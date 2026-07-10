@@ -1,0 +1,1020 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+</head>
+<body>
+<title>海外旅行おまもりキット</title>
+<style>
+:root{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+  --font-body:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium","Yu Gothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
+  --font-disp:"Avenir Next","Avenir","Futura","Trebuchet MS",var(--font-body);
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+    --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+    --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+    --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+    --ok:#86C295; --ok-bg:#16301C;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+}
+:root[data-theme="dark"]{
+  --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+  --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+  --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+  --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+  --ok:#86C295; --ok-bg:#16301C;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);line-height:1.65;font-size:15.5px;-webkit-text-size-adjust:100%}
+.wrap{max-width:700px;margin:0 auto;padding:0 14px 72px}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px;word-break:break-all}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+header.app{padding:22px 2px 10px}
+.eyebrow{font-family:var(--font-disp);font-size:11px;letter-spacing:.16em;color:var(--accent);font-weight:600;text-transform:uppercase}
+header.app h1{margin:2px 0 6px;font-size:26px;line-height:1.3;letter-spacing:.01em;color:var(--navy);text-wrap:balance}
+.stamp{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.stamp span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
+
+/* ラジオボタン式タブ: JavaScriptが無い環境(ファイルAppのプレビュー等)でも動く */
+.tabradio,.langradio{position:absolute;width:1px;height:1px;opacity:0;margin:0;pointer-events:none}
+nav.tabs{position:sticky;top:0;z-index:30;background:var(--bg);padding:8px 0 10px;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600;cursor:pointer;user-select:none}
+#t-visa:checked~nav .tab[for="t-visa"],#t-flight:checked~nav .tab[for="t-flight"],#t-money:checked~nav .tab[for="t-money"],#t-talk:checked~nav .tab[for="t-talk"],#t-pack:checked~nav .tab[for="t-pack"],#t-sos:checked~nav .tab[for="t-sos"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+#t-visa:focus-visible~nav .tab[for="t-visa"],#t-flight:focus-visible~nav .tab[for="t-flight"],#t-money:focus-visible~nav .tab[for="t-money"],#t-talk:focus-visible~nav .tab[for="t-talk"],#t-pack:focus-visible~nav .tab[for="t-pack"],#t-sos:focus-visible~nav .tab[for="t-sos"]{outline:2px solid var(--accent);outline-offset:2px}
+section.pane{display:none}
+#t-visa:checked~#pane-visa,#t-flight:checked~#pane-flight,#t-money:checked~#pane-money,#t-talk:checked~#pane-talk,#t-pack:checked~#pane-pack,#t-sos:checked~#pane-sos{display:block}
+
+.sec-head{margin:16px 2px 12px}
+.sec-head h2{margin:2px 0 4px;font-size:20px;color:var(--navy);letter-spacing:.01em}
+.sec-head .lede{margin:0;font-size:13.5px;color:var(--muted)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 15px;margin:0 0 12px}
+.card h3{margin:0 0 8px;font-size:15.5px;color:var(--navy)}
+.card p{margin:6px 0}
+.small{font-size:12.5px;color:var(--muted)}
+.callout{border:1px solid transparent;border-radius:10px;padding:12px 14px;margin:0 0 12px;font-size:14px}
+.callout.danger{background:var(--danger-bg);color:var(--danger)}
+.callout.warn{background:var(--warn-bg);color:var(--warn)}
+.callout b{display:block;margin-bottom:4px}
+.badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:2px 8px;vertical-align:middle;white-space:nowrap}
+.badge.auth{background:var(--danger-bg);color:var(--danger)}
+.badge.card-need{background:var(--warn-bg);color:var(--warn)}
+.badge.free{background:var(--ok-bg);color:var(--ok)}
+.badge.official{background:var(--accent-soft);color:var(--accent)}
+
+.search{width:100%;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:10px 13px;font-size:15px;margin:0 0 12px}
+.search::placeholder{color:var(--muted)}
+
+.country{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:0 0 10px;overflow:hidden}
+.country>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;min-height:44px}
+.country>summary::-webkit-details-marker{display:none}
+.country .flag{font-size:22px;flex:none}
+.country .cname{font-weight:700;font-size:15.5px}
+.country .csub{font-size:11.5px;color:var(--muted);display:block;line-height:1.4}
+.country .spacer{margin-left:auto;display:flex;align-items:center;gap:8px}
+.country .chev{color:var(--muted);font-size:12px;transition:transform .15s}
+.country[open] .chev{transform:rotate(90deg)}
+.cbody{border-top:1px solid var(--line);padding:10px 14px 13px;background:var(--surface)}
+.cbody dl{display:grid;grid-template-columns:86px 1fr;gap:6px 10px;margin:6px 0;font-size:14px}
+.cbody dt{color:var(--muted);font-size:12.5px;padding-top:1px}
+.cbody dd{margin:0}
+.cbody .fee{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.cnote{font-size:13px;color:var(--warn);background:var(--warn-bg);border-radius:7px;padding:8px 10px;margin:8px 0 0}
+.cdanger{font-size:13px;color:var(--danger);background:var(--danger-bg);border-radius:7px;padding:8px 10px;margin:8px 0 0}
+.clink{margin-top:9px;font-size:13.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+.steps{counter-reset:st;list-style:none;margin:0;padding:0}
+.steps li{position:relative;padding:0 0 14px 44px}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:1px;width:30px;height:30px;border-radius:8px;background:var(--navy);color:var(--surface);font-family:var(--font-disp);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center}
+.steps b{display:block;margin-bottom:2px}
+.steps p{margin:2px 0;font-size:14px}
+
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin:0 0 12px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:480px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+th{font-size:12px;color:var(--muted);font-weight:600;background:var(--surface2);white-space:nowrap}
+td.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.calc{display:grid;gap:10px}
+.calc label{font-size:12.5px;color:var(--muted);display:block;margin-bottom:3px}
+.calc input,.calc select{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:10px 12px;font-size:16px;font-family:var(--font-mono)}
+.calc select{font-family:var(--font-body);font-size:15px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.result{background:var(--accent-soft);border-radius:9px;padding:10px 13px;font-size:14px}
+.result b{font-family:var(--font-mono);font-size:19px;font-variant-numeric:tabular-nums;color:var(--accent)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;cursor:pointer;min-height:34px;user-select:none}
+.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--surface)}
+#L-en:checked~.chips .chip[for="L-en"],#L-ko:checked~.chips .chip[for="L-ko"],#L-tw:checked~.chips .chip[for="L-tw"],#L-cn:checked~.chips .chip[for="L-cn"],#L-th:checked~.chips .chip[for="L-th"],#L-vi:checked~.chips .chip[for="L-vi"],#L-id:checked~.chips .chip[for="L-id"],#L-fr:checked~.chips .chip[for="L-fr"],#L-es:checked~.chips .chip[for="L-es"],#L-it:checked~.chips .chip[for="L-it"],#L-de:checked~.chips .chip[for="L-de"]{background:var(--navy);border-color:var(--navy);color:var(--surface)}
+#L-en:focus-visible~.chips .chip[for="L-en"],#L-ko:focus-visible~.chips .chip[for="L-ko"],#L-tw:focus-visible~.chips .chip[for="L-tw"],#L-cn:focus-visible~.chips .chip[for="L-cn"],#L-th:focus-visible~.chips .chip[for="L-th"],#L-vi:focus-visible~.chips .chip[for="L-vi"],#L-id:focus-visible~.chips .chip[for="L-id"],#L-fr:focus-visible~.chips .chip[for="L-fr"],#L-es:focus-visible~.chips .chip[for="L-es"],#L-it:focus-visible~.chips .chip[for="L-it"],#L-de:focus-visible~.chips .chip[for="L-de"]{outline:2px solid var(--accent);outline-offset:2px}
+
+.talk-note{font-size:12.5px;color:var(--muted);margin:8px 2px 0;min-height:1em}
+.talk-note span{display:none}
+#L-en:checked~.talk-note .n-en,#L-ko:checked~.talk-note .n-ko,#L-tw:checked~.talk-note .n-tw,#L-cn:checked~.talk-note .n-cn,#L-th:checked~.talk-note .n-th,#L-vi:checked~.talk-note .n-vi,#L-id:checked~.talk-note .n-id,#L-fr:checked~.talk-note .n-fr,#L-es:checked~.talk-note .n-es,#L-it:checked~.talk-note .n-it,#L-de:checked~.talk-note .n-de{display:inline}
+
+.phrase{width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin:0 0 8px;cursor:pointer;color:var(--ink)}
+.phrase .jp{font-size:12.5px;color:var(--muted);display:block}
+.phrase .nat{font-size:17px;font-weight:700;display:block;margin:2px 0 1px;line-height:1.5}
+.phrase .read{font-size:12px;color:var(--accent);display:block}
+.ph{display:none}
+#L-en:checked~.plist .ph-en,#L-ko:checked~.plist .ph-ko,#L-tw:checked~.plist .ph-tw,#L-cn:checked~.plist .ph-cn,#L-th:checked~.plist .ph-th,#L-vi:checked~.plist .ph-vi,#L-id:checked~.plist .ph-id,#L-fr:checked~.plist .ph-fr,#L-es:checked~.plist .ph-es,#L-it:checked~.plist .ph-it,#L-de:checked~.plist .ph-de{display:block}
+.cat-h{font-family:var(--font-disp);font-size:11px;letter-spacing:.14em;color:var(--muted);font-weight:600;margin:16px 2px 8px;text-transform:uppercase}
+
+#overlay{position:fixed;inset:0;background:#FFFFFF;color:#101828;z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;cursor:pointer}
+#overlay.show{display:flex}
+#overlay .o-jp{font-size:15px;color:#5A6577;margin-bottom:14px}
+#overlay .o-nat{font-size:min(11vw,64px);font-weight:800;line-height:1.35;max-width:92vw;overflow-wrap:break-word}
+#overlay .o-read{font-size:16px;color:#0D6B65;margin-top:14px}
+#overlay .o-close{position:absolute;bottom:22px;font-size:12px;color:#98A2B3}
+
+.pgroup{margin:0 0 14px}
+.pgroup h3{margin:0 0 6px;font-size:14.5px;color:var(--navy)}
+.pitem{display:flex;align-items:flex-start;gap:10px;padding:9px 4px;border-bottom:1px solid var(--line);min-height:42px}
+.pitem:last-child{border-bottom:none}
+.pitem input[type="checkbox"]{width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent);flex:none}
+.pitem label{flex:1;cursor:pointer}
+.pitem .why{display:block;font-size:12px;color:var(--muted)}
+.pitem:has(input:checked) label{color:var(--muted);text-decoration:line-through}
+.pitem .del{border:none;background:none;color:var(--muted);font-size:16px;cursor:pointer;padding:2px 6px}
+.addrow{display:flex;gap:8px;margin-top:10px}
+.addrow input{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:9px 12px;font-size:15px}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--on-accent);border-radius:8px;padding:9px 16px;font-size:14px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.progress{font-size:12.5px;color:var(--muted);margin:0 0 10px}
+.progress b{color:var(--accent);font-family:var(--font-mono)}
+
+.memo textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:9px 12px;font-size:14px;font-family:inherit;resize:vertical;min-height:44px}
+.memo label{font-size:12.5px;color:var(--muted);display:block;margin:10px 0 4px}
+
+footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);line-height:1.7}
+</style>
+
+<div class="wrap">
+<header class="app">
+  <span class="eyebrow">Travel Companion Kit — 2026</span>
+  <h1>海外旅行おまもりキット</h1>
+  <div class="stamp">
+    <span><span class="dot"></span>情報確認日 2026-07-10</span>
+    <span><span class="dot"></span>オフラインで動作</span>
+    <span><span class="dot"></span>入力データは端末内のみ保存</span>
+  </div>
+  <noscript><div class="callout warn" style="margin-top:10px"><b>プレビュー表示中(ファイルAppなど)</b>すべての情報の閲覧・タブ切り替え・言語切り替えはこのまま使えます。計算機・検索・チェックの保存・タップで全画面表示だけは、ブラウザで開いたときに有効になります。</div></noscript>
+</header>
+
+<input class="tabradio" type="radio" name="tab" id="t-visa" checked>
+<input class="tabradio" type="radio" name="tab" id="t-flight">
+<input class="tabradio" type="radio" name="tab" id="t-money">
+<input class="tabradio" type="radio" name="tab" id="t-talk">
+<input class="tabradio" type="radio" name="tab" id="t-pack">
+<input class="tabradio" type="radio" name="tab" id="t-sos">
+
+<nav class="tabs" aria-label="メニュー">
+  <label class="tab" for="t-visa">🛂 手続き</label>
+  <label class="tab" for="t-flight">✈️ 航空券</label>
+  <label class="tab" for="t-money">💱 お金</label>
+  <label class="tab" for="t-talk">🗣 会話</label>
+  <label class="tab" for="t-pack">🧳 持ち物</label>
+  <label class="tab" for="t-sos">🆘 緊急</label>
+</nav>
+
+<!-- ============ 手続き ============ -->
+<section class="pane" id="pane-visa">
+  <div class="sec-head">
+    <span class="eyebrow">Entry Requirements</span>
+    <h2>渡航手続きチェッカー</h2>
+    <p class="lede">行き先をタップすると、必要な電子認証・入国カード・料金・公式サイトが出ます。</p>
+  </div>
+
+  <div class="callout danger">
+    <b>⚠ ニセ申請サイトに注意(相談が年1,000件超)</b>
+    ESTA・各国ETAそっくりの「代行サイト」が検索広告の上位に出ます。公式の数倍〜1万円超を請求される被害が多発(国民生活センター 2025年公表)。<b style="display:inline">必ずこのページの公式リンクか、リンクをブックマークして申請を。</b>タイ・台湾・韓国・フィリピン・マレーシアの入国カードは全部無料です。
+  </div>
+
+  <input class="search" id="csearch" type="search" placeholder="国名で検索(例: 韓国、ハワイ)" aria-label="国名で検索">
+  <div id="clist">
+<details class="country" data-name="韓国ソウル・釜山など"><summary><span class="flag">🇰🇷</span><span><span class="cname">韓国</span><span class="csub">ソウル・釜山など</span></span><span class="spacer"><span class="badge card-need">無料の事前登録</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>K-ETAは日本人は免除中(2026年12月31日まで延長済み)。紙の入国カードは廃止 → 事前に「e-Arrival Card」をオンライン登録(無料)</dd><dt>料金</dt><dd class="fee">無料</dd><dt>いつまでに</dt><dd>到着3日前から登録可</dd><dt>滞在できる日数</dt><dd>90日</dd><dt>パスポート残存</dt><dd>入国時に有効(残存3か月以上が安心)</dd></dl><div class="cdanger">2027年以降のK-ETA免除は未定。渡航前に大使館情報を確認</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.k-eta.go.kr/" rel="noopener">k-eta.go.kr(公式)</a></div></div></details>
+<details class="country" data-name="台湾台北・高雄など"><summary><span class="flag">🇹🇼</span><span><span class="cname">台湾</span><span class="csub">台北・高雄など</span></span><span class="spacer"><span class="badge card-need">無料の事前登録</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>ビザ免除。紙の入国カードは2025年10月に廃止 → 「TWAC」オンライン入国カードを事前登録(無料)</dd><dt>料金</dt><dd class="fee">無料</dd><dt>いつまでに</dt><dd>到着3日前から(到着日を含む)</dd><dt>滞在できる日数</dt><dd>90日</dd><dt>パスポート残存</dt><dd>滞在日数以上</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://twac.immigration.gov.tw/" rel="noopener">twac.immigration.gov.tw(公式)</a></div></div></details>
+<details class="country" data-name="タイバンコク・プーケットなど"><summary><span class="flag">🇹🇭</span><span><span class="cname">タイ</span><span class="csub">バンコク・プーケットなど</span></span><span class="spacer"><span class="badge card-need">無料の事前登録</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>ビザ免除。「TDAC」デジタル入国カードを事前登録(無料・紙のTM6は廃止)</dd><dt>料金</dt><dd class="fee">無料</dd><dt>いつまでに</dt><dd>到着72時間前から</dd><dt>滞在できる日数</dt><dd>現行60日 → 30日への短縮が2026年5月に閣議決定(施行日未定・要確認)</dd><dt>パスポート残存</dt><dd>6か月以上</dd></dl><div class="cdanger">滞在可能日数が変わる過渡期。渡航直前に最新情報を確認</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://tdac.immigration.go.th/" rel="noopener">tdac.immigration.go.th(公式)</a></div></div></details>
+<details class="country" data-name="中国上海・北京など"><summary><span class="flag">🇨🇳</span><span><span class="cname">中国</span><span class="csub">上海・北京など</span></span><span class="spacer"><span class="badge free">手続きなし</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>ビザ免除で30日滞在可(2026年12月31日まで延長済み)。事前手続き不要</dd><dt>料金</dt><dd class="fee">—</dd><dt>滞在できる日数</dt><dd>30日</dd><dt>パスポート残存</dt><dd>6か月以上が安心</dd></dl><div class="cnote">2027年以降の免除継続は未定</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.mofa.go.jp/mofaj/area/china/" rel="noopener">外務省 中国ページ</a></div></div></details>
+<details class="country" data-name="香港・マカオ"><summary><span class="flag">🇭🇰</span><span><span class="cname">香港・マカオ</span></span><span class="spacer"><span class="badge free">手続きなし</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>どちらもビザ免除・事前手続き不要</dd><dt>料金</dt><dd class="fee">—</dd><dt>滞在できる日数</dt><dd>各90日</dd><dt>パスポート残存</dt><dd>マカオは「滞在日数+90日」以上、香港は1か月+滞在日数以上</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.hk.emb-japan.go.jp/itpr_ja/entry_procedures.html" rel="noopener">在香港日本総領事館</a></div></div></details>
+<details class="country" data-name="シンガポール"><summary><span class="flag">🇸🇬</span><span><span class="cname">シンガポール</span></span><span class="spacer"><span class="badge card-need">無料の事前登録</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>ビザ免除。「SG Arrival Card」を事前にオンライン提出(無料)</dd><dt>料金</dt><dd class="fee">無料</dd><dt>いつまでに</dt><dd>到着3日前から</dd><dt>滞在できる日数</dt><dd>30日</dd><dt>パスポート残存</dt><dd>6か月以上</dd></dl><div class="cdanger">公式はICA(ica.gov.sg)のみ。有料の代行サイトに注意</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://eservices.ica.gov.sg/sgarrivalcard/" rel="noopener">ICA公式(SGアライバルカード)</a></div></div></details>
+<details class="country" data-name="ベトナムダナン・ホーチミンなど"><summary><span class="flag">🇻🇳</span><span><span class="cname">ベトナム</span><span class="csub">ダナン・ホーチミンなど</span></span><span class="spacer"><span class="badge free">手続きなし</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>ビザ免除45日(2028年3月14日まで適用が確定)。事前手続き不要</dd><dt>料金</dt><dd class="fee">—</dd><dt>滞在できる日数</dt><dd>45日</dd><dt>パスポート残存</dt><dd>6か月以上</dd></dl><div class="cnote">45日を超える滞在はe-Visaが必要</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.vn.emb-japan.go.jp/itpr_ja/JP_Shuttsunyukoku.html" rel="noopener">在ベトナム日本大使館</a></div></div></details>
+<details class="country" data-name="フィリピンセブ・マニラなど"><summary><span class="flag">🇵🇭</span><span><span class="cname">フィリピン</span><span class="csub">セブ・マニラなど</span></span><span class="spacer"><span class="badge card-need">無料の事前登録</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>ビザ免除30日。「eTravel」登録が必須(無料)— QRコードをチェックイン時に提示</dd><dt>料金</dt><dd class="fee">無料</dd><dt>いつまでに</dt><dd>出発72時間前から・チェックイン前までに</dd><dt>滞在できる日数</dt><dd>30日</dd><dt>パスポート残存</dt><dd>滞在日数+6か月以上</dd></dl><div class="cdanger">eTravelは無料。課金を求めるサイトは全部ニセ(政府が注意喚起)</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://etravel.gov.ph/" rel="noopener">etravel.gov.ph(公式)</a></div></div></details>
+<details class="country" data-name="マレーシアクアラルンプールなど"><summary><span class="flag">🇲🇾</span><span><span class="cname">マレーシア</span><span class="csub">クアラルンプールなど</span></span><span class="spacer"><span class="badge card-need">無料の事前登録</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>ビザ免除90日。「MDAC」デジタル入国カードを事前登録(無料)</dd><dt>料金</dt><dd class="fee">無料</dd><dt>いつまでに</dt><dd>到着日を含む3日前から</dd><dt>滞在できる日数</dt><dd>90日</dd><dt>パスポート残存</dt><dd>6か月以上</dd></dl><div class="cdanger">検索上位に5千〜1万円請求する代行サイトあり。公式は無料</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://imigresen-online.imi.gov.my/mdac/main" rel="noopener">MDAC(公式)</a></div></div></details>
+<details class="country" data-name="インドネシア(バリ島)"><summary><span class="flag">🇮🇩</span><span><span class="cname">インドネシア(バリ島)</span></span><span class="spacer"><span class="badge auth">要・有料手続き</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>観光は到着ビザが必要: e-VOA(オンライン)または空港でVOA。加えて「All Indonesia」入国登録(無料)が2025年10月から義務。バリ島は観光税が別途</dd><dt>料金</dt><dd class="fee">e-VOA 50万ルピア(約30日・1回延長可)+バリ観光税 15万ルピア</dd><dt>いつまでに</dt><dd>e-VOA・All Indonesiaとも到着3日前ごろから</dd><dt>滞在できる日数</dt><dd>30日(延長1回可)</dd><dt>パスポート残存</dt><dd>6か月以上</dd></dl><div class="cdanger">All Indonesia登録: allindonesia.imigrasi.go.id / バリ観光税: lovebali.baliprov.go.id</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://evisa.imigrasi.go.id/" rel="noopener">evisa.imigrasi.go.id(公式)</a></div></div></details>
+<details class="country" data-name="アメリカ(ハワイ・本土)ホノルル・LA・NYなど"><summary><span class="flag">🇺🇸</span><span><span class="cname">アメリカ(ハワイ・本土)</span><span class="csub">ホノルル・LA・NYなど</span></span><span class="spacer"><span class="badge auth">要・電子認証</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>「ESTA」電子渡航認証が必須</dd><dt>料金</dt><dd class="fee">US$40(2025年9月30日に$21から値上げ済み)</dd><dt>いつまでに</dt><dd>遅くとも出発72時間前までの申請推奨</dd><dt>滞在できる日数</dt><dd>90日</dd><dt>パスポート残存</dt><dd>帰国日まで有効でOK(日本は6か月ルール免除国)</dd></dl><div class="cdanger">「ESTA申請」で検索すると代行サイトが上位に出る。公式は$40 — 1万円前後の請求は代行かニセ</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://esta.cbp.dhs.gov/" rel="noopener">esta.cbp.dhs.gov(公式)</a></div></div></details>
+<details class="country" data-name="グアム"><summary><span class="flag">🇬🇺</span><span><span class="cname">グアム</span></span><span class="spacer"><span class="badge card-need">無料の事前登録</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>ESTAなしで行く場合は「G-CNMI ETA」(無料・電子)を事前取得 — 紙のI-736は廃止。ESTA($40)があれば不要</dd><dt>料金</dt><dd class="fee">無料(G-CNMI ETA)</dd><dt>いつまでに</dt><dd>搭乗7日前までの申請推奨</dd><dt>滞在できる日数</dt><dd>45日(ESTAなら90日)</dd><dt>パスポート残存</dt><dd>入国時有効</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://g-cnmi-eta.cbp.dhs.gov/" rel="noopener">g-cnmi-eta.cbp.dhs.gov(公式・日本語対応)</a></div></div></details>
+<details class="country" data-name="ヨーロッパ(シェンゲン圏)フランス・イタリア・スペイン・ドイツなど29か国"><summary><span class="flag">🇪🇺</span><span><span class="cname">ヨーロッパ(シェンゲン圏)</span><span class="csub">フランス・イタリア・スペイン・ドイツなど29か国</span></span><span class="spacer"><span class="badge free">手続きなし(変更予定あり)</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>現時点で事前手続きは不要。入国時に「EES」で顔写真+指紋の登録あり(2026年4月から全面運用・初回は時間がかかる)。電子認証「ETIAS」は【まだ始まっていない】(2026年末〜開始予定、開始後も猶予期間あり)</dd><dt>料金</dt><dd class="fee">—(ETIAS開始後は€20・18歳未満と70歳超は無料)</dd><dt>滞在できる日数</dt><dd>180日間で90日まで</dd><dt>パスポート残存</dt><dd>出国予定日+3か月以上、かつ発行10年以内</dd></dl><div class="cnote">「今すぐETIAS申請」をうたうサイトは全部ニセ(まだ申請できない)。空港の入国審査は混雑を見込んで乗継に余裕を</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://travel-europe.europa.eu/etias_en" rel="noopener">travel-europe.europa.eu(EU公式)</a></div></div></details>
+<details class="country" data-name="イギリスロンドンなど"><summary><span class="flag">🇬🇧</span><span><span class="cname">イギリス</span><span class="csub">ロンドンなど</span></span><span class="spacer"><span class="badge auth">要・電子認証</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>「ETA」電子渡航認証が必須。未取得だと搭乗を断られる(2026年2月25日から完全施行)。公式アプリ「UK ETA」または公式サイトで申請</dd><dt>料金</dt><dd class="fee">£20(2026年4月に£16から値上げ)</dd><dt>いつまでに</dt><dd>通常3営業日以内に承認 — 出発1週間前までが安心</dd><dt>滞在できる日数</dt><dd>6か月</dd><dt>パスポート残存</dt><dd>滞在期間中有効</dd></dl><div class="cdanger">申請は公式アプリが最速・最安。代行サイトの上乗せ請求に注意</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.gov.uk/eta" rel="noopener">gov.uk/eta(公式)</a></div></div></details>
+<details class="country" data-name="オーストラリアシドニー・ケアンズなど"><summary><span class="flag">🇦🇺</span><span><span class="cname">オーストラリア</span><span class="csub">シドニー・ケアンズなど</span></span><span class="spacer"><span class="badge auth">要・電子認証</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>「ETA(サブクラス601)」が必須。公式スマホアプリ「AustralianETA」でのみ申請できる(Web申請は存在しない)</dd><dt>料金</dt><dd class="fee">A$20</dd><dt>いつまでに</dt><dd>即時〜数日で承認 — 出発前に余裕をもって</dd><dt>滞在できる日数</dt><dd>1回3か月まで(有効1年)</dd><dt>パスポート残存</dt><dd>入国時有効</dd></dl><div class="cdanger">Webの「ETAS申請サイト」は全部非公式の代行。公式はアプリだけ</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/electronic-travel-authority-601" rel="noopener">immi.homeaffairs.gov.au(公式)</a></div></div></details>
+<details class="country" data-name="ニュージーランド"><summary><span class="flag">🇳🇿</span><span><span class="cname">ニュージーランド</span></span><span class="spacer"><span class="badge auth">要・電子認証</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>「NZeTA」+観光税「IVL」が必須(同時に支払い)</dd><dt>料金</dt><dd class="fee">NZeTA: アプリNZ$17/Web NZ$23 + IVL NZ$100(2024年10月に値上げ済み)</dd><dt>いつまでに</dt><dd>承認まで最大72時間 — 早めに申請</dd><dt>滞在できる日数</dt><dd>3か月</dd><dt>パスポート残存</dt><dd>入国時3か月+残存推奨</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.immigration.govt.nz/audiences/visit-new-zealand/prepare-nzeta" rel="noopener">immigration.govt.nz(公式)</a></div></div></details>
+<details class="country" data-name="カナダバンクーバーなど"><summary><span class="flag">🇨🇦</span><span><span class="cname">カナダ</span><span class="csub">バンクーバーなど</span></span><span class="spacer"><span class="badge auth">要・電子認証</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>空路入国は「eTA」が必須</dd><dt>料金</dt><dd class="fee">C$7</dd><dt>いつまでに</dt><dd>通常数分〜72時間で承認</dd><dt>滞在できる日数</dt><dd>6か月</dd><dt>パスポート残存</dt><dd>滞在期間+1日以上</dd></dl><div class="cdanger">政府公式そっくりの偽サイトに公式警告あり。C$7以外の請求は疑う</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/eta.html" rel="noopener">canada.ca(公式)</a></div></div></details>
+<details class="country" data-name="ドバイ(UAE)"><summary><span class="flag">🇦🇪</span><span><span class="cname">ドバイ(UAE)</span></span><span class="spacer"><span class="badge free">手続きなし</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>ビザ免除 — 到着時に30日の入国スタンプ。事前手続き不要</dd><dt>料金</dt><dd class="fee">—</dd><dt>滞在できる日数</dt><dd>30日(現地延長可)</dd><dt>パスポート残存</dt><dd>6か月以上</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.mofa.go.jp/mofaj/area/uae/" rel="noopener">外務省 UAEページ</a></div></div></details>
+<details class="country" data-name="インドデリー・ムンバイなど"><summary><span class="flag">🇮🇳</span><span><span class="cname">インド</span><span class="csub">デリー・ムンバイなど</span></span><span class="spacer"><span class="badge auth">要・e-Visa</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>観光は「e-Tourist Visa」が必要。公式サイトからオンライン申請</dd><dt>料金</dt><dd class="fee">30日ビザ US$25(4〜6月渡航はUS$10)・1年 US$40+カード手数料</dd><dt>いつまでに</dt><dd>渡航4日前までの申請推奨</dd><dt>滞在できる日数</dt><dd>30日(ビザ種別による)</dd><dt>パスポート残存</dt><dd>6か月以上</dd></dl><div class="cdanger">偽の申請サイトが最も多い国のひとつ。上記URL以外で申請しない</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://indianvisaonline.gov.in/evisa/tvoa.html" rel="noopener">indianvisaonline.gov.in(唯一の公式)</a></div></div></details>
+  <p class="small" id="nohit" hidden>見つかりませんでした。国名を変えて試してください。</p>
+  </div>
+  <p class="small">※ 観光目的・日本のパスポート保持者向けの要点です。制度・料金は変わるため、<b>出発前に必ず公式サイトで最終確認</b>してください。乗り継ぎだけの通過や、観光以外の目的は条件が異なります。</p>
+</section>
+
+<!-- ============ 航空券 ============ -->
+<section class="pane" id="pane-flight">
+  <div class="sec-head">
+    <span class="eyebrow">Flight Deals</span>
+    <h2>航空券を安く買う</h2>
+    <p class="lede">「探し方の型」と「セールの時刻表」。この2つで航空券は変わります。</p>
+  </div>
+
+  <div class="card">
+    <h3>基本の3ステップ</h3>
+    <ol class="steps">
+      <li><b>相場を知る</b>
+        <p>Google フライトで路線を検索 →「日程」タブで前後の日付の値段を一覧、「料金グラフ」で月をまたぐ推移を見る。Skyscannerは日付を「最安値月」にすると1年で一番安い月がわかる。</p></li>
+      <li><b>追跡を仕掛ける</b>
+        <p>Google フライトで「価格を追跡」をON(日付未定なら「任意の日付」)→ 値下がりでメール通知。Skyscannerの「プライスアラート」も併用。</p></li>
+      <li><b>セールを待ち構える</b>
+        <p>下の「セールの時刻表」の航空会社の公式アプリ・LINE・メルマガを登録。セール情報サイト(TRAICY、sky-budgetなど)のXフォローが最速。</p></li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>データで見る「買い時」</h3>
+    <p style="font-size:14px">・国際線は<b>出発31〜45日前</b>の予約が平均的に安い(Expedia×ARC 2026年調査)。ただしアジア方面は<b>5〜7か月前</b>からの早め予約が安いというデータもあり、方面で差が大きい<br>
+    ・<b>「◯曜日に買うと安い」はほぼ神話</b>(差は数%以下)。効くのは買う曜日ではなく<b>飛ぶ曜日</b> — 火曜など閑散日の出発は目に見えて安い<br>
+    ・年末年始・GW・お盆など日本の連休は世界的に見ても高騰枠。<b>3〜6か月前の早押し一択</b>、セール待ちは逆効果<br>
+    ・セールを見たら Google フライトの相場と比べて「本当に安いか」を確認してから買う</p>
+  </div>
+
+  <div class="tbl"><table>
+    <thead><tr><th>航空会社</th><th>セールの目安(2025〜26年実績)</th><th>いち早く知るには</th></tr></thead>
+    <tbody>
+      <tr><td><b>ZIPAIR</b>(成田発中長距離)</td><td>年6回前後: 1月・5月・7月・11月(ブラックフライデー)・12月など、各1〜2週間</td><td>LINE登録(事前告知あり)・アプリ</td></tr>
+      <tr><td><b>Peach</b></td><td>ほぼ毎月。約1か月続く「旅フェス」型が主流に</td><td>メルマガ・X(予告なし開始が基本)</td></tr>
+      <tr><td><b>ジェットスター</b></td><td>「スーパースターセール」がほぼ毎月(3〜10日間)。国際線片道7千円台の実績</td><td>Club Jetstar会員先行・メルマガ</td></tr>
+      <tr><td><b>スプリング・ジャパン</b></td><td>月1〜2回。成田〜中国線で片道1,000〜2,000円の実績</td><td>公式サイト・X</td></tr>
+      <tr><td><b>AirAsia</b></td><td>「BIG SALE」年4回目安(2・6・8・11月ごろ)+小型セールほぼ毎月</td><td>アプリ通知</td></tr>
+      <tr><td><b>Scoot</b>(シンガポール方面)</td><td>年5〜6回。12月の「EVERYWHEREセール」など</td><td>メルマガ・アプリ</td></tr>
+      <tr><td><b>セブパシフィック</b></td><td>「シートフェス」年3〜4回。片道数百円も出るが販売3〜6日と超短期</td><td>公式X・Instagram</td></tr>
+      <tr><td><b>韓国系LCC</b>(チェジュ・t'way等)</td><td>随時(火・水スタートが多め)。片道2千円台の実績</td><td>各社X・アプリ</td></tr>
+      <tr><td><b>ジンエアー</b></td><td>「JIN MARKET」年2回+毎週金曜の割引企画</td><td>Instagram・LINE</td></tr>
+      <tr><td><b>ANA</b></td><td>国際線タイムセールが<b>毎月上旬・約1週間</b>のパターン</td><td>公式サイト・アプリ</td></tr>
+      <tr><td><b>JAL</b></td><td>海外航空券タイムセールは不定期(年数回)</td><td>メルマガ</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout warn">
+    <b>落とし穴チェック</b>
+    ① LCCは受託手荷物・座席指定・支払手数料を足した<b>総額</b>で比較 ② 別々に買った乗り継ぎ(別切り)は遅延しても保護なし — 同日乗継は3時間以上あける ③ JAL/ANA等は燃油サーチャージが別途加算(LCCは込みが多い) ④ Googleフライトの「価格保証」は米国のみで日本では使えない
+  </div>
+</section>
+
+<!-- ============ お金 ============ -->
+<section class="pane" id="pane-money">
+  <div class="sec-head">
+    <span class="eyebrow">Money</span>
+    <h2>両替・チップ・支払い</h2>
+    <p class="lede">レートを一度入れておけば、現地ではオフラインで計算できます。</p>
+  </div>
+
+  <div class="card">
+    <h3>通貨かんたん換算</h3>
+    <div class="calc">
+      <div>
+        <label for="cur">通貨を選ぶ</label>
+        <select id="cur"></select>
+      </div>
+      <div>
+        <label for="rate" id="ratelabel">レート(1通貨=何円か)</label>
+        <input id="rate" type="number" inputmode="decimal" placeholder="例: 155">
+        <p class="small" style="margin:5px 0 0">出発前にGoogleで「1ドル 円」のように検索して入力。端末に保存されます。</p>
+      </div>
+      <div class="row2">
+        <div>
+          <label for="famt" id="flabel">現地通貨 → 円</label>
+          <input id="famt" type="number" inputmode="decimal" placeholder="現地の金額">
+        </div>
+        <div>
+          <label for="jamt">円 → 現地通貨</label>
+          <input id="jamt" type="number" inputmode="decimal" placeholder="日本円">
+        </div>
+      </div>
+      <div class="result" id="curout">※ 計算機はブラウザで開くと動きます(プレビューでは表示のみ)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>チップ計算(米国など)</h3>
+    <div class="calc">
+      <div class="row2">
+        <div>
+          <label for="bill">お会計(現地通貨)</label>
+          <input id="bill" type="number" inputmode="decimal" placeholder="例: 80">
+        </div>
+        <div>
+          <label for="ppl">人数で割る</label>
+          <input id="ppl" type="number" inputmode="numeric" value="1" min="1">
+        </div>
+      </div>
+      <div class="chips" id="tipchips" role="group" aria-label="チップ率">
+        <button class="chip" type="button" data-tip="10">10%</button>
+        <button class="chip" type="button" data-tip="15" aria-pressed="true">15%</button>
+        <button class="chip" type="button" data-tip="18">18%</button>
+        <button class="chip" type="button" data-tip="20">20%</button>
+      </div>
+      <div class="result" id="tipout">※ 計算機はブラウザで開くと動きます(プレビューでは表示のみ)</div>
+    </div>
+  </div>
+
+  <div class="tbl"><table>
+    <thead><tr><th>行き先</th><th>チップの目安</th></tr></thead>
+    <tbody>
+      <tr><td>アメリカ(ハワイ・グアム含む)</td><td>レストラン15〜20%・タクシー10〜15%・ホテル清掃$1〜5/泊。カード端末のチップ選択画面が標準</td></tr>
+      <tr><td>カナダ</td><td>レストラン15〜18%</td></tr>
+      <tr><td>イギリス</td><td>サービス料込みが多い。なければ10〜12.5%</td></tr>
+      <tr><td>フランス・イタリア・スペイン</td><td>基本サービス料込み。端数を丸める程度でOK(イタリアは席料コペルトが伝票に載る)</td></tr>
+      <tr><td>ドイツ</td><td>5〜10%上乗せして切りよく払うのが習慣</td></tr>
+      <tr><td>韓国・台湾・中国・香港</td><td>不要(高級ホテル等を除く)</td></tr>
+      <tr><td>タイ・ベトナム</td><td>基本不要。ホテルやスパで20〜100バーツ程度を任意で</td></tr>
+      <tr><td>シンガポール・マレーシア</td><td>不要(伝票にサービス料10%が入っていることが多い)</td></tr>
+      <tr><td>インドネシア(バリ)</td><td>サービス料込みが多い。任意で端数程度</td></tr>
+      <tr><td>オーストラリア・ニュージーランド</td><td>不要(良いサービスに任意で)</td></tr>
+      <tr><td>ドバイ(UAE)</td><td>任意で10〜15%</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="card">
+    <h3>支払いで損しない5か条</h3>
+    <p style="font-size:14px">
+    ① 店やATMで「<b>日本円で払いますか?</b>」と聞かれたら<b>必ず現地通貨を選ぶ</b>(円建て=DCCは3〜10%不利なレートになりがち)<br>
+    ② クレカの海外利用は事務手数料(目安1.6〜3.85%、カードによる)。それでも空港の両替所より有利なことが多い<br>
+    ③ 現金は最小限を空港到着時に。<b>銀行設置のATM</b>でカードから現地通貨を引き出すのが定番(独立系ATMの「手数料上乗せ」表示に注意)<br>
+    ④ カードは<b>2枚以上・別ブランド(Visa/Master)・別の場所に</b>保管。1枚は予備<br>
+    ⑤ タッチ決済(Visaのタッチ等)は海外の交通機関でそのまま使える都市が多い(ロンドン・シンガポール等)</p>
+  </div>
+</section>
+
+<!-- ============ 会話 ============ -->
+<section class="pane" id="pane-talk">
+  <div class="sec-head">
+    <span class="eyebrow">Point &amp; Speak</span>
+    <h2>指さし会話</h2>
+    <p class="lede">言語を選んでください。フレーズはタップで<b>大きな文字</b>の全画面表示になり、そのまま相手に見せられます(全画面はブラウザで開いたとき有効)。</p>
+  </div>
+  <input class="langradio" type="radio" name="lang" id="L-en" checked>
+  <input class="langradio" type="radio" name="lang" id="L-ko">
+  <input class="langradio" type="radio" name="lang" id="L-tw">
+  <input class="langradio" type="radio" name="lang" id="L-cn">
+  <input class="langradio" type="radio" name="lang" id="L-th">
+  <input class="langradio" type="radio" name="lang" id="L-vi">
+  <input class="langradio" type="radio" name="lang" id="L-id">
+  <input class="langradio" type="radio" name="lang" id="L-fr">
+  <input class="langradio" type="radio" name="lang" id="L-es">
+  <input class="langradio" type="radio" name="lang" id="L-it">
+  <input class="langradio" type="radio" name="lang" id="L-de">
+  <div class="chips" role="group" aria-label="言語を選ぶ">
+    <label class="chip" for="L-en">英語</label>
+    <label class="chip" for="L-ko">韓国語</label>
+    <label class="chip" for="L-tw">中国語(台湾)</label>
+    <label class="chip" for="L-cn">中国語(本土)</label>
+    <label class="chip" for="L-th">タイ語</label>
+    <label class="chip" for="L-vi">ベトナム語</label>
+    <label class="chip" for="L-id">インドネシア語</label>
+    <label class="chip" for="L-fr">フランス語</label>
+    <label class="chip" for="L-es">スペイン語</label>
+    <label class="chip" for="L-it">イタリア語</label>
+    <label class="chip" for="L-de">ドイツ語</label>
+  </div>
+  <p class="talk-note">
+    <span class="n-en">アメリカ・ハワイ・グアム・フィリピン・シンガポールなど</span>
+    <span class="n-ko"></span>
+    <span class="n-tw">繁体字 — 台湾・香港で</span>
+    <span class="n-cn">簡体字 — 中国本土で</span>
+    <span class="n-th">語尾の「クラップ」は男性、「カー」は女性が使います</span>
+    <span class="n-vi"></span>
+    <span class="n-id">バリ島でも通じます</span>
+    <span class="n-fr"></span>
+    <span class="n-es"></span>
+    <span class="n-it"></span>
+    <span class="n-de"></span>
+  </p>
+  <div class="plist" id="phraselist">
+<div class="cat-h">基本</div>
+<button type="button" class="phrase ph ph-en"><span class="jp">こんにちは</span><span class="nat">Hello.</span><span class="read">ハロー</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">こんにちは</span><span class="nat">안녕하세요</span><span class="read">アンニョンハセヨ</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">こんにちは</span><span class="nat">你好</span><span class="read">ニーハオ</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">こんにちは</span><span class="nat">你好</span><span class="read">ニーハオ</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">こんにちは</span><span class="nat">สวัสดีครับ/ค่ะ</span><span class="read">サワッディー クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">こんにちは</span><span class="nat">Xin chào</span><span class="read">シン チャオ</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">こんにちは</span><span class="nat">Halo</span><span class="read">ハロ</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">こんにちは</span><span class="nat">Bonjour</span><span class="read">ボンジュール</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">こんにちは</span><span class="nat">Hola</span><span class="read">オラ</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">こんにちは</span><span class="nat">Buongiorno</span><span class="read">ボンジョルノ</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">こんにちは</span><span class="nat">Hallo</span><span class="read">ハロー</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">ありがとう</span><span class="nat">Thank you.</span><span class="read">サンキュー</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">ありがとう</span><span class="nat">감사합니다</span><span class="read">カムサハムニダ</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">ありがとう</span><span class="nat">謝謝</span><span class="read">シェイシェイ</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">ありがとう</span><span class="nat">谢谢</span><span class="read">シエシエ</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">ありがとう</span><span class="nat">ขอบคุณครับ/ค่ะ</span><span class="read">コープクン クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">ありがとう</span><span class="nat">Cảm ơn</span><span class="read">カム オン</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">ありがとう</span><span class="nat">Terima kasih</span><span class="read">トゥリマ カシ</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">ありがとう</span><span class="nat">Merci</span><span class="read">メルシー</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">ありがとう</span><span class="nat">Gracias</span><span class="read">グラシアス</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">ありがとう</span><span class="nat">Grazie</span><span class="read">グラッツィエ</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">ありがとう</span><span class="nat">Danke</span><span class="read">ダンケ</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">すみません(呼びかけ・軽い謝罪)</span><span class="nat">Excuse me.</span><span class="read">エクスキューズ ミー</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">すみません(呼びかけ・軽い謝罪)</span><span class="nat">저기요 / 죄송합니다</span><span class="read">チョギヨ / チェソンハムニダ</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">すみません(呼びかけ・軽い謝罪)</span><span class="nat">不好意思</span><span class="read">ブーハオイース</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">すみません(呼びかけ・軽い謝罪)</span><span class="nat">不好意思</span><span class="read">ブーハオイース</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">すみません(呼びかけ・軽い謝罪)</span><span class="nat">ขอโทษครับ/ค่ะ</span><span class="read">コートート クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">すみません(呼びかけ・軽い謝罪)</span><span class="nat">Xin lỗi</span><span class="read">シン ロイ</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">すみません(呼びかけ・軽い謝罪)</span><span class="nat">Permisi / Maaf</span><span class="read">プルミシ / マアフ</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">すみません(呼びかけ・軽い謝罪)</span><span class="nat">Excusez-moi</span><span class="read">エクスキュゼ モワ</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">すみません(呼びかけ・軽い謝罪)</span><span class="nat">Perdone</span><span class="read">ペルドネ</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">すみません(呼びかけ・軽い謝罪)</span><span class="nat">Scusi</span><span class="read">スクージ</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">すみません(呼びかけ・軽い謝罪)</span><span class="nat">Entschuldigung</span><span class="read">エントシュルディグング</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">はい / いいえ</span><span class="nat">Yes. / No.</span><span class="read">イエス / ノー</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">はい / いいえ</span><span class="nat">네 / 아니요</span><span class="read">ネー / アニヨ</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">はい / いいえ</span><span class="nat">是 / 不是</span><span class="read">シー / ブーシー</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">はい / いいえ</span><span class="nat">是 / 不是</span><span class="read">シー / ブーシー</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">はい / いいえ</span><span class="nat">ใช่ / ไม่ใช่</span><span class="read">チャイ / マイチャイ</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">はい / いいえ</span><span class="nat">Vâng / Không</span><span class="read">ヴァン / ホン</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">はい / いいえ</span><span class="nat">Ya / Tidak</span><span class="read">ヤ / ティダッ</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">はい / いいえ</span><span class="nat">Oui / Non</span><span class="read">ウィ / ノン</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">はい / いいえ</span><span class="nat">Sí / No</span><span class="read">スィ / ノ</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">はい / いいえ</span><span class="nat">Sì / No</span><span class="read">スィ / ノ</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">はい / いいえ</span><span class="nat">Ja / Nein</span><span class="read">ヤー / ナイン</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">わかりません</span><span class="nat">I don&#x27;t understand.</span><span class="read">アイ ドント アンダースタンド</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">わかりません</span><span class="nat">잘 모르겠어요</span><span class="read">チャル モルゲッソヨ</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">わかりません</span><span class="nat">我聽不懂</span><span class="read">ウォ ティン ブードン</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">わかりません</span><span class="nat">我听不懂</span><span class="read">ウォ ティン ブードン</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">わかりません</span><span class="nat">ไม่เข้าใจครับ/ค่ะ</span><span class="read">マイ カオチャイ クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">わかりません</span><span class="nat">Tôi không hiểu</span><span class="read">トイ ホン ヒエウ</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">わかりません</span><span class="nat">Saya tidak mengerti</span><span class="read">サヤ ティダッ ムングルティ</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">わかりません</span><span class="nat">Je ne comprends pas</span><span class="read">ジュ ヌ コンプラン パ</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">わかりません</span><span class="nat">No entiendo</span><span class="read">ノ エンティエンド</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">わかりません</span><span class="nat">Non capisco</span><span class="read">ノン カピスコ</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">わかりません</span><span class="nat">Ich verstehe nicht</span><span class="read">イッヒ フェアシュテーエ ニヒト</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">いくらですか?</span><span class="nat">How much is it?</span><span class="read">ハウ マッチ イズ イット</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">いくらですか?</span><span class="nat">얼마예요?</span><span class="read">オルマエヨ?</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">いくらですか?</span><span class="nat">多少錢?</span><span class="read">ドゥオシャオ チェン?</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">いくらですか?</span><span class="nat">多少钱?</span><span class="read">ドゥオシャオ チェン?</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">いくらですか?</span><span class="nat">เท่าไหร่ครับ/คะ</span><span class="read">タオライ クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">いくらですか?</span><span class="nat">Bao nhiêu tiền?</span><span class="read">バオ ニエウ ティエン?</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">いくらですか?</span><span class="nat">Berapa harganya?</span><span class="read">ブラパ ハルガニャ?</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">いくらですか?</span><span class="nat">C&#x27;est combien ?</span><span class="read">セ コンビヤン?</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">いくらですか?</span><span class="nat">¿Cuánto cuesta?</span><span class="read">クアント クエスタ?</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">いくらですか?</span><span class="nat">Quanto costa?</span><span class="read">クアント コスタ?</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">いくらですか?</span><span class="nat">Wie viel kostet das?</span><span class="read">ヴィー フィール コステット ダス?</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">トイレはどこですか?</span><span class="nat">Where is the restroom?</span><span class="read">ウェア イズ ザ レストルーム</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">トイレはどこですか?</span><span class="nat">화장실이 어디예요?</span><span class="read">ファジャンシリ オディエヨ?</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">トイレはどこですか?</span><span class="nat">洗手間在哪裡?</span><span class="read">シーショウジェン ザイ ナーリー?</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">トイレはどこですか?</span><span class="nat">洗手间在哪里?</span><span class="read">シーショウジェン ザイ ナーリー?</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">トイレはどこですか?</span><span class="nat">ห้องน้ำอยู่ที่ไหนครับ/คะ</span><span class="read">ホンナーム ユー ティーナイ クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">トイレはどこですか?</span><span class="nat">Nhà vệ sinh ở đâu?</span><span class="read">ニャ ヴェ シン オー ダウ?</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">トイレはどこですか?</span><span class="nat">Di mana toilet?</span><span class="read">ディ マナ トイレット?</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">トイレはどこですか?</span><span class="nat">Où sont les toilettes ?</span><span class="read">ウ ソン レ トワレット?</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">トイレはどこですか?</span><span class="nat">¿Dónde está el baño?</span><span class="read">ドンデ エスタ エル バニョ?</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">トイレはどこですか?</span><span class="nat">Dov&#x27;è il bagno?</span><span class="read">ドヴェ イル バンニョ?</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">トイレはどこですか?</span><span class="nat">Wo ist die Toilette?</span><span class="read">ヴォー イスト ディー トイレッテ?</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">写真を撮ってもいいですか?</span><span class="nat">May I take a photo?</span><span class="read">メイ アイ テイク ア フォト</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">写真を撮ってもいいですか?</span><span class="nat">사진 찍어도 돼요?</span><span class="read">サジン チゴド デヨ?</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">写真を撮ってもいいですか?</span><span class="nat">可以拍照嗎?</span><span class="read">クーイー パイジャオ マ?</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">写真を撮ってもいいですか?</span><span class="nat">可以拍照吗?</span><span class="read">クーイー パイジャオ マ?</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">写真を撮ってもいいですか?</span><span class="nat">ถ่ายรูปได้ไหมครับ/คะ</span><span class="read">ターイループ ダイマイ クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">写真を撮ってもいいですか?</span><span class="nat">Tôi chụp ảnh được không?</span><span class="read">トイ チュップ アイン ドゥオック ホン?</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">写真を撮ってもいいですか?</span><span class="nat">Boleh saya foto?</span><span class="read">ボレ サヤ フォト?</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">写真を撮ってもいいですか?</span><span class="nat">Je peux prendre une photo ?</span><span class="read">ジュ プー プランドル ユヌ フォト?</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">写真を撮ってもいいですか?</span><span class="nat">¿Puedo tomar una foto?</span><span class="read">プエド トマール ウナ フォト?</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">写真を撮ってもいいですか?</span><span class="nat">Posso fare una foto?</span><span class="read">ポッソ ファーレ ウナ フォト?</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">写真を撮ってもいいですか?</span><span class="nat">Darf ich fotografieren?</span><span class="read">ダルフ イッヒ フォトグラフィーレン?</span></button>
+<div class="cat-h">食事</div>
+<button type="button" class="phrase ph ph-en"><span class="jp">これをください</span><span class="nat">This one, please.</span><span class="read">ディス ワン プリーズ</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">これをください</span><span class="nat">이거 주세요</span><span class="read">イゴ ジュセヨ</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">これをください</span><span class="nat">我要這個</span><span class="read">ウォ ヤオ ジェイガ</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">これをください</span><span class="nat">我要这个</span><span class="read">ウォ ヤオ ジェイガ</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">これをください</span><span class="nat">เอาอันนี้ครับ/ค่ะ</span><span class="read">アオ アンニー クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">これをください</span><span class="nat">Cho tôi cái này</span><span class="read">チョ トイ カイ ナイ</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">これをください</span><span class="nat">Saya mau ini</span><span class="read">サヤ マウ イニ</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">これをください</span><span class="nat">Celui-ci, s&#x27;il vous plaît</span><span class="read">スリュイシ シルヴプレ</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">これをください</span><span class="nat">Esto, por favor</span><span class="read">エスト ポル ファボール</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">これをください</span><span class="nat">Questo, per favore</span><span class="read">クエスト ペル ファヴォーレ</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">これをください</span><span class="nat">Das hier, bitte</span><span class="read">ダス ヒア ビッテ</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">おすすめは何ですか?</span><span class="nat">What do you recommend?</span><span class="read">ワット ドゥ ユー レコメンド</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">おすすめは何ですか?</span><span class="nat">추천 메뉴가 뭐예요?</span><span class="read">チュチョン メニュガ ムォエヨ?</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">おすすめは何ですか?</span><span class="nat">有什麼推薦的?</span><span class="read">ヨウ シェンマ トゥイジェン ダ?</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">おすすめは何ですか?</span><span class="nat">有什么推荐的?</span><span class="read">ヨウ シェンマ トゥイジェン ダ?</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">おすすめは何ですか?</span><span class="nat">มีอะไรแนะนำไหมครับ/คะ</span><span class="read">ミー アライ ネナム マイ クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">おすすめは何ですか?</span><span class="nat">Món nào ngon?</span><span class="read">モン ナオ ゴン?</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">おすすめは何ですか?</span><span class="nat">Apa rekomendasinya?</span><span class="read">アパ レコメンダシニャ?</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">おすすめは何ですか?</span><span class="nat">Qu&#x27;est-ce que vous recommandez ?</span><span class="read">ケスク ヴ レコマンデ?</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">おすすめは何ですか?</span><span class="nat">¿Qué me recomienda?</span><span class="read">ケ メ レコミエンダ?</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">おすすめは何ですか?</span><span class="nat">Cosa mi consiglia?</span><span class="read">コーザ ミ コンシリア?</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">おすすめは何ですか?</span><span class="nat">Was empfehlen Sie?</span><span class="read">ヴァス エンプフェーレン ズィー?</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">辛くしないでください</span><span class="nat">Not spicy, please.</span><span class="read">ノット スパイシー プリーズ</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">辛くしないでください</span><span class="nat">안 맵게 해 주세요</span><span class="read">アン メプケ ヘ ジュセヨ</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">辛くしないでください</span><span class="nat">請不要辣</span><span class="read">チン ブーヤオ ラー</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">辛くしないでください</span><span class="nat">请不要辣</span><span class="read">チン ブーヤオ ラー</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">辛くしないでください</span><span class="nat">ขอไม่เผ็ดครับ/ค่ะ</span><span class="read">コー マイペット クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">辛くしないでください</span><span class="nat">Đừng cho cay</span><span class="read">ドゥン チョ カイ</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">辛くしないでください</span><span class="nat">Jangan pedas</span><span class="read">ジャンガン プダス</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">辛くしないでください</span><span class="nat">Pas épicé, s&#x27;il vous plaît</span><span class="read">パ ゼピセ シルヴプレ</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">辛くしないでください</span><span class="nat">Sin picante, por favor</span><span class="read">シン ピカンテ ポル ファボール</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">辛くしないでください</span><span class="nat">Non piccante, per favore</span><span class="read">ノン ピッカンテ ペル ファヴォーレ</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">辛くしないでください</span><span class="nat">Nicht scharf, bitte</span><span class="read">ニヒト シャルフ ビッテ</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">お会計をお願いします</span><span class="nat">The check, please.</span><span class="read">ザ チェック プリーズ</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">お会計をお願いします</span><span class="nat">계산해 주세요</span><span class="read">ケサネ ジュセヨ</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">お会計をお願いします</span><span class="nat">買單</span><span class="read">マイダン</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">お会計をお願いします</span><span class="nat">买单</span><span class="read">マイダン</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">お会計をお願いします</span><span class="nat">เช็คบิลครับ/ค่ะ</span><span class="read">チェックビン クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">お会計をお願いします</span><span class="nat">Tính tiền</span><span class="read">ティン ティエン</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">お会計をお願いします</span><span class="nat">Minta bon</span><span class="read">ミンタ ボン</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">お会計をお願いします</span><span class="nat">L&#x27;addition, s&#x27;il vous plaît</span><span class="read">ラディシオン シルヴプレ</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">お会計をお願いします</span><span class="nat">La cuenta, por favor</span><span class="read">ラ クエンタ ポル ファボール</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">お会計をお願いします</span><span class="nat">Il conto, per favore</span><span class="read">イル コント ペル ファヴォーレ</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">お会計をお願いします</span><span class="nat">Die Rechnung, bitte</span><span class="read">ディー レヒヌング ビッテ</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">とてもおいしかったです</span><span class="nat">It was delicious!</span><span class="read">イット ワズ デリシャス</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">とてもおいしかったです</span><span class="nat">정말 맛있었어요</span><span class="read">チョンマル マシッソッソヨ</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">とてもおいしかったです</span><span class="nat">很好吃</span><span class="read">ヘン ハオチー</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">とてもおいしかったです</span><span class="nat">很好吃</span><span class="read">ヘン ハオチー</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">とてもおいしかったです</span><span class="nat">อร่อยมากครับ/ค่ะ</span><span class="read">アロイ マーク クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">とてもおいしかったです</span><span class="nat">Rất ngon</span><span class="read">ザット ゴン</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">とてもおいしかったです</span><span class="nat">Enak sekali</span><span class="read">エナッ スカリ</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">とてもおいしかったです</span><span class="nat">C&#x27;était délicieux</span><span class="read">セテ デリシュー</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">とてもおいしかったです</span><span class="nat">Estaba delicioso</span><span class="read">エスタバ デリシオソ</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">とてもおいしかったです</span><span class="nat">Era buonissimo</span><span class="read">エラ ブォニッシモ</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">とてもおいしかったです</span><span class="nat">Es war sehr lecker</span><span class="read">エス ヴァー ゼア レッカー</span></button>
+<div class="cat-h">買い物</div>
+<button type="button" class="phrase ph ph-en"><span class="jp">カードで払えますか?</span><span class="nat">Can I pay by card?</span><span class="read">キャナイ ペイ バイ カード</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">カードで払えますか?</span><span class="nat">카드 돼요?</span><span class="read">カドゥ デヨ?</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">カードで払えますか?</span><span class="nat">可以刷卡嗎?</span><span class="read">クーイー シュアカー マ?</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">カードで払えますか?</span><span class="nat">可以刷卡吗?</span><span class="read">クーイー シュアカー マ?</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">カードで払えますか?</span><span class="nat">จ่ายบัตรได้ไหมครับ/คะ</span><span class="read">チャーイ バット ダイマイ クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">カードで払えますか?</span><span class="nat">Trả bằng thẻ được không?</span><span class="read">チャー バン テー ドゥオック ホン?</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">カードで払えますか?</span><span class="nat">Bisa pakai kartu?</span><span class="read">ビサ パカイ カルトゥ?</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">カードで払えますか?</span><span class="nat">Je peux payer par carte ?</span><span class="read">ジュ プー ペイエ パル カルト?</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">カードで払えますか?</span><span class="nat">¿Puedo pagar con tarjeta?</span><span class="read">プエド パガール コン タルヘタ?</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">カードで払えますか?</span><span class="nat">Posso pagare con la carta?</span><span class="read">ポッソ パガーレ コン ラ カルタ?</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">カードで払えますか?</span><span class="nat">Kann ich mit Karte zahlen?</span><span class="read">カン イッヒ ミット カルテ ツァーレン?</span></button>
+<div class="cat-h">移動</div>
+<button type="button" class="phrase ph ph-en"><span class="jp">ここへ行きたいです(住所や地図を見せながら)</span><span class="nat">I&#x27;d like to go here.</span><span class="read">アイド ライク トゥ ゴー ヒア</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">ここへ行きたいです(住所や地図を見せながら)</span><span class="nat">여기로 가 주세요</span><span class="read">ヨギロ カ ジュセヨ</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">ここへ行きたいです(住所や地図を見せながら)</span><span class="nat">我要去這裡</span><span class="read">ウォ ヤオ チュー ジェリー</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">ここへ行きたいです(住所や地図を見せながら)</span><span class="nat">我要去这里</span><span class="read">ウォ ヤオ チュー ジェリー</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">ここへ行きたいです(住所や地図を見せながら)</span><span class="nat">ไปที่นี่ครับ/ค่ะ</span><span class="read">パイ ティーニー クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">ここへ行きたいです(住所や地図を見せながら)</span><span class="nat">Cho tôi đến đây</span><span class="read">チョ トイ デン ダイ</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">ここへ行きたいです(住所や地図を見せながら)</span><span class="nat">Saya mau ke sini</span><span class="read">サヤ マウ ク シニ</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">ここへ行きたいです(住所や地図を見せながら)</span><span class="nat">Je voudrais aller ici</span><span class="read">ジュ ヴドレ アレ イシ</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">ここへ行きたいです(住所や地図を見せながら)</span><span class="nat">Quiero ir aquí</span><span class="read">キエロ イール アキ</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">ここへ行きたいです(住所や地図を見せながら)</span><span class="nat">Vorrei andare qui</span><span class="read">ヴォレイ アンダーレ クイ</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">ここへ行きたいです(住所や地図を見せながら)</span><span class="nat">Ich möchte hierhin</span><span class="read">イッヒ メヒテ ヒアヒン</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">ここで止めてください</span><span class="nat">Please stop here.</span><span class="read">プリーズ ストップ ヒア</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">ここで止めてください</span><span class="nat">여기서 세워 주세요</span><span class="read">ヨギソ セウォ ジュセヨ</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">ここで止めてください</span><span class="nat">請在這裡停</span><span class="read">チン ザイ ジェリー ティン</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">ここで止めてください</span><span class="nat">请在这里停</span><span class="read">チン ザイ ジェリー ティン</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">ここで止めてください</span><span class="nat">จอดตรงนี้ครับ/ค่ะ</span><span class="read">チョート トロンニー クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">ここで止めてください</span><span class="nat">Dừng ở đây</span><span class="read">ズン オー ダイ</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">ここで止めてください</span><span class="nat">Berhenti di sini</span><span class="read">ブルフンティ ディ シニ</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">ここで止めてください</span><span class="nat">Arrêtez-vous ici</span><span class="read">アレテ ヴ イシ</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">ここで止めてください</span><span class="nat">Pare aquí, por favor</span><span class="read">パレ アキ ポル ファボール</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">ここで止めてください</span><span class="nat">Si fermi qui</span><span class="read">スィ フェルミ クイ</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">ここで止めてください</span><span class="nat">Halten Sie hier, bitte</span><span class="read">ハルテン ズィー ヒア ビッテ</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">駅はどこですか?</span><span class="nat">Where is the station?</span><span class="read">ウェア イズ ザ ステーション</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">駅はどこですか?</span><span class="nat">역이 어디예요?</span><span class="read">ヨギ オディエヨ?</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">駅はどこですか?</span><span class="nat">車站在哪裡?</span><span class="read">チャージャン ザイ ナーリー?</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">駅はどこですか?</span><span class="nat">车站在哪里?</span><span class="read">チャージャン ザイ ナーリー?</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">駅はどこですか?</span><span class="nat">สถานีอยู่ที่ไหนครับ/คะ</span><span class="read">サターニー ユー ティーナイ クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">駅はどこですか?</span><span class="nat">Nhà ga ở đâu?</span><span class="read">ニャ ガー オー ダウ?</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">駅はどこですか?</span><span class="nat">Di mana stasiun?</span><span class="read">ディ マナ スタシウン?</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">駅はどこですか?</span><span class="nat">Où est la gare ?</span><span class="read">ウ エ ラ ガール?</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">駅はどこですか?</span><span class="nat">¿Dónde está la estación?</span><span class="read">ドンデ エスタ ラ エスタシオン?</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">駅はどこですか?</span><span class="nat">Dov&#x27;è la stazione?</span><span class="read">ドヴェ ラ スタツィオーネ?</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">駅はどこですか?</span><span class="nat">Wo ist der Bahnhof?</span><span class="read">ヴォー イスト デア バーンホーフ?</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">時間はどのくらいかかりますか?</span><span class="nat">How long does it take?</span><span class="read">ハウ ロング ダズ イット テイク</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">時間はどのくらいかかりますか?</span><span class="nat">시간이 얼마나 걸려요?</span><span class="read">シガニ オルマナ コルリョヨ?</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">時間はどのくらいかかりますか?</span><span class="nat">要多久?</span><span class="read">ヤオ ドゥオジウ?</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">時間はどのくらいかかりますか?</span><span class="nat">要多久?</span><span class="read">ヤオ ドゥオジウ?</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">時間はどのくらいかかりますか?</span><span class="nat">ใช้เวลานานไหมครับ/คะ</span><span class="read">チャイ ウェーラー ナーン マイ クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">時間はどのくらいかかりますか?</span><span class="nat">Mất bao lâu?</span><span class="read">マット バオ ラウ?</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">時間はどのくらいかかりますか?</span><span class="nat">Berapa lama?</span><span class="read">ブラパ ラマ?</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">時間はどのくらいかかりますか?</span><span class="nat">Ça prend combien de temps ?</span><span class="read">サ プラン コンビヤン ドゥ タン?</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">時間はどのくらいかかりますか?</span><span class="nat">¿Cuánto se tarda?</span><span class="read">クアント セ タルダ?</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">時間はどのくらいかかりますか?</span><span class="nat">Quanto ci vuole?</span><span class="read">クアント チ ヴォーレ?</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">時間はどのくらいかかりますか?</span><span class="nat">Wie lange dauert es?</span><span class="read">ヴィー ランゲ ダウアート エス?</span></button>
+<div class="cat-h">緊急</div>
+<button type="button" class="phrase ph ph-en"><span class="jp">助けてください!</span><span class="nat">Help!</span><span class="read">ヘルプ!</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">助けてください!</span><span class="nat">도와주세요!</span><span class="read">トワジュセヨ!</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">助けてください!</span><span class="nat">請幫幫我!</span><span class="read">チン バンバン ウォ!</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">助けてください!</span><span class="nat">请帮帮我!</span><span class="read">チン バンバン ウォ!</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">助けてください!</span><span class="nat">ช่วยด้วยครับ/ค่ะ</span><span class="read">チュアイ ドゥアイ クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">助けてください!</span><span class="nat">Cứu tôi với!</span><span class="read">クウ トイ ヴォイ!</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">助けてください!</span><span class="nat">Tolong!</span><span class="read">トロン!</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">助けてください!</span><span class="nat">Au secours !</span><span class="read">オ スクール!</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">助けてください!</span><span class="nat">¡Ayuda!</span><span class="read">アユダ!</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">助けてください!</span><span class="nat">Aiuto!</span><span class="read">アイウート!</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">助けてください!</span><span class="nat">Hilfe!</span><span class="read">ヒルフェ!</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">警察を呼んでください</span><span class="nat">Please call the police.</span><span class="read">プリーズ コール ザ ポリス</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">警察を呼んでください</span><span class="nat">경찰을 불러 주세요</span><span class="read">キョンチャルル プルロ ジュセヨ</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">警察を呼んでください</span><span class="nat">請叫警察</span><span class="read">チン ジャオ ジンチャー</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">警察を呼んでください</span><span class="nat">请叫警察</span><span class="read">チン ジャオ ジンチャー</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">警察を呼んでください</span><span class="nat">ช่วยเรียกตำรวจให้หน่อยครับ/ค่ะ</span><span class="read">チュアイ リアック タムルアット ハイノイ クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">警察を呼んでください</span><span class="nat">Gọi cảnh sát giúp tôi</span><span class="read">ゴイ カイン サット ジュップ トイ</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">警察を呼んでください</span><span class="nat">Tolong panggil polisi</span><span class="read">トロン パンギル ポリシ</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">警察を呼んでください</span><span class="nat">Appelez la police</span><span class="read">アプレ ラ ポリス</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">警察を呼んでください</span><span class="nat">Llame a la policía</span><span class="read">ジャメ ア ラ ポリシア</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">警察を呼んでください</span><span class="nat">Chiami la polizia</span><span class="read">キアーミ ラ ポリツィーア</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">警察を呼んでください</span><span class="nat">Rufen Sie die Polizei</span><span class="read">ルーフェン ズィー ディー ポリツァイ</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">救急車を呼んでください</span><span class="nat">Please call an ambulance.</span><span class="read">プリーズ コール アン アンビュランス</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">救急車を呼んでください</span><span class="nat">구급차를 불러 주세요</span><span class="read">クグプチャルル プルロ ジュセヨ</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">救急車を呼んでください</span><span class="nat">請叫救護車</span><span class="read">チン ジャオ ジウフーチャー</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">救急車を呼んでください</span><span class="nat">请叫救护车</span><span class="read">チン ジャオ ジウフーチャー</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">救急車を呼んでください</span><span class="nat">ช่วยเรียกรถพยาบาลให้หน่อยครับ/ค่ะ</span><span class="read">チュアイ リアック ロット パヤバーン ハイノイ クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">救急車を呼んでください</span><span class="nat">Gọi xe cấp cứu giúp tôi</span><span class="read">ゴイ セ カップ クウ ジュップ トイ</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">救急車を呼んでください</span><span class="nat">Tolong panggil ambulans</span><span class="read">トロン パンギル アンブランス</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">救急車を呼んでください</span><span class="nat">Appelez une ambulance</span><span class="read">アプレ ユヌ アンビュランス</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">救急車を呼んでください</span><span class="nat">Llame a una ambulancia</span><span class="read">ジャメ ア ウナ アンブランシア</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">救急車を呼んでください</span><span class="nat">Chiami un&#x27;ambulanza</span><span class="read">キアーミ ウナンブランツァ</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">救急車を呼んでください</span><span class="nat">Rufen Sie einen Krankenwagen</span><span class="read">ルーフェン ズィー アイネン クランケンヴァーゲン</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">具合が悪いです</span><span class="nat">I feel sick.</span><span class="read">アイ フィール シック</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">具合が悪いです</span><span class="nat">몸이 아파요</span><span class="read">モミ アパヨ</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">具合が悪いです</span><span class="nat">我不舒服</span><span class="read">ウォ ブー シューフ</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">具合が悪いです</span><span class="nat">我不舒服</span><span class="read">ウォ ブー シューフ</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">具合が悪いです</span><span class="nat">ไม่สบายครับ/ค่ะ</span><span class="read">マイ サバーイ クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">具合が悪いです</span><span class="nat">Tôi thấy không khỏe</span><span class="read">トイ タイ ホン ホエ</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">具合が悪いです</span><span class="nat">Saya sakit</span><span class="read">サヤ サキット</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">具合が悪いです</span><span class="nat">Je me sens mal</span><span class="read">ジュ ム サン マル</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">具合が悪いです</span><span class="nat">Me encuentro mal</span><span class="read">メ エンクエントロ マル</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">具合が悪いです</span><span class="nat">Mi sento male</span><span class="read">ミ セント マーレ</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">具合が悪いです</span><span class="nat">Mir ist schlecht</span><span class="read">ミア イスト シュレヒト</span></button>
+<button type="button" class="phrase ph ph-en"><span class="jp">パスポートをなくしました</span><span class="nat">I lost my passport.</span><span class="read">アイ ロスト マイ パスポート</span></button>
+<button type="button" class="phrase ph ph-ko"><span class="jp">パスポートをなくしました</span><span class="nat">여권을 잃어버렸어요</span><span class="read">ヨックォヌル イロボリョッソヨ</span></button>
+<button type="button" class="phrase ph ph-tw"><span class="jp">パスポートをなくしました</span><span class="nat">我的護照不見了</span><span class="read">ウォダ フージャオ ブージェンラ</span></button>
+<button type="button" class="phrase ph ph-cn"><span class="jp">パスポートをなくしました</span><span class="nat">我的护照不见了</span><span class="read">ウォダ フージャオ ブージェンラ</span></button>
+<button type="button" class="phrase ph ph-th"><span class="jp">パスポートをなくしました</span><span class="nat">พาสปอร์ตหายครับ/ค่ะ</span><span class="read">パスポート ハーイ クラップ/カー</span></button>
+<button type="button" class="phrase ph ph-vi"><span class="jp">パスポートをなくしました</span><span class="nat">Tôi bị mất hộ chiếu</span><span class="read">トイ ビ マット ホー チエウ</span></button>
+<button type="button" class="phrase ph ph-id"><span class="jp">パスポートをなくしました</span><span class="nat">Paspor saya hilang</span><span class="read">パスポル サヤ ヒラン</span></button>
+<button type="button" class="phrase ph ph-fr"><span class="jp">パスポートをなくしました</span><span class="nat">J&#x27;ai perdu mon passeport</span><span class="read">ジェ ペルデュ モン パスポール</span></button>
+<button type="button" class="phrase ph ph-es"><span class="jp">パスポートをなくしました</span><span class="nat">He perdido mi pasaporte</span><span class="read">エ ペルディド ミ パサポルテ</span></button>
+<button type="button" class="phrase ph ph-it"><span class="jp">パスポートをなくしました</span><span class="nat">Ho perso il passaporto</span><span class="read">オ ペルソ イル パサポルト</span></button>
+<button type="button" class="phrase ph ph-de"><span class="jp">パスポートをなくしました</span><span class="nat">Ich habe meinen Pass verloren</span><span class="read">イッヒ ハーベ マイネン パス フェアローレン</span></button>
+  </div>
+</section>
+
+<!-- ============ 持ち物 ============ -->
+<section class="pane" id="pane-pack">
+  <div class="sec-head">
+    <span class="eyebrow">Packing</span>
+    <h2>持ち物チェックリスト</h2>
+    <p class="lede">チェックの保存と項目追加は、ブラウザで開いたとき有効です。</p>
+  </div>
+  <p class="progress" id="packprog"></p>
+  <div id="packlist">
+<div class="card pgroup"><h3>書類・手続き(最重要)</h3><div class="pitem"><input type="checkbox" id="cb-p0_0"><label for="cb-p0_0">パスポート<span class="why">残存有効期間を「手続き」タブで確認!</span></label></div><div class="pitem"><input type="checkbox" id="cb-p0_1"><label for="cb-p0_1">電子渡航認証・入国カードの承認画面スクショ<span class="why">ESTA・ETA・TDACなど。電波がなくても見せられるように</span></label></div><div class="pitem"><input type="checkbox" id="cb-p0_2"><label for="cb-p0_2">eチケット控え・ホテル予約確認</label></div><div class="pitem"><input type="checkbox" id="cb-p0_3"><label for="cb-p0_3">海外旅行保険の証券番号・緊急連絡先<span class="why">クレカ付帯なら補償条件(利用付帯か)も確認</span></label></div><div class="pitem"><input type="checkbox" id="cb-p0_4"><label for="cb-p0_4">パスポートのコピー+証明写真2枚<span class="why">本体と別の場所に。紛失時の再発行が速くなる</span></label></div><div class="pitem"><input type="checkbox" id="cb-p0_5"><label for="cb-p0_5">国際運転免許証<span class="why">現地で運転する人だけ</span></label></div></div>
+<div class="card pgroup"><h3>お金</h3><div class="pitem"><input type="checkbox" id="cb-p1_0"><label for="cb-p1_0">クレジットカード2枚以上(Visa/Master別ブランド)<span class="why">1枚は予備として別の場所に</span></label></div><div class="pitem"><input type="checkbox" id="cb-p1_1"><label for="cb-p1_1">現金(日本円)<span class="why">帰国後の交通費分も</span></label></div><div class="pitem"><input type="checkbox" id="cb-p1_2"><label for="cb-p1_2">現地通貨(少額)<span class="why">空港到着後のATM引き出しでも可</span></label></div><div class="pitem"><input type="checkbox" id="cb-p1_3"><label for="cb-p1_3">カード紛失時の連絡先メモ<span class="why">「緊急」タブのメモに書いておく</span></label></div></div>
+<div class="card pgroup"><h3>通信・電子機器</h3><div class="pitem"><input type="checkbox" id="cb-p2_0"><label for="cb-p2_0">eSIM設定 or SIMカード・ルーター<span class="why">出発前に設定して開通テストまで</span></label></div><div class="pitem"><input type="checkbox" id="cb-p2_1"><label for="cb-p2_1">モバイルバッテリー<span class="why">必ず手荷物へ。容量は「持ち物」タブの判定ツールで</span></label></div><div class="pitem"><input type="checkbox" id="cb-p2_2"><label for="cb-p2_2">充電器・ケーブル</label></div><div class="pitem"><input type="checkbox" id="cb-p2_3"><label for="cb-p2_3">変換プラグ<span class="why">下のプラグ表で確認</span></label></div></div>
+<div class="card pgroup"><h3>機内・移動</h3><div class="pitem"><input type="checkbox" id="cb-p3_0"><label for="cb-p3_0">液体は100ml以下・透明袋(1L)に<span class="why">化粧水・歯磨き粉も対象</span></label></div><div class="pitem"><input type="checkbox" id="cb-p3_1"><label for="cb-p3_1">常備薬(+処方箋の写し)<span class="why">痛み止め・胃腸薬・酔い止め。機内持ち込みに</span></label></div><div class="pitem"><input type="checkbox" id="cb-p3_2"><label for="cb-p3_2">ボールペン<span class="why">入国書類の記入用</span></label></div><div class="pitem"><input type="checkbox" id="cb-p3_3"><label for="cb-p3_3">ネックピロー・アイマスク・耳栓<span class="why">長距離便なら</span></label></div><div class="pitem"><input type="checkbox" id="cb-p3_4"><label for="cb-p3_4">羽織りもの<span class="why">機内は冷える</span></label></div></div>
+<div class="card pgroup"><h3>衛生・その他</h3><div class="pitem"><input type="checkbox" id="cb-p4_0"><label for="cb-p4_0">日焼け止め・虫よけ<span class="why">南国は特に</span></label></div><div class="pitem"><input type="checkbox" id="cb-p4_1"><label for="cb-p4_1">ばんそうこう・ウェットティッシュ</label></div><div class="pitem"><input type="checkbox" id="cb-p4_2"><label for="cb-p4_2">圧縮袋・エコバッグ<span class="why">帰りの荷物が増える前提で</span></label></div><div class="pitem"><input type="checkbox" id="cb-p4_3"><label for="cb-p4_3">ホテルの住所メモ(現地語)<span class="why">「緊急」タブのメモへ。タクシーで見せる</span></label></div></div>
+  </div>
+  <div class="card" id="customcard" style="display:none">
+    <h3>自分の持ち物を追加</h3>
+    <div class="addrow">
+      <input id="newitem" type="text" placeholder="例: コンタクトの予備" aria-label="追加する持ち物">
+      <button class="btn" id="additem" type="button">追加</button>
+    </div>
+    <div class="addrow">
+      <button class="btn ghost" id="uncheckall" type="button">チェックを全部外す(次の旅行用)</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>モバイルバッテリー 機内OK判定</h3>
+    <div class="calc">
+      <div>
+        <label for="mah">容量(mAh)を入力</label>
+        <input id="mah" type="number" inputmode="numeric" placeholder="例: 20000">
+      </div>
+      <div class="result" id="whout">※ 判定ツールはブラウザで開くと動きます(プレビューでは表示のみ)</div>
+    </div>
+    <p class="small">目安: <b>100Wh以下(約27,000mAh)はOK</b>/100〜160Whは航空会社の承認制/160Wh超は不可。<b>必ず手荷物へ</b>(預け入れ禁止)。機内での使用・充電ルールは厳格化傾向 — 搭乗する航空会社の案内に従ってください。</p>
+  </div>
+
+  <div class="tbl"><table>
+    <thead><tr><th>行き先</th><th>プラグ</th><th>電圧</th></tr></thead>
+    <tbody>
+      <tr><td>アメリカ・ハワイ・グアム</td><td>A(日本と同じ)</td><td class="num">120V</td></tr>
+      <tr><td>韓国</td><td>C / SE</td><td class="num">220V</td></tr>
+      <tr><td>台湾</td><td>A(日本と同じ)</td><td class="num">110V</td></tr>
+      <tr><td>中国</td><td>A / C / I</td><td class="num">220V</td></tr>
+      <tr><td>香港</td><td>BF</td><td class="num">220V</td></tr>
+      <tr><td>タイ</td><td>A / C 混在</td><td class="num">220V</td></tr>
+      <tr><td>ベトナム</td><td>A / C</td><td class="num">220V</td></tr>
+      <tr><td>シンガポール・マレーシア</td><td>BF</td><td class="num">230V</td></tr>
+      <tr><td>インドネシア(バリ)</td><td>C</td><td class="num">230V</td></tr>
+      <tr><td>フィリピン</td><td>A(形は日本と同じ)</td><td class="num">220V ⚠形が同じでも電圧が違う</td></tr>
+      <tr><td>ヨーロッパ大陸(仏独伊西など)</td><td>C / SE</td><td class="num">230V</td></tr>
+      <tr><td>イギリス</td><td>BF</td><td class="num">230V</td></tr>
+      <tr><td>オーストラリア・NZ</td><td>O</td><td class="num">230–240V</td></tr>
+      <tr><td>ドバイ(UAE)</td><td>BF</td><td class="num">220V</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">スマホ・PCの充電器は「INPUT 100-240V」表記なら変換プラグだけでOK(大半が対応)。ドライヤー・ヘアアイロンは非対応が多く、変圧器でも壊れやすいので現地・ホテルのものを。液体の機内持ち込みは<b>1容器100ml以下+合計1L</b>の透明袋(国際線)。</p>
+</section>
+
+<!-- ============ 緊急 ============ -->
+<section class="pane" id="pane-sos">
+  <div class="sec-head">
+    <span class="eyebrow">Emergency</span>
+    <h2>緊急時カード</h2>
+    <p class="lede">困ったときは、まずここ。下のメモは出発前に埋めておくと安心です。</p>
+  </div>
+
+  <div class="tbl"><table>
+    <thead><tr><th>行き先</th><th>警察</th><th>救急・消防</th></tr></thead>
+    <tbody>
+      <tr><td>アメリカ・カナダ・グアム</td><td class="num">911</td><td class="num">911</td></tr>
+      <tr><td>ヨーロッパ共通(EU)</td><td class="num">112</td><td class="num">112</td></tr>
+      <tr><td>イギリス</td><td class="num">999</td><td class="num">999</td></tr>
+      <tr><td>韓国</td><td class="num">112</td><td class="num">119</td></tr>
+      <tr><td>台湾</td><td class="num">110</td><td class="num">119</td></tr>
+      <tr><td>中国</td><td class="num">110</td><td class="num">120</td></tr>
+      <tr><td>香港</td><td class="num">999</td><td class="num">999</td></tr>
+      <tr><td>タイ</td><td class="num">191(観光警察 1155)</td><td class="num">1669</td></tr>
+      <tr><td>ベトナム</td><td class="num">113</td><td class="num">115</td></tr>
+      <tr><td>シンガポール</td><td class="num">999</td><td class="num">995</td></tr>
+      <tr><td>マレーシア</td><td class="num">999</td><td class="num">999</td></tr>
+      <tr><td>フィリピン</td><td class="num">911</td><td class="num">911</td></tr>
+      <tr><td>インドネシア</td><td class="num">110</td><td class="num">118</td></tr>
+      <tr><td>オーストラリア</td><td class="num">000</td><td class="num">000</td></tr>
+      <tr><td>ニュージーランド</td><td class="num">111</td><td class="num">111</td></tr>
+      <tr><td>ドバイ(UAE)</td><td class="num">999</td><td class="num">998</td></tr>
+      <tr><td>インド</td><td class="num">112</td><td class="num">112</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="card">
+    <h3>パスポートをなくしたら(3ステップ)</h3>
+    <ol class="steps">
+      <li><b>現地の警察へ</b><p>紛失・盗難届を出して「ポリスレポート(受理番号)」をもらう。</p></li>
+      <li><b>日本大使館・総領事館へ</b><p>「帰国のための渡航書」(数日で発行・要写真と帰国便情報)か、新しいパスポートを申請。パスポートのコピーと予備の証明写真を別の場所に持っておくと早い。</p></li>
+      <li><b>航空会社へ連絡</b><p>帰国便の変更が必要ならその相談も。海外旅行保険の対象になることがあるので領収書は保管。</p></li>
+    </ol>
+    <p class="small">在外公館の連絡先: 外務省「在外公館リスト」 <a href="https://www.mofa.go.jp/mofaj/annai/zaigai/list/" rel="noopener">mofa.go.jp/mofaj/annai/zaigai/list/</a> ・ 外務省 領事サービスセンター +81-3-3580-3311</p>
+  </div>
+
+  <div class="card">
+    <h3>カード・スマホをなくしたら</h3>
+    <p style="font-size:14px">・カード: すぐ発行会社に連絡して停止(番号はカード裏面・アプリ。<b>下のメモに書いておく</b>)。不正利用は補償されることが多いので、慌てず時系列をメモ<br>
+    ・スマホ: 「iPhoneを探す」「デバイスを探す」でロック&位置確認 → 通信会社に回線停止を連絡</p>
+  </div>
+
+  <div class="card">
+    <h3>出発前のおすすめ登録</h3>
+    <p style="font-size:14px">・外務省「<b>たびレジ</b>」: 現地の安全情報がメールで届く(無料) <a href="https://www.ezairyu.mofa.go.jp/tabireg/" rel="noopener">ezairyu.mofa.go.jp/tabireg/</a><br>
+    ・外務省 <b>海外安全アプリ</b>と、行き先の「海外安全ホームページ」を出発前に一読 <a href="https://www.anzen.mofa.go.jp/" rel="noopener">anzen.mofa.go.jp</a></p>
+  </div>
+
+  <div class="card memo">
+    <h3>じぶん緊急メモ(端末内にだけ保存)</h3>
+    <label for="m1">海外旅行保険(会社名・証券番号・緊急電話)</label>
+    <textarea id="m1" data-memo="m1" rows="2"></textarea>
+    <label for="m2">クレジットカード1(会社名・紛失時電話)</label>
+    <textarea id="m2" data-memo="m2" rows="2"></textarea>
+    <label for="m3">クレジットカード2(会社名・紛失時電話)</label>
+    <textarea id="m3" data-memo="m3" rows="2"></textarea>
+    <label for="m4">ホテル名・住所(タクシーで見せる用)</label>
+    <textarea id="m4" data-memo="m4" rows="2"></textarea>
+    <label for="m5">緊急連絡先(家族・同行者)</label>
+    <textarea id="m5" data-memo="m5" rows="2"></textarea>
+    <label for="m6">医療メモ(血液型・アレルギー・服用薬 — できれば英語でも)</label>
+    <textarea id="m6" data-memo="m6" rows="2"></textarea>
+    <p class="small">メモの保存はブラウザで開いたとき有効です。外部に送信されることはありません。</p>
+  </div>
+</section>
+
+<footer class="app">
+  海外旅行おまもりキット(2026年版)/ 情報確認日 2026-07-10。手続き・料金・制度は予告なく変わります。渡航前に必ず各公式サイト・外務省の最新情報を確認してください。本ページは情報提供のみを目的とし、正確性を保証するものではありません。
+</footer>
+</div>
+
+<div id="overlay" role="dialog" aria-label="フレーズ表示">
+  <div class="o-jp" id="o-jp"></div>
+  <div class="o-nat" id="o-nat"></div>
+  <div class="o-read" id="o-read"></div>
+  <div class="o-close">画面のどこかをタップで閉じる</div>
+</div>
+
+<script>
+"use strict";
+/* ここから下は「あると便利」な機能だけ。JSが動かないプレビューでも本体は全部使える */
+var store = {
+  get: function(k, fb){ try{ var v = localStorage.getItem("omamori:"+k); return v===null? fb : JSON.parse(v);}catch(e){ return fb; } },
+  set: function(k, v){ try{ localStorage.setItem("omamori:"+k, JSON.stringify(v)); }catch(e){} }
+};
+
+/* タブ切替時に先頭へスクロール */
+document.querySelectorAll(".tabradio").forEach(function(r){
+  r.addEventListener("change", function(){ window.scrollTo({top:0}); });
+});
+
+/* 国名検索 */
+var csearch = document.getElementById("csearch");
+if(csearch){
+  csearch.addEventListener("input", function(){
+    var q = this.value.trim();
+    var hit = 0;
+    document.querySelectorAll("#clist .country").forEach(function(d){
+      var show = !q || (d.getAttribute("data-name")||"").indexOf(q)!==-1;
+      d.style.display = show ? "" : "none";
+      if(show) hit++;
+    });
+    document.getElementById("nohit").hidden = hit>0;
+  });
+}
+
+/* 言語の記憶 */
+(function(){
+  var saved = store.get("lang","");
+  if(saved){ var r = document.getElementById("L-"+saved); if(r) r.checked = true; }
+  document.querySelectorAll(".langradio").forEach(function(r){
+    r.addEventListener("change", function(){ store.set("lang", r.id.replace("L-","")); });
+  });
+})();
+
+/* フレーズの全画面表示 */
+var ov = document.getElementById("overlay");
+document.getElementById("phraselist").addEventListener("click", function(e){
+  var b = e.target.closest(".phrase"); if(!b) return;
+  document.getElementById("o-jp").textContent = b.querySelector(".jp").textContent;
+  document.getElementById("o-nat").textContent = b.querySelector(".nat").textContent;
+  document.getElementById("o-read").textContent = b.querySelector(".read").textContent;
+  ov.classList.add("show");
+});
+ov.addEventListener("click", function(){ ov.classList.remove("show"); });
+document.addEventListener("keydown", function(e){ if(e.key==="Escape") ov.classList.remove("show"); });
+
+/* 持ち物: チェックの保存・追加・進捗 */
+var packState = store.get("pack", {});
+var customItems = store.get("custom", []);
+var customCard = document.getElementById("customcard");
+customCard.style.display = "";
+function bindCheckbox(cb){
+  var id = cb.id.replace("cb-","");
+  cb.checked = !!packState[id];
+  cb.addEventListener("change", function(){ packState[id] = cb.checked; store.set("pack", packState); updateProg(); });
+}
+function updateProg(){
+  var boxes = document.querySelectorAll("#packlist input[type=checkbox]");
+  var done = 0; boxes.forEach(function(b){ if(b.checked) done++; });
+  document.getElementById("packprog").innerHTML = "準備できた: <b>"+done+" / "+boxes.length+"</b>";
+}
+function renderCustom(){
+  var old = document.getElementById("customgroup");
+  if(old) old.remove();
+  if(!customItems.length){ updateProg(); return; }
+  var card = document.createElement("div"); card.className = "card pgroup"; card.id = "customgroup";
+  var h = document.createElement("h3"); h.textContent = "じぶん追加"; card.appendChild(h);
+  customItems.forEach(function(name, i){
+    var row = document.createElement("div"); row.className = "pitem";
+    var cb = document.createElement("input"); cb.type = "checkbox"; cb.id = "cb-c"+i;
+    var lb = document.createElement("label"); lb.setAttribute("for","cb-c"+i); lb.textContent = name;
+    var del = document.createElement("button"); del.className = "del"; del.type = "button"; del.textContent = "✕"; del.setAttribute("aria-label","削除");
+    del.addEventListener("click", function(){ customItems.splice(i,1); store.set("custom", customItems); renderCustom(); });
+    row.appendChild(cb); row.appendChild(lb); row.appendChild(del);
+    card.appendChild(row);
+    bindCheckbox(cb);
+  });
+  document.getElementById("packlist").appendChild(card);
+  updateProg();
+}
+document.querySelectorAll("#packlist input[type=checkbox]").forEach(bindCheckbox);
+renderCustom();
+document.getElementById("additem").addEventListener("click", function(){
+  var inp = document.getElementById("newitem");
+  var v = inp.value.trim();
+  if(!v) return;
+  customItems.push(v); store.set("custom", customItems); inp.value = ""; renderCustom();
+});
+document.getElementById("uncheckall").addEventListener("click", function(){
+  packState = {}; store.set("pack", packState);
+  document.querySelectorAll("#packlist input[type=checkbox]").forEach(function(b){ b.checked = false; });
+  updateProg();
+});
+
+/* 通貨換算 */
+var CURRENCIES = [
+ {code:"USD",label:"米ドル(アメリカ・ハワイ・グアム)",unit:1,ph:"例: 155"},
+ {code:"EUR",label:"ユーロ(ヨーロッパ)",unit:1,ph:"例: 170"},
+ {code:"GBP",label:"英ポンド",unit:1,ph:"例: 195"},
+ {code:"KRW",label:"韓国ウォン",unit:100,ph:"例: 11(100ウォンあたり)"},
+ {code:"TWD",label:"台湾ドル",unit:1,ph:"例: 5"},
+ {code:"THB",label:"タイバーツ",unit:1,ph:"例: 4.5"},
+ {code:"SGD",label:"シンガポールドル",unit:1,ph:"例: 115"},
+ {code:"MYR",label:"マレーシアリンギット",unit:1,ph:"例: 33"},
+ {code:"IDR",label:"インドネシアルピア",unit:1000,ph:"例: 9.5(1000ルピアあたり)"},
+ {code:"VND",label:"ベトナムドン",unit:1000,ph:"例: 6(1000ドンあたり)"},
+ {code:"PHP",label:"フィリピンペソ",unit:1,ph:"例: 2.7"},
+ {code:"HKD",label:"香港ドル",unit:1,ph:"例: 20"},
+ {code:"CNY",label:"中国元",unit:1,ph:"例: 21"},
+ {code:"AUD",label:"豪ドル",unit:1,ph:"例: 100"},
+ {code:"NZD",label:"NZドル",unit:1,ph:"例: 90"},
+ {code:"CAD",label:"カナダドル",unit:1,ph:"例: 110"},
+ {code:"AED",label:"UAEディルハム(ドバイ)",unit:1,ph:"例: 42"}
+];
+var curSel = document.getElementById("cur");
+CURRENCIES.forEach(function(c){
+  var o = document.createElement("option"); o.value = c.code; o.textContent = c.label; curSel.appendChild(o);
+});
+var rateIn = document.getElementById("rate"), fIn = document.getElementById("famt"), jIn = document.getElementById("jamt");
+var rates = store.get("rates", {});
+function curMeta(){ return CURRENCIES.filter(function(c){return c.code===curSel.value;})[0]; }
+function fmt(n){ return isFinite(n) ? Number(n.toFixed(n>=100?0:2)).toLocaleString("ja-JP") : "—"; }
+function updateCurUI(){
+  var m = curMeta();
+  document.getElementById("ratelabel").textContent = "レート(" + (m.unit>1? m.unit+" ":"1 ") + m.code + " = 何円か)";
+  document.getElementById("flabel").textContent = m.code + " → 円";
+  rateIn.placeholder = m.ph;
+  rateIn.value = rates[m.code] || "";
+  calcCur();
+}
+function calcCur(){
+  var m = curMeta(); var r = parseFloat(rateIn.value); var out = document.getElementById("curout");
+  if(!r){ out.textContent = "レートを入力すると、ここに換算結果が出ます"; return; }
+  var perOne = r / m.unit;
+  var f = parseFloat(fIn.value), j = parseFloat(jIn.value);
+  var lines = [];
+  if(f) lines.push(fmt(f)+" "+m.code+" ≈ <b>"+fmt(f*perOne)+"円</b>");
+  if(j) lines.push(fmt(j)+"円 ≈ <b>"+fmt(j/perOne)+" "+m.code+"</b>");
+  if(!lines.length) lines.push("1 "+m.code+" ≈ <b>"+fmt(perOne)+"円</b>(金額を入れるとまとめて換算)");
+  out.innerHTML = lines.join("<br>");
+}
+curSel.addEventListener("change", updateCurUI);
+rateIn.addEventListener("input", function(){ var m=curMeta(); rates[m.code]=rateIn.value; store.set("rates",rates); calcCur(); });
+fIn.addEventListener("input", calcCur);
+jIn.addEventListener("input", calcCur);
+updateCurUI();
+
+/* チップ計算 */
+var tipPct = 15;
+function calcTip(){
+  var b = parseFloat(document.getElementById("bill").value);
+  var p = Math.max(1, parseInt(document.getElementById("ppl").value||"1",10));
+  var out = document.getElementById("tipout");
+  if(!b){ out.textContent = "お会計を入れると、チップ込み金額が出ます"; return; }
+  var tip = b*tipPct/100, total = b+tip;
+  var html = "チップ "+tipPct+"% = <b>"+fmt(tip)+"</b> / 合計 <b>"+fmt(total)+"</b>";
+  if(p>1) html += "<br>1人あたり <b>"+fmt(total/p)+"</b>("+p+"人)";
+  out.innerHTML = html;
+}
+document.querySelectorAll("#tipchips .chip").forEach(function(ch){
+  ch.addEventListener("click", function(){
+    document.querySelectorAll("#tipchips .chip").forEach(function(x){ x.setAttribute("aria-pressed","false"); });
+    ch.setAttribute("aria-pressed","true"); tipPct = parseFloat(ch.dataset.tip); calcTip();
+  });
+});
+document.getElementById("bill").addEventListener("input", calcTip);
+document.getElementById("ppl").addEventListener("input", calcTip);
+calcTip();
+
+/* モバイルバッテリー判定 */
+var mahIn = document.getElementById("mah");
+function calcWh(){
+  var mah = parseFloat(mahIn.value);
+  var out = document.getElementById("whout");
+  if(!mah){ out.textContent = "容量を入れると判定が出ます"; return; }
+  var wh = mah*3.7/1000;
+  var verdict = wh<=100 ? "◎ 機内持ち込みOK(預け入れは不可)" : (wh<=160 ? "△ 航空会社の事前承認が必要" : "✕ 持ち込み不可");
+  out.innerHTML = "約 <b>"+wh.toFixed(1)+" Wh</b> → "+verdict;
+}
+mahIn.addEventListener("input", calcWh);
+calcWh();
+
+/* 緊急メモ */
+document.querySelectorAll("[data-memo]").forEach(function(ta){
+  ta.value = store.get("memo_"+ta.dataset.memo, "");
+  ta.addEventListener("input", function(){ store.set("memo_"+ta.dataset.memo, ta.value); });
+});
+</script>
+
+</body>
+</html>

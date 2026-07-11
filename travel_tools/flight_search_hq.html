@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+</head>
+<body>
+<title>航空券サーチ司令塔</title>
+<style>
+:root{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+  --font-body:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium","Yu Gothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
+  --font-disp:"Avenir Next","Avenir","Futura","Trebuchet MS",var(--font-body);
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+    --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+    --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+    --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+    --ok:#86C295; --ok-bg:#16301C;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+}
+:root[data-theme="dark"]{
+  --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+  --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+  --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+  --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+  --ok:#86C295; --ok-bg:#16301C;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);line-height:1.65;font-size:15.5px;-webkit-text-size-adjust:100%}
+.wrap{max-width:700px;margin:0 auto;padding:0 14px 72px}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px;word-break:break-all}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+header.app{padding:22px 2px 10px}
+.eyebrow{font-family:var(--font-disp);font-size:11px;letter-spacing:.16em;color:var(--accent);font-weight:600;text-transform:uppercase}
+header.app h1{margin:2px 0 6px;font-size:26px;line-height:1.3;letter-spacing:.01em;color:var(--navy);text-wrap:balance}
+.stamp{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.stamp span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
+
+.sec-head{margin:18px 2px 12px}
+.sec-head h2{margin:2px 0 4px;font-size:20px;color:var(--navy);letter-spacing:.01em}
+.sec-head .lede{margin:0;font-size:13.5px;color:var(--muted)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 15px;margin:0 0 12px}
+.card h3{margin:0 0 8px;font-size:15.5px;color:var(--navy)}
+.card p{margin:6px 0}
+.small{font-size:12.5px;color:var(--muted)}
+.callout{border:1px solid transparent;border-radius:10px;padding:12px 14px;margin:0 0 12px;font-size:14px}
+.callout.warn{background:var(--warn-bg);color:var(--warn)}
+.callout.danger{background:var(--danger-bg);color:var(--danger)}
+.callout b{display:block;margin-bottom:4px}
+.badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:2px 8px;vertical-align:middle;white-space:nowrap}
+.badge.free{background:var(--ok-bg);color:var(--ok)}
+.badge.tap{background:var(--warn-bg);color:var(--warn)}
+.badge.official{background:var(--accent-soft);color:var(--accent)}
+
+/* ---- 検索フォーム ---- */
+.f-grid{display:grid;gap:12px}
+.f-grid label.fl{font-size:12.5px;color:var(--muted);display:block;margin-bottom:3px}
+.f-grid select,.f-grid input[type="date"],.f-grid input[type="text"]{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:10px 12px;font-size:16px;font-family:var(--font-body);min-height:44px}
+.f-grid input[type="date"]{font-family:var(--font-mono)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tripchips{display:flex;gap:6px;flex-wrap:wrap}
+.tripradio{position:absolute;width:1px;height:1px;opacity:0;margin:0;pointer-events:none}
+.chip{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 15px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:38px;user-select:none}
+#tp-rt:checked~.tripchips .chip[for="tp-rt"],#tp-ow:checked~.tripchips .chip[for="tp-ow"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+#tp-rt:focus-visible~.tripchips .chip[for="tp-rt"],#tp-ow:focus-visible~.tripchips .chip[for="tp-ow"]{outline:2px solid var(--accent);outline-offset:2px}
+.f-form:has(#tp-ow:checked) .ret-field{display:none}
+.optrow{display:flex;align-items:center;gap:9px;min-height:40px}
+.optrow input[type="checkbox"]{width:20px;height:20px;accent-color:var(--accent);flex:none;margin:0}
+.optrow label{cursor:pointer}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--on-accent);border-radius:9px;padding:13px 16px;font-size:16px;font-weight:700;cursor:pointer;width:100%}
+.btn:active{opacity:.85}
+.ferr{display:none;font-size:13.5px;color:var(--danger);background:var(--danger-bg);border-radius:8px;padding:9px 12px}
+.ferr.show{display:block}
+.codehint{font-size:12px;color:var(--muted);margin-top:3px}
+
+/* ---- 結果リンク ---- */
+.result-sum{display:none;background:var(--accent-soft);border-radius:9px;padding:10px 13px;font-size:14px;margin:0 0 10px}
+.result-sum.show{display:block}
+.result-sum b{color:var(--accent)}
+.golist{display:none}
+.golist.show{display:block}
+.golink{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:13px 14px;margin:0 0 9px;text-decoration:none;color:var(--ink)}
+.golink .rank{width:30px;height:30px;border-radius:8px;background:var(--navy);color:var(--surface);font-family:var(--font-disp);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;flex:none}
+.golink .gbody{min-width:0}
+.golink .gname{font-weight:700;font-size:15.5px;color:var(--navy);display:block;line-height:1.4}
+.golink .gsub{font-size:12px;color:var(--muted);display:block;line-height:1.5}
+.golink .arrow{margin-left:auto;color:var(--accent);font-weight:700;flex:none}
+.gonote{font-size:12.5px;color:var(--muted);margin:10px 2px 0}
+
+/* ---- 静的リンク ---- */
+.sitelist{margin:0;padding:0;list-style:none}
+.sitelist li{display:flex;align-items:baseline;gap:8px;padding:8px 2px;border-bottom:1px solid var(--line);flex-wrap:wrap;font-size:14px}
+.sitelist li:last-child{border-bottom:none}
+.sitelist .sname{font-weight:700;min-width:9em}
+.sitelist .snote{font-size:12px;color:var(--muted);flex-basis:100%}
+
+.tips{margin:0;padding:0;list-style:none}
+.tips li{position:relative;padding:0 0 13px 30px}
+.tips li::before{content:"✓";position:absolute;left:2px;top:0;color:var(--accent);font-weight:700}
+.tips b{display:block}
+.tips p{margin:2px 0;font-size:14px}
+
+footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);line-height:1.7}
+</style>
+
+<div class="wrap">
+<header class="app">
+  <span class="eyebrow">Flight Search Command — 2026</span>
+  <h1>航空券サーチ司令塔</h1>
+  <div class="stamp">
+    <span><span class="dot"></span>情報確認日 2026-07-11</span>
+    <span><span class="dot"></span>入力は端末内だけで処理</span>
+    <span><span class="dot"></span>価格の表示は各公式サイトで</span>
+  </div>
+  <noscript><div class="callout warn" style="margin-top:10px"><b>プレビュー表示中(ファイルAppなど)</b>このままでも「よく使うサイト一覧」「安く買うコツ」はすべて読めます。条件を入れて検索リンクを作る機能だけは、ブラウザ(Safari・Chrome)で開いたときに有効になります。</div></noscript>
+</header>
+
+<div class="callout warn">
+  <b>このページの仕組み(だいじな話)</b>
+  価格そのものはこのページには出ません。条件を入れて検索すると、<b style="display:inline">Skyscanner・KAYAKなど各サイトの「安い順の結果ページ」へ直行するボタン</b>が並びます。ボタンを押した先で、実際の価格と空席が表示されます。表示された金額が正式な金額です。
+</div>
+
+<!-- ============ 検索フォーム ============ -->
+<div class="sec-head">
+  <span class="eyebrow">Step 1</span>
+  <h2>条件を入れて検索</h2>
+  <p class="lede">1回入力すれば、4つの比較サイトぶんの検索リンクがまとめて作れます。</p>
+</div>
+
+<div class="card f-form">
+  <input class="tripradio" type="radio" name="trip" id="tp-rt" checked>
+  <input class="tripradio" type="radio" name="trip" id="tp-ow">
+  <div class="tripchips" style="margin-bottom:12px">
+    <label class="chip" for="tp-rt">往復</label>
+    <label class="chip" for="tp-ow">片道</label>
+  </div>
+  <div class="f-grid">
+    <div>
+      <label class="fl" for="f-from">出発する空港</label>
+      <select id="f-from">
+        <option value="HND">羽田(東京)</option>
+        <option value="NRT">成田(東京)</option>
+        <option value="KIX">関西(大阪)</option>
+        <option value="NGO">中部セントレア(名古屋)</option>
+        <option value="FUK">福岡</option>
+        <option value="CTS">新千歳(札幌)</option>
+        <option value="OKA">那覇(沖縄)</option>
+        <option value="SDJ">仙台</option>
+        <option value="HIJ">広島</option>
+      </select>
+    </div>
+    <div>
+      <label class="fl" for="f-to">行き先</label>
+      <select id="f-to">
+        <optgroup label="韓国・台湾・香港・中国">
+          <option value="ICN">ソウル(仁川)</option>
+          <option value="GMP">ソウル(金浦)</option>
+          <option value="PUS">釜山</option>
+          <option value="TPE">台北(桃園)</option>
+          <option value="TSA">台北(松山)</option>
+          <option value="KHH">高雄</option>
+          <option value="HKG">香港</option>
+          <option value="MFM">マカオ</option>
+          <option value="PVG">上海(浦東)</option>
+          <option value="PEK">北京(首都)</option>
+        </optgroup>
+        <optgroup label="東南アジア">
+          <option value="BKK">バンコク(スワンナプーム)</option>
+          <option value="DMK">バンコク(ドンムアン)</option>
+          <option value="CNX">チェンマイ</option>
+          <option value="HKT">プーケット</option>
+          <option value="SIN">シンガポール</option>
+          <option value="KUL">クアラルンプール</option>
+          <option value="HAN">ハノイ</option>
+          <option value="SGN">ホーチミン</option>
+          <option value="DAD">ダナン</option>
+          <option value="MNL">マニラ</option>
+          <option value="CEB">セブ</option>
+          <option value="CGK">ジャカルタ</option>
+          <option value="DPS">バリ(デンパサール)</option>
+        </optgroup>
+        <optgroup label="ハワイ・グアム・オセアニア">
+          <option value="HNL">ホノルル(オアフ島)</option>
+          <option value="OGG">マウイ島(カフルイ)</option>
+          <option value="KOA">ハワイ島(コナ)</option>
+          <option value="GUM">グアム</option>
+          <option value="SPN">サイパン</option>
+          <option value="SYD">シドニー</option>
+          <option value="MEL">メルボルン</option>
+          <option value="BNE">ブリスベン</option>
+          <option value="CNS">ケアンズ</option>
+          <option value="AKL">オークランド</option>
+        </optgroup>
+        <optgroup label="北米">
+          <option value="LAX">ロサンゼルス</option>
+          <option value="SFO">サンフランシスコ</option>
+          <option value="SEA">シアトル</option>
+          <option value="JFK">ニューヨーク(JFK)</option>
+          <option value="BOS">ボストン</option>
+          <option value="ORD">シカゴ</option>
+          <option value="YVR">バンクーバー</option>
+          <option value="YYZ">トロント</option>
+        </optgroup>
+        <optgroup label="ヨーロッパ">
+          <option value="LHR">ロンドン(ヒースロー)</option>
+          <option value="CDG">パリ(シャルル・ド・ゴール)</option>
+          <option value="FRA">フランクフルト</option>
+          <option value="MUC">ミュンヘン</option>
+          <option value="AMS">アムステルダム</option>
+          <option value="FCO">ローマ(フィウミチーノ)</option>
+          <option value="MXP">ミラノ(マルペンサ)</option>
+          <option value="BCN">バルセロナ</option>
+          <option value="MAD">マドリード</option>
+          <option value="ZRH">チューリッヒ</option>
+          <option value="VIE">ウィーン</option>
+          <option value="HEL">ヘルシンキ</option>
+          <option value="IST">イスタンブール</option>
+        </optgroup>
+        <optgroup label="中東・南アジア">
+          <option value="DXB">ドバイ</option>
+          <option value="DOH">ドーハ</option>
+          <option value="DEL">デリー</option>
+        </optgroup>
+      </select>
+      <input type="text" id="f-tocode" maxlength="3" autocapitalize="characters" autocomplete="off" placeholder="一覧にない行き先は3文字の空港コード(例: NAN)" style="margin-top:8px">
+      <div class="codehint">※コード欄に入力があるときは、そちらを優先します(空港コードは「都市名 空港コード」で検索すると出ます)</div>
+    </div>
+    <div class="row2">
+      <div>
+        <label class="fl" for="f-dep">出発日</label>
+        <input type="date" id="f-dep">
+      </div>
+      <div class="ret-field">
+        <label class="fl" for="f-ret">帰着日(現地を発つ日)</label>
+        <input type="date" id="f-ret">
+      </div>
+    </div>
+    <div class="row2">
+      <div>
+        <label class="fl" for="f-pax">人数(大人)</label>
+        <select id="f-pax">
+          <option value="1">1名</option>
+          <option value="2">2名</option>
+          <option value="3">3名</option>
+          <option value="4">4名</option>
+          <option value="5">5名</option>
+          <option value="6">6名</option>
+        </select>
+      </div>
+      <div class="optrow" style="align-self:end">
+        <input type="checkbox" id="f-direct">
+        <label for="f-direct">直行便だけ見る</label>
+      </div>
+    </div>
+    <div class="ferr" id="f-err"></div>
+    <button class="btn" id="f-go" type="button">🔍 4サイトぶんの検索リンクを作る</button>
+    <p class="small" style="margin:0">子ども連れの場合: 人数は大人だけで検索し、子どもの追加は各サイトの画面で行うのが確実です。</p>
+  </div>
+</div>
+
+<!-- ============ 結果 ============ -->
+<div class="sec-head" id="results">
+  <span class="eyebrow">Step 2</span>
+  <h2>安い順で見に行く</h2>
+  <p class="lede">上のボタンを押すと、ここに条件入りのリンクが並びます。上から順にタップして比べてください。</p>
+</div>
+
+<div class="result-sum" id="r-sum"></div>
+<div class="golist" id="r-list"></div>
+<p class="gonote" id="r-note" style="display:none">💡 <span class="badge free">安い順で開く</span>= 最初から安い順に並んだ結果が出ます。<span class="badge tap">開いて1タップ</span>= 開いた画面で「価格が安い順」に切り替えてください。同じ便でもサイトごとに手数料が違うので、<b>2〜3サイト見比べるのがおすすめ</b>です。</p>
+
+<!-- ============ JSなしでも読める部分 ============ -->
+<div class="sec-head">
+  <span class="eyebrow">Manual Links</span>
+  <h2>よく使うサイト一覧(手動で入力する場合)</h2>
+  <p class="lede">検索ボタンが使えない画面でも、ここから各サイトへ行けます。</p>
+</div>
+
+<div class="card">
+  <h3>比較サイト(横断検索)</h3>
+  <ul class="sitelist">
+    <li><span class="sname">Google フライト</span><a href="https://www.google.com/travel/flights?hl=ja" rel="noopener">google.com/travel/flights</a><span class="snote">価格グラフで「安い日」が一目でわかる。まずここで相場をつかむのがおすすめ</span></li>
+    <li><span class="sname">Skyscanner</span><a href="https://www.skyscanner.jp/" rel="noopener">skyscanner.jp</a><span class="snote">LCC含め幅広く出る。「1か月まるごと」表示で最安日を探せる</span></li>
+    <li><span class="sname">KAYAK</span><a href="https://www.kayak.co.jp/" rel="noopener">kayak.co.jp</a><span class="snote">絞り込みが細かい。乗継時間の条件指定がしやすい</span></li>
+    <li><span class="sname">Trip.com</span><a href="https://jp.trip.com/flights/" rel="noopener">jp.trip.com/flights</a><span class="snote">アジア路線に強い。購入まで完結できるOTA(旅行予約サイト)</span></li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>航空会社の公式サイト <span class="badge official">✓ 公式</span></h3>
+  <p class="small" style="margin-top:0">比較サイトに出ない「公式限定運賃」やセールがあります。買う前に公式でも同じ条件を一度見るのが安心です。</p>
+  <ul class="sitelist">
+    <li><span class="sname">ANA</span><a href="https://www.ana.co.jp/" rel="noopener">ana.co.jp</a></li>
+    <li><span class="sname">JAL</span><a href="https://www.jal.co.jp/" rel="noopener">jal.co.jp</a></li>
+    <li><span class="sname">ZIPAIR</span><a href="https://www.zipair.net/ja" rel="noopener">zipair.net</a><span class="snote">JAL系の中長距離LCC。ホノルル・バンコク・北米など</span></li>
+    <li><span class="sname">Peach</span><a href="https://www.flypeach.com/" rel="noopener">flypeach.com</a><span class="snote">ソウル・台北・上海など近距離</span></li>
+    <li><span class="sname">ジェットスター</span><a href="https://www.jetstar.com/jp/ja/home" rel="noopener">jetstar.com</a><span class="snote">マニラ・台北・オーストラリア方面など</span></li>
+  </ul>
+</div>
+
+<!-- ============ コツ ============ -->
+<div class="sec-head">
+  <span class="eyebrow">Buying Guide</span>
+  <h2>安く買うコツと注意</h2>
+</div>
+
+<div class="card">
+  <ul class="tips">
+    <li><b>まず「安い日」を探す</b><p>日程を1〜2日ずらせるなら、Google フライトの価格グラフや Skyscanner の「1か月表示」で安い日を先に見つけると、数千〜数万円変わることがあります。</p></li>
+    <li><b>比べるのは「総額」</b><p>LCC(格安航空)は受託手荷物・座席指定・支払手数料が別料金です。最後の支払い画面に出る総額どうしで比べてください。</p></li>
+    <li><b>買う場所は2択で考える</b><p>①航空会社の公式サイト=変更・欠航時の対応が直接できて安心。②比較サイト経由の予約サイト(OTA)=安いことがあるが、変更・払い戻しはそのサイト経由になります。差が小さいなら公式が無難です。</p></li>
+    <li><b>価格は毎日変わる</b><p>為替・燃油・残席で変動します。「この時期に買うのが一番安い」という断定的な法則は公的な裏付けがありません(要確認)。見つけた価格が予算内なら、迷いすぎないのもコツです。</p></li>
+    <li><b>ニセ・格安をうたう非公式サイトに注意</b><p>検索広告には注意。このページのリンクは大手比較サイトと航空会社公式のみです。</p></li>
+  </ul>
+</div>
+
+<footer class="app">
+  <b>航空券サーチ司令塔</b> — 作成 2026-07-11(海外旅行ツール一式のひとつ)<br>
+  このページは検索条件から各サイトへの「入口リンク」を作るだけで、価格情報の取得・保存・外部送信は行いません。実際の運賃・空席・規約は必ず各リンク先(公式)の表示に従ってください。リンク先の画面構成は各社の都合で変わることがあります(その場合も条件を入れ直せば検索できます)。
+</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+  var form = {
+    from: $("f-from"), to: $("f-to"), tocode: $("f-tocode"),
+    dep: $("f-dep"), ret: $("f-ret"), pax: $("f-pax"),
+    direct: $("f-direct"), go: $("f-go"), err: $("f-err"),
+    rt: $("tp-rt"), ow: $("tp-ow"),
+    sum: $("r-sum"), list: $("r-list"), note: $("r-note")
+  };
+
+  /* 今日以前を選べないように */
+  var today = new Date();
+  var tstr = today.getFullYear() + "-" + String(today.getMonth()+1).padStart(2,"0") + "-" + String(today.getDate()).padStart(2,"0");
+  form.dep.min = tstr; form.ret.min = tstr;
+  form.dep.addEventListener("change", function(){ if(form.dep.value){ form.ret.min = form.dep.value; } });
+
+  /* 前回の入力を復元(この端末の中だけに保存) */
+  try {
+    var saved = JSON.parse(localStorage.getItem("flightHQ") || "null");
+    if (saved) {
+      if (saved.from) form.from.value = saved.from;
+      if (saved.to) form.to.value = saved.to;
+      if (saved.tocode) form.tocode.value = saved.tocode;
+      if (saved.dep && saved.dep >= tstr) form.dep.value = saved.dep;
+      if (saved.ret && saved.ret >= tstr) form.ret.value = saved.ret;
+      if (saved.pax) form.pax.value = saved.pax;
+      form.direct.checked = !!saved.direct;
+      if (saved.trip === "ow") form.ow.checked = true;
+    }
+  } catch(e){}
+
+  function jpDate(iso){
+    var p = iso.split("-");
+    var d = new Date(Number(p[0]), Number(p[1])-1, Number(p[2]));
+    var w = ["日","月","火","水","木","金","土"][d.getDay()];
+    return Number(p[1]) + "/" + Number(p[2]) + "(" + w + ")";
+  }
+  function yymmdd(iso){ return iso.slice(2).split("-").join(""); }
+  function optName(sel){ return sel.options[sel.selectedIndex].text; }
+
+  function showError(msg){
+    form.err.textContent = msg;
+    form.err.classList.add("show");
+  }
+
+  form.go.addEventListener("click", function(){
+    form.err.classList.remove("show");
+
+    var o = form.from.value;
+    var codeRaw = form.tocode.value.trim().toUpperCase();
+    var d, dName;
+    if (codeRaw) {
+      if (!/^[A-Z]{3}$/.test(codeRaw)) { showError("空港コードはアルファベット3文字で入れてください(例: NAN)。空欄にすれば一覧の行き先を使います。"); return; }
+      d = codeRaw; dName = codeRaw;
+    } else {
+      d = form.to.value; dName = optName(form.to);
+    }
+    if (d === o) { showError("出発と行き先が同じになっています。"); return; }
+
+    var isRT = form.rt.checked;
+    var dep = form.dep.value, ret = form.ret.value;
+    if (!dep) { showError("出発日を選んでください。"); return; }
+    if (isRT && !ret) { showError("往復の場合は帰着日も選んでください(片道なら上の「片道」をタップ)。"); return; }
+    if (isRT && ret < dep) { showError("帰着日が出発日より前になっています。"); return; }
+
+    var pax = Number(form.pax.value);
+    var direct = form.direct.checked;
+    var oName = optName(form.from);
+
+    try {
+      localStorage.setItem("flightHQ", JSON.stringify({from:o, to:form.to.value, tocode:codeRaw, dep:dep, ret:ret, pax:String(pax), direct:direct, trip:isRT?"rt":"ow"}));
+    } catch(e){}
+
+    /* 各サイトの「条件入り・安い順」URL */
+    var gq = "Flights from " + o + " to " + d + " on " + dep + (isRT ? " through " + ret : " one way") + (direct ? " nonstop" : "") + (pax > 1 ? " for " + pax + " adults" : "");
+    var google = "https://www.google.com/travel/flights?hl=ja&curr=JPY&q=" + encodeURIComponent(gq);
+
+    var sky = "https://www.skyscanner.jp/transport/flights/" + o.toLowerCase() + "/" + d.toLowerCase() + "/" + yymmdd(dep) + "/" + (isRT ? yymmdd(ret) + "/" : "")
+      + "?adults=" + pax + "&adultsv2=" + pax + "&cabinclass=economy&rtn=" + (isRT ? 1 : 0) + "&sortby=price" + (direct ? "&preferdirects=true" : "");
+
+    var kayak = "https://www.kayak.co.jp/flights/" + o + "-" + d + "/" + dep + (isRT ? "/" + ret : "") + (pax > 1 ? "/" + pax + "adults" : "")
+      + "?sort=price_a" + (direct ? "&fs=stops%3D0" : "");
+
+    var trip = "https://jp.trip.com/flights/showfarefirst?dcity=" + o.toLowerCase() + "&acity=" + d.toLowerCase()
+      + "&ddate=" + dep + (isRT ? "&rdate=" + ret : "") + "&triptype=" + (isRT ? "rt" : "ow") + "&class=y&quantity=" + pax;
+
+    var sites = [
+      { name: "Skyscanner", url: sky, badge: "free", btxt: "安い順で開く", sub: "LCC含め幅広い。最初から安い順で表示されます" },
+      { name: "KAYAK", url: kayak, badge: "free", btxt: "安い順で開く", sub: "最初から安い順で表示。絞り込みも細かい" },
+      { name: "Google フライト", url: google, badge: "tap", btxt: "開いて1タップ", sub: "開いたら「並べ替え → 価格の安い順」をタップ。価格グラフで安い日探しにも◎" },
+      { name: "Trip.com", url: trip, badge: "tap", btxt: "開いて1タップ", sub: "開いたら「価格(安い順)」に切り替え。条件が入っていなければ画面で入れ直してください" }
+    ];
+
+    form.sum.innerHTML = "<b>" + esc(oName) + " → " + esc(dName) + "</b> ・ " + jpDate(dep) + (isRT ? " 〜 " + jpDate(ret) + " 往復" : " 片道") + " ・ 大人" + pax + "名" + (direct ? " ・ 直行便のみ" : "");
+    form.sum.classList.add("show");
+
+    var html = "";
+    for (var i = 0; i < sites.length; i++) {
+      var s = sites[i];
+      html += '<a class="golink" target="_blank" rel="noopener" href="' + esc(s.url) + '">'
+        + '<span class="rank">' + (i+1) + '</span>'
+        + '<span class="gbody"><span class="gname">' + esc(s.name) + ' <span class="badge ' + s.badge + '">' + s.btxt + '</span></span>'
+        + '<span class="gsub">' + esc(s.sub) + '</span></span>'
+        + '<span class="arrow">開く ›</span></a>';
+    }
+    form.list.innerHTML = html;
+    form.list.classList.add("show");
+    form.note.style.display = "block";
+    document.getElementById("results").scrollIntoView({behavior:"smooth"});
+  });
+
+  function esc(s){
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+})();
+</script>
+</body>
+</html>

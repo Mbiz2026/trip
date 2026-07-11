@@ -61,14 +61,14 @@ header.app h1{margin:2px 0 6px;font-size:26px;line-height:1.3;letter-spacing:.01
 .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
 
 /* ラジオボタン式タブ: JavaScriptが無い環境(ファイルAppのプレビュー等)でも動く */
-.tabradio,.destradio{position:absolute;width:1px;height:1px;opacity:0;margin:0;pointer-events:none}
+.tabradio,.destradio,.arearadio{position:absolute;width:1px;height:1px;opacity:0;margin:0;pointer-events:none}
 nav.tabs{position:sticky;top:0;z-index:30;background:var(--bg);padding:8px 0 10px;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 nav.tabs::-webkit-scrollbar{display:none}
 .tab{flex:none;display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600;cursor:pointer;user-select:none}
-#t-basic:checked~nav .tab[for="t-basic"],#t-search:checked~nav .tab[for="t-search"],#t-dest:checked~nav .tab[for="t-dest"],#t-hub:checked~nav .tab[for="t-hub"],#t-mile:checked~nav .tab[for="t-mile"],#t-words:checked~nav .tab[for="t-words"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-#t-basic:focus-visible~nav .tab[for="t-basic"],#t-search:focus-visible~nav .tab[for="t-search"],#t-dest:focus-visible~nav .tab[for="t-dest"],#t-hub:focus-visible~nav .tab[for="t-hub"],#t-mile:focus-visible~nav .tab[for="t-mile"],#t-words:focus-visible~nav .tab[for="t-words"]{outline:2px solid var(--accent);outline-offset:2px}
+#t-basic:checked~nav .tab[for="t-basic"],#t-search:checked~nav .tab[for="t-search"],#t-dest:checked~nav .tab[for="t-dest"],#t-hub:checked~nav .tab[for="t-hub"],#t-trouble:checked~nav .tab[for="t-trouble"],#t-mile:checked~nav .tab[for="t-mile"],#t-words:checked~nav .tab[for="t-words"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+#t-basic:focus-visible~nav .tab[for="t-basic"],#t-search:focus-visible~nav .tab[for="t-search"],#t-dest:focus-visible~nav .tab[for="t-dest"],#t-hub:focus-visible~nav .tab[for="t-hub"],#t-trouble:focus-visible~nav .tab[for="t-trouble"],#t-mile:focus-visible~nav .tab[for="t-mile"],#t-words:focus-visible~nav .tab[for="t-words"]{outline:2px solid var(--accent);outline-offset:2px}
 section.pane{display:none}
-#t-basic:checked~#pane-basic,#t-search:checked~#pane-search,#t-dest:checked~#pane-dest,#t-hub:checked~#pane-hub,#t-mile:checked~#pane-mile,#t-words:checked~#pane-words{display:block}
+#t-basic:checked~#pane-basic,#t-search:checked~#pane-search,#t-dest:checked~#pane-dest,#t-hub:checked~#pane-hub,#t-trouble:checked~#pane-trouble,#t-mile:checked~#pane-mile,#t-words:checked~#pane-words{display:block}
 
 .sec-head{margin:16px 2px 12px}
 .sec-head h2{margin:2px 0 4px;font-size:20px;color:var(--navy);letter-spacing:.01em}
@@ -99,7 +99,7 @@ section.pane{display:none}
 .steps{counter-reset:st;list-style:none;margin:0;padding:0}
 .steps li{position:relative;padding:0 0 14px 44px}
 .steps li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:1px;width:30px;height:30px;border-radius:8px;background:var(--navy);color:var(--surface);font-family:var(--font-disp);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center}
-.steps b{display:block;margin-bottom:2px}
+.steps li>b{display:block;margin-bottom:2px}
 .steps p{margin:2px 0;font-size:14px}
 
 .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin:0 0 12px}
@@ -124,9 +124,19 @@ td.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-spac
 .dchips{display:flex;gap:6px;flex-wrap:wrap}
 .dchip{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;cursor:pointer;min-height:34px;user-select:none}
 .dpane{display:none;margin-top:14px}
-#d-dom:checked~.dsel .dchip[for="d-dom"],#d-sel:checked~.dsel .dchip[for="d-sel"],#d-tpe:checked~.dsel .dchip[for="d-tpe"],#d-hkg:checked~.dsel .dchip[for="d-hkg"],#d-chn:checked~.dsel .dchip[for="d-chn"],#d-bkk:checked~.dsel .dchip[for="d-bkk"],#d-sin:checked~.dsel .dchip[for="d-sin"],#d-kul:checked~.dsel .dchip[for="d-kul"],#d-vnm:checked~.dsel .dchip[for="d-vnm"],#d-phl:checked~.dsel .dchip[for="d-phl"],#d-idn:checked~.dsel .dchip[for="d-idn"],#d-hnl:checked~.dsel .dchip[for="d-hnl"],#d-gum:checked~.dsel .dchip[for="d-gum"],#d-wus:checked~.dsel .dchip[for="d-wus"],#d-nyc:checked~.dsel .dchip[for="d-nyc"],#d-cad:checked~.dsel .dchip[for="d-cad"],#d-lon:checked~.dsel .dchip[for="d-lon"],#d-par:checked~.dsel .dchip[for="d-par"],#d-deu:checked~.dsel .dchip[for="d-deu"],#d-eur:checked~.dsel .dchip[for="d-eur"],#d-aus:checked~.dsel .dchip[for="d-aus"]{background:var(--navy);border-color:var(--navy);color:var(--surface)}
-#d-dom:focus-visible~.dsel .dchip[for="d-dom"],#d-sel:focus-visible~.dsel .dchip[for="d-sel"],#d-tpe:focus-visible~.dsel .dchip[for="d-tpe"],#d-hkg:focus-visible~.dsel .dchip[for="d-hkg"],#d-chn:focus-visible~.dsel .dchip[for="d-chn"],#d-bkk:focus-visible~.dsel .dchip[for="d-bkk"],#d-sin:focus-visible~.dsel .dchip[for="d-sin"],#d-kul:focus-visible~.dsel .dchip[for="d-kul"],#d-vnm:focus-visible~.dsel .dchip[for="d-vnm"],#d-phl:focus-visible~.dsel .dchip[for="d-phl"],#d-idn:focus-visible~.dsel .dchip[for="d-idn"],#d-hnl:focus-visible~.dsel .dchip[for="d-hnl"],#d-gum:focus-visible~.dsel .dchip[for="d-gum"],#d-wus:focus-visible~.dsel .dchip[for="d-wus"],#d-nyc:focus-visible~.dsel .dchip[for="d-nyc"],#d-cad:focus-visible~.dsel .dchip[for="d-cad"],#d-lon:focus-visible~.dsel .dchip[for="d-lon"],#d-par:focus-visible~.dsel .dchip[for="d-par"],#d-deu:focus-visible~.dsel .dchip[for="d-deu"],#d-eur:focus-visible~.dsel .dchip[for="d-eur"],#d-aus:focus-visible~.dsel .dchip[for="d-aus"]{outline:2px solid var(--accent);outline-offset:2px}
-#d-dom:checked~#dp-dom,#d-sel:checked~#dp-sel,#d-tpe:checked~#dp-tpe,#d-hkg:checked~#dp-hkg,#d-chn:checked~#dp-chn,#d-bkk:checked~#dp-bkk,#d-sin:checked~#dp-sin,#d-kul:checked~#dp-kul,#d-vnm:checked~#dp-vnm,#d-phl:checked~#dp-phl,#d-idn:checked~#dp-idn,#d-hnl:checked~#dp-hnl,#d-gum:checked~#dp-gum,#d-wus:checked~#dp-wus,#d-nyc:checked~#dp-nyc,#d-cad:checked~#dp-cad,#d-lon:checked~#dp-lon,#d-par:checked~#dp-par,#d-deu:checked~#dp-deu,#d-eur:checked~#dp-eur,#d-aus:checked~#dp-aus{display:block}
+/* エリア絞り込み(第1段・CSSのみ) */
+.afilter{margin:0 0 12px}
+.afilter .flabel{display:block;font-size:11.5px;color:var(--muted);margin:0 2px 5px}
+.achips{display:flex;gap:6px;flex-wrap:wrap}
+.achip{display:inline-flex;align-items:center;border:1px dashed var(--line);background:var(--bg);color:var(--muted);border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:30px;user-select:none}
+#a-all:checked~.afilter .achip[for="a-all"],#a-easia:checked~.afilter .achip[for="a-easia"],#a-seasia:checked~.afilter .achip[for="a-seasia"],#a-same:checked~.afilter .achip[for="a-same"],#a-pac:checked~.afilter .achip[for="a-pac"],#a-amer:checked~.afilter .achip[for="a-amer"],#a-eur:checked~.afilter .achip[for="a-eur"],#a-ocaf:checked~.afilter .achip[for="a-ocaf"]{background:var(--accent);border:1px solid var(--accent);color:var(--on-accent)}
+#a-all:focus-visible~.afilter .achip[for="a-all"],#a-easia:focus-visible~.afilter .achip[for="a-easia"],#a-seasia:focus-visible~.afilter .achip[for="a-seasia"],#a-same:focus-visible~.afilter .achip[for="a-same"],#a-pac:focus-visible~.afilter .achip[for="a-pac"],#a-amer:focus-visible~.afilter .achip[for="a-amer"],#a-eur:focus-visible~.afilter .achip[for="a-eur"],#a-ocaf:focus-visible~.afilter .achip[for="a-ocaf"]{outline:2px solid var(--accent);outline-offset:2px}
+#a-easia:checked~.dsel .dgroup,#a-seasia:checked~.dsel .dgroup,#a-same:checked~.dsel .dgroup,#a-pac:checked~.dsel .dgroup,#a-amer:checked~.dsel .dgroup,#a-eur:checked~.dsel .dgroup,#a-ocaf:checked~.dsel .dgroup{display:none}
+#a-easia:checked~.dsel .dgroup.g-keep,#a-easia:checked~.dsel .dgroup.g-easia,#a-seasia:checked~.dsel .dgroup.g-keep,#a-seasia:checked~.dsel .dgroup.g-seasia,#a-same:checked~.dsel .dgroup.g-keep,#a-same:checked~.dsel .dgroup.g-same,#a-pac:checked~.dsel .dgroup.g-keep,#a-pac:checked~.dsel .dgroup.g-pac,#a-amer:checked~.dsel .dgroup.g-keep,#a-amer:checked~.dsel .dgroup.g-amer,#a-eur:checked~.dsel .dgroup.g-keep,#a-eur:checked~.dsel .dgroup.g-eur,#a-ocaf:checked~.dsel .dgroup.g-keep,#a-ocaf:checked~.dsel .dgroup.g-ocaf{display:block}
+
+#d-dom:checked~.dsel .dchip[for="d-dom"],#d-kor:checked~.dsel .dchip[for="d-kor"],#d-tpe:checked~.dsel .dchip[for="d-tpe"],#d-hkm:checked~.dsel .dchip[for="d-hkm"],#d-chn:checked~.dsel .dchip[for="d-chn"],#d-mng:checked~.dsel .dchip[for="d-mng"],#d-bkk:checked~.dsel .dchip[for="d-bkk"],#d-sin:checked~.dsel .dchip[for="d-sin"],#d-kul:checked~.dsel .dchip[for="d-kul"],#d-vnm:checked~.dsel .dchip[for="d-vnm"],#d-phl:checked~.dsel .dchip[for="d-phl"],#d-idn:checked~.dsel .dchip[for="d-idn"],#d-khm:checked~.dsel .dchip[for="d-khm"],#d-ind:checked~.dsel .dchip[for="d-ind"],#d-lka:checked~.dsel .dchip[for="d-lka"],#d-mdv:checked~.dsel .dchip[for="d-mdv"],#d-uae:checked~.dsel .dchip[for="d-uae"],#d-qat:checked~.dsel .dchip[for="d-qat"],#d-tur:checked~.dsel .dchip[for="d-tur"],#d-hnl:checked~.dsel .dchip[for="d-hnl"],#d-gum:checked~.dsel .dchip[for="d-gum"],#d-spc:checked~.dsel .dchip[for="d-spc"],#d-wus:checked~.dsel .dchip[for="d-wus"],#d-eus:checked~.dsel .dchip[for="d-eus"],#d-ous:checked~.dsel .dchip[for="d-ous"],#d-cad:checked~.dsel .dchip[for="d-cad"],#d-mex:checked~.dsel .dchip[for="d-mex"],#d-ltm:checked~.dsel .dchip[for="d-ltm"],#d-lon:checked~.dsel .dchip[for="d-lon"],#d-par:checked~.dsel .dchip[for="d-par"],#d-deu:checked~.dsel .dchip[for="d-deu"],#d-ita:checked~.dsel .dchip[for="d-ita"],#d-esp:checked~.dsel .dchip[for="d-esp"],#d-nrd:checked~.dsel .dchip[for="d-nrd"],#d-cee:checked~.dsel .dchip[for="d-cee"],#d-aus:checked~.dsel .dchip[for="d-aus"],#d-nzl:checked~.dsel .dchip[for="d-nzl"],#d-afr:checked~.dsel .dchip[for="d-afr"]{background:var(--navy);border-color:var(--navy);color:var(--surface)}
+#d-dom:focus-visible~.dsel .dchip[for="d-dom"],#d-kor:focus-visible~.dsel .dchip[for="d-kor"],#d-tpe:focus-visible~.dsel .dchip[for="d-tpe"],#d-hkm:focus-visible~.dsel .dchip[for="d-hkm"],#d-chn:focus-visible~.dsel .dchip[for="d-chn"],#d-mng:focus-visible~.dsel .dchip[for="d-mng"],#d-bkk:focus-visible~.dsel .dchip[for="d-bkk"],#d-sin:focus-visible~.dsel .dchip[for="d-sin"],#d-kul:focus-visible~.dsel .dchip[for="d-kul"],#d-vnm:focus-visible~.dsel .dchip[for="d-vnm"],#d-phl:focus-visible~.dsel .dchip[for="d-phl"],#d-idn:focus-visible~.dsel .dchip[for="d-idn"],#d-khm:focus-visible~.dsel .dchip[for="d-khm"],#d-ind:focus-visible~.dsel .dchip[for="d-ind"],#d-lka:focus-visible~.dsel .dchip[for="d-lka"],#d-mdv:focus-visible~.dsel .dchip[for="d-mdv"],#d-uae:focus-visible~.dsel .dchip[for="d-uae"],#d-qat:focus-visible~.dsel .dchip[for="d-qat"],#d-tur:focus-visible~.dsel .dchip[for="d-tur"],#d-hnl:focus-visible~.dsel .dchip[for="d-hnl"],#d-gum:focus-visible~.dsel .dchip[for="d-gum"],#d-spc:focus-visible~.dsel .dchip[for="d-spc"],#d-wus:focus-visible~.dsel .dchip[for="d-wus"],#d-eus:focus-visible~.dsel .dchip[for="d-eus"],#d-ous:focus-visible~.dsel .dchip[for="d-ous"],#d-cad:focus-visible~.dsel .dchip[for="d-cad"],#d-mex:focus-visible~.dsel .dchip[for="d-mex"],#d-ltm:focus-visible~.dsel .dchip[for="d-ltm"],#d-lon:focus-visible~.dsel .dchip[for="d-lon"],#d-par:focus-visible~.dsel .dchip[for="d-par"],#d-deu:focus-visible~.dsel .dchip[for="d-deu"],#d-ita:focus-visible~.dsel .dchip[for="d-ita"],#d-esp:focus-visible~.dsel .dchip[for="d-esp"],#d-nrd:focus-visible~.dsel .dchip[for="d-nrd"],#d-cee:focus-visible~.dsel .dchip[for="d-cee"],#d-aus:focus-visible~.dsel .dchip[for="d-aus"],#d-nzl:focus-visible~.dsel .dchip[for="d-nzl"],#d-afr:focus-visible~.dsel .dchip[for="d-afr"]{outline:2px solid var(--accent);outline-offset:2px}
+#d-dom:checked~#dp-dom,#d-kor:checked~#dp-kor,#d-tpe:checked~#dp-tpe,#d-hkm:checked~#dp-hkm,#d-chn:checked~#dp-chn,#d-mng:checked~#dp-mng,#d-bkk:checked~#dp-bkk,#d-sin:checked~#dp-sin,#d-kul:checked~#dp-kul,#d-vnm:checked~#dp-vnm,#d-phl:checked~#dp-phl,#d-idn:checked~#dp-idn,#d-khm:checked~#dp-khm,#d-ind:checked~#dp-ind,#d-lka:checked~#dp-lka,#d-mdv:checked~#dp-mdv,#d-uae:checked~#dp-uae,#d-qat:checked~#dp-qat,#d-tur:checked~#dp-tur,#d-hnl:checked~#dp-hnl,#d-gum:checked~#dp-gum,#d-spc:checked~#dp-spc,#d-wus:checked~#dp-wus,#d-eus:checked~#dp-eus,#d-ous:checked~#dp-ous,#d-cad:checked~#dp-cad,#d-mex:checked~#dp-mex,#d-ltm:checked~#dp-ltm,#d-lon:checked~#dp-lon,#d-par:checked~#dp-par,#d-deu:checked~#dp-deu,#d-ita:checked~#dp-ita,#d-esp:checked~#dp-esp,#d-nrd:checked~#dp-nrd,#d-cee:checked~#dp-cee,#d-aus:checked~#dp-aus,#d-nzl:checked~#dp-nzl,#d-afr:checked~#dp-afr{display:block}
 
 .dhead{margin:2px 2px 10px}
 .dhead h3{margin:0 0 2px;font-size:18px;color:var(--navy)}
@@ -170,6 +180,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
 <input class="tabradio" type="radio" name="tab" id="t-search">
 <input class="tabradio" type="radio" name="tab" id="t-dest">
 <input class="tabradio" type="radio" name="tab" id="t-hub">
+<input class="tabradio" type="radio" name="tab" id="t-trouble">
 <input class="tabradio" type="radio" name="tab" id="t-mile">
 <input class="tabradio" type="radio" name="tab" id="t-words">
 
@@ -178,6 +189,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   <label class="tab" for="t-search">🔍 さがし方</label>
   <label class="tab" for="t-dest">🌏 行き先別</label>
   <label class="tab" for="t-hub">🔁 乗り継ぎ</label>
+  <label class="tab" for="t-trouble">🚨 トラブル</label>
   <label class="tab" for="t-mile">🎫 マイル</label>
   <label class="tab" for="t-words">📖 用語集</label>
 </nav>
@@ -197,7 +209,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
       <thead><tr><th>項目</th><th>ざっくり説明</th></tr></thead>
       <tbody>
         <tr><td><b>運賃本体</b></td><td>いちばん変動する部分。同じ便でも売れ行きで上下する</td></tr>
-        <tr><td><b>燃油サーチャージ</b></td><td>ANA・JALなど大手の国際線で別途加算(2か月ごとに改定)。欧米行きだと往復数万円になることも。LCCや一部外資は「込み」表示が多い</td></tr>
+        <tr><td><b>燃油サーチャージ</b></td><td>ANA・JALなど大手の国際線で別途加算(2か月ごとに改定)。<b>2026年7〜8月発券分は過去最高水準</b>(片道: 韓国7,400円/東南アジア3.3〜3.5万円/欧米6.5万円)。9月以降は下がる観測も(二次情報)。シンガポール航空・米系・LCCは「なし/込み」</td></tr>
         <tr><td><b>空港税・諸税</b></td><td>各国の出入国税・空港使用料など。避けられない固定費</td></tr>
         <tr><td><b>手数料</b></td><td>予約サイト(OTA)の事務手数料・支払手数料など。売り手によって差が出る</td></tr>
       </tbody>
@@ -250,6 +262,58 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
     ・「◯曜日に買うと安い」はほぼ神話。効くのは買う曜日ではなく<b>飛ぶ曜日</b>(火・水など閑散日の出発は安い)<br>
     ・国内線の大手(ANA・JAL)は<b>早割の刻み</b>(28日前・45日前・55日前・75日前など)を過ぎるごとに上がるのが基本形。LCCはセール勝負<br>
     ・迷ったら: 相場より安ければ買い。航空券は待つほど選択肢が減る商品です</p>
+  </div>
+
+  <div class="card">
+    <h3>⑥ 当日の空港の流れ(国際線)</h3>
+    <ol class="steps">
+      <li><b>空港到着 — 出発2〜3時間前</b>
+        <p>LCC・繁忙期・初めての空港は3時間前が安心。オンラインチェックイン済みでも、荷物を預けるならカウンター/自動手荷物預け機の締切(多くは出発60分前)に間に合うこと。</p></li>
+      <li><b>チェックイン・手荷物を預ける</b>
+        <p>パスポート提示。行き先によっては電子認証(ESTA等)や帰りの航空券の確認あり。モバイルバッテリーは預け入れ不可 — 必ず機内持ち込みに。</p></li>
+      <li><b>保安検査</b>
+        <p>液体は1容器100ml以下+合計1Lの透明袋。PCは出す(空港による)。混雑期はここが最大の行列。</p></li>
+      <li><b>出国審査 → 搭乗口へ</b>
+        <p>日本は顔認証ゲートでスタンプなし(欲しい人は係員に申し出)。搭乗締切は<b>出発の20〜30分前</b>が普通。免税店で時間を溶かして乗り遅れる人が実際にいます。搭乗口の位置と「歩いて何分か」を先に確認してから買い物へ。</p></li>
+    </ol>
+    <p class="small">国内線は「出発30〜40分前空港着」でも間に合う設計ですが、保安検査締切(出発15〜20分前)を過ぎると乗れません。各社アプリの案内に従ってください。</p>
+  </div>
+
+  <div class="card">
+    <h3>⑦ 運賃ルール(Fare Rules)の読み方</h3>
+    <p style="font-size:14px">予約画面の「運賃規則」で見るべきは実質3点だけです。</p>
+    <div class="tbl mini"><table>
+      <thead><tr><th>項目</th><th>見るポイント</th></tr></thead>
+      <tbody>
+        <tr><td><b>変更</b></td><td>「可(手数料◯円)」か「不可」か。日付変更の可能性が少しでもあるなら変更可の運賃を</td></tr>
+        <tr><td><b>払い戻し</b></td><td>「不可」でも空港税などは戻るのが原則。取消手数料の額を確認</td></tr>
+        <tr><td><b>ノーショー</b></td><td>連絡なしで乗らないと<b>復路も自動キャンセル</b>される規則が一般的。乗れないと分かったら出発前に必ず連絡</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">往復予約の「行きに乗らず帰りだけ乗る」は原則できません(順序どおりに使う決まり)。また安い運賃ほどマイルの貯まり率も低い傾向があります(「マイル」タブ参照)。</p>
+  </div>
+
+  <div class="card">
+    <h3>⑧ 座席の選び方</h3>
+    <p style="font-size:14px">・<b>無料で選べるかは運賃次第</b>: ANA国際線は最安「Basic」だと事前指定不可、下位運賃は人気席(前方の窓・通路)が有料(2,500円〜、非常口席5,500円など)。JAL国際線は標準席なら原則無料+非常口席等は有料。LCCは全席有料(数百円〜)が基本<br>
+    ・<b>非常口席</b>(足元広い)には条件があります: 満15歳以上・緊急時に乗務員を援助できる・<b>日本語か英語で意思疎通できる</b>・小さい子ども連れは不可<br>
+    ・迷ったら: トイレに立ちやすい<b>通路側</b>、景色と壁にもたれて寝たいなら<b>窓側</b>。中央4席の真ん中だけは避ける、が定石<br>
+    ・家族・グループはオンラインチェックイン開始と同時に操作すると並び席を確保しやすい(直前に無料開放される席もあります)</p>
+  </div>
+
+  <div class="card">
+    <h3>⑨ 子ども連れの料金と設備</h3>
+    <div class="tbl"><table>
+      <thead><tr><th></th><th>ANA・JAL 国際線</th><th>ANA・JAL 国内線</th><th>LCC</th></tr></thead>
+      <tbody>
+        <tr><td><b>幼児(膝の上)</b></td><td>大人運賃の10%(2歳未満)</td><td>無料(JALは3歳未満・<b>ANAは2026年5月19日から2歳未満に変更</b>)</td><td>ピーチ無料 / ジェットスター1,500円 / <b>ZIPAIRは膝上不可</b>(0〜6歳は座席必須の定額「U6運賃」)</td></tr>
+        <tr><td><b>小児(座席あり)</b></td><td>大人運賃の75%(2〜11歳)</td><td>大人運賃の25%引き</td><td>大人と同額が基本</td></tr>
+      </tbody>
+    </table></div>
+    <p style="font-size:14px">・<b>バシネット(赤ちゃん用ベッド)</b>は台数限定・電話予約のみ(ANAは体重10kgまで・出発48時間前締切、JALは10.5kgまで)。<b>航空券を買ったらすぐ電話</b>が鉄則<br>
+    ・大人1人が膝上に抱けるのは1人まで。幼児2人なら1人分の座席+チャイルドシートが必要<br>
+    ・最安運賃には小児運賃の設定が無い場合あり(その場合は大人運賃のほうが安いことも — 総額比較を)</p>
+    <p class="small">数値は2026-07-10時点の公式ページ確認。予約前に各社の最新条件を確認してください。</p>
   </div>
 
   <div class="callout danger">
@@ -316,6 +380,20 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 
   <div class="card">
+    <h3>Google フライト実践(相場がわかる3つの画面)</h3>
+    <p style="font-size:14px"><b>① カレンダー表示</b> — 出発日の欄をタップすると、日ごとの最安値が並んだカレンダーが出ます。「1日ずらすと1万円違う」が一目瞭然。<br>
+    <b>② 価格グラフ</b> — 数か月分の価格推移が折れ線で見えます。その路線の「底値」と「相場」を最初に頭に入れる場所。<br>
+    <b>③ 価格を追跡</b> — スイッチをONにすると、値下がり・値上がりをメールで通知。日付未定なら「任意の日付」でもOK。<br>
+    仕上げに「この運賃はふつうより安いです/高いです」の表示(過去データとの比較)を見てから決めます。</p>
+    <p class="small">Skyscannerでは、日付を「1か月全体」、行き先を「すべての場所」にすると「安い月・安い行き先」から旅を逆算できます。行き先が決まっていない旅の計画に便利。</p>
+  </div>
+
+  <div class="card">
+    <h3>行き先を決めずに探す(逆引きの旅)</h3>
+    <p style="font-size:14px">「どこでもいいから安く海外へ」なら、①Skyscannerで出発地=東京・行き先=<b>「すべての場所」</b>・日付=<b>「最安値月」</b>で検索 ②出てきた国から気になる所を選ぶ ③「行き先別」タブで就航会社とマイルの選択肢を確認 — の順。セール速報(各LCCの公式SNS・メルマガ)から逆算する方法もあります。</p>
+  </div>
+
+  <div class="card">
     <h3>安くするテク(初級 → 上級)</h3>
     <div class="tbl"><table>
       <thead><tr><th>難易度</th><th>テクニック</th><th>ポイント</th></tr></thead>
@@ -323,6 +401,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
         <tr><td>★</td><td>閑散日に飛ぶ</td><td>火・水発、1〜2月・4〜6月・11月台は安い傾向。連休と夏休みを外すだけで別世界</td></tr>
         <tr><td>★</td><td>価格追跡を仕掛ける</td><td>Google フライト「価格を追跡」+Skyscannerアラートの二段構え</td></tr>
         <tr><td>★</td><td>セールを待ち構える</td><td>各社の公式アプリ・LINE・メルマガ登録(ZIPAIRは年6回前後、ピーチはほぼ毎月など)</td></tr>
+        <tr><td>★</td><td>25歳以下・65歳以上は当日割</td><td>国内線の「ユース」「シニア」(ANA・2026年5月改称)/「スカイメイト」「当日シニア割引」(JAL)は<b>搭乗当日だけ買える割安運賃</b>。空席次第だが閑散期は強い</td></tr>
         <tr><td>★★</td><td>近隣空港・複数空港で比べる</td><td>成田⇔羽田、伊丹⇔関西⇔神戸で値段が違う。パリ(CDG/ORY)・ロンドン(LHR/LGW/STN)・NY(JFK/EWR)など海外側も</td></tr>
         <tr><td>★★</td><td>乗り継ぎ便に変える</td><td>欧州行きを仁川・中東・中国経由にすると直行比で数万円下がることが多い(「乗り継ぎ」タブ)</td></tr>
         <tr><td>★★</td><td>LCCセール×平日</td><td>セール運賃は席数限定。開始直後(深夜〜早朝)が勝負</td></tr>
@@ -346,6 +425,18 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
     □ 入国に必要な電子認証(ESTA・ETA等)の準備 — 姉妹アプリ「海外旅行おまもりキット」の手続きタブ参照</p>
   </div>
 
+  <div class="card">
+    <h3>予約したら、飛ぶまでにやること</h3>
+    <p style="font-size:14px">
+    □ <b>予約確認メール(eチケット控え)を保存</b> — PDFをスマホに保存+スクショ。予約番号(6桁英数字)を控える<br>
+    □ 航空会社の公式サイト/アプリで<b>予約が引けるか確認</b>(OTA購入時は特に。引けなければOTAへ連絡)<br>
+    □ パスポート番号の登録(APIs=事前旅客情報。米国行きなどで必要)<br>
+    □ 座席指定(無料枠のある運賃なら早い者勝ち。有料なら本当に必要か検討 — 「マイル」タブ下の座席の話も参照)<br>
+    □ 電子渡航認証(ESTA・ETA等)・入国カードの準備 — 姉妹アプリ「おまもりキット」へ<br>
+    □ 出発24〜48時間前: <b>オンラインチェックイン</b>(LCCはほぼ必須と考える)<br>
+    □ 出発前日: 便の時刻変更がないかメール・アプリを確認</p>
+  </div>
+
   <div class="callout warn">
     <b>こんな売り文句に注意</b>
     ・「今なら残り1席!」→ その運賃枠の残りで、飛行機が満席とは限らない
@@ -359,84 +450,145 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   <div class="sec-head">
     <span class="eyebrow">By Destination</span>
     <h2>行き先別ガイド</h2>
-    <p class="lede">行き先をタップすると「直行便のある会社」「使えるマイル」「安く行くルート」がまとめて出ます。</p>
+    <p class="lede">エリアで絞ってから行き先をタップすると、「直行便のある会社」「使えるマイル」「安く行くコツ」がまとめて出ます(38方面)。</p>
   </div>
 
+  <input class="arearadio" type="radio" name="area" id="a-all" checked>
+  <input class="arearadio" type="radio" name="area" id="a-easia">
+  <input class="arearadio" type="radio" name="area" id="a-seasia">
+  <input class="arearadio" type="radio" name="area" id="a-same">
+  <input class="arearadio" type="radio" name="area" id="a-pac">
+  <input class="arearadio" type="radio" name="area" id="a-amer">
+  <input class="arearadio" type="radio" name="area" id="a-eur">
+  <input class="arearadio" type="radio" name="area" id="a-ocaf">
+
   <input class="destradio" type="radio" name="dest" id="d-dom" checked>
-  <input class="destradio" type="radio" name="dest" id="d-sel">
+  <input class="destradio" type="radio" name="dest" id="d-kor">
   <input class="destradio" type="radio" name="dest" id="d-tpe">
-  <input class="destradio" type="radio" name="dest" id="d-hkg">
+  <input class="destradio" type="radio" name="dest" id="d-hkm">
   <input class="destradio" type="radio" name="dest" id="d-chn">
+  <input class="destradio" type="radio" name="dest" id="d-mng">
   <input class="destradio" type="radio" name="dest" id="d-bkk">
   <input class="destradio" type="radio" name="dest" id="d-sin">
   <input class="destradio" type="radio" name="dest" id="d-kul">
   <input class="destradio" type="radio" name="dest" id="d-vnm">
   <input class="destradio" type="radio" name="dest" id="d-phl">
   <input class="destradio" type="radio" name="dest" id="d-idn">
+  <input class="destradio" type="radio" name="dest" id="d-khm">
+  <input class="destradio" type="radio" name="dest" id="d-ind">
+  <input class="destradio" type="radio" name="dest" id="d-lka">
+  <input class="destradio" type="radio" name="dest" id="d-mdv">
+  <input class="destradio" type="radio" name="dest" id="d-uae">
+  <input class="destradio" type="radio" name="dest" id="d-qat">
+  <input class="destradio" type="radio" name="dest" id="d-tur">
   <input class="destradio" type="radio" name="dest" id="d-hnl">
   <input class="destradio" type="radio" name="dest" id="d-gum">
+  <input class="destradio" type="radio" name="dest" id="d-spc">
   <input class="destradio" type="radio" name="dest" id="d-wus">
-  <input class="destradio" type="radio" name="dest" id="d-nyc">
+  <input class="destradio" type="radio" name="dest" id="d-eus">
+  <input class="destradio" type="radio" name="dest" id="d-ous">
   <input class="destradio" type="radio" name="dest" id="d-cad">
+  <input class="destradio" type="radio" name="dest" id="d-mex">
+  <input class="destradio" type="radio" name="dest" id="d-ltm">
   <input class="destradio" type="radio" name="dest" id="d-lon">
   <input class="destradio" type="radio" name="dest" id="d-par">
   <input class="destradio" type="radio" name="dest" id="d-deu">
-  <input class="destradio" type="radio" name="dest" id="d-eur">
+  <input class="destradio" type="radio" name="dest" id="d-ita">
+  <input class="destradio" type="radio" name="dest" id="d-esp">
+  <input class="destradio" type="radio" name="dest" id="d-nrd">
+  <input class="destradio" type="radio" name="dest" id="d-cee">
   <input class="destradio" type="radio" name="dest" id="d-aus">
+  <input class="destradio" type="radio" name="dest" id="d-nzl">
+  <input class="destradio" type="radio" name="dest" id="d-afr">
+
+  <div class="afilter">
+    <span class="flabel">エリアで絞り込み</span>
+    <div class="achips">
+      <label class="achip" for="a-all">すべて</label>
+      <label class="achip" for="a-easia">東アジア</label>
+      <label class="achip" for="a-seasia">東南アジア</label>
+      <label class="achip" for="a-same">南アジア・中東</label>
+      <label class="achip" for="a-pac">ハワイ・太平洋</label>
+      <label class="achip" for="a-amer">南北アメリカ</label>
+      <label class="achip" for="a-eur">ヨーロッパ</label>
+      <label class="achip" for="a-ocaf">オセアニア・アフリカ</label>
+    </div>
+  </div>
 
   <div class="dsel">
-    <div class="dgroup"><span class="glabel">Japan</span>
+    <div class="dgroup g-keep"><span class="glabel">Japan</span>
       <div class="dchips">
         <label class="dchip" for="d-dom">🗾 日本国内線</label>
       </div>
     </div>
-    <div class="dgroup"><span class="glabel">East Asia</span>
+    <div class="dgroup g-easia"><span class="glabel">East Asia</span>
       <div class="dchips">
-        <label class="dchip" for="d-sel">🇰🇷 ソウル</label>
-        <label class="dchip" for="d-tpe">🇹🇼 台北</label>
-        <label class="dchip" for="d-hkg">🇭🇰 香港</label>
-        <label class="dchip" for="d-chn">🇨🇳 上海・北京</label>
+        <label class="dchip" for="d-kor">🇰🇷 韓国</label>
+        <label class="dchip" for="d-tpe">🇹🇼 台湾</label>
+        <label class="dchip" for="d-hkm">🇭🇰 香港・マカオ</label>
+        <label class="dchip" for="d-chn">🇨🇳 中国</label>
+        <label class="dchip" for="d-mng">🇲🇳 モンゴル</label>
       </div>
     </div>
-    <div class="dgroup"><span class="glabel">Southeast Asia</span>
+    <div class="dgroup g-seasia"><span class="glabel">Southeast Asia</span>
       <div class="dchips">
-        <label class="dchip" for="d-bkk">🇹🇭 バンコク</label>
+        <label class="dchip" for="d-bkk">🇹🇭 タイ</label>
         <label class="dchip" for="d-sin">🇸🇬 シンガポール</label>
-        <label class="dchip" for="d-kul">🇲🇾 クアラルンプール</label>
+        <label class="dchip" for="d-kul">🇲🇾 マレーシア</label>
         <label class="dchip" for="d-vnm">🇻🇳 ベトナム</label>
-        <label class="dchip" for="d-phl">🇵🇭 マニラ・セブ</label>
-        <label class="dchip" for="d-idn">🇮🇩 バリ・ジャカルタ</label>
+        <label class="dchip" for="d-phl">🇵🇭 フィリピン</label>
+        <label class="dchip" for="d-idn">🇮🇩 インドネシア</label>
+        <label class="dchip" for="d-khm">🇰🇭 カンボジア</label>
       </div>
     </div>
-    <div class="dgroup"><span class="glabel">Pacific Resort</span>
+    <div class="dgroup g-same"><span class="glabel">South Asia &amp; Middle East</span>
       <div class="dchips">
-        <label class="dchip" for="d-hnl">🌺 ホノルル</label>
-        <label class="dchip" for="d-gum">🇬🇺 グアム</label>
+        <label class="dchip" for="d-ind">🇮🇳 インド</label>
+        <label class="dchip" for="d-lka">🇱🇰 スリランカ</label>
+        <label class="dchip" for="d-mdv">🇲🇻 モルディブ</label>
+        <label class="dchip" for="d-uae">🇦🇪 ドバイ(UAE)</label>
+        <label class="dchip" for="d-qat">🇶🇦 ドーハ(カタール)</label>
+        <label class="dchip" for="d-tur">🇹🇷 トルコ</label>
       </div>
     </div>
-    <div class="dgroup"><span class="glabel">North America</span>
+    <div class="dgroup g-pac"><span class="glabel">Hawaii &amp; Pacific</span>
+      <div class="dchips">
+        <label class="dchip" for="d-hnl">🌺 ハワイ</label>
+        <label class="dchip" for="d-gum">🇬🇺 グアム</label>
+        <label class="dchip" for="d-spc">🏝 南太平洋の島々</label>
+      </div>
+    </div>
+    <div class="dgroup g-amer"><span class="glabel">Americas</span>
       <div class="dchips">
         <label class="dchip" for="d-wus">🇺🇸 米西海岸</label>
-        <label class="dchip" for="d-nyc">🗽 ニューヨーク</label>
+        <label class="dchip" for="d-eus">🗽 米東海岸</label>
+        <label class="dchip" for="d-ous">🛫 米国その他</label>
         <label class="dchip" for="d-cad">🇨🇦 カナダ</label>
+        <label class="dchip" for="d-mex">🇲🇽 メキシコ</label>
+        <label class="dchip" for="d-ltm">🌎 中南米</label>
       </div>
     </div>
-    <div class="dgroup"><span class="glabel">Europe</span>
+    <div class="dgroup g-eur"><span class="glabel">Europe</span>
       <div class="dchips">
-        <label class="dchip" for="d-lon">🇬🇧 ロンドン</label>
-        <label class="dchip" for="d-par">🇫🇷 パリ</label>
+        <label class="dchip" for="d-lon">🇬🇧 イギリス</label>
+        <label class="dchip" for="d-par">🇫🇷 フランス</label>
         <label class="dchip" for="d-deu">🇩🇪 ドイツ</label>
-        <label class="dchip" for="d-eur">🇪🇺 欧州その他</label>
+        <label class="dchip" for="d-ita">🇮🇹 イタリア</label>
+        <label class="dchip" for="d-esp">🇪🇸 スペイン</label>
+        <label class="dchip" for="d-nrd">❄️ 北欧</label>
+        <label class="dchip" for="d-cee">🇪🇺 欧州その他</label>
       </div>
     </div>
-    <div class="dgroup"><span class="glabel">Oceania</span>
+    <div class="dgroup g-ocaf"><span class="glabel">Oceania &amp; Africa</span>
       <div class="dchips">
         <label class="dchip" for="d-aus">🇦🇺 オーストラリア</label>
+        <label class="dchip" for="d-nzl">🇳🇿 ニュージーランド</label>
+        <label class="dchip" for="d-afr">🌍 アフリカ</label>
       </div>
     </div>
   </div>
+<p class="small" style="margin:10px 2px 0">※ 就航会社・必要マイルは2026-07-10時点の確認情報です。ダイヤ改定・制度改定で変わるため、予約前に各社公式サイトで最終確認してください。マイル数の目安は日本発・エコノミー往復(ANAはロー〜ハイの幅、JALは最低ラインの「基本マイル」+空席による変動)。<span class="al mr">MR</span>=アメックスのポイントから移行できるマイル。</p>
 
-  <p class="small" style="margin:10px 2px 0">※ 就航会社・必要マイルは2026-07-10時点の確認情報です。ダイヤ改定・制度改定で変わるため、予約前に各社公式サイトで最終確認してください。マイル数の目安は日本発・エコノミー往復(ANAはロー〜ハイの幅、JALは最低ラインの「基本マイル」+空席による変動)。<span class="al mr">MR</span>=アメックスのポイントから移行できるマイル。</p>
 
   <div class="dpane" id="dp-dom">
     <div class="dhead"><h3>🗾 日本国内線</h3><p class="dsub">大手2社+中堅+LCCの三層構造。マイルの「少額で乗れる」入門先でもあります。</p></div>
@@ -468,16 +620,22 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
     </div>
   </div>
 
-  <div class="dpane" id="dp-sel">
-    <div class="dhead"><h3>🇰🇷 ソウル</h3><p class="dsub">直行 約2.5時間(仁川 ICN・金浦 GMP)/ 世界有数の激戦路線=安い</p></div>
+  <div class="dpane" id="dp-kor">
+    <div class="dhead"><h3>🇰🇷 韓国(ソウル・釜山・済州島)</h3><p class="dsub">直行 約2〜2.5時間 / 世界有数の激戦路線=安い</p></div>
     <div class="card">
       <h3>✈️ 直行便がある航空会社</h3>
+      <h4>ソウル(仁川 ICN・金浦 GMP)</h4>
       <ul class="airlist">
         <li><span class="badge fsc">FSC</span><span class="an">ANA / JAL / 大韓航空 / アシアナ航空</span><span class="anote">成田=仁川・羽田=金浦の両ルート。金浦はソウル市内に近く便利</span></li>
         <li><span class="badge fsc">FSC</span><span class="an">エアプレミア</span><span class="anote">成田=仁川。韓国のハイブリッド新興(広めの座席)</span></li>
         <li><span class="badge lcc">LCC</span><span class="an">ZIPAIR / ジンエアー / チェジュ航空 / ティーウェイ / イースター / エアソウル / ピーチ</span><span class="anote">主に成田=仁川(ピーチは羽田=仁川、2026年9月に成田も就航予定)</span></li>
       </ul>
-      <p class="small">※ アシアナは2026年12月に大韓航空へ統合予定(ブランド消滅見込み)。以降の便名・マイルの扱いに注意。</p>
+      <h4>釜山(金海 PUS)・済州島(CJU)</h4>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">大韓航空</span><span class="anote">成田=釜山、成田=済州島(週3〜4便・東京から済州への唯一の直行)</span></li>
+        <li><span class="badge lcc">LCC</span><span class="an">エアプサン / チェジュ航空 / ジンエアー など</span><span class="anote">成田=釜山(合計1日8便前後・二次情報)。羽田発の釜山直行はなし</span></li>
+      </ul>
+      <p class="small">※ 紛らわしい注意: 「チェジュ航空」の東京便はソウル・釜山行きで、<b>済州島への直行はありません</b>。済州へは大韓の直行か、ソウル金浦経由(金浦=済州は世界最多頻度級)が定番。<br>※ アシアナは2026年12月に大韓航空へ統合予定。<b>スターアライアンスのマイル積算は2026年10月15日搭乗分まで</b>(以降はスカイチーム側へ)。ANAマイル狙いでアシアナに乗る人は要注意。</p>
     </div>
     <div class="card">
       <h3>🎫 マイルで行くなら</h3>
@@ -499,13 +657,19 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 
   <div class="dpane" id="dp-tpe">
-    <div class="dhead"><h3>🇹🇼 台北</h3><p class="dsub">直行 約3.5〜4時間(桃園 TPE・松山 TSA)/ 羽田=松山が別格に便利</p></div>
+    <div class="dhead"><h3>🇹🇼 台湾(台北・高雄)</h3><p class="dsub">直行 約3.5〜4.5時間(桃園 TPE・松山 TSA・高雄 KHH)/ 羽田=松山が別格に便利</p></div>
     <div class="card">
       <h3>✈️ 直行便がある航空会社</h3>
+      <h4>台北</h4>
       <ul class="airlist">
         <li><span class="badge fsc">FSC</span><span class="an">JAL / ANA / チャイナエアライン / エバー航空</span><span class="anote">羽田=松山(市内至近)。成田=桃園はJAL・チャイナエア・エバー・スターラックス</span></li>
         <li><span class="badge fsc">FSC</span><span class="an">スターラックス航空</span><span class="anote">成田=桃園。座席・サービス評価が高い新興FSC</span></li>
         <li><span class="badge lcc">LCC</span><span class="an">ピーチ / タイガーエア台湾 / ジェットスター・ジャパン / スクート</span><span class="anote">成田・羽田=桃園。スクートは台北経由シンガポール行き</span></li>
+      </ul>
+      <h4>高雄(台湾南部)</h4>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">チャイナエアライン / エバー航空</span><span class="anote">成田から。エバーは2026年5月からワイドボディ機投入</span></li>
+        <li><span class="badge lcc">LCC</span><span class="an">タイガーエア台湾</span><span class="anote">成田から。羽田発の高雄直行はなし</span></li>
       </ul>
     </div>
     <div class="card">
@@ -526,14 +690,19 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
     </div>
   </div>
 
-  <div class="dpane" id="dp-hkg">
-    <div class="dhead"><h3>🇭🇰 香港</h3><p class="dsub">直行 約4.5〜5時間(HKG)/ キャセイのお膝元=アジア・マイルの出番</p></div>
+  <div class="dpane" id="dp-hkm">
+    <div class="dhead"><h3>🇭🇰 香港・マカオ</h3><p class="dsub">直行 約4.5〜5時間(HKG / MFM)/ キャセイのお膝元=アジア・マイルの出番</p></div>
     <div class="card">
       <h3>✈️ 直行便がある航空会社</h3>
+      <h4>香港</h4>
       <ul class="airlist">
         <li><span class="badge fsc">FSC</span><span class="an">JAL / ANA / キャセイパシフィック</span><span class="anote">羽田・成田とも。ANAは深夜発羽田便あり</span></li>
         <li><span class="badge fsc">FSC</span><span class="an">香港航空</span><span class="anote">成田</span></li>
         <li><span class="badge lcc">LCC</span><span class="an">香港エクスプレス / グレーターベイ航空 / ジェットスター・ジャパン</span><span class="anote">羽田・成田。ジェットスターは2026年2月に再開</span></li>
+      </ul>
+      <h4>マカオ</h4>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">エアマカオ</span><span class="anote">成田のみ(ANAとコードシェア)。または香港経由でフェリー・バス連絡も定番</span></li>
       </ul>
     </div>
     <div class="card">
@@ -845,15 +1014,20 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
     </div>
   </div>
 
-  <div class="dpane" id="dp-nyc">
-    <div class="dhead"><h3>🗽 ニューヨーク</h3><p class="dsub">直行 約12.5〜13時間(JFK / EWR)/ 東海岸は「経由で安く」も有力</p></div>
+  <div class="dpane" id="dp-eus">
+    <div class="dhead"><h3>🗽 米東海岸(ニューヨーク・ボストン・ワシントンD.C.)</h3><p class="dsub">直行 約12〜13時間 / 東海岸は「経由で安く」も有力</p></div>
     <div class="card">
       <h3>✈️ 直行便がある航空会社</h3>
+      <h4>ニューヨーク</h4>
       <ul class="airlist">
         <li><span class="badge fsc">FSC</span><span class="an">JAL</span><span class="anote">羽田=JFK 1日2便</span></li>
         <li><span class="badge fsc">FSC</span><span class="an">ANA / アメリカン</span><span class="anote">羽田=JFK</span></li>
         <li><span class="badge fsc">FSC</span><span class="an">ユナイテッド</span><span class="anote">羽田・成田=ニューアーク(EWR)。マンハッタンへの近さはJFKと大差なし</span></li>
-        <li><span class="badge lcc">LCC</span><span class="an">(なし)</span><span class="anote"></span></li>
+      </ul>
+      <h4>ボストン / ワシントンD.C.</h4>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">JAL</span><span class="anote">成田=ボストン(唯一の直行。羽田発ではない点に注意)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">ANA / ユナイテッド</span><span class="anote">羽田=ワシントンD.C.(ダレス)</span></li>
       </ul>
     </div>
     <div class="card">
@@ -986,36 +1160,6 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
     </div>
   </div>
 
-  <div class="dpane" id="dp-eur">
-    <div class="dhead"><h3>🇪🇺 欧州その他(ヘルシンキ・イスタンブール・ローマなど)</h3><p class="dsub">直行+「1回乗継で欧州全域」の入口たち</p></div>
-    <div class="card">
-      <h3>✈️ 日本直行便がある主な欧州系(2026年7月時点)</h3>
-      <ul class="airlist">
-        <li><span class="badge fsc">FSC</span><span class="an">フィンエアー(ヘルシンキ)</span><span class="anote">羽田 毎日+成田・関空・中部。北回りで約13時間=欧州最短級。ヘルシンキでの乗継が速い</span></li>
-        <li><span class="badge fsc">FSC</span><span class="an">ターキッシュ エアラインズ(イスタンブール)</span><span class="anote">成田・羽田 計週17便。ANAも羽田→イスタンブール週3便</span></li>
-        <li><span class="badge fsc">FSC</span><span class="an">ITAエアウェイズ(ローマ)</span><span class="anote">羽田。2026年4月からスターアライアンス加盟</span></li>
-        <li><span class="badge fsc">FSC</span><span class="an">イベリア(マドリード)/ スイス(チューリッヒ)/ SAS(コペンハーゲン)/ LOT(ワルシャワ)など</span><span class="anote">成田・羽田から各都市へ(便数・季節運航は要確認)</span></li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>🎫 マイルで行くなら</h3>
-      <div class="tbl"><table>
-        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
-        <tbody>
-          <tr><td><b>ANAマイル</b> <span class="al mr">MR</span></td><td>スタアラ勢(ターキッシュ・スイス・ITA・LOT等)で欧州各都市へ</td><td class="num">提携60,000〜(変動なし・要公式確認)</td></tr>
-          <tr><td><b>JALマイル</b></td><td>フィンエアー・イベリア便(ワンワールド提携)</td><td class="num">提携チャート・要確認</td></tr>
-          <tr><td><b>BA Avios</b> <span class="al mr">MR</span></td><td>フィンエアー・イベリア・BA便</td><td class="num">距離制(要予約画面確認)</td></tr>
-          <tr><td><b>カタール Privilege Club</b> <span class="al mr">MR</span></td><td>カタール航空(ドーハ経由で欧州各都市)</td><td class="num">Avios制(要確認)</td></tr>
-        </tbody>
-      </table></div>
-      <p class="small">「JALマイルでヘルシンキ経由の欧州小都市へ」「ANAマイルでイスタンブール経由ギリシャへ」など、提携便は行き先の幅が武器。空席検索は各社サイトで。</p>
-    </div>
-    <div class="card">
-      <h3>💰 現金で安くするなら</h3>
-      <p style="font-size:14px">ターキッシュは就航都市数世界一で「欧州のマイナー都市まで1回乗継」が強み。フィンエアーは飛行時間最短級。この2社+中東系のセールが欧州安値の定番です(2026年前半は中東情勢での運休があったため、予約時は運航状況を確認)。</p>
-    </div>
-  </div>
-
   <div class="dpane" id="dp-aus">
     <div class="dhead"><h3>🇦🇺 オーストラリア(シドニー・メルボルン・ブリスベン・ケアンズ・パース)</h3><p class="dsub">直行 約7〜10.5時間 / 時差1〜2時間で時差ボケなし</p></div>
     <div class="card">
@@ -1042,6 +1186,499 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
     <div class="card">
       <h3>💰 現金で安くするなら</h3>
       <p style="font-size:14px">ジェットスターのセール(往復6〜7万円台の実績)と、スクートのシンガポール経由が安値の二本柱。現地が冬の5〜8月が安い傾向。ETA(電子渡航認証・A$20、公式アプリのみ)を忘れずに。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-mng">
+    <div class="dhead"><h3>🇲🇳 モンゴル(ウランバートル)</h3><p class="dsub">直行 約5〜5.5時間(UBN)/ 夏が旅行シーズン=便も夏に増える</p></div>
+    <div class="card">
+      <h3>✈️ 直行便がある航空会社</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">MIATモンゴル航空</span><span class="anote">成田。通年運航+夏期(4〜10月)はほぼ毎日に増便(二次情報)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">ユナイテッド航空</span><span class="anote">成田。季節運航(2026年は4月末〜10月中旬・週3便)— 米系がモンゴルへ、という珍しい路線</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>ユナイテッド</b></td><td>ユナイテッド直行便(季節)</td><td class="num">変動制・燃油負担なし</td></tr>
+          <tr><td><b>ANAマイル</b> <span class="al mr">MR</span></td><td>ユナイテッド便(スタアラ提携)</td><td class="num">提携チャート・要公式確認</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">MIATは無所属のため大手マイルの特典対象外が基本。冬期は便が減るので、夏の旅行を早めに確保するのが定石です。</p>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">直行2社と少ないため、仁川経由(大韓航空など)との比較が有効。旅行シーズン(6〜8月)は強気価格になるので早め確保を。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-khm">
+    <div class="dhead"><h3>🇰🇭 カンボジア(プノンペン・シェムリアップ)</h3><p class="dsub">直行便なし(2026年7月時点)/ 経由の組み方が腕の見せどころ</p></div>
+    <div class="card">
+      <h3>✈️ 行き方(直行便なし)</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">経由1</span><span class="an">ホーチミン / ハノイ経由</span><span class="anote">ベトナム航空。同日乗継が組みやすい定番。東京→シェムリアップ 約10時間〜</span></li>
+        <li><span class="badge fsc">経由2</span><span class="an">バンコク経由</span><span class="anote">タイ国際航空等+バンコク・エアウェイズでプノンペン/シェムリアップへ</span></li>
+        <li><span class="badge fsc">経由3</span><span class="an">ソウル仁川経由</span><span class="anote">大韓航空など。地方空港発でも組みやすい</span></li>
+      </ul>
+      <p class="small">※ ANAの成田=プノンペン直行は運休が続いています(2026年夏ダイヤも運休)。シェムリアップは2023年開港の新空港(SAI)発着です。</p>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>デルタ</b> <span class="al mr">MR</span></td><td>ベトナム航空経由便(スカイチーム)</td><td class="num">変動制</td></tr>
+          <tr><td><b>ANAマイル</b> <span class="al mr">MR</span></td><td>タイ国際便でバンコクまで(スタアラ)+接続は別途</td><td class="num">提携チャート・要公式確認</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">バンコク=カンボジア間のバンコク・エアウェイズは大手アライアンス非加盟。マイルは「バンコクまで」で使い、先は現金で買うのが現実的です。</p>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">ベトナム航空の通し券(乗継1回)が価格・手間のバランス良し。LCCを組む場合(バンコク経由等)は別切りになりがちなので「乗り継ぎ」タブの注意を必読。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-ind">
+    <div class="dhead"><h3>🇮🇳 インド(デリー・ムンバイ・ベンガルール)</h3><p class="dsub">直行 約9〜11時間 / 2026年は日印路線の拡大期</p></div>
+    <div class="card">
+      <h3>✈️ 直行便がある航空会社</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">ANA</span><span class="anote">羽田=デリー、成田=ムンバイ(夏期に減便あり・要確認)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">JAL</span><span class="anote">羽田=デリー+成田=デリー(2026年1月新設)、成田=ベンガルール(2026年8月からデイリー予定)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">エア・インディア</span><span class="anote">羽田=デリー(毎日)、羽田=ムンバイ(2026年6月新設・週4)</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>ANAマイル</b> <span class="al mr">MR</span></td><td>ANA直行便 / エア・インディア便(スタアラ)</td><td class="num">35,000〜60,000程度(L/R/H・インドはアジア2ゾーン・要公式確認)</td></tr>
+          <tr><td><b>JALマイル</b></td><td>JAL直行便</td><td class="num">基本35,000前後〜+変動(要確認)</td></tr>
+          <tr><td><b>ユナイテッド</b></td><td>ANA・エア・インディア便(スタアラ)</td><td class="num">変動制・燃油負担なし</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">直行は日系中心で高めの傾向。香港(キャセイ)・シンガポール(SQ)・バンコク経由や、エア・インディア直行の運賃を比較すると下がることが多い。e-Visaの取得を忘れずに(公式サイトのみで申請)。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-lka">
+    <div class="dhead"><h3>🇱🇰 スリランカ(コロンボ)</h3><p class="dsub">直行 約9.5時間(CMB)/ 直行は週4便のみ=日程が組めるかが勝負</p></div>
+    <div class="card">
+      <h3>✈️ 直行便がある航空会社</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">スリランカ航空</span><span class="anote">成田=コロンボ 週4便(唯一の直行)。ワンワールド加盟</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>JALマイル</b></td><td>スリランカ航空便(ワンワールド提携)</td><td class="num">提携チャート・要公式確認</td></tr>
+          <tr><td><b>BA Avios</b> <span class="al mr">MR</span></td><td>スリランカ航空便(距離制)</td><td class="num">要予約画面確認</td></tr>
+          <tr><td><b>キャセイ(アジア・マイル)</b> <span class="al mr">MR</span></td><td>香港経由キャセイ便</td><td class="num">距離制(二次情報)</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">直行が週4便なので、日程が合わなければシンガポール・バンコク・香港経由。モルディブと組み合わせる周遊(コロンボ=マレは約1.5時間)も定番です。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-mdv">
+    <div class="dhead"><h3>🇲🇻 モルディブ(マレ)</h3><p class="dsub">直行便なし / 経由1回・計13〜16時間が標準</p></div>
+    <div class="card">
+      <h3>✈️ 行き方(直行便なし)</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">経由1</span><span class="an">シンガポール経由</span><span class="anote">シンガポール航空。便数が多く日程の自由度が高い定番。計14〜16時間</span></li>
+        <li><span class="badge fsc">経由2</span><span class="an">コロンボ経由</span><span class="anote">スリランカ航空。飛行時間は最短級(計13〜15時間)だが直行部分が週4便</span></li>
+        <li><span class="badge fsc">経由3</span><span class="an">ドーハ / ドバイ経由</span><span class="anote">カタール航空・エミレーツ。遠回り(計18時間超)だが乗り心地とラウンジに定評</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>KrisFlyer</b> <span class="al mr">MR</span></td><td>シンガポール航空(SIN経由マレ)</td><td class="num">要公式確認。ビジネス特典の人気路線</td></tr>
+          <tr><td><b>ANAマイル</b> <span class="al mr">MR</span></td><td>SQ便の乗継旅程(スタアラ提携)</td><td class="num">提携チャート・要公式確認</td></tr>
+          <tr><td><b>カタール Privilege Club</b> <span class="al mr">MR</span></td><td>カタール航空(ドーハ経由)</td><td class="num">Avios制・要確認</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">新婚旅行の定番ゆえ、ビジネスクラス特典の争奪が激しい行き先。取りたい日の1年近く前から空席を見るのが本気の取り方です。</p>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">航空券よりも「水上ヴィラ+水上飛行機送迎」が総額を支配する行き先。航空券はSQ・中東系のセール、宿はリゾート直販や旅行会社のパッケージも含めた総額比較が正解です。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-uae">
+    <div class="dhead"><h3>🇦🇪 ドバイ・アブダビ(UAE)</h3><p class="dsub">直行 約11〜12時間(DXB / AUH)/ 旅先としても乗継ハブとしても</p></div>
+    <div class="card">
+      <h3>✈️ 直行便がある航空会社</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">エミレーツ航空</span><span class="anote">成田・羽田・関空=ドバイ(2026年2〜3月の中東情勢による停止から復旧済み)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">エティハド航空</span><span class="anote">成田=アブダビ(2026年6月からA380投入)</span></li>
+      </ul>
+      <p class="small">※ 2026年2月末の中東情勢悪化で一時全便停止 → 段階復旧という経緯があった年です。予約時に最新の運航状況を確認してください。</p>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>エミレーツ スカイワーズ</b> <span class="al mr">MR</span></td><td>エミレーツ直行便</td><td class="num">変動制・要公式確認。A380ファーストの「憧れ枠」もこのマイル</td></tr>
+          <tr><td><b>エティハド ゲスト</b> <span class="al mr">MR</span></td><td>エティハド直行便</td><td class="num">要公式確認</td></tr>
+          <tr><td><b>JALマイル</b></td><td>エミレーツ便(個別提携・要確認)</td><td class="num">提携チャート・要公式確認</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">両社ともアライアンス無所属ですが、アメックスからどちらのマイルにも直接移行できます — MR持ちに相性の良い行き先。</p>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">「ドバイ行き」より「ドバイ経由欧州行きのストップオーバー」が安く付くことも(エミレーツは乗継ホテルのプログラムあり)。単純往復はセール待ちが基本。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-qat">
+    <div class="dhead"><h3>🇶🇦 ドーハ(カタール)</h3><p class="dsub">直行 約11〜12時間(DOH)/ サービス世界最高評価クラスのカタール航空の本拠</p></div>
+    <div class="card">
+      <h3>✈️ 直行便がある航空会社</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">カタール航空</span><span class="anote">成田(1日2便)・関空(週5)。羽田線は2026年8月に毎日運航へ復帰予定(要確認)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">JAL</span><span class="anote">羽田=ドーハは2026年8月末まで運休中(再開時期は要確認)</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>カタール Privilege Club</b> <span class="al mr">MR</span></td><td>カタール航空直行便</td><td class="num">Avios制・要公式確認</td></tr>
+          <tr><td><b>BA Avios</b> <span class="al mr">MR</span></td><td>カタール航空便(同じAvios圏)</td><td class="num">要予約画面確認</td></tr>
+          <tr><td><b>JALマイル</b></td><td>カタール航空便(ワンワールド)</td><td class="num">提携チャート・要公式確認</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">カタール航空のビジネスクラス「Qsuite」は世界的な人気特典。ワンワールド系マイル(JAL・BA・カタール)の見せ場です。</p>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">ドーハ自体が欧州・アフリカへの乗継ハブ。「ドーハで1〜2泊ストップオーバー→欧州へ」の組み方が、単純な欧州往復に近い値段で2都市楽しめる定番です。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-tur">
+    <div class="dhead"><h3>🇹🇷 トルコ(イスタンブール)</h3><p class="dsub">直行 約13〜14時間(IST)/ 「欧州就航都市数世界一」への入口</p></div>
+    <div class="card">
+      <h3>✈️ 直行便がある航空会社</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">ターキッシュ エアラインズ</span><span class="anote">成田(週10)・羽田・関空 — 日本計週24便体制(2026年6月時点)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">ANA</span><span class="anote">羽田 週3便(2025年就航の日系初トルコ線)</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>ANAマイル</b> <span class="al mr">MR</span></td><td>ANA直行便 / ターキッシュ便(スタアラ)</td><td class="num">45,000〜78,000(L/R/H・欧州ゾーン)/ 提携60,000〜</td></tr>
+          <tr><td><b>ユナイテッド</b></td><td>ANA・ターキッシュ便(スタアラ)</td><td class="num">変動制・燃油負担なし</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">ターキッシュは欧州行きの価格破壊役でもあり、「イスタンブールで途中降機(ストップオーバー)→欧州」の設計が得意。長時間乗継者向けの無料市内ツアー・無料ホテルのプログラムも公式にあります(条件は公式サイトで)。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-spc">
+    <div class="dhead"><h3>🏝 南太平洋の島々(フィジー・ニューカレドニア・タヒチ)</h3><p class="dsub">直行は細い季節・少頻度便 / 「いつ飛んでいるか」の確認が最重要</p></div>
+    <div class="card">
+      <h3>✈️ 行き方</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">フィジー: フィジー・エアウェイズ</span><span class="anote">成田=ナンディ 週2便(ワンワールド加盟)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">タヒチ: エア タヒチ ヌイ</span><span class="anote">成田=パペーテ 週2便。ただし例年6月中旬〜9月上旬は運休(2026年も運休中・9月再開予定)</span></li>
+        <li><span class="badge fsc">経由</span><span class="an">ニューカレドニア: 直行なし</span><span class="anote">エアカランは2024年8月で日本路線から撤退。シドニー・ブリスベン・オークランド・ナンディ経由で</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>JALマイル</b></td><td>フィジー・エアウェイズ便(ワンワールド)</td><td class="num">提携チャート・要公式確認</td></tr>
+          <tr><td><b>BA Avios</b> <span class="al mr">MR</span></td><td>フィジー・エアウェイズ便(距離制)</td><td class="num">要予約画面確認</td></tr>
+          <tr><td><b>ANA/ユナイテッド等</b></td><td>豪州・NZ経由の乗継旅程で</td><td class="num">要公式確認</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">直行が週2便クラスなので「安い日を選ぶ」自由度は低め。フィジーはワンワールド周遊の立ち寄り先としても優秀。ニューカレドニア・タヒチは豪州・NZ旅行との二段構えで組むと航空券のムダが少ない。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-ous">
+    <div class="dhead"><h3>🛫 米国その他(シカゴ・ダラス・ヒューストン・ボストンほか)</h3><p class="dsub">直行 約11〜13時間 / 実は直行都市が多い=乗継より快適</p></div>
+    <div class="card">
+      <h3>✈️ 直行便がある都市と会社</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">シカゴ</span><span class="anote">ANA・JAL・ユナイテッド(羽田)+JAL(成田)。ユナイテッドは2026年10月に成田線再開予定</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">ダラス</span><span class="anote">JAL・アメリカン(羽田)— AAの本拠地でアメリカ南部への乗継拠点</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">ヒューストン</span><span class="anote">ANA(羽田)・ユナイテッド(成田)+ZIPAIR(成田・週3〜4)— 中南米乗継の入口</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">アトランタ / デトロイト / ミネアポリス</span><span class="anote">デルタ(羽田)— デルタの国内網へ接続</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">サンディエゴ / ボストン</span><span class="anote">JAL(成田)</span></li>
+      </ul>
+      <p class="small">ラスベガス・オーランドへの直行はありません(西海岸かダラス・ヒューストン・アトランタで乗継)。米国内乗継は入国審査があるため3時間以上の余裕を。</p>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>ANAマイル</b> <span class="al mr">MR</span></td><td>ANA直行便+ユナイテッド国内線接続</td><td class="num">40,000〜72,000(L/R/H)</td></tr>
+          <tr><td><b>JALマイル</b></td><td>JAL直行便+アメリカン国内線接続</td><td class="num">基本54,000〜+変動</td></tr>
+          <tr><td><b>ユナイテッド</b></td><td>ユナイテッド・ANA便(米国内接続込みで検索可)</td><td class="num">変動制・燃油負担なし</td></tr>
+          <tr><td><b>デルタ</b> <span class="al mr">MR</span></td><td>デルタ直行便+国内線</td><td class="num">変動制</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">米国は「直行便のある都市まで飛んで、同じアライアンスの国内線で先へ」が基本形。マイル特典も乗継込みの旅程で一気に検索・発券できます。</p>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">ZIPAIR(LA・SF・サンノゼ・ヒューストン・ホノルル)を軸に、米国内LCC(サウスウエスト等)を別切りで足す上級ワザもありますが、遅延リスクは自己責任(「乗り継ぎ」タブ)。初心者は1枚の通し券が安全です。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-mex">
+    <div class="dhead"><h3>🇲🇽 メキシコ(メキシコシティ)</h3><p class="dsub">直行 約12.5時間(MEX)/ 中南米への玄関</p></div>
+    <div class="card">
+      <h3>✈️ 直行便がある航空会社</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">アエロメヒコ</span><span class="anote">成田=メキシコシティ 毎日(スカイチーム)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">ANA / JAL</span><span class="anote">直行なし。米国経由(ダラス・ヒューストン・LA等)で</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>デルタ</b> <span class="al mr">MR</span></td><td>アエロメヒコ直行便(スカイチーム)</td><td class="num">変動制・要空席確認</td></tr>
+          <tr><td><b>ANA/JAL/ユナイテッド等</b></td><td>米国経由の乗継旅程</td><td class="num">北米ゾーン+接続。米国通過はESTA必要</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">カンクンへは直行がなく、メキシコシティ経由(アエロメヒコ)か米国経由(ダラス・ヒューストン等)の2択が定番です。</p>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">アエロメヒコ直行は「米国入国(ESTA)を避けられる」のが隠れた価値。米国経由は安いことも多い一方、入国審査で乗継3時間+ESTA代がかかります。総合で比較を。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-ltm">
+    <div class="dhead"><h3>🌎 中南米(ブラジル・ペルー・アルゼンチンなど)</h3><p class="dsub">直行便なし / 片道24時間超の長旅=経由地の選び方がすべて</p></div>
+    <div class="card">
+      <h3>✈️ 行き方(直行便なし)</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">経由1</span><span class="an">北米経由</span><span class="anote">ダラス(JAL/AA)・ヒューストン(ANA/UA)・LA・アトランタ(DL)から南米各都市へ。ESTA必要・入国審査あり</span></li>
+        <li><span class="badge fsc">経由2</span><span class="an">メキシコシティ経由</span><span class="anote">アエロメヒコ1社で乗継1回。米国を通らないのが利点</span></li>
+        <li><span class="badge fsc">経由3</span><span class="an">中東経由(ドーハ・ドバイ)</span><span class="anote">カタール航空・エミレーツでサンパウロ等へ。乗継1回で行けるが総所要は30時間級</span></li>
+      </ul>
+      <p class="small">目安総所要: サンパウロ 25〜28時間 / リマ 24〜30時間 / ブエノスアイレス 30時間超。</p>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>ANAマイル</b> <span class="al mr">MR</span></td><td>ユナイテッド等スタアラ乗継(ヒューストン経由など)</td><td class="num">中南米ゾーン・要公式確認</td></tr>
+          <tr><td><b>JALマイル</b></td><td>アメリカン乗継(ダラス経由)</td><td class="num">提携チャート・要公式確認</td></tr>
+          <tr><td><b>デルタ</b> <span class="al mr">MR</span></td><td>デルタ+ラタム/アエロメヒコ系接続</td><td class="num">変動制</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">長距離×2区間なので、ビジネスクラス特典の「マイル単価」が最も高くなりやすいゾーン。マイルを貯める人の最終目標地とも言われます(二次情報)。</p>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">北米経由の通し券が本命。南米内の国内線は現地系(LATAM等)の別切りが必要になる場合が多く、乗継余裕は1泊単位で考えるのが安全です。黄熱など予防接種の要否も渡航先により確認を(検疫所の公式情報)。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-ita">
+    <div class="dhead"><h3>🇮🇹 イタリア(ローマ・ミラノ)</h3><p class="dsub">直行 約14.5〜15.5時間(FCO / MXP)</p></div>
+    <div class="card">
+      <h3>✈️ 直行便がある航空会社</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">ITAエアウェイズ</span><span class="anote">羽田=ローマ 毎日。2026年4月からスターアライアンス加盟(ANAとマイル提携開始)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">ANA</span><span class="anote">羽田=ミラノ 週3(2026年10月末からデイリー化予定)</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>ANAマイル</b> <span class="al mr">MR</span></td><td>ANA直行便(ミラノ)/ ITA便(ローマ・スタアラ)</td><td class="num">45,000〜78,000(L/R/H)/ 提携60,000〜(要公式確認)</td></tr>
+          <tr><td><b>ユナイテッド</b></td><td>ANA・ITA・ルフトハンザ系便</td><td class="num">変動制・燃油負担なし</td></tr>
+          <tr><td><b>JALマイル</b></td><td>直行なし。フィンエアー・BA等の経由便(ワンワールド)</td><td class="num">提携チャート・要公式確認</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">ITAのスタアラ加盟(2026年4月)で「ANAマイルでローマ直行」が可能になったのが今年のトピック。空席は要検索。</p>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">直行2社と少ないため、ターキッシュ(イスタンブール経由)・中東系・フィンエアー(ヘルシンキ経由)がイタリア行きの値段を作っています。ベネチア・フィレンツェ等へも欧州内ハブ乗継が普通。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-esp">
+    <div class="dhead"><h3>🇪🇸 スペイン(マドリード・バルセロナ)</h3><p class="dsub">直行 約15〜16時間(MAD)/ バルセロナ直行はなし</p></div>
+    <div class="card">
+      <h3>✈️ 直行便がある航空会社</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">イベリア航空</span><span class="anote">成田=マドリード 週3(桜・秋シーズンは週4に増便)。ワンワールド加盟</span></li>
+        <li><span class="badge fsc">経由</span><span class="an">バルセロナ: 直行なし</span><span class="anote">マドリード乗継(イベリア)か、ヘルシンキ・パリ・フランクフルト・ドーハ等の経由で</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>JALマイル</b></td><td>イベリア直行便(ワンワールド)</td><td class="num">提携チャート・要公式確認</td></tr>
+          <tr><td><b>BA Avios</b> <span class="al mr">MR</span></td><td>イベリア・BA便(Avios圏。イベリア側のAviosにも移せる)</td><td class="num">距離制・要予約画面確認</td></tr>
+          <tr><td><b>ANAマイル</b> <span class="al mr">MR</span></td><td>ルフトハンザ・スイス等の経由便(スタアラ)</td><td class="num">提携60,000〜(要公式確認)</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">直行週3〜4便では席が細いので、実勢はカタール・ターキッシュ・エミレーツ経由が主戦場。バルセロナ往復+マドリード周遊なら「オープンジョー」(往路バルセロナ着・復路マドリード発)が移動のムダを消します。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-nrd">
+    <div class="dhead"><h3>❄️ 北欧(ヘルシンキ・コペンハーゲン・ストックホルム)</h3><p class="dsub">直行 約13〜13.5時間 / 欧州最短級の飛行時間</p></div>
+    <div class="card">
+      <h3>✈️ 直行便がある航空会社</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">フィンエアー(ヘルシンキ)</span><span class="anote">羽田 毎日+成田・関空・中部。北回りルートで約13時間=欧州最短級。ヘルシンキ空港は乗継が速い</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">SAS(コペンハーゲン)</span><span class="anote">羽田 最大週6便。2024年からスカイチーム(ANAマイルは貯まらない点に注意)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">ANA(ストックホルム)</span><span class="anote">羽田 週3便(2025年就航)。オスロへは直行なし(コペンハーゲン等経由)</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>JALマイル</b></td><td>フィンエアー便(ワンワールド)</td><td class="num">提携チャート・要公式確認</td></tr>
+          <tr><td><b>BA Avios</b> <span class="al mr">MR</span></td><td>フィンエアー便(距離制)</td><td class="num">要予約画面確認</td></tr>
+          <tr><td><b>ANAマイル</b> <span class="al mr">MR</span></td><td>ANA直行便(ストックホルム)</td><td class="num">45,000〜78,000(L/R/H)</td></tr>
+          <tr><td><b>デルタ</b> <span class="al mr">MR</span></td><td>SAS便(スカイチーム)</td><td class="num">変動制</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">「JALマイルでヘルシンキへ→そこからフィンエアーで欧州各都市へ」は欧州小都市攻略の王道パターン。SASのスカイチーム移籍で、北欧はアライアンス3陣営が揃う珍しいエリアになりました。</p>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">フィンエアーは日本4空港体制でセールも定期的。オーロラ目的なら「ヘルシンキ乗継で北部(ロヴァニエミ等)へ通し購入」が安全です(別切りにしない)。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-cee">
+    <div class="dhead"><h3>🇪🇺 欧州その他(オランダ・スイス・オーストリア・ポーランド・ベルギーなど)</h3><p class="dsub">「意外と直行がある」ゾーン / 2026年7月時点の就航一覧</p></div>
+    <div class="card">
+      <h3>✈️ 直行便がある都市と会社</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">アムステルダム</span><span class="anote">KLM(成田 毎日・関空 週3)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">チューリッヒ</span><span class="anote">スイス インターナショナル(成田 週5〜、夏の一部はデイリー)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">ウィーン</span><span class="anote">ANA(羽田 週3・通年)+オーストリア航空(成田・季節運航: 夏はデイリー、冬は運休)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">ワルシャワ</span><span class="anote">LOTポーランド航空(成田・2026年夏は最大週9)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">ブリュッセル</span><span class="anote">ANA(成田 週3)</span></li>
+      </ul>
+      <p class="small">プラハ・ブダペスト等へは直行がなく、ウィーン・ヘルシンキ・フランクフルト・ワルシャワ乗継が定番です。</p>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>ANAマイル</b> <span class="al mr">MR</span></td><td>ANA(ウィーン・ブリュッセル)/ スイス・オーストリア・LOT便(スタアラ)</td><td class="num">45,000〜78,000(L/R/H)/ 提携60,000〜</td></tr>
+          <tr><td><b>ユナイテッド</b></td><td>上記スタアラ勢すべて</td><td class="num">変動制・燃油負担なし</td></tr>
+          <tr><td><b>フライング・ブルー(AF-KLM)</b> <span class="al mr">MR</span></td><td>KLM直行便(アムステルダム)</td><td class="num">変動制。プロモリワードの対象になることも</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">この一帯はスターアライアンスの牙城(スイス・オーストリア・LOT・ブリュッセルのANA)。ANAマイル・ユナイテッドマイルの相性が抜群です。</p>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">単価はターキッシュ・中東系経由が作りがち。ただし直行のKLM・スイス・LOTもセール時は健闘します。「どの都市から入って、鉄道でどう回るか」まで含めると総額が変わる — 周遊はオープンジョーで。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-nzl">
+    <div class="dhead"><h3>🇳🇿 ニュージーランド(オークランド・クライストチャーチ)</h3><p class="dsub">直行 約11時間(AKL)/ 時差わずか3〜4時間で長距離感が薄い</p></div>
+    <div class="card">
+      <h3>✈️ 直行便がある航空会社</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">ニュージーランド航空</span><span class="anote">成田=オークランド 毎日(南半球の夏は週10便)。スターアライアンス</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">(クライストチャーチ)</span><span class="anote">2026年11月末からニュージーランド航空が11年ぶりに直行再開予定(季節運航・週3)</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>ANAマイル</b> <span class="al mr">MR</span></td><td>ニュージーランド航空便(スタアラ提携)</td><td class="num">提携チャート(オセアニア)・要公式確認</td></tr>
+          <tr><td><b>ユナイテッド</b></td><td>ニュージーランド航空便</td><td class="num">変動制・燃油負担なし</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">直行1社なのでNZ航空のセール(年数回)が実質すべて。豪州経由(カンタス・ジェットスター)で入り、豪NZ間LCCを組む手もありますが別切り注意。NZeTA(電子渡航認証+観光税)を忘れずに。</p>
+    </div>
+  </div>
+
+  <div class="dpane" id="dp-afr">
+    <div class="dhead"><h3>🌍 アフリカ(カイロ・アディスアベバ・ナイロビ・南アフリカ)</h3><p class="dsub">成田からカイロ直行あり / それ以外は中東・アジア経由が定石</p></div>
+    <div class="card">
+      <h3>✈️ 行き方</h3>
+      <ul class="airlist">
+        <li><span class="badge fsc">FSC</span><span class="an">カイロ: エジプト航空</span><span class="anote">成田 週2便(日本=アフリカ間で貴重な直行。スターアライアンス)</span></li>
+        <li><span class="badge fsc">FSC</span><span class="an">アディスアベバ: エチオピア航空</span><span class="anote">成田発・仁川経由の同一便(直行ではない)。アフリカ各都市への乗継ハブ</span></li>
+        <li><span class="badge fsc">経由</span><span class="an">ナイロビ / ヨハネスブルグ / ケープタウン: 直行なし</span><span class="anote">ドーハ(カタール)・ドバイ(エミレーツ)・シンガポール(SQ)・香港(キャセイ)経由。総所要19〜22時間</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎫 マイルで行くなら</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>マイル</th><th>乗れる便</th><th>目安(往復エコノミー)</th></tr></thead>
+        <tbody>
+          <tr><td><b>ANAマイル</b> <span class="al mr">MR</span></td><td>エジプト航空・エチオピア航空・ターキッシュ便(スタアラ)</td><td class="num">アフリカゾーンの提携チャート・要公式確認</td></tr>
+          <tr><td><b>カタール Privilege Club / BA Avios</b> <span class="al mr">MR</span></td><td>カタール航空(ドーハ経由)</td><td class="num">Avios制・要確認</td></tr>
+          <tr><td><b>KrisFlyer</b> <span class="al mr">MR</span></td><td>SQ(シンガポール経由ヨハネスブルグ・ケープタウン)</td><td class="num">要公式確認</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3>💰 現金で安くするなら</h3>
+      <p style="font-size:14px">中東系(カタール・エミレーツ)のセールがアフリカ行きの相場を決めます。サファリ等は現地手配込みのツアーとの総額比較も。黄熱ワクチンなど検疫要件は行き先ごとに公式(FORTH/検疫所)で確認してください。</p>
     </div>
   </div>
 </section>
@@ -1077,6 +1714,23 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 
   <div class="card">
+    <h3>乗継地で「入国審査」があるかないか</h3>
+    <p style="font-size:14px">ここを知らないと乗継時間の見積もりを外します。</p>
+    <div class="tbl"><table>
+      <thead><tr><th>乗継地</th><th>審査・手続き</th><th>備考</th></tr></thead>
+      <tbody>
+        <tr><td><b>米国</b>(LA・シアトル等で乗継)</td><td><b>必ず入国審査+荷物受取→再預け</b></td><td>通過でもESTA必須。3時間以上確保</td></tr>
+        <tr><td><b>カナダ</b></td><td>入国審査あり(米国行きは事前審査場も)</td><td>通過でもeTA必須</td></tr>
+        <tr><td><b>英国</b></td><td>国際線→国際線の「airside乗継」なら入国不要の場合あり。ただし<b>通過でもETAが必要</b></td><td>ヒースローはターミナル間移動に時間</td></tr>
+        <tr><td><b>シェンゲン圏内の乗継</b>(ヘルシンキ・フランクフルト・パリ等)</td><td><b>最初に着いたシェンゲン空港で入域審査</b>。その先の欧州内移動は国内線扱い</td><td>例: 羽田→ヘルシンキ→ローマなら、審査はヘルシンキ。乗継時間に審査の行列を織り込む(EESの顔・指紋登録で初回は時間がかかる)</td></tr>
+        <tr><td><b>仁川・台北・香港・シンガポール・ドーハ・ドバイ・イスタンブール</b></td><td>入国不要(国際線乗継エリア内で完結)</td><td>保安検査の再通過はあり。空港外に出るなら各国の入国条件が必要</td></tr>
+        <tr><td><b>中国本土</b>(上海・北京経由)</td><td>乗継は原則入国不要だが、<b>荷物・発券の条件次第で入国が必要になる例あり</b></td><td>240時間トランジットビザ免除制度あり。行程が複雑なら避けるのが無難(要確認)</td></tr>
+        <tr><td><b>オーストラリア</b></td><td>通過でもETA等が必要な場合あり</td><td>シドニー経由NZ行きなど(要確認)</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="card">
     <h3>主要ハブ空港ガイド(日本からの乗り継ぎ定番)</h3>
     <div class="tbl"><table>
       <thead><tr><th>ハブ</th><th>航空会社</th><th>強い方面</th><th>メモ</th></tr></thead>
@@ -1089,11 +1743,11 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
         <tr><td><b>ドバイ DXB</b></td><td>エミレーツ</td><td>欧州・中東・アフリカ</td><td>巨大空港。乗継に余裕を。A380の2階席は体験としても人気</td></tr>
         <tr><td><b>アブダビ AUH</b></td><td>エティハド</td><td>欧州・中東</td><td>中東3社では小ぶりで歩きやすい</td></tr>
         <tr><td><b>イスタンブール IST</b></td><td>ターキッシュ エアラインズ</td><td>欧州全域(就航都市数世界一)</td><td>欧州の小都市まで1回乗継で届くのが強み。無料市内ツアー(長時間乗継向け)も有名</td></tr>
-        <tr><td><b>ヘルシンキ HEL</b></td><td>フィンエアー</td><td>欧州</td><td>コンパクト空港で乗継が速い(最短35分設計)。日本路線は季節運航中心になっており要確認</td></tr>
+        <tr><td><b>ヘルシンキ HEL</b></td><td>フィンエアー</td><td>欧州</td><td>コンパクト空港で乗継が速く、飛行時間も欧州最短級(約13時間)。羽田毎日+成田・関空・中部の4空港体制(2026年夏ダイヤ)</td></tr>
         <tr><td><b>シンガポール SIN・クアラルンプール KUL・バンコク BKK</b></td><td>シンガポール航空・マレーシア航空・タイ国際航空 など</td><td>豪州・インド・中東</td><td>豪州行きを安くするなら東南アジア経由が定番。空港自体が観光地(SINのジュエル等)</td></tr>
       </tbody>
     </table></div>
-    <p class="small">価格の傾向は時期・燃料価格・為替で変わります。「この経由なら必ず安い」ではなく「比較の候補に入れる場所」として使ってください(傾向の出典は各カード内・フッターに記載)。</p>
+    <p class="small">価格の傾向は時期・燃料価格・為替で変わります。「この経由なら必ず安い」ではなく「比較の候補に入れる場所」として使ってください。※中東3社(ドーハ・ドバイ・アブダビ)は2026年2〜3月の中東情勢で一時全便停止→段階復旧という経緯があった年です。中東経由を予約する際は運航状況を最新確認してください(2026-07-10時点でエミレーツ・カタールの日本線は復旧済み、JAL羽田=ドーハのみ8月末まで運休)。</p>
   </div>
 
   <div class="card">
@@ -1116,6 +1770,109 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
     ・長い乗継(6時間超)なら、ラウンジの有料利用・仮眠エリア・市内ミニ観光(イスタンブール・シンガポール・ドーハ・仁川は公式の無料/格安ツアーあり)も選択肢<br>
     ・乗継地でも<b>電子認証が要る国がある</b>(米国ESTA、カナダeTA、英国ETA など通過でも必要)。姉妹アプリ「おまもりキット」で確認を</p>
   </div>
+</section>
+
+<!-- ============ トラブル ============ -->
+<section class="pane" id="pane-trouble">
+  <div class="sec-head">
+    <span class="eyebrow">When Things Go Wrong</span>
+    <h2>遅延・欠航・荷物トラブル</h2>
+    <p class="lede">起きてから調べる余裕はありません。「もらえるもの」と「動き方」を先に知っておくページです(2026-07-10時点の制度)。</p>
+  </div>
+
+  <div class="card">
+    <h3>まず大原則(ここだけでも覚えて)</h3>
+    <p style="font-size:14px">① どの航空会社でも、欠航・大幅遅延時は「<b>代替便への振替</b>」か「<b>手数料なしの払い戻し</b>」を選べるのが世界共通の原則<br>
+    ② <b>1枚の予約</b>の乗り継ぎ失敗は航空会社が次の便に乗せてくれる。<b>別切りは自己責任</b>(「乗り継ぎ」タブ)<br>
+    ③ 天候などの不可抗力では、日本を含む多くの国で<b>ホテル代や二次被害は補償されない</b>。埋められるのは旅行保険だけ<br>
+    ④ すべての請求(補償・保険・カード付帯)は<b>証拠が命</b>: 遅延・欠航の画面スクショ、係員の案内メモ、領収書は全部残す</p>
+  </div>
+
+  <div class="card">
+    <h3>欠航・大幅遅延 — 最初の30分の動き方</h3>
+    <ol class="steps">
+      <li><b>3つ同時に動く</b>
+        <p>①航空会社アプリ/Webの自己振替 ②カウンターの列に並ぶ ③電話(日本語デスクがあれば日本語)。振替枠は早い者勝ちなので、列に並びながらアプリと電話です。</p></li>
+      <li><b>選択肢を確認する</b>
+        <p>振替か払い戻しか。翌日以降になるなら宿泊の提供有無(下の表)。「自社都合か・天候か」で扱いが変わるので、<b>遅延理由を必ず聞いてメモ</b>。</p></li>
+      <li><b>OTA(予約サイト)で買った人</b>
+        <p>当日の振替は運航会社が対応してくれることが多い一方、<b>払い戻しは購入元(OTA)経由</b>が原則。OTAサポートにも並行連絡を。</p></li>
+      <li><b>証拠を確保</b>
+        <p>欠航表示の画面・搭乗券・領収書・案内メモ。あとで補償・保険請求の全部に使います。</p></li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>遅延・欠航で「もらえるもの」早見表</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>どこの話か</th><th>もらえる・できること</th><th>ポイント</th></tr></thead>
+      <tbody>
+        <tr><td><b>日本の国内線</b></td><td>振替 or 全額払い戻し(原因問わず)。<b>会社都合</b>(機材故障等)なら宿泊費・交通費も所定範囲で負担(ANAは上限15,000円と公表)</td><td>天候の場合は宿泊等は<b>自己負担</b>。定額の遅延補償制度は日本には無い</td></tr>
+        <tr><td><b>EU・英国発着</b></td><td>下のEU261カード参照。<b>定額補償(最大600ユーロ/£520)+食事・ホテルのケア</b></td><td>日本人にも適用される。権利として請求しないともらえない</td></tr>
+        <tr><td><b>米国発着</b></td><td>欠航・大幅変更(国内3時間/国際6時間)で振替を断れば<b>自動で現金返金</b>(2024年新ルール)。大手は自社都合時の食事・ホテル提供を公約</td><td>EUのような定額の上乗せ補償は無い。購入24時間以内・出発7日以上前なら<b>無料キャンセル</b>(公式直販)</td></tr>
+        <tr><td><b>その他の国際線全般</b></td><td>モントリオール条約: <b>証明できた実損</b>を賠償請求できる(遅延 上限6,303SDR≒約126万円)</td><td>「実損＋立証」が前提。悪天候等は免責。日本も締約国</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>EU261(ヨーロッパの手厚い補償)を使いこなす</h3>
+    <p style="font-size:14px"><b>いつ適用?</b> ①EU域内(+英国は同等のUK261)を<b>出発する全便</b>(会社の国籍不問)②日本→EUは<b>EU系航空会社の運航便のみ</b>対象。<br>
+    例: パリ→羽田はJAL便もエールフランス便も対象。羽田→パリは<b>エールフランス便なら対象、JAL便は対象外</b>(その場合はモントリオール条約のみ)。判定は実際に運航する会社(コードシェア注意)。</p>
+    <div class="tbl mini"><table>
+      <thead><tr><th>条件(最終目的地への到着遅れ)</th><th>定額補償</th></tr></thead>
+      <tbody>
+        <tr><td>3時間以上(日本⇔欧州の距離帯)</td><td class="num">600ユーロ(3〜4時間なら300ユーロ)</td></tr>
+        <tr><td>欧州内の短・中距離</td><td class="num">250〜400ユーロ</td></tr>
+        <tr><td>英国 UK261</td><td class="num">£220〜£520</td></tr>
+      </tbody>
+    </table></div>
+    <p style="font-size:14px">・悪天候・管制など「特別な事情」では定額補償は出ない。ただし<b>食事・飲み物・(翌日発なら)ホテル+送迎のケア義務は天候でも発生</b>(長距離は出発4時間遅れから)<br>
+    ・5時間以上の遅延なら、旅行をやめて<b>全額払い戻し</b>を選ぶ権利<br>
+    ・請求は搭乗後でもOK。航空会社の公式フォームから自分で請求できます(代行業者は手数料2〜4割が相場なのでまず自力で)<br>
+    <span class="small">※ 2026年6月にEUで制度改正の政治合意(3時間・金額は維持、手続きの電子化など)。適用は2027年ごろの見込みで、現時点は上記の現行ルールです(要確認)。</span></p>
+  </div>
+
+  <div class="card">
+    <h3>荷物が出てこない・壊れた(ロストバゲージ)</h3>
+    <ol class="steps">
+      <li><b>空港を出る前にPIRを作る</b>
+        <p>ターンテーブル近くの「Baggage Service」カウンターで<b>PIR(手荷物事故報告書)</b>を発行してもらう。この番号が追跡・補償・保険のすべての起点。ここを飛ばすと後の請求が非常に不利です。</p></li>
+      <li><b>必需品を買ったら領収書を残す</b>
+        <p>下着・洗面用具など最低限の購入費は航空会社が払い戻す慣行(範囲は会社ごと。カウンターで確認)。旅行保険の「手荷物遅延」特約(到着6時間超で生活必需品、限度2〜10万円が目安)も使えます。</p></li>
+      <li><b>期限を守って書面請求</b>
+        <p><b>破損は受取から7日以内・遅延関連の出費は21日以内</b>に書面(メール・公式フォーム)で請求。21日たっても出てこなければ「紛失」となり、実損を上限約30万円(1,519SDR)まで請求できます(モントリオール条約)。</p></li>
+    </ol>
+    <p class="small">高価なもの・壊れやすいもの・薬・貴重品はそもそも預けない(受託手荷物の賠償には上限がある)。日本の国内線の賠償上限は約款で1人15万円です。</p>
+  </div>
+
+  <div class="card">
+    <h3>オーバーブッキングは「チャンス」でもある</h3>
+    <p style="font-size:14px">座席が足りないとき、航空会社はまず「便を変えてもいい人」を募集します。<br>
+    ・<b>日本(ANA・JAL「フレックストラベラー制度」)</b>: 当日中の変更に協力で<b>現金10,000円または7,500マイル</b>、翌日以降なら<b>20,000円または15,000マイル+ホテル代</b><br>
+    ・<b>米国発の便</b>: 強制的に降ろされた場合の補償は最大2,150ドル(遅れ幅による)。自発的に譲る場合の条件は交渉次第<br>
+    時間に余裕がある旅なら、協力を申し出て堂々と受け取ってOKの制度です。</p>
+  </div>
+
+  <div class="card">
+    <h3>保険とクレジットカード付帯で埋める</h3>
+    <div class="tbl mini"><table>
+      <thead><tr><th>特約</th><th>典型的な条件と補償(目安)</th></tr></thead>
+      <tbody>
+        <tr><td><b>航空機遅延費用</b>(海外旅行保険)</td><td>出発遅延・欠航で<b>6時間以内に代替便がない</b>とき、宿泊・食事・交通費・予約済みツアーの取消料などを<b>2万円程度</b>まで実費</td></tr>
+        <tr><td><b>手荷物遅延</b>(同)</td><td>到着後<b>6時間以内に荷物が届かない</b>とき、96時間以内の必需品購入費を<b>2万〜10万円</b>まで</td></tr>
+        <tr><td><b>カード付帯の遅延保険</b></td><td>一部のゴールドカード以上。<b>4時間遅延で2万円</b>などの設計が典型。「そのカードで航空券を買った場合のみ有効(利用付帯)」の条件が多い</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">金額・条件は商品ごとに違います(上記は目安・要個別確認)。台風シーズンや冬の北国など「天候リスクが高い旅」ほど、遅延特約の価値が上がります。</p>
+  </div>
+
+  <div class="callout warn">
+    <b>天候欠航で旅程が崩れたときの現実</b>
+    航空会社が返すのは<b>航空券代だけ</b>。使えなくなったホテル・現地ツアーのキャンセル料は、日本でもEUでも航空会社は補償しません(不可抗力)。ここを埋められるのは旅行保険(遅延特約・取消系特約)と、ホテル側のキャンセル規定だけ。<b>「前日までキャンセル無料」のプランで宿を取る</b>のは、それ自体が優秀な保険です。
+  </div>
+
+  <p class="small">出典: EU公式(Your Europe・EU理事会 2026-06-15発表)、英国CAA、ICAO・国土交通省(モントリオール条約 2024年12月改定限度額)、ANA・JAL公式(フレックストラベラー・欠航時取り扱い)、米国運輸省DOT(自動返金・IDB規則)。いずれも2026-07-10確認。制度は変わるため、実際の請求時は各公式サイトで最新条件を確認してください。</p>
 </section>
 
 <!-- ============ マイル ============ -->
@@ -1172,6 +1929,37 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 
   <div class="card">
+    <h3>マイルの貯まり方 — 「安い券はマイルも少ない」の仕組み</h3>
+    <p style="font-size:14px">飛んで貯まるマイル = <b>区間の基本マイレージ × 積算率</b>。積算率は買った運賃(予約クラス)で決まります。</p>
+    <div class="tbl mini"><table>
+      <thead><tr><th>乗り方</th><th>積算率の目安(2026-07-10時点)</th></tr></thead>
+      <tbody>
+        <tr><td>ANA・JAL国際線エコノミー</td><td class="num">100% / 70% / 50% / 30%(運賃の安さに応じて下がる)</td></tr>
+        <tr><td>ANA国内線(2026年5月19日〜の新運賃)</td><td class="num">フレックス100% / スタンダード80% / シンプル70%</td></tr>
+        <tr><td>JAL国内線</td><td class="num">フレックス100% / セイバー・スペシャルセイバー75%</td></tr>
+        <tr><td>LCC(ピーチ・ジェットスター等)</td><td class="num">対象外(0%)。ZIPAIRは搭乗では貯まらないが、JALマイル10,000→ZIPAIRポイント15,000の交換制度あり</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">・提携他社便・コードシェアは「実際に運航する会社」の予約クラスで積算が決まり、対象外クラスもあります(予約時に積算条件を確認)<br>
+    ・忘れがち: 予約時にマイレージ番号を入れておく。入れ忘れても搭乗後6か月程度は事後登録できます(各社ルール確認)<br>
+    ・決済で貯める場合の目安: 100円=1マイル前後のカードなら「年間100万円の決済+韓国1往復」で年約13,000マイル。東南アジア往復のローシーズン特典(30,000マイル)まで2年強、が現実的なペース感です</p>
+  </div>
+
+  <div class="card">
+    <h3>家族でマイルを合算する(少なくても使える)</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>制度</th><th>できること</th><th>条件の要点</th></tr></thead>
+      <tbody>
+        <tr><td><b>ANAカード ファミリーマイル</b></td><td>特典交換時に家族の残高を合算(最大10名)</td><td>本人・家族ともANAカード会員が基本。生計同一の配偶者・親・子</td></tr>
+        <tr><td><b>JALカード家族プログラム</b></td><td>特典交換時に合算(国内・国際とも)</td><td>親会員=JALカード本会員。登録無料</td></tr>
+        <tr><td><b>BA「Household Account」</b></td><td>同一住所の最大7名でAviosを共有</td><td>日本在住でも作成可。特典は原則メンバー用のみ・住所変更は半年に1回まで</td></tr>
+        <tr><td><b>ユナイテッド「マイルプール」</b></td><td>最大5名でマイルを持ち寄り(2024年導入)</td><td>無料。拠出したマイルは戻せない点に注意</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">「家族それぞれに数千マイルずつ散らばって失効」が一番もったいないパターン。家族合算は最初に設定しておくのが吉です(各制度の細則は公式で確認。確認日 2026-07-10)。</p>
+  </div>
+
+  <div class="card">
     <h3>ANA・JALで行く場合の必要マイル目安(エコノミー往復・日本発)</h3>
     <p class="small">2026-07-10時点の公式チャートに基づく目安です(出典: ANA・JAL公式サイト/一部数値は公式改定を報じた専門メディア)。<b>ANAは固定チャート(ロー L/レギュラー R/ハイ H の3シーズン)、JALは「基本マイル(最低ライン)+空席状況で変動(PLUS)」</b>という別方式なので、単純比較はできません。</p>
     <div class="tbl"><table>
@@ -1207,6 +1995,19 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
       </tbody>
     </table></div>
     <div class="callout warn"><b>「どの便に・どのマイルが使えるか」の考え方</b>行き先に飛んでいる航空会社を確認 → その会社が属するアライアンスのマイル+個別提携のマイルが候補になります。「行き先別」タブに、都市ごとの「使えるマイル一覧」をまとめてあります。</div>
+  </div>
+
+  <div class="card">
+    <h3>第3の選択肢: マイルを「航空券代」に変える</h3>
+    <p style="font-size:14px">特典航空券の空席がない繁忙期でも、マイルを<b>1円相当のコイン・ポイント</b>にして有償航空券の支払いに使えます。<b>空席さえあれば使えて、マイルも貯まる</b>のが特典との違い。</p>
+    <div class="tbl mini"><table>
+      <thead><tr><th></th><th>交換レート(2026-07-10時点)</th></tr></thead>
+      <tbody>
+        <tr><td><b>ANA SKY コイン</b></td><td class="num">1マイル=1コイン〜。50,000マイル一括なら最大1.2〜1.7倍(会員種別による。例: ANAゴールドカード保有で5万→8万コイン)</td></tr>
+        <tr><td><b>e JALポイント</b></td><td class="num">1,000マイル=1,000pt / <b>10,000マイル=15,000pt(1.5倍)</b></td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">使い分けの定石(二次情報): 長距離ビジネスの特典が取れるならマイルのまま(1マイル3円超の価値)。家族全員の席を繁忙期に確実に押さえたい・エコノミーしか使わないなら、コイン/ポイント化(確実に1〜1.7円)が合理的。燃油サーチャージ・税金にも充当できます。</p>
   </div>
 
   <div class="card">
@@ -1255,10 +2056,21 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   <div class="card">
     <h3>特典航空券を実際に取るコツ</h3>
     <p style="font-size:14px">・<b>席数限定</b>。カレンダー検索で「空いている日」から旅程を組む、が正しい順番<br>
-    ・国際線は<b>発売開始日(ANA提携便は355日前など)</b>の朝に張るのが繁忙期の必勝法<br>
+    ・繁忙期は<b>発売開始日の開始時刻に張る</b>のが必勝法(下の表)<br>
     ・見つからないときは「1人ずつ検索」「平日発着」「近隣都市発着(ソウル→釜山など)」で再検索<br>
-    ・特典でも<b>燃油サーチャージ・税金は現金払い</b>。ANA・JALの欧州特典は往復数万円の別払いになることも(ユナイテッド等サーチャージを取らないプログラムだと安く済む)<br>
+    ・特典でも<b>燃油サーチャージ・税金は現金払い</b>。ANA・JALの欧米特典は片道数万円の別払いになることも(ユナイテッド等サーチャージを取らないプログラムだと軽い)<br>
     ・キャンセル待ち・直前開放(出発2週間前ごろ)も狙い目</p>
+    <h4>発売開始とキャンセル料の早見表(2026-07-10時点)</h4>
+    <div class="tbl"><table>
+      <thead><tr><th>プログラム</th><th>予約開始</th><th>取消手数料(出発前)</th></tr></thead>
+      <tbody>
+        <tr><td><b>ANA 国際線特典</b></td><td class="num">355日前 朝9:00</td><td class="num">3,000マイル/人(現金3,000円払いも選択可)</td></tr>
+        <tr><td><b>JAL 特典(国内・国際)</b></td><td class="num">360日前 午前0:00</td><td class="num">国際線 3,100円/人</td></tr>
+        <tr><td><b>ユナイテッド</b></td><td class="num">約337日前</td><td class="num">無料(無断不搭乗後の払い戻しは125ドル)</td></tr>
+        <tr><td><b>BA(Avios)</b></td><td class="num">355日前</td><td class="num">約£35/人(出発24時間前まで)</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">※ ANAマイルでユナイテッド等の提携便を取る場合も「その提携会社が席を開放してから」なので、開始日は上表と一致しないことがあります。ユナイテッドは取消無料なので「とりあえず押さえて後で調整」がしやすいプログラムです。</p>
   </div>
 
   <div class="card">
@@ -1323,10 +2135,33 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   <div class="term"><b>変動制(ダイナミックアワード)</b><p>特典に必要なマイル数が日によって変わる方式。JAL国際線・デルタ・ユナイテッドなどが採用。「安い日を探す」感覚が必要に。固定チャート(ANA国際線など)との違いを「マイル」タブで解説。</p></div>
   <div class="term"><b>ポイントサイト経由/クレカ修行</b><p>マイルを陸で貯める文化の俗称。本アプリでは深入りしないが、まずは「決済を1枚に集約+ポイント移行先を決める」だけで十分貯まる。</p></div>
 
+  <div class="term"><b>ノーショー(No-show)</b><p>連絡せずに搭乗しないこと。復路や以降の便が自動キャンセルされる規則が一般的で、ノーショー手数料を取る会社もある。乗れないと分かった時点で連絡・変更手続きを。</p></div>
+  <div class="term"><b>オーバーブッキング(過剰予約)</b><p>座席数より多く売る運用。満席超過時は「便を変えてもいい人」を募集し、協力金やホテルが提供される(詳しくは「トラブル」タブ)。</p></div>
+  <div class="term"><b>レイオーバー</b><p>24時間未満の乗り継ぎ滞在のこと(24時間以上は「ストップオーバー」)。「レイオーバー8時間」なら市内に出られることも — 入国可否と再保安検査の時間に注意。</p></div>
+
   <p class="cat-h">手続きまわり</p>
   <div class="term"><b>eチケット(お客様控え)</b><p>今の航空券は電子データ。控えのPDF・予約番号(6桁の英数字=PNR)があれば搭乗手続きできる。スマホに保存+紙でも1枚あると安心。</p></div>
+  <div class="term"><b>スルーチェックイン</b><p>乗継便の2枚目の搭乗券まで最初の空港で発行し、荷物も最終目的地まで通しで預けること。1枚の予約なら基本自動。別切りでは原則不可(乗継地で入国して預け直し)。</p></div>
+  <div class="term"><b>APIs(事前旅客情報)</b><p>パスポート番号などを事前に航空会社へ登録する仕組み。米国行きなどで必須。予約後にサイト/アプリから入力しておくと空港で止まらない。</p></div>
   <div class="term"><b>オンラインチェックイン</b><p>出発24〜48時間前からWeb/アプリで搭乗手続き。LCCは空港カウンターが有料・行列のことが多いので、事前チェックインが基本と覚える。</p></div>
   <div class="term"><b>電子渡航認証(ESTA/ETA/ETIAS)</b><p>ビザ免除でも事前登録が必要な国が増加中。米国ESTA・英国ETA・カナダeTAなど。<b>乗り継ぎだけでも必要</b>な国があるので要注意(姉妹アプリ「おまもりキット」参照)。</p></div>
+
+  <div class="sec-head" style="margin-top:22px">
+    <span class="eyebrow">FAQ</span>
+    <h2>よくある質問</h2>
+    <p class="lede">初めての人がつまずきやすい疑問を先回りで。</p>
+  </div>
+
+  <details class="faq"><summary>結局、何か月前に買えばいいの?<span class="chev">▶</span></summary><div class="fbody"><p>平均的には国際線で出発1〜1.5か月前が安いというデータがありますが、<b>アジア方面は5〜7か月前から</b>、<b>連休・年末年始は3〜6か月前の早押し</b>が基本。「きほん」タブ⑤と、Google フライトの価格グラフでその路線の相場を見るのが確実です。</p></div></details>
+  <details class="faq"><summary>往復で買わずに、片道ずつ買ってもいい?<span class="chev">▶</span></summary><div class="fbody"><p>LCCはもともと片道売りなので問題なし。大手(FSC)の国際線は往復で買うほうが割安な設計が多く、別々の航空会社の片道を組み合わせると「別切り」扱いで乗継保護もありません。また、<b>片道の国際線航空券だけだと入国審査で帰国便の提示を求められる国が多い</b>点にも注意。</p></div></details>
+  <details class="faq"><summary>パスポートの残存期間って何?<span class="chev">▶</span></summary><div class="fbody"><p>入国時にパスポートの有効期限が一定以上残っている必要がある、というルール。<b>東南アジアは6か月以上</b>が多く、行き先ごとに違います。予約前に確認を(姉妹アプリ「おまもりキット」の手続きタブに国別一覧があります)。</p></div></details>
+  <details class="faq"><summary>空港には何時間前に着けばいい?<span class="chev">▶</span></summary><div class="fbody"><p>国際線は2〜3時間前(LCC・繁忙期・初めての空港は3時間)、国内線は30〜40分前+保安検査締切(出発15〜20分前)厳守。詳しくは「きほん」タブ⑥の流れを参照。</p></div></details>
+  <details class="faq"><summary>名前のローマ字を間違えて予約してしまった<span class="chev">▶</span></summary><div class="fbody"><p>航空券は原則<b>名義変更不可</b>。軽微な綴り修正は航空会社によって無料〜有料で対応してもらえる場合があるので、気づいた瞬間に航空会社(OTA購入ならOTA)へ連絡。放置して搭乗拒否が最悪のパターンです。結婚等で姓が変わる予定がある人は「搭乗日に有効なパスポートの姓」で予約します。</p></div></details>
+  <details class="faq"><summary>妊娠中でも飛行機に乗れる?<span class="chev">▶</span></summary><div class="fbody"><p>多くの航空会社で、出産予定日が近い場合(目安として28週以降は診断書推奨、36週前後以降は搭乗不可や医師同伴条件)に制限があります。<b>会社ごとに規定が異なるため、予約前に必ず公式の案内を確認</b>し、かかりつけ医にも相談を(要確認)。</p></div></details>
+  <details class="faq"><summary>天候で欠航になったら、お金は戻る?<span class="chev">▶</span></summary><div class="fbody"><p>航空券は振替か全額払い戻しができます。ただし<b>ホテルやツアーのキャンセル料は航空会社からは戻りません</b>。詳しくは「トラブル」タブへ。旅行保険の遅延特約がここを埋めます。</p></div></details>
+  <details class="faq"><summary>燃油サーチャージを払わない方法はある?<span class="chev">▶</span></summary><div class="fbody"><p>①シンガポール航空・米系・LCCなど「サーチャージなし/込み」の会社を選ぶ ②マイル特典ならユナイテッドなどサーチャージを取らないプログラムを使う ③改定(偶数月ごろ)で下がるタイミングまで発券を待つ — の3択です。2026年7〜8月発券分は過去最高水準なので、秋の改定を待つ価値があるかもしれません(相場次第・二次情報)。</p></div></details>
+  <details class="faq"><summary>マイルは貯めるべき?ポイント(現金値引き)とどっちが得?<span class="chev">▶</span></summary><div class="fbody"><p>年に1回以上飛行機に乗る/アメックス等の移行できるポイントが貯まっているなら、マイルの価値(1マイル=1.5〜2円以上)は狙う価値があります。ほぼ乗らないなら無理せず現金値引き・ポイント充当で十分。「マイル」タブの計算機で判断できます。</p></div></details>
+  <details class="faq"><summary>予約したサイトが倒産・連絡不能になったら?<span class="chev">▶</span></summary><div class="fbody"><p>まず航空会社に「予約が生きているか(発券済みか)」を予約番号で確認。発券済みなら搭乗できることが多いです。未発券・返金トラブルは、カード会社への相談(支払い異議=チャージバック)と消費者ホットライン<b>188</b>へ。こうしたリスクを避けたい人は公式サイト購入が安心です。</p></div></details>
 
   <div class="sec-head" style="margin-top:22px">
     <span class="eyebrow">Links</span>

@@ -1,0 +1,967 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>航空券サーチ司令塔</title>
+</head>
+<body>
+<style>
+:root{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+  --font-body:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium","Yu Gothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
+  --font-disp:"Avenir Next","Avenir","Futura","Trebuchet MS",var(--font-body);
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+    --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+    --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+    --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+    --ok:#86C295; --ok-bg:#16301C;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+}
+:root[data-theme="dark"]{
+  --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+  --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+  --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+  --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+  --ok:#86C295; --ok-bg:#16301C;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);line-height:1.65;font-size:15.5px;-webkit-text-size-adjust:100%}
+.wrap{max-width:700px;margin:0 auto;padding:0 14px 72px}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px;word-break:break-all}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+header.app{padding:22px 2px 10px}
+.eyebrow{font-family:var(--font-disp);font-size:11px;letter-spacing:.16em;color:var(--accent);font-weight:600;text-transform:uppercase}
+header.app h1{margin:2px 0 6px;font-size:26px;line-height:1.3;letter-spacing:.01em;color:var(--navy);text-wrap:balance}
+.stamp{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.stamp span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
+
+/* ラジオボタン式タブ: JavaScriptが無い環境でも動く */
+.tabradio{position:absolute;width:1px;height:1px;opacity:0;margin:0;pointer-events:none}
+nav.tabs{position:sticky;top:0;z-index:30;background:var(--bg);padding:8px 0 10px;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600;cursor:pointer;user-select:none}
+#t-search:checked~nav .tab[for="t-search"],#t-lcc:checked~nav .tab[for="t-lcc"],#t-bag:checked~nav .tab[for="t-bag"],#t-waza:checked~nav .tab[for="t-waza"],#t-sale:checked~nav .tab[for="t-sale"],#t-watch:checked~nav .tab[for="t-watch"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+#t-search:focus-visible~nav .tab[for="t-search"],#t-lcc:focus-visible~nav .tab[for="t-lcc"],#t-bag:focus-visible~nav .tab[for="t-bag"],#t-waza:focus-visible~nav .tab[for="t-waza"],#t-sale:focus-visible~nav .tab[for="t-sale"],#t-watch:focus-visible~nav .tab[for="t-watch"]{outline:2px solid var(--accent);outline-offset:2px}
+section.pane{display:none}
+#t-search:checked~#pane-search,#t-lcc:checked~#pane-lcc,#t-bag:checked~#pane-bag,#t-waza:checked~#pane-waza,#t-sale:checked~#pane-sale,#t-watch:checked~#pane-watch{display:block}
+
+.sec-head{margin:16px 2px 12px}
+.sec-head h2{margin:2px 0 4px;font-size:20px;color:var(--navy);letter-spacing:.01em}
+.sec-head .lede{margin:0;font-size:13.5px;color:var(--muted)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 15px;margin:0 0 12px}
+.card h3{margin:0 0 8px;font-size:15.5px;color:var(--navy)}
+.card h4{margin:14px 0 6px;font-size:13.5px;color:var(--navy)}
+.card p{margin:6px 0}
+.small{font-size:12.5px;color:var(--muted)}
+.callout{border:1px solid transparent;border-radius:10px;padding:12px 14px;margin:0 0 12px;font-size:14px}
+.callout.danger{background:var(--danger-bg);color:var(--danger)}
+.callout.warn{background:var(--warn-bg);color:var(--warn)}
+.callout.ok{background:var(--ok-bg);color:var(--ok)}
+.callout b{display:block;margin-bottom:4px}
+.badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:2px 8px;vertical-align:middle;white-space:nowrap}
+.badge.auth{background:var(--danger-bg);color:var(--danger)}
+.badge.card-need{background:var(--warn-bg);color:var(--warn)}
+.badge.free{background:var(--ok-bg);color:var(--ok)}
+.badge.official{background:var(--accent-soft);color:var(--accent)}
+.badge.hidden-g{background:var(--danger-bg);color:var(--danger)}
+
+.search{width:100%;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:10px 13px;font-size:15px;margin:0 0 12px}
+.search::placeholder{color:var(--muted)}
+
+.country{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:0 0 10px;overflow:hidden}
+.country>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;min-height:44px}
+.country>summary::-webkit-details-marker{display:none}
+.country .flag{font-size:22px;flex:none}
+.country .cname{font-weight:700;font-size:15.5px}
+.country .csub{font-size:11.5px;color:var(--muted);display:block;line-height:1.4}
+.country .spacer{margin-left:auto;display:flex;align-items:center;gap:8px}
+.country .chev{color:var(--muted);font-size:12px;transition:transform .15s}
+.country[open] .chev{transform:rotate(90deg)}
+.cbody{border-top:1px solid var(--line);padding:10px 14px 13px;background:var(--surface)}
+.cbody dl{display:grid;grid-template-columns:96px 1fr;gap:6px 10px;margin:6px 0;font-size:14px}
+.cbody dt{color:var(--muted);font-size:12.5px;padding-top:1px}
+.cbody dd{margin:0}
+.cnote{font-size:13px;color:var(--warn);background:var(--warn-bg);border-radius:7px;padding:8px 10px;margin:8px 0 0}
+.cdanger{font-size:13px;color:var(--danger);background:var(--danger-bg);border-radius:7px;padding:8px 10px;margin:8px 0 0}
+.clink{margin-top:9px;font-size:13.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+.steps{counter-reset:st;list-style:none;margin:0;padding:0}
+.steps li{position:relative;padding:0 0 14px 44px}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:1px;width:30px;height:30px;border-radius:8px;background:var(--navy);color:var(--surface);font-family:var(--font-disp);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center}
+.steps b{display:block;margin-bottom:2px}
+.steps p{margin:2px 0;font-size:14px}
+
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin:0 0 12px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:480px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+th{font-size:12px;color:var(--muted);font-weight:600;background:var(--surface2);white-space:nowrap}
+td.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.calc{display:grid;gap:10px}
+.calc label{font-size:12.5px;color:var(--muted);display:block;margin-bottom:3px}
+.calc input,.calc select{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:10px 12px;font-size:16px}
+.calc input[type="number"]{font-family:var(--font-mono)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.result{background:var(--accent-soft);border-radius:9px;padding:10px 13px;font-size:14px}
+.result b{font-family:var(--font-mono);font-size:19px;font-variant-numeric:tabular-nums;color:var(--accent)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;cursor:pointer;min-height:34px;user-select:none}
+.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--surface)}
+
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--on-accent);border-radius:8px;padding:9px 16px;font-size:14px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.big{width:100%;padding:13px 16px;font-size:15.5px;border-radius:10px}
+
+/* 検索リンク一括表示 */
+.sitegroup{margin:0 0 14px}
+.sitegroup>h4{margin:0 0 8px;font-family:var(--font-disp);font-size:11px;letter-spacing:.14em;color:var(--muted);font-weight:600;text-transform:uppercase}
+.lbtn{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:10px 13px;margin:0 0 8px;text-decoration:none;color:var(--ink);font-size:14.5px;font-weight:600;min-height:44px}
+.lbtn small{display:block;color:var(--muted);font-weight:400;font-size:12px;line-height:1.45}
+.lbtn .go{color:var(--accent);flex:none;font-size:13px;font-weight:700}
+.lbtn.hl{border-color:var(--accent);background:var(--accent-soft)}
+.lgroupnote{font-size:12.5px;color:var(--muted);margin:2px 0 8px}
+
+.checkline{display:flex;align-items:flex-start;gap:10px;padding:8px 2px;font-size:14px}
+.checkline input[type="checkbox"]{width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent);flex:none}
+
+/* 追跡メモ・比較メモ */
+.pitem{display:flex;align-items:flex-start;gap:10px;padding:9px 4px;border-bottom:1px solid var(--line);min-height:42px}
+.pitem:last-child{border-bottom:none}
+.pitem .del{border:none;background:none;color:var(--muted);font-size:16px;cursor:pointer;padding:2px 6px}
+.addrow{display:flex;gap:8px;margin-top:10px}
+.addrow input{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:9px 12px;font-size:15px;min-width:0}
+
+.jsonly-note{display:none}
+.cat-h{font-family:var(--font-disp);font-size:11px;letter-spacing:.14em;color:var(--muted);font-weight:600;margin:16px 2px 8px;text-transform:uppercase}
+.kbd{font-family:var(--font-mono);font-size:12.5px;background:var(--surface2);border:1px solid var(--line);border-radius:6px;padding:2px 7px;white-space:nowrap}
+.copybox{font-family:var(--font-mono);font-size:13px;background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0;word-break:break-all;user-select:all}
+
+footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);line-height:1.7}
+</style>
+<div class="wrap">
+<header class="app">
+  <span class="eyebrow">Flight Search Command — 2026</span>
+  <h1>航空券サーチ司令塔</h1>
+  <div class="stamp">
+    <span><span class="dot"></span>情報確認日 2026-07-11</span>
+    <span><span class="dot"></span>関西発を優先収録(伊丹・関空・神戸)</span>
+    <span><span class="dot"></span>入力データは端末内のみ保存</span>
+  </div>
+  <noscript><div class="callout warn" style="margin-top:10px"><b>プレビュー表示中(ファイルAppなど)</b>情報の閲覧・タブ切り替えはこのまま全部使えます。「条件入力→リンク一括生成」「計算機」「メモ保存」はブラウザで開くと有効になります。JSが無くても、各サイトへの入口リンクとGoogleフライト検索フォームは使えます。</div></noscript>
+</header>
+
+<input class="tabradio" type="radio" name="tab" id="t-search" checked>
+<input class="tabradio" type="radio" name="tab" id="t-lcc">
+<input class="tabradio" type="radio" name="tab" id="t-bag">
+<input class="tabradio" type="radio" name="tab" id="t-waza">
+<input class="tabradio" type="radio" name="tab" id="t-sale">
+<input class="tabradio" type="radio" name="tab" id="t-watch">
+
+<nav class="tabs" aria-label="メニュー">
+  <label class="tab" for="t-search">🔍 検索</label>
+  <label class="tab" for="t-lcc">🛩 LCC図鑑</label>
+  <label class="tab" for="t-bag">🧳 手荷物</label>
+  <label class="tab" for="t-waza">🧭 裏ワザ</label>
+  <label class="tab" for="t-sale">🏷 セール</label>
+  <label class="tab" for="t-watch">🔔 見張り番</label>
+</nav>
+
+<!-- ============ 検索 ============ -->
+<section class="pane" id="pane-search">
+  <div class="sec-head">
+    <span class="eyebrow">One Input, Every Site</span>
+    <h2>1回入力 → 全サイト一斉検索</h2>
+    <p class="lede">条件を入れて生成ボタンを押すと、横断検索サイトと「その路線に就航するLCC公式」のリンクが条件入りでずらっと並びます。順番に開いて、下の比較メモに最安値を控えていくのが基本の使い方。</p>
+  </div>
+
+  <div class="card">
+    <h3>検索条件</h3>
+    <div class="calc">
+      <div class="row2">
+        <div>
+          <label for="f-orig">出発空港</label>
+          <select id="f-orig">
+            <option value="KIX" selected>関西(関空 KIX)</option>
+            <option value="ITM">大阪(伊丹 ITM)※国内線のみ</option>
+            <option value="UKB">神戸(UKB)</option>
+            <option value="HND">東京(羽田 HND)</option>
+            <option value="NRT">東京(成田 NRT)</option>
+            <option value="NGO">名古屋(中部 NGO)</option>
+            <option value="FUK">福岡(FUK)</option>
+            <option value="CTS">札幌(新千歳 CTS)</option>
+            <option value="OKA">沖縄(那覇 OKA)</option>
+          </select>
+        </div>
+        <div>
+          <label for="f-dest">目的地(都市名 or 3レター)</label>
+          <input id="f-dest" list="airports" placeholder="例: バンコク / BKK" autocomplete="off">
+        </div>
+      </div>
+      <div class="row2">
+        <div>
+          <label for="f-dep">出発日</label>
+          <input id="f-dep" type="date">
+        </div>
+        <div>
+          <label for="f-ret">帰国日(空欄=片道)</label>
+          <input id="f-ret" type="date">
+        </div>
+      </div>
+      <div class="row2">
+        <div>
+          <label for="f-adults">人数(大人)</label>
+          <input id="f-adults" type="number" inputmode="numeric" value="1" min="1" max="9">
+        </div>
+        <div></div>
+      </div>
+      <div>
+        <label class="checkline" style="padding:4px 0"><input type="checkbox" id="f-nearjp" checked><span>日本側の周辺空港もあわせて検索(関空⇄神戸、羽田⇄成田 など)</span></label>
+        <label class="checkline" style="padding:4px 0"><input type="checkbox" id="f-neardest" checked><span>目的地側の周辺空港もあわせて検索(例: バンコクBKK⇄ドンムアンDMK)</span></label>
+        <label class="checkline" style="padding:4px 0"><input type="checkbox" id="f-owcombo" checked><span>片道×片道の組み合わせも出す(往復より安いことがある)</span></label>
+      </div>
+      <button class="btn big" type="button" id="f-go">検索リンクを生成</button>
+      <noscript><p class="small">※ この一括生成はブラウザ(JSあり)で動きます。JSなしの環境では、下の「JSなしでも使える検索」と「各サイトの入口リンク」をお使いください。</p></noscript>
+    </div>
+    <datalist id="airports"></datalist>
+  </div>
+
+  <div id="linkout"></div>
+
+  <div class="card">
+    <h3>JSなしでも使える検索(Googleフライト)</h3>
+    <p class="small">下の1行に「どこから どこへ いつ」を書いて送信すると、Googleフライトの検索結果が開きます(通信が必要)。例: <span class="kbd">KIX to BKK 2026-12-20 through 2026-12-27</span> / 日本語でも通じます(例: 関空からバンコク 12月20日)。</p>
+    <form action="https://www.google.com/travel/flights" method="get" target="_blank" rel="noopener">
+      <input class="search" type="text" name="q" placeholder="例: KIX to BKK 2026-12-20 through 2026-12-27" aria-label="Googleフライト検索" style="margin-bottom:8px">
+      <input type="hidden" name="hl" value="ja">
+      <input type="hidden" name="curr" value="JPY">
+      <button class="btn" type="submit">Googleフライトで開く</button>
+    </form>
+  </div>
+
+  <details class="country">
+    <summary><span class="flag">🚪</span><span><span class="cname">各サイトの入口リンク</span><span class="csub">条件なしのトップ/検索ページ。JSなしでも使える</span></span><span class="spacer"><span class="chev">▶</span></span></summary>
+    <div class="cbody">
+            <a class="lbtn" target="_blank" rel="noopener" href="https://www.google.com/travel/flights?hl=ja&curr=JPY"><span>Google フライト<small>相場の基準。価格グラフ・追跡</small></span><span class="go">開く ›</span></a>
+      <a class="lbtn" target="_blank" rel="noopener" href="https://www.skyscanner.jp/"><span>Skyscanner<small>LCC網羅・「すべての場所」検索</small></span><span class="go">開く ›</span></a>
+      <a class="lbtn" target="_blank" rel="noopener" href="https://www.kayak.co.jp/flights"><span>Kayak<small>OTA横断・表示が見やすい</small></span><span class="go">開く ›</span></a>
+      <a class="lbtn" target="_blank" rel="noopener" href="https://www.kiwi.com/ja/"><span>Kiwi.com<small>LCC乗継の自動組み合わせ</small></span><span class="go">開く ›</span></a>
+      <a class="lbtn" target="_blank" rel="noopener" href="https://jp.trip.com/flights/"><span>Trip.com<small>アジアに強い・独自セール</small></span><span class="go">開く ›</span></a>
+      <a class="lbtn" target="_blank" rel="noopener" href="https://www.tour.ne.jp/w_air/"><span>トラベルコ<small>日本の格安OTAを横断比較</small></span><span class="go">開く ›</span></a>
+      <a class="lbtn" target="_blank" rel="noopener" href="https://www.airtrip.jp/"><span>エアトリ<small>日本のOTA。国内線+海外</small></span><span class="go">開く ›</span></a>
+      <a class="lbtn" target="_blank" rel="noopener" href="https://skyticket.jp/kaigai/"><span>スカイチケット<small>日本のOTA。海外航空券ページ</small></span><span class="go">開く ›</span></a>
+      <p class="small" style="margin-top:6px">OTA(旅行会社サイト)で買うときは検索タブ下部の「激安OTAの注意」を一読。基本は<b>比較はOTA込みで・購入は公式か大手</b>。</p>
+    </div>
+  </details>
+
+  <div class="card">
+    <h3>比較メモ <span class="badge official">端末に保存</span></h3>
+    <p class="small">各サイトで見た総額を控えると、最安に ★ が付きます。金額は<b>手荷物込みの総額</b>で入れるのがコツ(→ 手荷物タブ)。</p>
+    <div id="memoList"></div>
+    <div class="addrow">
+      <input id="m-site" placeholder="サイト/会社" aria-label="サイト名">
+      <input id="m-price" type="number" inputmode="numeric" placeholder="総額(円)" aria-label="総額" style="max-width:110px">
+      <button class="btn" type="button" id="m-add">追加</button>
+    </div>
+    <p class="small jsnote-memo" hidden>※ メモの保存はブラウザで開いたときに使えます。</p>
+  </div>
+
+  <div class="card">
+    <h3>予約ボタンを押す前の最終チェック</h3>
+    <label class="checkline"><input type="checkbox"><span><b>総額</b>で比べた?(受託手荷物・座席指定・支払手数料・燃油サーチャージ込み)</span></label>
+    <label class="checkline"><input type="checkbox"><span>空港を間違えていない?(バンコクBKKとドンムアンDMK、成田と羽田 など)・深夜着の市内移動はある?</span></label>
+    <label class="checkline"><input type="checkbox"><span>乗継時間は十分?(別々に買った便の乗継は<b>3時間以上</b>+荷物の受け直しを想定)</span></label>
+    <label class="checkline"><input type="checkbox"><span>氏名はパスポートのローマ字表記と完全一致?(訂正は有料・不可のことも)</span></label>
+    <label class="checkline"><input type="checkbox"><span>販売元は公式か大手か?(聞いたことのない激安サイトは下の注意を読む)</span></label>
+    <label class="checkline"><input type="checkbox"><span>キャンセル・変更の条件を見た?(最安運賃はたいてい変更不可)</span></label>
+    <label class="checkline"><input type="checkbox"><span>入国手続き(電子認証・入国カード)は確認した?(姉妹アプリ「海外旅行おまもりキット」の手続きタブ)</span></label>
+  </div>
+
+  <div class="callout danger">
+    <b>⚠ 激安OTA(旅行販売サイト)の注意</b>
+    横断検索の最安に出てくる無名OTAは、変更・欠航時に連絡がつかない/高額手数料/座席・荷物が別料金、というトラブルが典型です。差が数千円なら<b>航空会社公式か大手</b>で買うのが結局安全。本アプリのリンクは検索サイトと航空会社公式のみ案内しています。
+  </div>
+</section>
+
+<!-- ============ LCC図鑑 ============ -->
+<section class="pane" id="pane-lcc">
+  <div class="sec-head">
+    <span class="eyebrow">LCC Directory — Japan</span>
+    <h2>LCC図鑑(日本就航)</h2>
+    <p class="lede">Googleフライト・Skyscanner・Trip.comに「出ない/出にくい」会社はここで確認。検索サイトだけ見ていると、そもそも候補に出てこない便があります。</p>
+  </div>
+
+    <div class="callout warn">
+    <b>⚠ 「大手検索に出ない・出にくい」ことがある会社(2026-07-11時点の調査)</b>
+    エアアジア系(D7・XJ・Z2)、ベトジェット系(VJ・VZ)、タイ・ライオンエア(SL)は、Googleフライト等への掲載が無い・不完全なことがあると複数の指摘があります(スクートも直販優先の傾向が指摘・要確認)。この方面は<b>横断検索+公式サイトの二段構え</b>が鉄則。セール運賃が公式サイト限定のことも多くあります。
+  </div>
+
+  <input class="search" id="lccsearch" type="search" placeholder="会社名・行き先で絞り込み(例: バンコク、チェジュ)" aria-label="LCCを検索">
+  <div id="lcclist">
+      <p class="cat-h">日本のLCC・格安系</p>
+<details class="country" data-name="ピーチ peach mm 関空 ソウル 金浦 仁川 台北 高雄 上海 香港 バンコク シンガポール"><summary><span class="flag">🇯🇵</span><span><span class="cname">ピーチ <span class="small">MM</span></span><span class="csub">関空拠点・日本最大のLCC</span></span><span class="spacer"><span class="badge free">大手に掲載</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>ソウル(金浦・仁川)・台北・高雄・上海・香港・バンコク・シンガポール</dd><dt>大手サイト</dt><dd>Googleフライト: 掲載 / Skyscanner: 掲載 / Trip.com: 要確認</dd><dt>手荷物</dt><dd>機内2個・計7kg。受託は有料(Web同時購入が最安)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.flypeach.com/" target="_blank" rel="noopener">flypeach.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="ジェットスター ジャパン jetstar gk 成田 関空 台北 マニラ"><summary><span class="flag">🇯🇵</span><span><span class="cname">ジェットスター・ジャパン <span class="small">GK</span></span><span class="csub">成田拠点+関空〜台北・マニラ</span></span><span class="spacer"><span class="badge free">大手に掲載</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>台北・マニラ</dd><dt>東京ほか</dt><dd>成田発 台北・マニラなど(詳細は公式で要確認)</dd><dt>大手サイト</dt><dd>Googleフライト: 掲載 / Skyscanner: 掲載 / Trip.com: 要確認</dd><dt>手荷物</dt><dd>機内2個・計7kg(有料で14kgまで拡張可)。受託はStarter運賃では有料</dd></dl><div class="cnote">豪州路線(ケアンズ等)は別会社「ジェットスター(JQ)」。同じブランドでも規定が異なることがある</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.jetstar.com/jp/ja/home" target="_blank" rel="noopener">jetstar.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="ジップエア zipair zg 成田 ソウル バンコク シンガポール ホノルル ロサンゼルス サンフランシスコ バンクーバー ヒューストン ラスベガス ハワイ"><summary><span class="flag">🇯🇵</span><span><span class="cname">ZIPAIR <span class="small">ZG</span></span><span class="csub">成田拠点・中長距離ハイブリッド(JAL系)</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>成田発</dt><dd>ソウル・バンコク・シンガポール・ホノルル・ロサンゼルス・サンフランシスコ・サンノゼ・バンクーバー・ヒューストン・ラスベガス(2026年6月〜)</dd><dt>大手サイト</dt><dd>Googleフライト/Skyscanner/Trip.com: いずれも要確認 — 公式が確実</dd><dt>手荷物</dt><dd>機内2個・計7kg。受託は全運賃で有料(個数課金)</dd></dl><div class="cnote">関空発はなし。関西からはハワイ・北米の片道戦略で「伊丹→成田(国内線)+ZIPAIR」の別切りも定番(裏ワザ⑤の注意を守ること)</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.zipair.net/ja" target="_blank" rel="noopener">zipair.net</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="スプリング ジャパン spring ij 成田 上海 常州 中国"><summary><span class="flag">🇯🇵</span><span><span class="cname">スプリング・ジャパン <span class="small">IJ</span></span><span class="csub">成田〜中国が中心(JAL系)</span></span><span class="spacer"><span class="badge free">大手に掲載</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>常州</dd><dt>東京ほか</dt><dd>成田発 上海ほか中国路線・国内線</dd><dt>大手サイト</dt><dd>Googleフライト: 掲載 / Skyscanner: 掲載 / Trip.com: 掲載</dd><dt>手荷物</dt><dd>機内2個・計7kg。最安運賃は受託なし(Web追加5kgごと750円)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://jp.ch.com/" target="_blank" rel="noopener">jp.ch.com(春秋グループ共通)</a><span class="small">確認 2026-07-11</span></div></div></details>
+  <p class="cat-h">韓国系(関空〜韓国はLCC激戦区)</p>
+<details class="country" data-name="チェジュ航空 jeju 7c ソウル 金浦 仁川 釜山 神戸"><summary><span class="flag">🇰🇷</span><span><span class="cname">チェジュ航空 <span class="small">7C</span></span><span class="csub">韓国最大級LCC・神戸にも就航</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>ソウル(金浦・仁川)・釜山</dd><dt>神戸発</dt><dd>ソウル(仁川)— 2026年6月11日〜の季節運航(7/1〜10/24は毎日)</dd><dt>大手サイト</dt><dd>いずれも要確認</dd><dt>手荷物</dt><dd>ルールは公式で要確認(運賃種別で受託の有無が変わる)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.jejuair.net/ja" target="_blank" rel="noopener">jejuair.net</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="ティーウェイ tway tw トリニティ ソウル 仁川 釜山 チェジュ 済州 大邱 清州 グアム"><summary><span class="flag">🇰🇷</span><span><span class="cname">ティーウェイ航空 <span class="small">TW</span></span><span class="csub">関空〜韓国5都市+グアム</span></span><span class="spacer"><span class="badge free">大手に掲載</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>ソウル(仁川)・釜山・済州・大邱・清州・グアム(2025年7月〜毎日)</dd><dt>大手サイト</dt><dd>Googleフライト: 掲載 / Skyscanner・Trip.com: 要確認</dd><dt>手荷物</dt><dd>機内2個・計10kg。特価運賃は受託なし(事前5kg 3,500円)</dd></dl><div class="cnote">「トリニティ航空」への社名変更手続き中(2026年)。名前が変わっても同じ会社</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.twayair.com/app/main?regionCode=JP&amp;langCode=ja-JP" target="_blank" rel="noopener">twayair.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="ジンエアー jinair lj 釜山 神戸 仁川"><summary><span class="flag">🇰🇷</span><span><span class="cname">ジンエアー <span class="small">LJ</span></span><span class="csub">大韓航空系・関空〜釜山1日4往復</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>釜山(2026年3月末から1日4往復に増便)</dd><dt>神戸発</dt><dd>ソウル(仁川)— 2026年7月22日〜10月24日の期間限定</dd><dt>大手サイト</dt><dd>いずれも要確認</dd><dt>手荷物</dt><dd>機内2個・計10kg。日本路線は受託15kg無料の情報(特価運賃を除く・要確認)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.jinair.com/" target="_blank" rel="noopener">jinair.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="エアプサン airbusan bx 釜山 仁川"><summary><span class="flag">🇰🇷</span><span><span class="cname">エアプサン <span class="small">BX</span></span><span class="csub">釜山拠点</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>ソウル(仁川)・釜山</dd><dt>大手サイト</dt><dd>いずれも要確認</dd><dt>手荷物</dt><dd>機内1個10kg+小物。一般運賃は受託15kg込み(特価は無し)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://jp.airbusan.com/" target="_blank" rel="noopener">jp.airbusan.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="イースター eastar ze 仁川 釜山"><summary><span class="flag">🇰🇷</span><span><span class="cname">イースター航空 <span class="small">ZE</span></span><span class="csub">関空〜仁川・釜山</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>ソウル(仁川)・釜山(2026年春に一部減便の報道あり)</dd><dt>大手サイト</dt><dd>いずれも要確認</dd><dt>手荷物</dt><dd>機内1個10kg+小物。割引・一般運賃は受託15kg込み(特価は無し)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.eastarjet.com/" target="_blank" rel="noopener">eastarjet.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="エアソウル airseoul rs 仁川"><summary><span class="flag">🇰🇷</span><span><span class="cname">エアソウル <span class="small">RS</span></span><span class="csub">アシアナ系・関空〜仁川</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>ソウル(仁川)</dd><dt>大手サイト</dt><dd>いずれも要確認</dd><dt>手荷物</dt><dd>機内1個10kg。通常運賃は受託15kg込み(特価は無し)</dd></dl><div class="cnote">韓国LCC再編(ジンエアーへの統合予定)が進行中。予約前に運航会社を確認</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://flyairseoul.com/" target="_blank" rel="noopener">flyairseoul.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="エアロK aerok rf 清州 神戸"><summary><span class="flag">🇰🇷</span><span><span class="cname">エアロK <span class="small">RF</span></span><span class="csub">清州拠点・神戸にも就航</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>清州</dd><dt>神戸発</dt><dd>清州(2026年6月〜 1日1往復)</dd><dt>大手サイト</dt><dd>Trip.com: 掲載 / Googleフライト・Skyscanner: 要確認</dd><dt>手荷物</dt><dd>機内合計10kg。Lite運賃は受託なし(Basic15kg・Plus20kg込み)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.aerok.com/ja-JP" target="_blank" rel="noopener">aerok.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="エアプレミア airpremia yp 成田 仁川"><summary><span class="flag">🇰🇷</span><span><span class="cname">エアプレミア <span class="small">YP</span></span><span class="csub">広め座席のハイブリッド(成田のみ)</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>東京発</dt><dd>成田〜ソウル(仁川) 1日2往復(2026年3月末〜)</dd><dt>大手サイト</dt><dd>Skyscanner: 掲載 / ほか要確認</dd><dt>手荷物</dt><dd>機内1個10kg。<b>最安運賃でも受託15kg込み</b>(ハイブリッドの強み)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.airpremia.com/a/ja" target="_blank" rel="noopener">airpremia.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+  <p class="cat-h">台湾・香港・中国系</p>
+<details class="country" data-name="タイガーエア台湾 tigerair it 台北 桃園"><summary><span class="flag">🇹🇼</span><span><span class="cname">タイガーエア台湾 <span class="small">IT</span></span><span class="csub">台北+日本の地方空港に多数</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>台北(桃園)</dd><dt>大手サイト</dt><dd>いずれも要確認</dd><dt>手荷物</dt><dd>機内2個・計10kg。最安tigerlightは受託なし(事前購入必須・当日空港は高額)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.tigerairtw.com/ja-JP" target="_blank" rel="noopener">tigerairtw.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="スターラックス starlux jx 台北 台中 神戸"><summary><span class="flag">🇹🇼</span><span><span class="cname">スターラックス航空 <span class="small">JX</span></span><span class="csub">台湾のプレミアム系・神戸チャーターも</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>台北(桃園)</dd><dt>神戸発</dt><dd>台北・台中(国際チャーター枠)</dd><dt>大手サイト</dt><dd>いずれも要確認</dd><dt>手荷物</dt><dd>受託込みが基本のフルサービス寄り(詳細は公式で要確認)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.starlux-airlines.com/ja-JP" target="_blank" rel="noopener">starlux-airlines.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="香港エクスプレス hkexpress uo 香港 羽田"><summary><span class="flag">🇭🇰</span><span><span class="cname">香港エクスプレス <span class="small">UO</span></span><span class="csub">日本14路線・羽田にも就航</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>香港</dd><dt>東京ほか</dt><dd>羽田・成田〜香港、中部・福岡・沖縄ほか多数</dd><dt>大手サイト</dt><dd>Skyscanner: 掲載 / ほか要確認</dd><dt>手荷物</dt><dd>機内2個・計7kg。Lite系は受託なし(予約時20kg HKD310)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.hkexpress.com/ja/" target="_blank" rel="noopener">hkexpress.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="グレーターベイ greaterbay hb 香港"><summary><span class="flag">🇭🇰</span><span><span class="cname">グレーターベイ航空 <span class="small">HB</span></span><span class="csub">香港の新興LCC</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>香港</dd><dt>大手サイト</dt><dd>Skyscanner・Trip.com: 掲載 / Googleフライト: 要確認</dd><dt>手荷物</dt><dd>機内2個・計7kg。最安Go Goは受託なし(追加20kg1個 HKD350=関空線)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://trp.greaterbay-airlines.com/ja-JP/" target="_blank" rel="noopener">greaterbay-airlines.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="春秋航空 spring china 9c 上海 中国"><summary><span class="flag">🇨🇳</span><span><span class="cname">春秋航空(中国) <span class="small">9C</span></span><span class="csub">関空〜中国各都市・激安セールで有名</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>上海(浦東)ほか中国各都市に多数</dd><dt>大手サイト</dt><dd>Skyscanner・Trip.com: 掲載 / Googleフライト: 要確認</dd><dt>手荷物</dt><dd>公式で要確認(機内7kg目安・受託は運賃種別による)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://jp.ch.com/" target="_blank" rel="noopener">jp.ch.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+  <p class="cat-h">東南アジア系(公式チェック推奨ゾーン)</p>
+<details class="country" data-name="スクート scoot tr シンガポール 羽田"><summary><span class="flag">🇸🇬</span><span><span class="cname">スクート <span class="small">TR</span></span><span class="csub">シンガポール航空系・羽田線も新設</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>シンガポール</dd><dt>東京ほか</dt><dd>羽田(2026年3月〜毎日)・成田(台北経由)・那覇・新千歳</dd><dt>大手サイト</dt><dd>Skyscanner: 掲載 / ほか要確認(直販優先の傾向が指摘される)</dd><dt>手荷物</dt><dd>機内2個・計10kg。Fly運賃は受託なし(事前20kg SGD30〜50目安)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.flyscoot.com/jp" target="_blank" rel="noopener">flyscoot.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="エアアジア airasia d7 xj z2 クアラルンプール バンコク ドンムアン セブ マニラ"><summary><span class="flag">🇲🇾</span><span><span class="cname">エアアジア各社 <span class="small">D7・XJ・Z2</span></span><span class="csub">クアラルンプール・バンコク・フィリピン</span></span><span class="spacer"><span class="badge auth">大手に出ないことあり</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>クアラルンプール(高雄経由・D7/2026年6月〜)・バンコク=ドンムアン(XJ・2026年5月から減便中)・マニラ(Z2・要確認)</dd><dt>東京ほか</dt><dd>成田〜バンコク(XJ)・セブ(Z2)</dd><dt>大手サイト</dt><dd><b>Googleフライトに出ない・不完全なことがある</b>との複数指摘(要確認)。Skyscanner・Trip.com: 掲載</dd><dt>手荷物</dt><dd>機内2個・計7kg(計量厳格)。受託は全て有料・予約時購入が最安</dd></dl><div class="cdanger">セール(BIG SALE等)は公式サイト・アプリ限定の運賃が多い。この方面は公式チェック必須</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.airasia.com/ja/jp" target="_blank" rel="noopener">airasia.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="ベトジェット vietjet vj vz ホーチミン ハノイ バンコク"><summary><span class="flag">🇻🇳</span><span><span class="cname">ベトジェット/タイ・ベトジェット <span class="small">VJ・VZ</span></span><span class="csub">ベトナム&amp;バンコク(スワンナプーム)</span></span><span class="spacer"><span class="badge auth">大手に出ないことあり</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>ホーチミン・ハノイ(VJ・要確認)/ バンコク=スワンナプーム(VZ・2026年2月就航 週4便)</dd><dt>東京ほか</dt><dd>成田〜ホーチミン・ハノイ(VJ)・バンコク(VZ・毎日)</dd><dt>大手サイト</dt><dd><b>Googleフライトへの掲載が不完全なことがある</b>との指摘(要確認)。Skyscanner・Trip.com: 掲載</dd><dt>手荷物</dt><dd>機内2個・計7kg。Eco運賃は受託なし(事前パック購入で最大50%割引)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.vietjetair.com/ja/" target="_blank" rel="noopener">vietjetair.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="セブパシフィック cebu 5j セブ マニラ"><summary><span class="flag">🇵🇭</span><span><span class="cname">セブパシフィック <span class="small">5J</span></span><span class="csub">関空〜セブ毎日運航</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>セブ(毎日)</dd><dt>東京ほか</dt><dd>成田〜セブ・マニラ(要確認)</dd><dt>大手サイト</dt><dd>Trip.com: 掲載 / Googleフライト・Skyscanner: 要確認</dd><dt>手荷物</dt><dd>機内2個・計7kg。GO Basicは受託なし(事前購入が空港の数分の一)</dd></dl><div class="cnote">名物「シートフェス」(片道数百円級)は公式サイト限定販売</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.cebupacificair.com/ja-jp/" target="_blank" rel="noopener">cebupacificair.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+<details class="country" data-name="タイライオンエア thai lion sl バンコク ドンムアン 台北"><summary><span class="flag">🇹🇭</span><span><span class="cname">タイ・ライオンエア <span class="small">SL</span></span><span class="csub">関空〜バンコク(台北経由)</span></span><span class="spacer"><span class="badge auth">大手に出ないことあり</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>関西発</dt><dd>バンコク=ドンムアン(台北経由・週4便)</dd><dt>大手サイト</dt><dd>掲載が不安定との指摘(要確認)。日本語サイトなし(英語)</dd><dt>手荷物</dt><dd>機内1個7kg+小物。Promo運賃は受託なし(Economyは20kg込み)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.lionairthai.com/en/" target="_blank" rel="noopener">lionairthai.com(英語)</a><span class="small">確認 2026-07-11</span></div></div></details>
+  <p class="cat-h">オセアニア方面</p>
+<details class="country" data-name="ジェットスター jq オーストラリア ケアンズ ブリスベン ゴールドコースト"><summary><span class="flag">🇦🇺</span><span><span class="cname">ジェットスター(豪州) <span class="small">JQ</span></span><span class="csub">カンタス系・日本〜豪州の格安枠</span></span><span class="spacer"><span class="badge card-need">掲載は要確認</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>路線</dt><dd>関空・成田〜ケアンズ、成田〜ブリスベン・ゴールドコーストなど(2026年時点の運航路線は要確認)</dd><dt>大手サイト</dt><dd>Googleフライト・Skyscanner: 掲載</dd><dt>手荷物</dt><dd>ジェットスター・ジャパン(GK)と同系の運賃体系(受託は運賃種別による・要確認)</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.jetstar.com/jp/ja/home" target="_blank" rel="noopener">jetstar.com</a><span class="small">確認 2026-07-11</span></div></div></details>
+  <div class="card">
+    <h3>運航をやめた・まだ来ていない会社(検索で見かけたら注意)</h3>
+    <p style="font-size:14px">・<b>エアージャパン(NQ)</b>: ANA系の中距離ブランド。<b>2026年3月28日で運航休止</b>しANAに統合(2026-07-11確認)。古い記事のセール情報に注意<br>
+    ・<b>バティックエア</b>: 関空便は2026年3月の期間限定チャーターのみ。定期便なし(要確認)<br>
+    ・<b>ベトラベル航空</b>: 日本定期便なし(2026-07-11時点)</p>
+  </div>
+  </div>
+  <p class="small" id="lccnohit" hidden>見つかりませんでした。別の言葉で試してください。</p>
+  <p class="small">掲載状況・就航路線は変わります(各カードに確認日)。「非掲載」の会社は<b>公式サイトで直接検索</b>しないと出てきません。</p>
+</section>
+
+<!-- ============ 手荷物 ============ -->
+<section class="pane" id="pane-bag">
+  <div class="sec-head">
+    <span class="eyebrow">Baggage Rules</span>
+    <h2>手荷物ルール早見表</h2>
+    <p class="lede">LCCは「運賃+手荷物代」の総額で比べないと順位が逆転します。各社の個数・重量のルールと料金の目安(公式サイト確認・確認日つき)。</p>
+  </div>
+
+  <div class="callout danger">
+    <b>⚠ 手荷物は「予約と同時に買う」が鉄則</b>
+    受託手荷物は<b>空港カウンターで当日買うと事前購入の2〜5倍</b>が相場。機内持込も重量計測が年々厳格化していて、超過すると搭乗口で高額請求されます。サイズ・重量は出発前に必ず量ってください。
+  </div>
+
+  <input class="search" id="bagsearch" type="search" placeholder="会社名で絞り込み(例: ピーチ、スクート)" aria-label="手荷物ルールを検索">
+
+    <div class="tbl"><table id="bagtbl">
+    <thead><tr><th>会社</th><th>機内持込(個数・重量)</th><th>受託: 基本運賃に</th><th>受託: 事前購入の目安</th><th>注意</th></tr></thead>
+    <tbody>
+      <tr data-name="ピーチ peach mm"><td><b>ピーチ</b> MM</td><td>2個・合計7kg(50×40×25cm)</td><td>含まず(Standard運賃は20kg×1個込み)</td><td class="num">20kgまで1個 1,950円〜(Web・航空券と同時購入)</td><td>あとから追加2,490円・空港3,000円超と段階的に高くなる。20〜32kgは超過料金</td></tr>
+      <tr data-name="ジェットスター jetstar gk jq"><td><b>ジェットスター</b> GK/JQ</td><td>2個・合計7kg(56×36×23cm)。有料+7kgで最大14kg</td><td>含まず(Starter Plusは20kg込み)</td><td class="num">国内線15kg 1,680円〜(国際線は路線により変動・要確認)</td><td>空港カウンター4,600円・搭乗ゲート5,500円(国内線公表値)と激増</td></tr>
+      <tr data-name="ジップエア zipair zg"><td><b>ZIPAIR</b> ZG</td><td>2個・合計7kg(+8kgの追加購入可・出発24時間前まで)</td><td>含まず(全運賃で有料。Value/Premiumパックは30kg込み)</td><td class="num">30kgまで1個 11,000円(成田〜サンフランシスコの例)</td><td>重量でなく個数課金。当日空港は事務手数料が上乗せ</td></tr>
+      <tr data-name="スプリング ジャパン spring ij"><td><b>スプリング・ジャパン</b> IJ</td><td>2個・合計7kg</td><td>最安運賃は含まず(上位運賃は込み・量は要確認)</td><td class="num">Web追加5kgごと750円(出発2時間前まで)</td><td>搭乗ゲート払いが最高額。30kg超は空港払いのみ</td></tr>
+      <tr data-name="春秋航空 9c"><td><b>春秋航空(中国)</b> 9C</td><td>要確認(7kg目安)</td><td>運賃種別による(要確認)</td><td class="num">要確認</td><td>公式(jp.ch.com)で要確認</td></tr>
+      <tr data-name="エアアジア airasia d7 xj z2 ak"><td><b>エアアジア各社</b> D7/XJ/Z2</td><td>2個・合計7kg(56×36×23+40×30×10cm)</td><td>含まず(全運賃で有料)</td><td class="num">20/25/30/40kgの段階制。金額は路線・時期で変動(予約時purchase最安)</td><td>計量が厳格との報告多数。空港購入は大幅割高と公式明記</td></tr>
+      <tr data-name="スクート scoot tr"><td><b>スクート</b> TR</td><td>2個・合計10kg(ScootPlusは15kg)</td><td>Fly運賃は含まず(FlyBag/FlyBagEatは20kg込み)</td><td class="num">20kg SGD30〜50目安(路線・時期で変動)</td><td>空港はSGD70〜90。超過はSGD20〜25/kgと高額</td></tr>
+      <tr data-name="セブパシフィック cebu 5j"><td><b>セブパシフィック</b> 5J</td><td>2個・合計7kg</td><td>GO Basicは含まず(GO Easy/Flexiは20kg込み)</td><td class="num">事前20kg 約PHP340+税〜(購入が遅いほど値上がり)</td><td>空港購入は事前の数倍(2026年2月に料金改定)。出発4時間前まで購入可</td></tr>
+      <tr data-name="ベトジェット vietjet vj"><td><b>ベトジェット</b> VJ</td><td>2個・合計7kg</td><td>Eco運賃は含まず(Deluxe20kg/SkyBoss30kg込み)</td><td class="num">20kgパック 250,000VND程度〜(路線で変動)</td><td>事前オンラインで最大50%引き。空港・ゲートは割高と公式明記</td></tr>
+      <tr data-name="タイベトジェット vz"><td><b>タイ・ベトジェット</b> VZ</td><td>VJに準ずる(要確認)</td><td>要確認</td><td class="num">要確認</td><td>2026年2月就航の新路線。公式で要確認</td></tr>
+      <tr data-name="ジンエアー jinair lj"><td><b>ジンエアー</b> LJ</td><td>2個・合計10kg(一部路線12kg)</td><td>日本路線は15kg無料の情報(特価運賃を除く・要確認)</td><td class="num">追加5kgあたり約45,000KRW(二次情報)</td><td>エアプサン・エアソウルとの統合予定あり=規定変更に注意</td></tr>
+      <tr data-name="ティーウェイ tway tw"><td><b>ティーウェイ航空</b> TW</td><td>2個・合計10kg(55×40×20cm)</td><td>特価は含まず・スマート15kg・一般20kg込み(揺れあり要確認)</td><td class="num">事前5kg 3,500円/10kg 7,000円(日本発)</td><td>空港は約2倍。超過1,200円/kg+ゲート手数料2,000円</td></tr>
+      <tr data-name="エアプサン airbusan bx"><td><b>エアプサン</b> BX</td><td>1個10kg+小物(3辺計60cm以下)</td><td>一般運賃は15kg×1個込み(特価は無し)</td><td class="num">事前5kg 3,000円(出発2日前まで)</td><td>当日空港は900〜1,000円/kg。ゲート預けは事前購入対象外</td></tr>
+      <tr data-name="イースター eastar ze"><td><b>イースター航空</b> ZE</td><td>1個10kg+小物</td><td>割引・一般は15kg込み(特価は無し)</td><td class="num">15kg 40,000〜60,000KRW目安(二次情報)</td><td>超過料金の額は要確認。事前購入は24時間前まで</td></tr>
+      <tr data-name="エアロK aerok rf"><td><b>エアロK</b> RF</td><td>1個+小物 合計10kg(55×40×20cm)</td><td>Liteは含まず(Basic15kg・Plus20kg込み)</td><td class="num">追加5kg 30,000KRW(北東アジア路線)</td><td>日本路線Lite運賃の初回購入額は要確認</td></tr>
+      <tr data-name="エアソウル airseoul rs"><td><b>エアソウル</b> RS</td><td>1個10kg</td><td>通常運賃は15kg込み(特価は無し)</td><td class="num">要確認</td><td>ジンエアーへの統合予定=規定変更に注意</td></tr>
+      <tr data-name="エアプレミア airpremia yp"><td><b>エアプレミア</b> YP</td><td>1個10kg(プレミアム席は2個)</td><td><b>込み</b>(Lite15kg/Standard23kg・アジア路線)</td><td class="num">追加は出発48時間前まで(額は要確認)</td><td>Liteは重量の追加不可・個数追加のみ</td></tr>
+      <tr data-name="チェジュ jeju 7c"><td><b>チェジュ航空</b> 7C</td><td>要確認(1個10kg目安)</td><td>運賃種別による(要確認)</td><td class="num">要確認</td><td>公式(jejuair.net)で要確認</td></tr>
+      <tr data-name="香港エクスプレス hkexpress uo"><td><b>香港エクスプレス</b> UO</td><td>2個・合計7kg</td><td>Ultra Lite/Liteは含まず(Essential20kg/Max32kg込み)</td><td class="num">20kg×1個 HKD310(初回予約時)</td><td>空港HKD490と1.6倍。超過HKD120/kg。事前は1人2個まで</td></tr>
+      <tr data-name="グレーターベイ greaterbay hb"><td><b>グレーターベイ航空</b> HB</td><td>2個・合計7kg</td><td>Go Goは含まず(Value10kg/Flex20kg込み)</td><td class="num">追加20kg×1個 HKD350(香港〜関空・2026年下期価格)</td><td>追加は1区間1人1個まで・出発4時間前まで</td></tr>
+      <tr data-name="タイガーエア tigerair it"><td><b>タイガーエア台湾</b> IT</td><td>2個・合計10kg</td><td>tigerlightは含まず(tigersmartは20kg込み)</td><td class="num">15kg≒TWD850/20kg≒TWD950(台湾発の目安・二次情報)</td><td>当日空港はTWD1,200〜と割高。1人合計40kgまで</td></tr>
+      <tr data-name="スターラックス starlux jx"><td><b>スターラックス</b> JX</td><td>要確認</td><td>受託込みが基本(フルサービス寄り)</td><td class="num">—</td><td>公式で要確認</td></tr>
+      <tr data-name="タイライオン lion sl"><td><b>タイ・ライオンエア</b> SL</td><td>1個7kg+小物</td><td>Promoは含まず(Economyは国際線20kg込み)</td><td class="num">国際線20kg 1,600THB(事前)</td><td>空港での超過は525THB/kgと高額(公式明記)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small" id="bagnohit" hidden>見つかりませんでした。別の言葉で試してください。</p>
+  <p class="small">確認日 2026-07-11。今回の調査はネットワーク制限のため<b>検索経由の確認(二次情報)</b>です。手荷物ルールは頻繁に変わるため、<b>予約前に必ず各社公式の手荷物ページで再確認</b>してください(各社公式へはLCC図鑑タブから)。料金は片道・1個あたりの代表例で、路線・時期により変動します。</p>
+
+  <div class="card">
+    <h3>LCC実質総額計算機 <span class="badge official">JSで動作</span></h3>
+    <p class="small">運賃に手荷物・座席・手数料を足した「本当の総額」を出して、大手航空会社の総額と比べます。往復なら手荷物代は往路+復路の合計を入れてください。</p>
+    <div class="calc">
+      <div class="row2">
+        <div><label for="b-fare">LCC運賃 合計(円)</label><input id="b-fare" type="number" inputmode="numeric" placeholder="例: 45000"></div>
+        <div><label for="b-bag">受託手荷物 合計(円)</label><input id="b-bag" type="number" inputmode="numeric" placeholder="例: 8000"></div>
+      </div>
+      <div class="row2">
+        <div><label for="b-seat">座席指定 合計(円)</label><input id="b-seat" type="number" inputmode="numeric" placeholder="任意"></div>
+        <div><label for="b-fee">支払・その他手数料(円)</label><input id="b-fee" type="number" inputmode="numeric" placeholder="任意"></div>
+      </div>
+      <div><label for="b-fsc">比べたい大手・他社の総額(円)</label><input id="b-fsc" type="number" inputmode="numeric" placeholder="例: 62000(手荷物込み)"></div>
+      <div class="result" id="b-out">※ 計算機はブラウザで開くと動きます(プレビューでは表示のみ)</div>
+    </div>
+    <p class="small">大手(JAL/ANA等)は受託23kg×2個まで無料が一般的。LCCとの差額が手荷物代より小さければ大手が実質安いことも。</p>
+  </div>
+</section>
+<!-- ============ 裏ワザ ============ -->
+<section class="pane" id="pane-waza">
+  <div class="sec-head">
+    <span class="eyebrow">Fare Hacks — Safe Only</span>
+    <h2>安く飛ぶ定石</h2>
+    <p class="lede">旅費を大きく下げられる合法・安全な技だけを載せています(航空会社の規約違反になり得る技は載せていません)。</p>
+  </div>
+
+  <div class="card">
+    <h3>① 片道×片道(往復を分解する)</h3>
+    <p style="font-size:14px">往復で買うのが常に安いとは限りません。<b>行きはLCC・帰りは大手</b>のような組み合わせや、曜日で値段が大きく違う路線では、片道2枚のほうが安くなることがあります。検索タブの「片道×片道の組み合わせも出す」にチェックを入れると、往路だけ・復路だけの検索リンクが並びます。</p>
+    <div class="cnote">注意: 別々に買った航空券は別契約。往路が欠航しても復路は保護されません。また入国審査で「帰りの便の証明」を求められることがあるので、復路の予約確認書をすぐ出せるようにしておくこと。</div>
+  </div>
+
+  <div class="card">
+    <h3>② オープンジョー(行きと帰りで空港を変える)</h3>
+    <p style="font-size:14px">「行き: 関空→ソウル、帰り: 釜山→関空」のように<b>入る都市と出る都市を変える</b>買い方。都市間は鉄道やバスで移動します。周遊旅行では、来た道を戻る国内移動代と時間がまるごと浮くので、総額で大きく得になりやすい型です。</p>
+    <p style="font-size:14px">検索サイトでは「複数都市」(マルチシティ)を選んで、1区間目と2区間目を別々に指定します。LCC同士なら最初から片道2枚で組んでもOK。</p>
+    <p class="small">例: 関空in ソウル→(鉄道)→釜山out / 成田in ロンドン→(鉄道)→パリout / 関空in 台北→(新幹線)→高雄out</p>
+  </div>
+
+  <div class="card">
+    <h3>③ ストップオーバー(乗継地で数日滞在)</h3>
+    <p style="font-size:14px">乗継便は直行便より安いことが多いうえ、乗継地で途中降機(ストップオーバー)すれば<b>1回の運賃で2都市</b>旅行できます。航空会社によっては乗継地のホテルを無料・格安で提供する公式プログラムもあります。</p>
+        <div class="tbl"><table>
+      <thead><tr><th>航空会社</th><th>制度</th><th>内容の要点</th><th>状態</th></tr></thead>
+      <tbody>
+        <tr><td><b>ターキッシュ エアラインズ</b></td><td>Stopover in Istanbul / TourIstanbul</td><td>イスタンブール乗継20時間〜7日でホテル1泊無料(ビジネスは2泊)。乗継6〜24時間なら無料市内ツアーも(併用不可)。出発72時間前までに申請</td><td><span class="badge free">確認済み</span></td></tr>
+        <tr><td><b>カタール航空</b></td><td>無料トランジットホテル+有料Stopover</td><td>ドーハ乗継8〜24時間で無料ホテル(運賃条件あり)。有料パッケージは4つ星1泊$14〜と激安</td><td><span class="badge free">確認済み</span></td></tr>
+        <tr><td><b>エミレーツ航空</b></td><td>Dubai Connect</td><td>ドバイ乗継8〜26時間(ビジネスは6〜)で無料ホテル+送迎+食事。最短乗継の便が対象・事前申込制</td><td><span class="badge free">確認済み</span></td></tr>
+        <tr><td><b>シンガポール航空</b></td><td>Singapore Stopover</td><td>乗継5.5時間以上で無料市内ツアー。無料ホテルは主にビジネス以上。有料の宿泊パッケージあり</td><td><span class="badge free">確認済み</span></td></tr>
+        <tr><td><b>大韓航空</b></td><td>無料トランジットホテル+K-Stopover</td><td>仁川乗継 概ね9〜24時間(ビジネスは6〜)で無料ホテル。割引運賃・特典航空券は対象外が多い</td><td><span class="badge free">確認済み</span></td></tr>
+        <tr><td><b>エチオピア航空</b></td><td>Addis Ababa Stopover</td><td>アディスアベバ乗継8〜24時間で無料ホテル+送迎+食事(自社便のみの同一チケット限定)</td><td><span class="badge free">確認済み</span></td></tr>
+        <tr><td><b>アイスランド航空</b></td><td>Stopover in Iceland</td><td>北米⇔欧州の途中でレイキャビクに最大7泊(Flex系21泊)追加運賃なしで滞在可。宿代は自己負担・公式サイト予約限定</td><td><span class="badge free">確認済み</span></td></tr>
+        <tr><td><b>フィンエアー</b></td><td>Stopover in Helsinki</td><td>マルチシティ予約でヘルシンキに5時間〜5泊(Light運賃は不可)。宿代は自己負担</td><td><span class="badge free">確認済み</span></td></tr>
+        <tr><td><b>中華航空</b></td><td>台北ストップオーバー企画</td><td>無料ホテル企画を期間・路線限定で実施する例あり。2026年7月時点の現行条件は公式で要確認</td><td><span class="badge card-need">要確認</span></td></tr>
+        <tr><td><b>アシアナ航空</b></td><td>乗継ホテル(区間限定)</td><td>一部区間で無料ホテルの例あり。ブランド自体が2026年12月に大韓航空へ統合予定のため利用は早めに要確認</td><td><span class="badge card-need">要確認</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">確認日 2026-07-11。「無料」でも対象運賃・申込期限の条件があります。予約前に必ず公式ページで最終確認を。</p>
+    <p class="small">プログラムの条件(対象運賃・申込期限)は変わるため、利用前に公式ページで最終確認を。</p>
+  </div>
+
+  <div class="card">
+    <h3>④ 安くなりやすい経由地の定番</h3>
+        <p style="font-size:14px">関西発で「直行が高い」ときに検討する定番の経由地(いずれも相場は時期で大きく変動):</p>
+    <p style="font-size:14px">・<b>ソウル(仁川)経由</b> — 関空→ソウルを韓国LCCで数千円、ソウル→欧州・北米を大韓航空等で。欧州直行網が厚い<br>
+    ・<b>台北(桃園)経由</b> — 関空〜台北は週100便超の激戦区で安い。台北→欧州・豪州はエバー航空・中華航空<br>
+    ・<b>バンコク経由</b> — 関空→バンコクをLCCで、バンコク→欧州をタイ国際航空等で。東南アジア域内LCC乗継の拠点でもある<br>
+    ・<b>香港経由</b> — 香港エクスプレス等で安く入り、キャセイパシフィックの欧州・豪州網へ<br>
+    ・<b>クアラルンプール経由</b> — エアアジアの長距離網(豪州ほか)への接続拠点</p>
+    <div class="cnote">別々に買って乗り継ぐ場合は必ず下の⑤「別切り乗継の安全ルール」を守ること。同一チケットの乗継便なら遅延時も保護されます。</div>
+    <p class="small">相場は時期で大きく変動します。「直行の値段を見てから、経由便と比べる」の順番で。</p>
+  </div>
+
+  <div class="card">
+    <h3>⑤ 別切り乗継(セルフ乗継)の安全ルール</h3>
+    <p style="font-size:14px">LCC同士をつなぐと劇的に安くなることがありますが、<b>別々に買った便は乗り遅れても誰も守ってくれません</b>。やるなら次のルールで。</p>
+        <ol class="steps" style="margin-top:8px">
+      <li><b>まず「同一チケット」にできないか確認</b><p>横断検索で出る乗継便(1枚のチケット)なら遅延時に振替保護あり。別切りはそれより明確に安いときだけ。</p></li>
+      <li><b>乗継時間は国際線どうしで最低3時間、推奨4〜6時間</b><p>荷物を受け取り→入国→再チェックインの時間が必要。同一空港でも別ターミナルならさらに余裕を。空港が変わる乗継(例: バンコクBKK→DMK)は5〜8時間か前泊。</p></li>
+      <li><b>荷物は「通し」で運ばれない前提で</b><p>受託手荷物は毎回受け取り直し。機内持込だけで行ける荷物にすると別切りのリスクが大きく下がる。</p></li>
+      <li><b>乗継地の入国・ビザ要件を確認</b><p>別切りは一度入国することが多い。乗継国のビザ・電子認証は「おまもりキット」の手続きタブで。</p></li>
+      <li><b>Kiwi.comの保証は「Kiwiで買った組み合わせ」だけ</b><p>Kiwi.com Guaranteeバッジ付きの予約は、乗り遅れ時に代替便手配等の保護あり(条件・範囲は予約時に表示を確認)。自分で別々に買った場合は対象外。</p></li>
+      <li><b>保険を確認</b><p>一般の旅行保険・EU261等の補償は同一契約の乗継が前提のことが多い。別切りをカバーするかは契約条件次第。</p></li>
+    </ol>
+    <p class="small">確認日 2026-07-11(最低乗継時間の考え方はIATA基準・大手旅行サイトの一般的推奨に基づく)</p>
+  </div>
+
+  <div class="card">
+    <h3>⑥ 関西3空港の使い分け(伊丹・関空・神戸)</h3>
+    <p style="font-size:14px">国際線の本拠地は<b>関空</b>。伊丹は国内線専用なので、地方や東京経由で乗り継ぐときの「国内脚」に使います。神戸は国内線+一部国際線。空港間の移動時間とお金は以下(確認日つき)。</p>
+        <div class="tbl"><table>
+      <thead><tr><th>区間</th><th>手段</th><th>所要</th><th>料金(片道・大人)</th></tr></thead>
+      <tbody>
+        <tr><td class="num">伊丹 → 関空</td><td>空港リムジンバス(直行)</td><td class="num">約70〜80分</td><td class="num">約2,200円(要確認)</td></tr>
+        <tr><td class="num">神戸 → 関空</td><td>ベイ・シャトル(高速船)</td><td class="num">約30分</td><td class="num">1,880円(往復3,060円)</td></tr>
+        <tr><td class="num">伊丹 → 神戸</td><td>リムジンバスで三宮→ポートライナー</td><td class="num">約60〜65分+乗換</td><td class="num">約1,540円(1,200円+340円)</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">確認日 2026-07-11(公式時刻表・運賃ページの検索確認)。ダイヤ・運賃は変わるため利用前に公式で再確認を。神戸空港は2025年4月から国際チャーター便が就航中(ソウル・台北など)。国際定期便の解禁は2030年目標— つまり今は「神戸=韓国・台湾の一部+国内線」「国際線の本命=関空」です。</p>
+    <div class="cnote">別切りで「伊丹→羽田/成田 → 国際線」と組むときも⑤の安全ルール(3時間以上)を守ること。国内線の遅延でも国際線は待ってくれません。</div>
+  </div>
+
+  <div class="card">
+    <h3>⑦ 周辺空港を使う(ただし移動費込みで判断)</h3>
+    <p style="font-size:14px">同じ都市圏に空港が複数ある街では、空港を変えるだけで数千〜数万円変わります。ただし<b>遠い空港は市内までの移動費・時間で逆転</b>することがあるので、下の表の注意つきで。検索タブの「周辺空港もあわせて検索」はこの表をもとにしています。</p>
+        <div class="tbl"><table>
+      <thead><tr><th>都市</th><th>空港</th><th>落とし穴・目安</th></tr></thead>
+      <tbody>
+        <tr><td><b>ソウル</b></td><td class="num">ICN 仁川 / GMP 金浦</td><td>金浦は都心寄りで羽田線あり。仁川⇔金浦は直通鉄道で約40分</td></tr>
+        <tr><td><b>台北</b></td><td class="num">TPE 桃園 / TSA 松山</td><td>松山は市内至近(羽田線)。桃園⇔松山は約1時間</td></tr>
+        <tr><td><b>上海</b></td><td class="num">PVG 浦東 / SHA 虹橋</td><td>約50km離れている。跨ぐ乗継は40分〜1.5時間+を見込む</td></tr>
+        <tr><td><b>バンコク</b></td><td class="num">BKK スワンナプーム / DMK ドンムアン</td><td>LCCはドンムアン発着が多い。空港間は無料シャトル50〜60分(渋滞で2時間も)</td></tr>
+        <tr><td><b>マニラ</b></td><td class="num">MNL / CRK クラーク</td><td><b>クラークは実質別都市</b>(約80km・バス2〜3時間)。同日乗継は避ける</td></tr>
+        <tr><td><b>東京</b></td><td class="num">HND 羽田 / NRT 成田</td><td>直通鉄道なし。跨ぐ移動はバス・電車で1時間半見当</td></tr>
+        <tr><td><b>ロンドン</b></td><td class="num">LHR / LGW / STN / LTN / LCY</td><td>LCCはスタンステッド・ルートン発着が多く都心まで45〜75分+</td></tr>
+        <tr><td><b>パリ</b></td><td class="num">CDG / ORY / BVA ボーヴェ</td><td><b>ボーヴェは市内から約80km</b>・バス70〜90分(€18〜)。「パリ」と思わないこと</td></tr>
+        <tr><td><b>ミラノ</b></td><td class="num">MXP / LIN / BGY ベルガモ</td><td>ベルガモは別都市寄り(約50km・バス約55分)。リナーテは市内至近</td></tr>
+        <tr><td><b>ローマ</b></td><td class="num">FCO / CIA チャンピーノ</td><td>チャンピーノは市内寄りだがLCC専門・交通はバス+地下鉄</td></tr>
+        <tr><td><b>ニューヨーク</b></td><td class="num">JFK / EWR / LGA</td><td>ニューアークは別州。2026年はニューアークのAirTrain工事で平日運休あり(要確認)</td></tr>
+        <tr><td><b>イスタンブール</b></td><td class="num">IST / SAW サビハ</td><td>新空港とサビハは海峡を挟んで別大陸。移動1.5〜2時間+</td></tr>
+        <tr><td><b>ドバイ</b></td><td class="num">DXB / DWC</td><td>DWCは都心から45〜60分・鉄道なし。DXBはメトロ直結</td></tr>
+        <tr><td><b>クアラルンプール</b></td><td class="num">KUL 本館 / klia2</td><td>同じ空港コードでも別棟。エアアジアはklia2。棟間はシャトルで45〜90分の余裕を</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">確認日 2026-07-11。アクセス時間・料金は目安。検索タブの「周辺空港もあわせて検索」はこの表の組み合わせで動きます。</p>
+  </div>
+
+  <div class="card">
+    <h3>⑧ 日付を±3日ずらす・月ごと最安を見る</h3>
+    <p style="font-size:14px">出発日を1〜2日ずらすだけで数万円変わるのはよくあること。<b>Googleフライトの「日付グリッド」「価格グラフ」</b>で前後の日付を一覧し、<b>Skyscannerの「最安値月」</b>(日付欄で「最安値の月」を選ぶ)で1年で一番安い月を見ます。生成した検索リンクから開いた画面で、日付欄の横のボタンを押すだけ。</p>
+  </div>
+
+  <div class="card">
+    <h3>⑨ 行き先を決めずに「安い所へ行く」</h3>
+    <p style="font-size:14px">セールやエラーフェアを拾う人の定番。行き先を空欄にして「どこでも」で検索すると、値段順に行き先が並びます。</p>
+    <div class="sitegroup" style="margin-top:8px">
+            <a class="lbtn" target="_blank" rel="noopener" href="https://www.skyscanner.jp/transport/flights/kix/everywhere/"><span>Skyscanner「すべての場所」(関空発)<small>行き先を値段順に一覧。日付を「最安値の月」にすると威力倍増</small></span><span class="go">開く ›</span></a>
+      <a class="lbtn" target="_blank" rel="noopener" href="https://www.skyscanner.jp/transport/flights/osak/everywhere/"><span>Skyscanner「すべての場所」(大阪すべての空港発)<small>関空・伊丹・神戸をまとめて</small></span><span class="go">開く ›</span></a>
+      <a class="lbtn" target="_blank" rel="noopener" href="https://www.google.com/travel/explore?hl=ja&curr=JPY"><span>Google フライト「もっと探す(Explore)」<small>地図で世界中の値段を眺める。日付は「1週間」など曖昧指定OK</small></span><span class="go">開く ›</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ セール ============ -->
+<section class="pane" id="pane-sale">
+  <div class="sec-head">
+    <span class="eyebrow">Sales &amp; Error Fares</span>
+    <h2>セール・エラーフェア</h2>
+    <p class="lede">安い航空券は「探す」より「待ち構える」。各社のセールの癖と、日本発の激安情報が流れてくる場所をまとめました。</p>
+  </div>
+
+  <div class="card">
+    <h3>セールの時刻表(日本就航LCC・確認日つき)</h3>
+        <div class="tbl"><table>
+      <thead><tr><th>航空会社</th><th>セールの目安(2025〜26年実績)</th><th>いち早く知るには</th></tr></thead>
+      <tbody>
+        <tr><td><b>ZIPAIR</b>(成田発中長距離)</td><td>年6回前後: 1月・5月・7月・11月(ブラックフライデー)・12月など、各1〜2週間</td><td>LINE登録(事前告知あり)・アプリ</td></tr>
+        <tr><td><b>ピーチ</b>(関空拠点)</td><td>ほぼ毎月。約1か月続く「旅フェス」型が主流</td><td>メルマガ・X(予告なし開始が基本)</td></tr>
+        <tr><td><b>ジェットスター</b></td><td>「スーパースターセール」がほぼ毎月(3〜10日間)。国際線片道7千円台の実績</td><td>Club Jetstar会員先行・メルマガ</td></tr>
+        <tr><td><b>スプリング・ジャパン</b></td><td>月1〜2回。成田〜中国線で片道1,000〜2,000円の実績</td><td>公式サイト・X</td></tr>
+        <tr><td><b>エアアジア</b></td><td>「BIG SALE」年4回目安(2・6・8・11月ごろ)+小型セールほぼ毎月。<b>公式アプリ限定運賃が多い</b></td><td>アプリ通知</td></tr>
+        <tr><td><b>スクート</b>(シンガポール方面)</td><td>年5〜6回。12月の「EVERYWHEREセール」など</td><td>メルマガ・アプリ</td></tr>
+        <tr><td><b>セブパシフィック</b></td><td>「シートフェス」年3〜4回。片道数百円も出るが販売3〜6日と超短期</td><td>公式X・Instagram</td></tr>
+        <tr><td><b>韓国系LCC</b>(チェジュ・ティーウェイ等)</td><td>随時(火・水スタートが多め)。片道2千円台の実績。関空〜韓国は競争が激しく突発セール頻発</td><td>各社X・アプリ</td></tr>
+        <tr><td><b>ジンエアー</b></td><td>「JIN MARKET」年2回+毎週金曜の割引企画</td><td>Instagram・LINE</td></tr>
+        <tr><td><b>ベトジェット/タイ・ベトジェット</b></td><td>不定期(記念日セール・0円/激安基本運賃型が多い)。公式SNS・メルマガで告知</td><td>公式X・アプリ</td></tr>
+        <tr><td><b>香港エクスプレス</b></td><td>不定期(週次の小型セールを打つ時期あり)。公式SNS・メルマガで告知</td><td>メルマガ・アプリ</td></tr>
+        <tr><td><b>ANA</b></td><td>国際線タイムセールが<b>毎月上旬・約1週間</b>のパターン</td><td>公式サイト・アプリ</td></tr>
+        <tr><td><b>JAL</b></td><td>海外航空券タイムセールは不定期(年数回)</td><td>メルマガ</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">実績パターンの確認日: 2026-07-10(姉妹アプリの調査)+2026-07-11追記。セールは予告なく変わります。LCCのセール運賃は<b>諸税・手荷物別</b>が基本なので総額で判断を。</p>
+    <p class="small">セール価格は座席数限定・諸税別のことが多く、支払総額で判断を。「定例」も予告なく変わります。</p>
+  </div>
+
+  <div class="card">
+    <h3>日本発の激安情報が流れてくる場所</h3>
+        <div class="sitegroup">
+      <a class="lbtn" target="_blank" rel="noopener" href="https://www.secretflying.com/"><span>Secret Flying <span class="badge official">英語</span><small>エラーフェア速報の世界的定番。検索欄に「Osaka」「Tokyo」で日本発を絞り込み</small></span><span class="go">開く ›</span></a>
+      <a class="lbtn" target="_blank" rel="noopener" href="https://www.fly4free.com/"><span>Fly4free <span class="badge official">英語</span><small>エラーフェア・激安運賃の速報。Flights from Asia をチェック</small></span><span class="go">開く ›</span></a>
+      <a class="lbtn" target="_blank" rel="noopener" href="https://www.travelzoo.com/jp/"><span>トラベルズー日本版 <span class="badge official">日本語</span><small>審査済みセール情報。メルマガが便利</small></span><span class="go">開く ›</span></a>
+      <a class="lbtn" target="_blank" rel="noopener" href="https://www.traicy.com/"><span>TRAICY(トライシー) <span class="badge official">日本語</span><small>日本の航空セール・新路線ニュース速報。Xフォローが最速</small></span><span class="go">開く ›</span></a>
+      <a class="lbtn" target="_blank" rel="noopener" href="https://sky-budget.com/"><span>sky-budget <span class="badge official">日本語</span><small>LCC専門ニュース。セール開始の記事が早い</small></span><span class="go">開く ›</span></a>
+      <a class="lbtn" target="_blank" rel="noopener" href="https://www.holidaypirates.com/"><span>HolidayPirates <span class="badge official">英語</span><small>欧州系のセール情報サイト。欧州内LCCに強い</small></span><span class="go">開く ›</span></a>
+    </div>
+    <p class="small">確認日 2026-07-11。上記は情報源の紹介であり、購入は必ず航空会社公式か大手サイトで(情報サイト内の広告リンクに注意)。</p>
+  </div>
+
+  <div class="card">
+    <h3>エラーフェア(運賃設定ミス)の心得</h3>
+    <p style="font-size:14px">桁を間違えた等の激安運賃が、まれに数時間〜数日だけ出ます。見つけたときの鉄則:</p>
+    <ol class="steps" style="margin-top:8px">
+      <li><b>迷ったら即予約</b><p>エラーフェアは数時間で消えます。「一晩考える」は無し。キャンセル無料期間や取消条件だけ確認して押す。</p></li>
+      <li><b>発券(チケット番号発行)まで安心しない</b><p>予約確認メール≠発券。eチケット番号が出るまでは成立していないことがあります。</p></li>
+      <li><b>ホテル・休暇の確定は数日待つ</b><p>航空会社側から「運賃ミスのためキャンセル」になる可能性があります。返金はされるのが通例ですが、周辺の手配は発券確認後・数日置いてから。</p></li>
+      <li><b>本物か確かめる</b><p>Googleフライトで同路線の相場と比べる。あまりに安い場合は販売元が公式か大手かも確認。</p></li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>「この期間で安いのが出たら教えて」を自動化する</h3>
+    <p style="font-size:14px">指定期間の日本発セール・エラーフェアの見張りは、Claudeにやらせるのが確実です(このアプリは閉じている間は何もできないため)。→ <b>見張り番タブ</b>の「セール見張り」をどうぞ。手動でやる場合は、上の情報源を朝1回巡回+Skyscannerの「どこでも・最安値月」を見るのが最短コースです。</p>
+  </div>
+</section>
+
+<!-- ============ 見張り番 ============ -->
+<section class="pane" id="pane-watch">
+  <div class="sec-head">
+    <span class="eyebrow">Price Watch — 7 Days</span>
+    <h2>7日間 価格見張り番</h2>
+    <p class="lede">「検索したときの最安値」を基準に7日間追跡し、下回ったら通知——この部分はアプリ単体ではできないので、<b>Claude(このアプリを作ったAI)に毎日見に行かせます</b>。アプリ側は基準額のメモと再検索を受け持ちます。</p>
+  </div>
+
+  <div class="card">
+    <h3>使い方(3ステップ)</h3>
+    <ol class="steps">
+      <li><b>検索タブで最安値を見つける</b><p>いつも通り横断検索し、見つけた最安値を下の「追跡メモ」に登録(=基準額)。</p></li>
+      <li><b>Claudeに見張りを頼む</b><p>Claude Code(このアプリを作ってもらっている画面)で、次のように頼みます:</p>
+        <div class="copybox">/flight-mihari 価格 関空→バンコク 2026-12-20発 2026-12-27戻り 基準45000円</div>
+        <div class="copybox">/flight-mihari セール 2026-08-01〜08-31 関西発(方面はおまかせ)</div>
+      </li>
+      <li><b>あとは待つ</b><p>毎日1回チェックし、基準額を下回った日・大きなセールが出た日に通知が届きます。7日たつと結果まとめを報告して自動終了します。</p></li>
+    </ol>
+    <div class="cnote"><b>正直な注意:</b>検索サイトは自動アクセスを制限しているため、価格が取得できない日があります(その日は「取得失敗」と報告)。セール見張りはニュースサイト巡回なので安定して動きます。</div>
+  </div>
+
+  <div class="card">
+    <h3>追跡メモ <span class="badge official">端末に保存</span></h3>
+    <p class="small">基準額と期限(登録から7日)を管理します。「再検索」で同じ条件の検索リンクをすぐ再生成。</p>
+    <div id="trackList"></div>
+    <div class="addrow">
+      <input id="t-route" placeholder="例: KIX→BKK 12/20-12/27" aria-label="路線と日付">
+      <input id="t-price" type="number" inputmode="numeric" placeholder="基準額(円)" aria-label="基準額" style="max-width:110px">
+      <button class="btn" type="button" id="t-add">登録</button>
+    </div>
+    <p class="small jsnote-track" hidden>※ 追跡メモの保存はブラウザで開いたときに使えます。</p>
+  </div>
+
+  <div class="card">
+    <h3>検索サイト純正のアラートも併用する</h3>
+    <p class="small">二段構えにすると取りこぼしが減ります。どちらも無料。</p>
+        <div class="tbl"><table>
+      <thead><tr><th>サービス</th><th>設定手順(2026-07-11時点のUI)</th><th>通知先</th></tr></thead>
+      <tbody>
+        <tr><td><b>Google フライト 価格追跡</b></td><td>① 検索タブから路線を開く ② 検索結果の上部にある「価格を追跡」をON(日付未定なら「任意の日付」も選べる) ③ 完了</td><td>Googleアカウントのメール</td></tr>
+        <tr><td><b>Skyscanner プライスアラート</b></td><td>① 検索結果を開く ② ベルのアイコン「価格変動をお知らせ」をタップ ③ ログイン(無料)して登録</td><td>メール・アプリ通知</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">画面の文言は変わることがあります。この2つは「下がったら教えてくれる」だけなので、<b>基準額との比較・7日で区切る管理はこのアプリの追跡メモ+Claude見張り番</b>と組み合わせるのがおすすめ。</p>
+  </div>
+</section>
+
+<footer class="app">
+  <p><b>航空券サーチ司令塔</b> — 姉妹アプリ:「海外旅行おまもりキット」(入国手続き・両替・持ち物はそちらで)</p>
+  <p>本アプリは検索サイト・航空会社公式へのリンク集と目安情報です。航空券の販売は行いません。運賃・手荷物ルール・セール傾向・空港間アクセスの料金は変動するため、<b>予約前に必ず公式サイトで最終確認</b>してください。ページ内の事実情報には確認日を付記しています(基準日: 2026-07-11)。</p>
+  <p>リンクは公式サイト・大手検索サイトのみを案内し、代行サイト・非公式販売への誘導は行いません。</p>
+</footer>
+</div>
+
+<script>
+/* ここから下は「あれば便利」機能。無くても全情報の閲覧・タブ切替・入口リンクは動く */
+document.documentElement.setAttribute('data-js','1');
+
+/* ---------- データ(調査日 2026-07-11) ---------- */
+/*JS:DATA 調査日2026-07-11*/
+const AIRPORTS=[
+{code:"KIX",ja:"大阪(関空)",kw:"osaka kansai かんくう"},{code:"ITM",ja:"大阪(伊丹)※国内線",kw:"osaka itami いたみ"},{code:"UKB",ja:"神戸",kw:"kobe こうべ"},
+{code:"HND",ja:"東京(羽田)",kw:"tokyo haneda はねだ"},{code:"NRT",ja:"東京(成田)",kw:"tokyo narita なりた"},{code:"NGO",ja:"名古屋(中部)",kw:"nagoya chubu セントレア"},
+{code:"FUK",ja:"福岡",kw:"fukuoka"},{code:"CTS",ja:"札幌(新千歳)",kw:"sapporo chitose"},{code:"OKA",ja:"沖縄(那覇)",kw:"okinawa naha"},
+{code:"ICN",ja:"ソウル(仁川)",kw:"seoul incheon"},{code:"GMP",ja:"ソウル(金浦)",kw:"seoul gimpo"},{code:"PUS",ja:"釜山",kw:"busan pusan ぷさん"},{code:"CJU",ja:"済州(チェジュ)",kw:"jeju"},{code:"TAE",ja:"大邱(テグ)",kw:"daegu"},{code:"CJJ",ja:"清州(チョンジュ)",kw:"cheongju"},
+{code:"TPE",ja:"台北(桃園)",kw:"taipei taoyuan たいぺい"},{code:"TSA",ja:"台北(松山)",kw:"taipei songshan"},{code:"KHH",ja:"高雄",kw:"kaohsiung"},{code:"RMQ",ja:"台中",kw:"taichung"},
+{code:"HKG",ja:"香港",kw:"hongkong ほんこん"},{code:"MFM",ja:"マカオ",kw:"macau macao"},
+{code:"PVG",ja:"上海(浦東)",kw:"shanghai pudong しゃんはい"},{code:"SHA",ja:"上海(虹橋)",kw:"shanghai hongqiao"},{code:"PEK",ja:"北京(首都)",kw:"beijing ぺきん"},{code:"PKX",ja:"北京(大興)",kw:"beijing daxing"},{code:"CAN",ja:"広州",kw:"guangzhou"},{code:"SZX",ja:"深圳",kw:"shenzhen"},{code:"DLC",ja:"大連",kw:"dalian"},{code:"XMN",ja:"厦門(アモイ)",kw:"xiamen"},{code:"CZX",ja:"常州",kw:"changzhou"},{code:"NKG",ja:"南京",kw:"nanjing"},
+{code:"BKK",ja:"バンコク(スワンナプーム)",kw:"bangkok ばんこく"},{code:"DMK",ja:"バンコク(ドンムアン)",kw:"bangkok donmueang"},{code:"CNX",ja:"チェンマイ",kw:"chiangmai"},{code:"HKT",ja:"プーケット",kw:"phuket"},
+{code:"SGN",ja:"ホーチミン",kw:"hochiminh saigon"},{code:"HAN",ja:"ハノイ",kw:"hanoi"},{code:"DAD",ja:"ダナン",kw:"danang"},{code:"CXR",ja:"ニャチャン(カムラン)",kw:"nhatrang camranh"},
+{code:"SIN",ja:"シンガポール",kw:"singapore しんがぽーる"},{code:"KUL",ja:"クアラルンプール",kw:"kualalumpur"},{code:"PEN",ja:"ペナン",kw:"penang"},{code:"BKI",ja:"コタキナバル",kw:"kotakinabalu"},
+{code:"MNL",ja:"マニラ",kw:"manila まにら"},{code:"CRK",ja:"クラーク",kw:"clark"},{code:"CEB",ja:"セブ",kw:"cebu せぶ"},
+{code:"CGK",ja:"ジャカルタ",kw:"jakarta"},{code:"DPS",ja:"バリ(デンパサール)",kw:"bali denpasar ばり"},
+{code:"PNH",ja:"プノンペン",kw:"phnompenh"},{code:"REP",ja:"シェムリアップ",kw:"siemreap angkor"},{code:"RGN",ja:"ヤンゴン",kw:"yangon"},{code:"VTE",ja:"ビエンチャン",kw:"vientiane"},
+{code:"DEL",ja:"デリー",kw:"delhi"},{code:"BOM",ja:"ムンバイ",kw:"mumbai"},{code:"CMB",ja:"コロンボ",kw:"colombo"},{code:"KTM",ja:"カトマンズ",kw:"kathmandu"},{code:"ULN",ja:"ウランバートル",kw:"ulaanbaatar"},
+{code:"GUM",ja:"グアム",kw:"guam ぐあむ"},{code:"SPN",ja:"サイパン",kw:"saipan"},
+{code:"HNL",ja:"ホノルル",kw:"honolulu hawaii はわい"},{code:"OGG",ja:"マウイ(カフルイ)",kw:"maui kahului"},
+{code:"LAX",ja:"ロサンゼルス",kw:"losangeles"},{code:"SFO",ja:"サンフランシスコ",kw:"sanfrancisco"},{code:"SJC",ja:"サンノゼ",kw:"sanjose"},{code:"SAN",ja:"サンディエゴ",kw:"sandiego"},{code:"SEA",ja:"シアトル",kw:"seattle"},{code:"PDX",ja:"ポートランド",kw:"portland"},{code:"LAS",ja:"ラスベガス",kw:"lasvegas"},{code:"DEN",ja:"デンバー",kw:"denver"},{code:"DFW",ja:"ダラス",kw:"dallas"},{code:"IAH",ja:"ヒューストン",kw:"houston"},{code:"ORD",ja:"シカゴ",kw:"chicago"},{code:"ATL",ja:"アトランタ",kw:"atlanta"},{code:"BOS",ja:"ボストン",kw:"boston"},{code:"MIA",ja:"マイアミ",kw:"miami"},{code:"MCO",ja:"オーランド",kw:"orlando"},
+{code:"JFK",ja:"ニューヨーク(JFK)",kw:"newyork にゅーよーく"},{code:"EWR",ja:"ニューヨーク(ニューアーク)",kw:"newyork newark"},{code:"LGA",ja:"ニューヨーク(ラガーディア)",kw:"newyork laguardia"},
+{code:"IAD",ja:"ワシントン(ダレス)",kw:"washington dulles"},{code:"YVR",ja:"バンクーバー",kw:"vancouver"},{code:"YYZ",ja:"トロント",kw:"toronto"},
+{code:"MEX",ja:"メキシコシティ",kw:"mexico"},{code:"CUN",ja:"カンクン",kw:"cancun"},{code:"GRU",ja:"サンパウロ",kw:"saopaulo"},
+{code:"LHR",ja:"ロンドン(ヒースロー)",kw:"london ろんどん"},{code:"LGW",ja:"ロンドン(ガトウィック)",kw:"london gatwick"},{code:"STN",ja:"ロンドン(スタンステッド)",kw:"london stansted"},{code:"LTN",ja:"ロンドン(ルートン)",kw:"london luton"},{code:"LCY",ja:"ロンドン(シティ)",kw:"london city"},
+{code:"CDG",ja:"パリ(シャルル・ド・ゴール)",kw:"paris ぱり"},{code:"ORY",ja:"パリ(オルリー)",kw:"paris orly"},{code:"BVA",ja:"パリ(ボーヴェ)※遠い",kw:"paris beauvais"},
+{code:"FRA",ja:"フランクフルト",kw:"frankfurt"},{code:"MUC",ja:"ミュンヘン",kw:"munich"},{code:"BER",ja:"ベルリン",kw:"berlin"},{code:"DUS",ja:"デュッセルドルフ",kw:"dusseldorf"},
+{code:"AMS",ja:"アムステルダム",kw:"amsterdam"},{code:"BRU",ja:"ブリュッセル",kw:"brussels"},{code:"ZRH",ja:"チューリッヒ",kw:"zurich"},{code:"GVA",ja:"ジュネーブ",kw:"geneva"},{code:"VIE",ja:"ウィーン",kw:"vienna"},{code:"PRG",ja:"プラハ",kw:"prague"},{code:"WAW",ja:"ワルシャワ",kw:"warsaw"},{code:"BUD",ja:"ブダペスト",kw:"budapest"},
+{code:"MXP",ja:"ミラノ(マルペンサ)",kw:"milan みらの"},{code:"LIN",ja:"ミラノ(リナーテ)",kw:"milan linate"},{code:"BGY",ja:"ミラノ(ベルガモ)※遠い",kw:"milan bergamo"},
+{code:"VCE",ja:"ベネチア",kw:"venice"},{code:"FCO",ja:"ローマ(フィウミチーノ)",kw:"rome ろーま"},{code:"CIA",ja:"ローマ(チャンピーノ)",kw:"rome ciampino"},{code:"NAP",ja:"ナポリ",kw:"naples"},
+{code:"MAD",ja:"マドリード",kw:"madrid"},{code:"BCN",ja:"バルセロナ",kw:"barcelona"},{code:"LIS",ja:"リスボン",kw:"lisbon"},{code:"OPO",ja:"ポルト",kw:"porto"},{code:"ATH",ja:"アテネ",kw:"athens"},
+{code:"IST",ja:"イスタンブール",kw:"istanbul"},{code:"SAW",ja:"イスタンブール(サビハ)",kw:"istanbul sabiha"},
+{code:"HEL",ja:"ヘルシンキ",kw:"helsinki"},{code:"CPH",ja:"コペンハーゲン",kw:"copenhagen"},{code:"ARN",ja:"ストックホルム",kw:"stockholm"},{code:"OSL",ja:"オスロ",kw:"oslo"},{code:"KEF",ja:"レイキャビク(ケプラヴィーク)",kw:"reykjavik iceland"},
+{code:"DUB",ja:"ダブリン",kw:"dublin"},{code:"EDI",ja:"エディンバラ",kw:"edinburgh"},{code:"MAN",ja:"マンチェスター",kw:"manchester"},
+{code:"DXB",ja:"ドバイ",kw:"dubai どばい"},{code:"DWC",ja:"ドバイ(アール・マクトゥーム)",kw:"dubai world central"},{code:"AUH",ja:"アブダビ",kw:"abudhabi"},{code:"DOH",ja:"ドーハ",kw:"doha"},{code:"CAI",ja:"カイロ",kw:"cairo"},{code:"JNB",ja:"ヨハネスブルグ",kw:"johannesburg"},{code:"NBO",ja:"ナイロビ",kw:"nairobi"},{code:"ADD",ja:"アディスアベバ",kw:"addisababa"},
+{code:"SYD",ja:"シドニー",kw:"sydney"},{code:"MEL",ja:"メルボルン",kw:"melbourne"},{code:"BNE",ja:"ブリスベン",kw:"brisbane"},{code:"OOL",ja:"ゴールドコースト",kw:"goldcoast"},{code:"CNS",ja:"ケアンズ",kw:"cairns"},{code:"PER",ja:"パース",kw:"perth"},{code:"AKL",ja:"オークランド",kw:"auckland"},{code:"CHC",ja:"クライストチャーチ",kw:"christchurch"}
+];
+const CLUSTERS={
+OSA:{ja:"大阪・関西",codes:["KIX","UKB","ITM"]},
+TYO:{ja:"東京",codes:["HND","NRT"]},
+SEL:{ja:"ソウル",codes:["ICN","GMP"]},
+TPE:{ja:"台北",codes:["TPE","TSA"]},
+SHA:{ja:"上海",codes:["PVG","SHA"]},
+BJS:{ja:"北京",codes:["PEK","PKX"]},
+BKK:{ja:"バンコク",codes:["BKK","DMK"]},
+MNL:{ja:"マニラ",codes:["MNL","CRK"]},
+LON:{ja:"ロンドン",codes:["LHR","LGW","STN","LTN"]},
+PAR:{ja:"パリ",codes:["CDG","ORY","BVA"]},
+MIL:{ja:"ミラノ",codes:["MXP","LIN","BGY"]},
+ROM:{ja:"ローマ",codes:["FCO","CIA"]},
+NYC:{ja:"ニューヨーク",codes:["JFK","EWR","LGA"]},
+IST:{ja:"イスタンブール",codes:["IST","SAW"]},
+DXB:{ja:"ドバイ",codes:["DXB","DWC"]}
+};
+/* 横断検索サイト: URL書式は2026-07-11時点の文献ベース(この環境から実測不可)。
+   万一書式が変わっていても各サイトの検索フォームに着地するだけで実害は小さい */
+const SITES=[
+{name:"Google フライト",note:"相場の基準・価格グラフ・価格追跡",top3:true,
+ rt:"https://www.google.com/travel/flights?q=Flights%20from%20{ORIG}%20to%20{DEST}%20on%20{DEP:YYYY-MM-DD}%20through%20{RET:YYYY-MM-DD}&hl=ja&curr=JPY",
+ ow:"https://www.google.com/travel/flights?q=Flights%20from%20{ORIG}%20to%20{DEST}%20on%20{DEP:YYYY-MM-DD}%20one%20way&hl=ja&curr=JPY"},
+{name:"Skyscanner",note:"LCC網羅度が高い・最安値月表示",top3:true,
+ rt:"https://www.skyscanner.jp/transport/flights/{ORIGL}/{DESTL}/{DEP:YYMMDD}/{RET:YYMMDD}/?adultsv2={ADULTS}&adults={ADULTS}&cabinclass=economy&rtn=1",
+ ow:"https://www.skyscanner.jp/transport/flights/{ORIGL}/{DESTL}/{DEP:YYMMDD}/?adultsv2={ADULTS}&adults={ADULTS}&cabinclass=economy&rtn=0"},
+{name:"Kayak",note:"表示が見やすい・OTA横断",top3:false,
+ rt:"https://www.kayak.co.jp/flights/{ORIG}-{DEST}/{DEP:YYYY-MM-DD}/{RET:YYYY-MM-DD}{AXSEG}?sort=bestflight_a",
+ ow:"https://www.kayak.co.jp/flights/{ORIG}-{DEST}/{DEP:YYYY-MM-DD}{AXSEG}?sort=bestflight_a"},
+{name:"Kiwi.com",note:"LCC乗継の自動組み合わせが得意(別切りは自己責任・裏ワザ⑤)",top3:true,
+ rt:"https://www.kiwi.com/deep?from={ORIG}&to={DEST}&departure={DEP:YYYY-MM-DD}&return={RET:YYYY-MM-DD}&adults={ADULTS}&selected_cabins=M",
+ ow:"https://www.kiwi.com/deep?from={ORIG}&to={DEST}&departure={DEP:YYYY-MM-DD}&adults={ADULTS}&selected_cabins=M"},
+{name:"Trip.com",note:"アジア方面に強い・独自セールあり",top3:false,
+ rt:"https://jp.trip.com/flights/showfarefirst?dcity={ORIG}&acity={DEST}&ddate={DEP:YYYY-MM-DD}&rdate={RET:YYYY-MM-DD}&triptype=rt&class=y&quantity={ADULTS}&locale=ja-JP&curr=JPY",
+ ow:"https://jp.trip.com/flights/showfarefirst?dcity={ORIG}&acity={DEST}&ddate={DEP:YYYY-MM-DD}&triptype=ow&class=y&quantity={ADULTS}&locale=ja-JP&curr=JPY"},
+{name:"トラベルコ",note:"日本の格安OTAを横断比較(往復のみ直リンク対応)",top3:false,
+ rt:"https://www.tour.ne.jp/w_air/list/?dpt_airport={ORIG}%7C{DEST}&dst_airport={DEST}%7C{ORIG}&slice_info=air.{ORIG}-air.{DEST}%7Cair.{DEST}-air.{ORIG}&dpt_date={DEP:YYYYMMDD}%7C{RET:YYYYMMDD}",
+ ow:null}
+];
+/* 日本就航LCC・格安系(路線マッチング用) 調査日2026-07-11
+   hidden:true = 大手検索サイトに出ない・不完全なことがあると複数指摘のある会社 */
+const AIRLINES=[
+{iata:"MM",name:"ピーチ",url:"https://www.flypeach.com/",routes:[["KIX","GMP"],["KIX","ICN"],["KIX","TPE"],["KIX","KHH"],["KIX","PVG"],["KIX","HKG"],["KIX","BKK"],["KIX","SIN"]],rnote:"関空拠点。ソウル・台北・高雄・上海・香港・バンコク・シンガポール"},
+{iata:"GK",name:"ジェットスター・ジャパン",url:"https://www.jetstar.com/jp/ja/home",routes:[["KIX","TPE"],["KIX","MNL"],["NRT","TPE"],["NRT","MNL"]],rnote:"成田拠点+関空〜台北・マニラ"},
+{iata:"JQ",name:"ジェットスター(豪州 JQ)",url:"https://www.jetstar.com/jp/ja/home",routes:[["KIX","CNS"],["KIX","BNE"],["NRT","CNS"],["NRT","OOL"]],rnote:"豪州路線(ケアンズ等)。日本のGKとは別会社(要確認)"},
+{iata:"ZG",name:"ZIPAIR",url:"https://www.zipair.net/ja",routes:[["NRT","ICN"],["NRT","BKK"],["NRT","SIN"],["NRT","HNL"],["NRT","LAX"],["NRT","YVR"],["NRT","SFO"],["NRT","SJC"],["NRT","IAH"],["NRT","LAS"]],rnote:"成田拠点の中長距離。ホノルル・北米・バンコク等"},
+{iata:"IJ",name:"スプリング・ジャパン",url:"https://www.springjapan.com/",routes:[["KIX","CZX"],["NRT","PVG"]],rnote:"成田〜中国中心(関空は常州)"},
+{iata:"9C",name:"春秋航空(中国)",url:"https://jp.ch.com/",routes:[["KIX","PVG"],["KIX","XMN"],["KIX","DLC"]],rnote:"関空〜中国各都市に多数(激安セールあり)"},
+{iata:"D7",name:"エアアジアX",url:"https://www.airasia.com/ja/jp",hidden:true,routes:[["KIX","KUL"]],rnote:"関空〜クアラルンプール(高雄経由・2026年6月就航)"},
+{iata:"XJ",name:"タイ・エアアジアX",url:"https://www.airasia.com/ja/jp",hidden:true,routes:[["KIX","DMK"],["NRT","DMK"]],rnote:"関空・成田〜バンコク(ドンムアン)※2026年5月から減便中"},
+{iata:"Z2",name:"フィリピン・エアアジア",url:"https://www.airasia.com/ja/jp",hidden:true,routes:[["NRT","CEB"],["KIX","MNL"]],rnote:"成田〜セブ、関空〜マニラ(要確認)"},
+{iata:"TR",name:"スクート",url:"https://www.flyscoot.com/jp",routes:[["KIX","SIN"],["HND","SIN"],["NRT","SIN"],["OKA","SIN"],["CTS","SIN"]],rnote:"シンガポール直行。羽田線は2026年3月新設"},
+{iata:"5J",name:"セブパシフィック",url:"https://www.cebupacificair.com/ja-jp/",routes:[["KIX","CEB"],["NRT","CEB"],["NRT","MNL"]],rnote:"関空〜セブ毎日運航(2025年〜)"},
+{iata:"VJ",name:"ベトジェットエア",url:"https://www.vietjetair.com/ja/",hidden:true,routes:[["KIX","SGN"],["KIX","HAN"],["NRT","SGN"],["NRT","HAN"]],rnote:"ホーチミン・ハノイ(関空発は要確認)"},
+{iata:"VZ",name:"タイ・ベトジェット",url:"https://www.vietjetair.com/ja/",hidden:true,routes:[["KIX","BKK"],["NRT","BKK"]],rnote:"バンコク(スワンナプーム)。2026年2月就航の新路線"},
+{iata:"LJ",name:"ジンエアー",url:"https://www.jinair.com/",routes:[["KIX","PUS"],["UKB","ICN"]],rnote:"関空〜釜山1日4往復。神戸〜仁川は期間限定(7〜10月)"},
+{iata:"TW",name:"ティーウェイ航空",url:"https://www.twayair.com/app/main?regionCode=JP&langCode=ja-JP",routes:[["KIX","ICN"],["KIX","PUS"],["KIX","CJU"],["KIX","TAE"],["KIX","CJJ"],["KIX","GUM"]],rnote:"関空〜韓国各都市+グアム(トリニティ航空へ社名変更手続き中)"},
+{iata:"BX",name:"エアプサン",url:"https://jp.airbusan.com/",routes:[["KIX","ICN"],["KIX","PUS"]],rnote:"釜山拠点。関空〜仁川・釜山"},
+{iata:"ZE",name:"イースター航空",url:"https://www.eastarjet.com/",routes:[["KIX","ICN"],["KIX","PUS"],["NRT","ICN"]],rnote:"関空〜仁川・釜山(2026年春に一部減便あり)"},
+{iata:"RF",name:"エアロK",url:"https://www.aerok.com/ja-JP",routes:[["KIX","CJJ"],["UKB","CJJ"]],rnote:"清州拠点。神戸〜清州は2026年6月就航"},
+{iata:"RS",name:"エアソウル",url:"https://flyairseoul.com/",routes:[["KIX","ICN"]],rnote:"関空〜仁川"},
+{iata:"YP",name:"エアプレミア",url:"https://www.airpremia.com/a/ja",routes:[["NRT","ICN"]],rnote:"成田〜仁川(広めの座席のハイブリッド)"},
+{iata:"7C",name:"チェジュ航空",url:"https://www.jejuair.net/ja",routes:[["KIX","GMP"],["KIX","ICN"],["KIX","PUS"],["UKB","ICN"]],rnote:"関空〜金浦・仁川・釜山。神戸〜仁川は季節運航(2026年6月〜)"},
+{iata:"HB",name:"グレーターベイ航空",url:"https://trp.greaterbay-airlines.com/ja-JP/",routes:[["KIX","HKG"],["NRT","HKG"]],rnote:"香港の新興LCC"},
+{iata:"UO",name:"香港エクスプレス",url:"https://www.hkexpress.com/ja/",routes:[["KIX","HKG"],["HND","HKG"],["NRT","HKG"],["NGO","HKG"],["FUK","HKG"],["OKA","HKG"]],rnote:"日本14路線。羽田にも就航"},
+{iata:"IT",name:"タイガーエア台湾",url:"https://www.tigerairtw.com/ja-JP",routes:[["KIX","TPE"],["OKA","TPE"],["FUK","TPE"]],rnote:"台北ほか日本の地方空港に多数就航"},
+{iata:"JX",name:"スターラックス航空",url:"https://www.starlux-airlines.com/ja-JP",routes:[["KIX","TPE"],["UKB","TPE"],["UKB","RMQ"]],rnote:"台湾のプレミアム系。神戸〜台北・台中(チャーター)も"},
+{iata:"SL",name:"タイ・ライオンエア",url:"https://www.lionairthai.com/en/",hidden:true,routes:[["KIX","DMK"]],rnote:"関空〜バンコク(台北経由・週4便)。日本語サイトなし"}
+];
+
+/* ---------- ユーティリティ ---------- */
+const $=s=>document.querySelector(s);
+const $$=s=>Array.from(document.querySelectorAll(s));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function store(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function load(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+function fmtYen(n){return isFinite(n)?Number(n).toLocaleString('ja-JP')+'円':'—'}
+
+/* 空港名の解決: 3レター or 日本語都市名 */
+function resolveAirport(q){
+  if(!q)return null;
+  const s=q.trim();
+  const up=s.toUpperCase();
+  let hit=AIRPORTS.find(a=>a.code===up);
+  if(hit)return hit;
+  hit=AIRPORTS.find(a=>a.ja===s)||AIRPORTS.find(a=>a.ja.includes(s)&&s.length>=2)||AIRPORTS.find(a=>(a.kw||'').includes(s)&&s.length>=2);
+  return hit||null;
+}
+function dstr(d,f){ /* d='YYYY-MM-DD' */
+  if(!d)return'';
+  const[y,m,dd]=d.split('-');
+  if(f==='YYMMDD')return y.slice(2)+m+dd;
+  if(f==='YYYYMMDD')return y+m+dd;
+  if(f==='YYYY-MM-DD')return d;
+  if(f==='DD/MM/YYYY')return dd+'/'+m+'/'+y;
+  return d;
+}
+function fill(tpl,o,d,dep,ret,ax){
+  return tpl.replace(/\{ORIGL\}/g,o.toLowerCase()).replace(/\{DESTL\}/g,d.toLowerCase())
+    .replace(/\{ORIG\}/g,o).replace(/\{DEST\}/g,d)
+    .replace(/\{DEP:([^}]+)\}/g,(_,f)=>dstr(dep,f)).replace(/\{RET:([^}]+)\}/g,(_,f)=>dstr(ret,f))
+    .replace(/\{ADULTS\}/g,ax)
+    .replace(/\{AXSEG\}/g,ax>1?'/'+ax+'adults':'')
+    .replace(/\{AXQ\}/g,ax>1?'?adults='+ax:'');
+}
+
+/* ---------- 検索リンク生成 ---------- */
+function airportsOf(code,useCluster){
+  if(!useCluster)return[code];
+  for(const k in CLUSTERS){const c=CLUSTERS[k];if(c.codes.includes(code))return c.codes.slice()}
+  return[code];
+}
+function siteLinks(o,d,dep,ret,ax,compact){
+  const rows=[];
+  for(const s of SITES){
+    if(compact&&!s.top3)continue;
+    const oneway=!ret;
+    let url=null;
+    if(oneway&&s.ow)url=fill(s.ow,o,d,dep,ret,ax);
+    else if(!oneway&&s.rt)url=fill(s.rt,o,d,dep,ret,ax);
+    if(!url)continue;
+    rows.push({name:s.name,note:s.note,url,verified:s.verified});
+  }
+  return rows;
+}
+function airlineMatches(o,d){
+  const os=airportsOf(o,true),ds=airportsOf(d,true);
+  return AIRLINES.filter(a=>a.routes&&a.routes.some(r=>(os.includes(r[0])&&ds.includes(r[1]))||(os.includes(r[1])&&ds.includes(r[0]))));
+}
+function lbtn(r,hl){
+  return'<a class="lbtn'+(hl?' hl':'')+'" target="_blank" rel="noopener" href="'+esc(r.url)+'"><span>'+esc(r.name)+(r.note?'<small>'+esc(r.note)+'</small>':'')+'</span><span class="go">開く ›</span></a>';
+}
+function groupHTML(title,rows,note,hl){
+  if(!rows.length)return'';
+  return'<div class="sitegroup"><h4>'+esc(title)+'</h4>'+(note?'<p class="lgroupnote">'+esc(note)+'</p>':'')+rows.map(r=>lbtn(r,hl)).join('')+'</div>';
+}
+function buildLinks(){
+  const o=$('#f-orig').value;
+  const destRaw=$('#f-dest').value;
+  const da=resolveAirport(destRaw);
+  const dep=$('#f-dep').value,ret=$('#f-ret').value;
+  const ax=Math.max(1,parseInt($('#f-adults').value||'1',10));
+  const out=$('#linkout');
+  if(!da){out.innerHTML='<div class="callout warn"><b>目的地がわかりませんでした</b>都市名(例: バンコク)か3レターコード(例: BKK)で入力してください。</div>';return}
+  if(!dep){out.innerHTML='<div class="callout warn"><b>出発日を入れてください</b>片道なら帰国日は空欄でOK。</div>';return}
+  const d=da.code;
+  let html='';
+  const label=o+' → '+d+(ret?'(往復 '+dep+' / '+ret+')':'(片道 '+dep+')')+' 大人'+ax+'名';
+  html+='<div class="card"><h3>検索リンク: '+esc(label)+'</h3>';
+  html+='<p class="small">上から順に開いて総額を比較メモへ。同じ便でもサイトで値段が違います。</p>';
+  html+=groupHTML('横断検索サイト',siteLinks(o,d,dep,ret,ax,false),null,false);
+  const als=airlineMatches(o,d);
+  if(als.length){
+    html+='<div class="sitegroup"><h4>この路線に就航するLCC・格安系(公式で直接検索)</h4><p class="lgroupnote">「非掲載」バッジの会社は検索サイトに出ないので公式が唯一の窓口。</p>'
+      +als.map(a=>'<a class="lbtn'+(a.hidden?' hl':'')+'" target="_blank" rel="noopener" href="'+esc(a.url)+'"><span>'+esc(a.name)+(a.hidden?' <span class="badge hidden-g">大手に非掲載あり</span>':'')+'<small>'+esc(a.rnote||'')+'</small></span><span class="go">公式 ›</span></a>').join('')+'</div>';
+  }else{
+    html+='<p class="small">この路線の直行LCCはデータ未登録です(乗継便または LCC図鑑タブを確認)。</p>';
+  }
+  /* 周辺空港の組み合わせ */
+  const nearjp=$('#f-nearjp').checked,neardest=$('#f-neardest').checked;
+  const os=airportsOf(o,nearjp),ds=airportsOf(d,neardest);
+  const combos=[];
+  for(const oo of os)for(const dd of ds){if(oo===o&&dd===d)continue;combos.push([oo,dd])}
+  if(combos.length){
+    html+='<div class="sitegroup"><h4>周辺空港の組み合わせ(主要3サイトで比較)</h4><p class="lgroupnote">空港までの移動費・時間込みで判断(→ 裏ワザ⑦)。</p>';
+    for(const[oo,dd]of combos.slice(0,6)){
+      const rows=siteLinks(oo,dd,dep,ret,ax,true);
+      html+='<details class="country"><summary><span class="flag">🛫</span><span><span class="cname">'+oo+' → '+dd+'</span></span><span class="spacer"><span class="chev">▶</span></span></summary><div class="cbody">'+rows.map(r=>lbtn(r,false)).join('')+'</div></details>';
+    }
+    html+='</div>';
+  }
+  /* 片道×片道 */
+  if($('#f-owcombo').checked&&ret){
+    const outb=siteLinks(o,d,dep,'',ax,true),inb=siteLinks(d,o,ret,'',ax,true);
+    html+='<div class="sitegroup"><h4>片道×片道で組む(往復と比べる)</h4><p class="lgroupnote">往路と復路を別々に最安で買うと往復より安いことがあります(注意点は裏ワザ①)。</p>';
+    html+='<details class="country"><summary><span class="flag">➡️</span><span><span class="cname">往路のみ '+o+' → '+d+'</span></span><span class="spacer"><span class="chev">▶</span></span></summary><div class="cbody">'+outb.map(r=>lbtn(r,false)).join('')+'</div></details>';
+    html+='<details class="country"><summary><span class="flag">⬅️</span><span><span class="cname">復路のみ '+d+' → '+o+'</span></span><span class="spacer"><span class="chev">▶</span></span></summary><div class="cbody">'+inb.map(r=>lbtn(r,false)).join('')+'</div></details>';
+    html+='<div class="calc" style="margin-top:8px"><div class="row3">'
+      +'<div><label>往復の最安(円)</label><input id="ow-rt" type="number" inputmode="numeric" placeholder="例: 52000"></div>'
+      +'<div><label>片道 往路(円)</label><input id="ow-a" type="number" inputmode="numeric" placeholder="例: 21000"></div>'
+      +'<div><label>片道 復路(円)</label><input id="ow-b" type="number" inputmode="numeric" placeholder="例: 24000"></div>'
+      +'</div><div class="result" id="ow-out">3つ入れると判定します</div></div>';
+  }
+  html+='<p class="small" style="margin-top:6px">この条件を見張り番に頼む文言: </p><div class="copybox" id="mihari-copy">/flight-mihari 価格 '+o+'→'+d+' '+dep+'発'+(ret?' '+ret+'戻り':'(片道)')+' 基準◯◯円</div>';
+  html+='</div>';
+  out.innerHTML=html;
+  $$('#linkout input[id^=ow-]').forEach(i=>i.addEventListener('input',owJudge));
+  out.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function owJudge(){
+  const rt=+($('#ow-rt')?.value||0),a=+($('#ow-a')?.value||0),b=+($('#ow-b')?.value||0);
+  const el=$('#ow-out');if(!el)return;
+  if(rt>0&&a>0&&b>0){
+    const sum=a+b,diff=rt-sum;
+    el.innerHTML=diff>0?'片道×片道が <b>'+fmtYen(diff)+'</b> 安い(合計 '+fmtYen(sum)+')。裏ワザ①の注意も確認を。'
+      :diff<0?'往復のほうが <b>'+fmtYen(-diff)+'</b> 安い(片道合計 '+fmtYen(sum)+')。'
+      :'同額です(合計 '+fmtYen(sum)+')。保護の面では往復1枚が有利。';
+  }else el.textContent='3つ入れると判定します';
+}
+
+/* ---------- 比較メモ ---------- */
+let memos=load('ff_memo',[]);
+function renderMemo(){
+  const el=$('#memoList');if(!el)return;
+  if(!memos.length){el.innerHTML='<p class="small">まだメモがありません。</p>';return}
+  const min=Math.min(...memos.map(m=>m.p));
+  el.innerHTML=memos.map((m,i)=>'<div class="pitem"><span style="flex:1">'+(m.p===min?'★ ':'')+esc(m.s)+'</span><span class="num" style="font-family:var(--font-mono)">'+fmtYen(m.p)+'</span><button class="del" data-i="'+i+'" aria-label="削除">✕</button></div>').join('');
+  $$('#memoList .del').forEach(b=>b.onclick=()=>{memos.splice(+b.dataset.i,1);store('ff_memo',memos);renderMemo()});
+}
+/* ---------- 追跡メモ ---------- */
+let tracks=load('ff_track',[]);
+function renderTrack(){
+  const el=$('#trackList');if(!el)return;
+  if(!tracks.length){el.innerHTML='<p class="small">追跡中の路線はありません。</p>';return}
+  const today=new Date();
+  el.innerHTML=tracks.map((t,i)=>{
+    const start=new Date(t.d);const leftMs=start.getTime()+7*86400000-today.getTime();
+    const left=Math.ceil(leftMs/86400000);
+    const badge=left>0?'<span class="badge card-need">あと'+left+'日</span>':'<span class="badge auth">期限切れ</span>';
+    return'<div class="pitem"><span style="flex:1">'+esc(t.r)+'<span class="small" style="display:block">基準 '+fmtYen(t.p)+'・登録 '+esc(t.d)+' '+badge+'</span></span><button class="del" data-i="'+i+'" aria-label="削除">✕</button></div>';
+  }).join('');
+  $$('#trackList .del').forEach(b=>b.onclick=()=>{tracks.splice(+b.dataset.i,1);store('ff_track',tracks);renderTrack()});
+}
+/* ---------- 手荷物計算機 ---------- */
+function bagCalc(){
+  const f=+($('#b-fare').value||0),bg=+($('#b-bag').value||0),st=+($('#b-seat').value||0),fe=+($('#b-fee').value||0),cmp=+($('#b-fsc').value||0);
+  const total=f+bg+st+fe;const el=$('#b-out');
+  if(total<=0){el.textContent='運賃を入れると総額を計算します';return}
+  let t='LCC実質総額: <b>'+fmtYen(total)+'</b>';
+  if(cmp>0){const d=cmp-total;t+=d>0?' — 比較先より '+fmtYen(d)+' 安い':d<0?' — <span style="color:var(--danger)">比較先のほうが '+fmtYen(-d)+' 安い(逆転!)</span>':' — 同額';}
+  el.innerHTML=t;
+}
+/* ---------- 絞り込み ---------- */
+function hookFilter(inputSel,itemSel,nohitSel){
+  const inp=$(inputSel);if(!inp)return;
+  inp.addEventListener('input',()=>{
+    const q=inp.value.trim().toLowerCase();let n=0;
+    $$(itemSel).forEach(el=>{
+      const hay=(el.getAttribute('data-name')||el.textContent).toLowerCase();
+      const show=!q||hay.includes(q);el.hidden=!show;if(show)n++;
+    });
+    const nh=$(nohitSel);if(nh)nh.hidden=n>0;
+  });
+}
+/* ---------- 初期化 ---------- */
+window.addEventListener('DOMContentLoaded',()=>{
+  const dl=document.getElementById('airports');
+  if(dl)AIRPORTS.forEach(a=>{const o=document.createElement('option');o.value=a.code;o.label=a.ja;dl.appendChild(o)});
+  const go=$('#f-go');if(go)go.addEventListener('click',buildLinks);
+  const dep=$('#f-dep');if(dep&&!dep.value){const d=new Date(Date.now()+30*86400000);dep.value=d.toISOString().slice(0,10)}
+  const ma=$('#m-add');if(ma)ma.onclick=()=>{const s=$('#m-site').value.trim(),p=+($('#m-price').value||0);if(!s||p<=0)return;memos.push({s,p});store('ff_memo',memos);$('#m-site').value='';$('#m-price').value='';renderMemo()};
+  const ta=$('#t-add');if(ta)ta.onclick=()=>{const r=$('#t-route').value.trim(),p=+($('#t-price').value||0);if(!r||p<=0)return;tracks.push({r,p,d:new Date().toISOString().slice(0,10)});store('ff_track',tracks);$('#t-route').value='';$('#t-price').value='';renderTrack()};
+  ['b-fare','b-bag','b-seat','b-fee','b-fsc'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',bagCalc)});
+  hookFilter('#lccsearch','#lcclist details.country','#lccnohit');
+  hookFilter('#bagsearch','#bagtbl tbody tr','#bagnohit');
+  renderMemo();renderTrack();
+});
+</script>
+</body>
+</html>

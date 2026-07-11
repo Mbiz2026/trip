@@ -4,10 +4,12 @@
 
 ## このリポジトリについて
 
-海外旅行者向けの実用ツールを作る。今のところ2つ:
+海外旅行者向けの実用ツールを作る。今のところ4つ:
 
 1. `travel_tools/kaigai_travel_kit.html` — 入国手続き・航空券の探し方・両替とチップ・指さし会話・持ち物・緊急連絡先をまとめた、オフラインで動くスマホ用Webアプリ(1ファイル)
 2. `/tabi-shiori` コマンド(`.claude/commands/tabi-shiori.md`) — 行き先と日程を伝えると、その渡航専用の「旅のしおり」HTMLを調査つきで生成する
+3. `travel_tools/flight_finder.html` — 「航空券サーチ司令塔」。条件を1回入れると横断検索サイト+就航LCC公式への条件入りリンクを一括生成するオンライン前提アプリ(1ファイル)。周辺空港・片道×片道・LCC図鑑(大手サイト掲載状況つき)・手荷物ルール早見・実質総額計算機・セールカレンダー・追跡メモ入り。ユーザーの出発空港の優先順は 伊丹→関空→神戸→羽田(国際線の実質拠点は関空)
+4. `/flight-mihari` コマンド(`.claude/commands/flight-mihari.md`) — 航空券の7日間価格追跡/期間セール監視をRoutine(毎日1回)で代行し、基準額を下回ったら通知。取得失敗は正直に報告するベストエフォート設計
 
 ## 絶対に守ること
 
@@ -25,6 +27,10 @@
 # JSを外した状態(iOSファイルアプリ相当)も必ず確認する
 <同上> --blink-settings=scriptEnabled=false --no-sandbox --disable-gpu --window-size=390,1300 --screenshot=out_nojs.png file:///絶対パス/foo.html
 ```
+
+注意(2026-07-11に判明):
+- 上記の直接起動はウィンドウ幅が最小500pxに切り上げられ、390px指定だと**画像の右端が切れて写る**(実際のはみ出しではない)。`--blink-settings=scriptEnabled=false` も新しいheadlessでは失敗することがある
+- 確実なのは `pip install playwright` して Python から `executable_path='/opt/pw-browsers/chromium'` で起動する方法。`viewport=390x844` が正しく効き、`color_scheme='dark'`(ダーク確認)や `java_script_enabled=False`(JSオフ確認)も指定できる。実装例: 過去セッションの `shoot.py`(scratchpad)
 
 ## ワークフロー: 旅のしおり生成 (`/tabi-shiori`)
 

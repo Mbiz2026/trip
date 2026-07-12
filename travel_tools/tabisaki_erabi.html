@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>旅先えらび — 次の海外旅行はどこへ?</title>
+<!--
+  旅先えらび(1ファイル・オフライン動作・JavaScript不使用)
+  作成: 2026-07-12 / データはすべて「目安」。確認日と免責はページ末尾に記載。
+  絞り込み・件数カウント・比較表ハイライトはCSSのみで動作します
+  (iPhone「ファイル」アプリのプレビュー等、JSが動かない環境でも全機能が使えます)。
+-->
+<style>
+:root{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+  --font-body:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium","Yu Gothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
+  --font-disp:"Avenir Next","Avenir","Futura","Trebuchet MS",var(--font-body);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+    --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+    --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+    --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+    --ok:#86C295; --ok-bg:#16301C;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+}
+:root[data-theme="dark"]{
+  --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+  --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+  --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+  --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+  --ok:#86C295; --ok-bg:#16301C;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);line-height:1.65;font-size:15.5px;-webkit-text-size-adjust:100%}
+.wrap{max-width:700px;margin:0 auto;padding:0 14px 72px}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px;word-break:break-all}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+header.app{padding:22px 2px 6px}
+.eyebrow{font-family:var(--font-disp);font-size:11px;letter-spacing:.16em;color:var(--accent);font-weight:600;text-transform:uppercase}
+header.app h1{margin:2px 0 6px;font-size:26px;line-height:1.3;color:var(--navy);text-wrap:balance}
+header.app .lede{margin:0 0 8px;font-size:13.5px;color:var(--muted)}
+.stamp{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.stamp span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
+
+/* ラジオボタン(視覚的に隠すがキーボード操作は可能) */
+.vh{position:absolute;width:1px;height:1px;opacity:0;margin:0;pointer-events:none}
+
+/* 条件パネル */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 15px;margin:10px 0 14px}
+.panel h2{margin:0 0 2px;font-size:17px;color:var(--navy)}
+.panel .how{margin:0 0 10px;font-size:12.5px;color:var(--muted)}
+.fgroup{margin:12px 0 0}
+.ftitle{font-size:13px;font-weight:700;color:var(--ink);margin:0 0 6px}
+.ftitle small{font-weight:400;color:var(--muted)}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:999px;padding:6px 13px;font-size:13.5px;font-weight:600;cursor:pointer;user-select:none}
+.panel .hint{margin:12px 0 0;font-size:12px;color:var(--muted)}
+
+/* 選択中のチップ */
+#ft5:checked~.wrap label[for="ft5"],#ft9:checked~.wrap label[for="ft9"],#ftx:checked~.wrap label[for="ftx"],
+#bg10:checked~.wrap label[for="bg10"],#bg20:checked~.wrap label[for="bg20"],#bg35:checked~.wrap label[for="bg35"],#bgx:checked~.wrap label[for="bgx"],
+#m0:checked~.wrap label[for="m0"],#m1:checked~.wrap label[for="m1"],#m2:checked~.wrap label[for="m2"],#m3:checked~.wrap label[for="m3"],
+#m4:checked~.wrap label[for="m4"],#m5:checked~.wrap label[for="m5"],#m6:checked~.wrap label[for="m6"],#m7:checked~.wrap label[for="m7"],
+#m8:checked~.wrap label[for="m8"],#m9:checked~.wrap label[for="m9"],#m10:checked~.wrap label[for="m10"],#m11:checked~.wrap label[for="m11"],#m12:checked~.wrap label[for="m12"]
+{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+#ft5:focus-visible~.wrap label[for="ft5"],#ft9:focus-visible~.wrap label[for="ft9"],#ftx:focus-visible~.wrap label[for="ftx"],
+#bg10:focus-visible~.wrap label[for="bg10"],#bg20:focus-visible~.wrap label[for="bg20"],#bg35:focus-visible~.wrap label[for="bg35"],#bgx:focus-visible~.wrap label[for="bgx"],
+#m0:focus-visible~.wrap label[for="m0"],#m1:focus-visible~.wrap label[for="m1"],#m2:focus-visible~.wrap label[for="m2"],#m3:focus-visible~.wrap label[for="m3"],
+#m4:focus-visible~.wrap label[for="m4"],#m5:focus-visible~.wrap label[for="m5"],#m6:focus-visible~.wrap label[for="m6"],#m7:focus-visible~.wrap label[for="m7"],
+#m8:focus-visible~.wrap label[for="m8"],#m9:focus-visible~.wrap label[for="m9"],#m10:focus-visible~.wrap label[for="m10"],#m11:focus-visible~.wrap label[for="m11"],#m12:focus-visible~.wrap label[for="m12"]
+{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ===== 絞り込みの本体(CSSのみ) =====
+   f5=〜5時間 f9=5〜9時間 f13=9時間超 / b1=〜10万 b2=〜20万 b3=〜35万 b4=それ以上 / ngN=N月が苦手 */
+#ft5:checked~.wrap :is(.city,.cmp):is(.f9,.f13),
+#ft9:checked~.wrap :is(.city,.cmp).f13,
+#bg10:checked~.wrap :is(.city,.cmp):is(.b2,.b3,.b4),
+#bg20:checked~.wrap :is(.city,.cmp):is(.b3,.b4),
+#bg35:checked~.wrap :is(.city,.cmp).b4,
+#m1:checked~.wrap :is(.city,.cmp).ng1,#m2:checked~.wrap :is(.city,.cmp).ng2,#m3:checked~.wrap :is(.city,.cmp).ng3,
+#m4:checked~.wrap :is(.city,.cmp).ng4,#m5:checked~.wrap :is(.city,.cmp).ng5,#m6:checked~.wrap :is(.city,.cmp).ng6,
+#m7:checked~.wrap :is(.city,.cmp).ng7,#m8:checked~.wrap :is(.city,.cmp).ng8,#m9:checked~.wrap :is(.city,.cmp).ng9,
+#m10:checked~.wrap :is(.city,.cmp).ng10,#m11:checked~.wrap :is(.city,.cmp).ng11,#m12:checked~.wrap :is(.city,.cmp).ng12
+{display:none}
+
+/* 外れた都市リスト: 条件に引っかかったものだけ表示 */
+.ex{display:none}
+#ft5:checked~.wrap .ex:is(.f9,.f13),
+#ft9:checked~.wrap .ex.f13,
+#bg10:checked~.wrap .ex:is(.b2,.b3,.b4),
+#bg20:checked~.wrap .ex:is(.b3,.b4),
+#bg35:checked~.wrap .ex.b4,
+#m1:checked~.wrap .ex.ng1,#m2:checked~.wrap .ex.ng2,#m3:checked~.wrap .ex.ng3,
+#m4:checked~.wrap .ex.ng4,#m5:checked~.wrap .ex.ng5,#m6:checked~.wrap .ex.ng6,
+#m7:checked~.wrap .ex.ng7,#m8:checked~.wrap .ex.ng8,#m9:checked~.wrap .ex.ng9,
+#m10:checked~.wrap .ex.ng10,#m11:checked~.wrap .ex.ng11,#m12:checked~.wrap .ex.ng12
+{display:flex}
+
+/* 外れた理由バッジ */
+.why{display:none;font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px}
+.w-f{color:var(--warn);background:var(--warn-bg)}
+.w-b{color:var(--danger);background:var(--danger-bg)}
+.w-m{color:var(--navy);background:var(--surface2);border:1px solid var(--line)}
+#ft5:checked~.wrap .ex:is(.f9,.f13) .w-f,
+#ft9:checked~.wrap .ex.f13 .w-f,
+#bg10:checked~.wrap .ex:is(.b2,.b3,.b4) .w-b,
+#bg20:checked~.wrap .ex:is(.b3,.b4) .w-b,
+#bg35:checked~.wrap .ex.b4 .w-b,
+#m1:checked~.wrap .ex.ng1 .w-m,#m2:checked~.wrap .ex.ng2 .w-m,#m3:checked~.wrap .ex.ng3 .w-m,
+#m4:checked~.wrap .ex.ng4 .w-m,#m5:checked~.wrap .ex.ng5 .w-m,#m6:checked~.wrap .ex.ng6 .w-m,
+#m7:checked~.wrap .ex.ng7 .w-m,#m8:checked~.wrap .ex.ng8 .w-m,#m9:checked~.wrap .ex.ng9 .w-m,
+#m10:checked~.wrap .ex.ng10 .w-m,#m11:checked~.wrap .ex.ng11 .w-m,#m12:checked~.wrap .ex.ng12 .w-m
+{display:inline-block}
+
+/* 候補カード一覧 + 件数カウント(CSSカウンター) */
+.sec-head{margin:18px 2px 10px}
+.sec-head h2{margin:2px 0 4px;font-size:20px;color:var(--navy)}
+.sec-head .lede{margin:0;font-size:13.5px;color:var(--muted)}
+.cards{display:flex;flex-direction:column;gap:12px;counter-reset:hits}
+.city{counter-increment:hits;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
+.cards::after{order:-1;content:"いまの条件に合う候補: " counter(hits) " / 40都市";display:block;font-size:13.5px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:10px;padding:8px 13px}
+.city h3{margin:0 0 4px;font-size:16.5px;color:var(--navy)}
+.city h3 .cc{font-size:12px;font-weight:600;color:var(--muted);margin-left:6px}
+.meta{margin:0 0 2px;font-size:13px;color:var(--ink)}
+.season{margin:0 0 8px;font-size:12.5px;color:var(--muted)}
+.tags{list-style:none;display:flex;flex-wrap:wrap;gap:5px;margin:0 0 8px;padding:0}
+.tags li{font-size:11.5px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 9px}
+.todo{margin:0;font-size:13.5px}
+.todo b{color:var(--navy)}
+
+/* 外れた都市ゾーン */
+.exbox{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin:14px 0;padding:0}
+.exbox summary{cursor:pointer;font-weight:700;font-size:14.5px;color:var(--navy);padding:13px 15px;list-style-position:inside}
+.exbox .exnote{margin:0 15px 10px;font-size:12.5px;color:var(--muted)}
+.exlist{list-style:none;margin:0;padding:0 15px 8px}
+.ex{align-items:center;flex-wrap:wrap;gap:4px 8px;border-top:1px dashed var(--line);padding:8px 0;font-size:13.5px}
+.ex b{color:var(--ink)}
+.ex .cc{font-size:11.5px;color:var(--muted)}
+
+/* 比較表 */
+.tblwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:12.5px}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{background:var(--surface2);color:var(--navy);font-size:12px;position:sticky;top:0}
+tr:last-child td{border-bottom:none}
+td .pin{accent-color:var(--accent);width:16px;height:16px;vertical-align:-3px;margin-right:5px}
+.cmp:has(.pin:checked) td{background:var(--accent-soft)}
+.tbl-note{font-size:12px;color:var(--muted);margin:6px 2px 0}
+
+/* 最後のひと押し */
+.nudge{border:1px solid transparent;border-radius:12px;background:var(--ok-bg);color:var(--ok);padding:13px 15px;margin:18px 0;font-size:14px}
+.nudge b{display:block;margin-bottom:2px}
+
+footer{margin-top:22px;border-top:1px solid var(--line);padding-top:14px;font-size:12.5px;color:var(--muted)}
+footer h2{font-size:14px;color:var(--navy);margin:0 0 6px}
+footer ul{margin:6px 0;padding-left:18px}
+footer li{margin:3px 0}
+</style>
+</head>
+<body>
+
+<!-- 絞り込み条件(ラジオボタン)。CSSの兄弟セレクタで下の一覧を出し分ける -->
+<input class="vh" type="radio" name="ft" id="ft5">
+<input class="vh" type="radio" name="ft" id="ft9">
+<input class="vh" type="radio" name="ft" id="ftx" checked>
+<input class="vh" type="radio" name="bg" id="bg10">
+<input class="vh" type="radio" name="bg" id="bg20">
+<input class="vh" type="radio" name="bg" id="bg35">
+<input class="vh" type="radio" name="bg" id="bgx" checked>
+<input class="vh" type="radio" name="m" id="m0" checked>
+<input class="vh" type="radio" name="m" id="m1"><input class="vh" type="radio" name="m" id="m2"><input class="vh" type="radio" name="m" id="m3">
+<input class="vh" type="radio" name="m" id="m4"><input class="vh" type="radio" name="m" id="m5"><input class="vh" type="radio" name="m" id="m6">
+<input class="vh" type="radio" name="m" id="m7"><input class="vh" type="radio" name="m" id="m8"><input class="vh" type="radio" name="m" id="m9">
+<input class="vh" type="radio" name="m" id="m10"><input class="vh" type="radio" name="m" id="m11"><input class="vh" type="radio" name="m" id="m12">
+
+<div class="wrap">
+
+<header class="app">
+  <div class="eyebrow">TABISAKI ERABI</div>
+  <h1>旅先えらび</h1>
+  <p class="lede">候補が多すぎて決められない——を、行動経済学の知恵で。ゆずれない条件で消していき、残った中から自分の目で選びます。ベストを探すより「条件を満たす中から選ぶ」ほうが、満足度が高いことが分かっています。</p>
+  <div class="stamp"><span><i class="dot"></i>日本発の定番40都市</span><span><i class="dot"></i>オフラインOK・通信不要</span><span><i class="dot"></i>2026年7月作成の目安</span></div>
+</header>
+
+<section class="panel" aria-label="絞り込み条件">
+  <h2>ゆずれない条件だけ選ぶ</h2>
+  <p class="how">全部選ばなくてOK。「これだけは無理」という条件だけで十分です。</p>
+  <div class="fgroup">
+    <div class="ftitle">✈ 飛行時間(片道・目安) <small>— 移動の体力と休みの日数に直結</small></div>
+    <div class="opts">
+      <label class="chip" for="ft5">〜5時間</label>
+      <label class="chip" for="ft9">〜9時間</label>
+      <label class="chip" for="ftx">気にしない</label>
+    </div>
+  </div>
+  <div class="fgroup">
+    <div class="ftitle">💰 予算(1人・3〜5日のざっくり目安) <small>— 航空券+宿+現地費</small></div>
+    <div class="opts">
+      <label class="chip" for="bg10">〜10万円</label>
+      <label class="chip" for="bg20">〜20万円</label>
+      <label class="chip" for="bg35">〜35万円</label>
+      <label class="chip" for="bgx">気にしない</label>
+    </div>
+  </div>
+  <div class="fgroup">
+    <div class="ftitle">🗓 行く月 <small>— 雨季・酷暑・厳寒の都市を除きます</small></div>
+    <div class="opts">
+      <label class="chip" for="m0">未定</label>
+      <label class="chip" for="m1">1月</label><label class="chip" for="m2">2月</label><label class="chip" for="m3">3月</label>
+      <label class="chip" for="m4">4月</label><label class="chip" for="m5">5月</label><label class="chip" for="m6">6月</label>
+      <label class="chip" for="m7">7月</label><label class="chip" for="m8">8月</label><label class="chip" for="m9">9月</label>
+      <label class="chip" for="m10">10月</label><label class="chip" for="m11">11月</label><label class="chip" for="m12">12月</label>
+    </div>
+  </div>
+  <p class="hint">候補が0になったら、どれかの条件を「気にしない/未定」に戻してみてください。</p>
+</section>
+
+<div class="sec-head">
+  <h2>残った候補</h2>
+  <p class="lede">この中はぜんぶ「あなたの条件を満たした都市」。並び順はおすすめ順ではなく地域順です。気になる都市の「できること」を見比べてください。</p>
+</div>
+
+<div class="cards">
+
+  <article class="city f5 b1 ng1 ng7">
+    <h3>ソウル<span class="cc">韓国</span></h3>
+    <p class="meta">✈ 約2.5時間(直行) ・ 時差 0時間 ・ 💰 目安 5〜10万円</p>
+    <p class="season">🗓 ベスト: 3〜5月・9〜11月 ／ 苦手: 1月(厳寒)・7月(梅雨)</p>
+    <ul class="tags"><li>🍜 グルメ</li><li>🛍 ショッピング</li><li>🏛 歴史</li><li>♨ 美容・スパ</li><li>☕ カフェ</li><li>🎢 テーマパーク</li></ul>
+    <p class="todo"><b>できること:</b> 広蔵市場で屋台グルメ、明洞・東大門で買い物、景福宮を韓服レンタルで散策、汗蒸幕(サウナ)で美容体験。ロッテワールドや漢江ピクニックも。</p>
+  </article>
+
+  <article class="city f5 b1 ng1 ng7">
+    <h3>釜山<span class="cc">韓国</span></h3>
+    <p class="meta">✈ 約2時間(直行) ・ 時差 0時間 ・ 💰 目安 5〜9万円</p>
+    <p class="season">🗓 ベスト: 4〜6月・9〜11月 ／ 苦手: 1月(厳寒)・7月(梅雨)</p>
+    <ul class="tags"><li>🦐 海鮮グルメ</li><li>🏖 ビーチ</li><li>♨ 温泉・チムジルバン</li><li>🏞 絶景</li><li>🚶 市場歩き</li></ul>
+    <p class="todo"><b>できること:</b> チャガルチ市場で海鮮丼、海雲台ビーチさんぽ、カラフルな甘川文化村で写真撮影、温泉とチムジルバンでのんびり。</p>
+  </article>
+
+  <article class="city f5 b1 ng6 ng8">
+    <h3>台北<span class="cc">台湾</span></h3>
+    <p class="meta">✈ 約3.5〜4時間(直行) ・ 時差 −1時間 ・ 💰 目安 6〜11万円</p>
+    <p class="season">🗓 ベスト: 10〜12月・3〜4月 ／ 苦手: 6月(梅雨)・8月(台風・蒸し暑さ)</p>
+    <ul class="tags"><li>🍜 夜市グルメ</li><li>🏛 博物館・歴史</li><li>♨ 温泉</li><li>🏮 絶景(九份)</li><li>💆 マッサージ</li><li>🍵 お茶・カフェ</li></ul>
+    <p class="todo"><b>できること:</b> 士林夜市で小籠包とルーローハン、夕暮れの九份で提灯の路地、北投温泉、故宮博物院、締めに足つぼマッサージ。</p>
+  </article>
+
+  <article class="city f5 b1 ng7 ng8">
+    <h3>高雄<span class="cc">台湾</span></h3>
+    <p class="meta">✈ 約4時間(直行) ・ 時差 −1時間 ・ 💰 目安 6〜11万円</p>
+    <p class="season">🗓 ベスト: 11〜4月 ／ 苦手: 7〜8月(台風・酷暑)</p>
+    <ul class="tags"><li>🍜 夜市</li><li>⛩ 寺院・歴史</li><li>🌃 港町夜景</li><li>🖼 アート</li><li>🚲 島あそび</li></ul>
+    <p class="todo"><b>できること:</b> 蓮池潭の龍虎塔で開運祈願、六合夜市で食べ歩き、倉庫街をリノベした駁二芸術特区でアート散歩、旗津島でシーフードとサイクリング。</p>
+  </article>
+
+  <article class="city f5 b1 ng6 ng7 ng8">
+    <h3>上海<span class="cc">中国</span></h3>
+    <p class="meta">✈ 約3時間(直行) ・ 時差 −1時間 ・ 💰 目安 7〜12万円</p>
+    <p class="season">🗓 ベスト: 3〜5月・10〜11月 ／ 苦手: 6月(梅雨)・7〜8月(酷暑)</p>
+    <ul class="tags"><li>🌃 夜景(外灘)</li><li>🥟 小籠包グルメ</li><li>🏮 庭園・歴史</li><li>🎢 テーマパーク</li><li>🖼 アート</li><li>🛶 水郷</li></ul>
+    <p class="todo"><b>できること:</b> 外灘で摩天楼の夜景、豫園の庭園と小籠包、上海ディズニーリゾート、水郷の古い町・朱家角へ日帰り、話題の美術館巡り。</p>
+  </article>
+
+  <article class="city f5 b2 ng6 ng8">
+    <h3>香港<span class="cc">中国(特別行政区)</span></h3>
+    <p class="meta">✈ 約4.5〜5時間(直行) ・ 時差 −1時間 ・ 💰 目安 8〜15万円</p>
+    <p class="season">🗓 ベスト: 10〜12月・3〜4月 ／ 苦手: 6月(雨季)・8月(台風)</p>
+    <ul class="tags"><li>🥟 飲茶・グルメ</li><li>🌃 100万ドルの夜景</li><li>🛍 ショッピング</li><li>🎢 ディズニー</li><li>⛴ 離島さんぽ</li><li>⛩ 寺院</li></ul>
+    <p class="todo"><b>できること:</b> ビクトリアピークから夜景、老舗茶楼で飲茶、スターフェリーで湾を横断、香港ディズニーランド、ランタオ島の天壇大仏へ。</p>
+  </article>
+
+  <article class="city f5 b2 ng6 ng8">
+    <h3>マカオ<span class="cc">中国(特別行政区)</span></h3>
+    <p class="meta">✈ 約5時間(直行) ・ 時差 −1時間 ・ 💰 目安 8〜15万円</p>
+    <p class="season">🗓 ベスト: 10〜12月・3〜4月 ／ 苦手: 6月(雨季)・8月(台風)</p>
+    <ul class="tags"><li>🏛 世界遺産</li><li>🚶 石畳の街歩き</li><li>🎰 カジノ・ショー</li><li>🥧 エッグタルト</li><li>🌃 夜景</li></ul>
+    <p class="todo"><b>できること:</b> 世界遺産の歴史地区(聖ポール天主堂跡)を散策、焼きたてエッグタルト、水のショー「ハウス・オブ・ダンシング・ウォーター」、豪華カジノ見物。</p>
+  </article>
+
+  <article class="city f9 b2 ng4 ng9 ng10">
+    <h3>バンコク<span class="cc">タイ</span></h3>
+    <p class="meta">✈ 約6.5時間(直行) ・ 時差 −2時間 ・ 💰 目安 8〜16万円</p>
+    <p class="season">🗓 ベスト: 11〜2月(乾季) ／ 苦手: 4月(酷暑)・9〜10月(雨季ピーク)</p>
+    <ul class="tags"><li>⛩ 三大寺院</li><li>🍜 屋台グルメ</li><li>💆 マッサージ・スパ</li><li>🛍 巨大市場</li><li>🛶 水上マーケット</li><li>🍸 ルーフトップバー</li></ul>
+    <p class="todo"><b>できること:</b> ワットポーの巨大涅槃仏など三大寺院巡り、屋台でガパオとカオマンガイ、格安マッサージ三昧、週末のチャトチャック市場、夜はルーフトップバー。</p>
+  </article>
+
+  <article class="city f9 b2 ng3 ng4 ng9">
+    <h3>チェンマイ<span class="cc">タイ</span></h3>
+    <p class="meta">✈ 約9時間〜(バンコク乗継) ・ 時差 −2時間 ・ 💰 目安 9〜16万円</p>
+    <p class="season">🗓 ベスト: 11〜2月 ／ 苦手: 3〜4月(野焼きの煙・酷暑)・9月(雨)</p>
+    <ul class="tags"><li>⛩ 古都の寺院</li><li>🐘 象とふれあい</li><li>🛍 ナイトバザール</li><li>🍜 北タイ料理</li><li>🏞 山の自然</li><li>☕ カフェ</li></ul>
+    <p class="todo"><b>できること:</b> 旧市街の寺院を自転車で巡る、象の保護施設で餌やり・水浴び、ナイトバザールで雑貨探し、名物カオソーイ(カレー麺)、山あいのカフェ。</p>
+  </article>
+
+  <article class="city f9 b2 ng12">
+    <h3>シンガポール<span class="cc">シンガポール</span></h3>
+    <p class="meta">✈ 約7時間(直行) ・ 時差 −1時間 ・ 💰 目安 10〜18万円</p>
+    <p class="season">🗓 ベスト: 2〜7月 ／ 苦手: 12月(雨が多め) ※通年蒸し暑い常夏</p>
+    <ul class="tags"><li>🌃 近未来の夜景</li><li>🦁 動物園・ナイトサファリ</li><li>🍜 ホーカーグルメ</li><li>🎢 テーマパーク</li><li>🌳 ガーデン</li><li>🛍 ショッピング</li></ul>
+    <p class="todo"><b>できること:</b> マリーナベイ・サンズ展望デッキと夜の光のショー、世界初のナイトサファリ、ホーカーズで絶品チキンライス、ガーデンズ・バイ・ザ・ベイ、セントーサ島のユニバーサル。</p>
+  </article>
+
+  <article class="city f9 b2 ng4 ng11">
+    <h3>クアラルンプール<span class="cc">マレーシア</span></h3>
+    <p class="meta">✈ 約7.5時間(直行) ・ 時差 −1時間 ・ 💰 目安 8〜15万円</p>
+    <p class="season">🗓 ベスト: 6〜8月 ／ 苦手: 4月・11月(スコールが多め)</p>
+    <ul class="tags"><li>🌃 ツインタワー夜景</li><li>🍛 多文化グルメ</li><li>🕌 モスク</li><li>🏞 バトゥ洞窟</li><li>🛍 ショッピング</li></ul>
+    <p class="todo"><b>できること:</b> ペトロナスツインタワーの夜景、極彩色の階段で有名なバトゥ洞窟、マレー・中華・インド料理の食べ比べ、ピンクモスク、巨大モールでお買い物。</p>
+  </article>
+
+  <article class="city f9 b1 ng7 ng8">
+    <h3>ハノイ<span class="cc">ベトナム</span></h3>
+    <p class="meta">✈ 約6時間(直行) ・ 時差 −2時間 ・ 💰 目安 7〜13万円</p>
+    <p class="season">🗓 ベスト: 10〜12月・3〜4月 ／ 苦手: 7〜8月(酷暑・スコール)</p>
+    <ul class="tags"><li>🚶 旧市街歩き</li><li>🛳 世界遺産ハロン湾</li><li>🍜 ベトナム料理</li><li>☕ カフェ文化</li><li>🧵 雑貨探し</li></ul>
+    <p class="todo"><b>できること:</b> 旧市街三十六通りをそぞろ歩き、世界遺産ハロン湾の日帰りクルーズ、フォーとバインミー、名物エッグコーヒー、刺繍雑貨やバッチャン焼き探し。</p>
+  </article>
+
+  <article class="city f9 b2 ng10 ng11">
+    <h3>ダナン<span class="cc">ベトナム</span></h3>
+    <p class="meta">✈ 約6時間(直行) ・ 時差 −2時間 ・ 💰 目安 8〜15万円</p>
+    <p class="season">🗓 ベスト: 5〜8月(ビーチシーズン) ／ 苦手: 10〜11月(雨季・台風)</p>
+    <ul class="tags"><li>🏖 ビーチリゾート</li><li>🏮 世界遺産ホイアン</li><li>🏞 バーナーヒルズ</li><li>🦐 海鮮</li><li>💆 スパ</li></ul>
+    <p class="todo"><b>できること:</b> ミーケビーチでリゾート滞在、夕方はランタンの世界遺産ホイアンへ小遠足、「神の手の橋」のバーナーヒルズ、海鮮とスパ三昧。</p>
+  </article>
+
+  <article class="city f9 b2 ng4 ng9">
+    <h3>ホーチミン<span class="cc">ベトナム</span></h3>
+    <p class="meta">✈ 約6.5時間(直行) ・ 時差 −2時間 ・ 💰 目安 8〜14万円</p>
+    <p class="season">🗓 ベスト: 12〜3月(乾季) ／ 苦手: 4月(酷暑)・9月(雨季ピーク)</p>
+    <ul class="tags"><li>🏛 コロニアル建築</li><li>🍜 グルメ</li><li>🛍 市場</li><li>🛶 メコン川クルーズ</li><li>🍸 ルーフトップバー</li></ul>
+    <p class="todo"><b>できること:</b> 中央郵便局などフランス統治時代の建築巡り、ベンタイン市場で雑貨とコーヒー豆、メコン川クルーズ、バインセオと生春巻き、夜はルーフトップバー。</p>
+  </article>
+
+  <article class="city f5 b2 ng8 ng9">
+    <h3>セブ島<span class="cc">フィリピン</span></h3>
+    <p class="meta">✈ 約5時間(直行) ・ 時差 −1時間 ・ 💰 目安 9〜16万円</p>
+    <p class="season">🗓 ベスト: 12〜5月(乾季) ／ 苦手: 8〜9月(雨・台風シーズン)</p>
+    <ul class="tags"><li>🏖 ビーチリゾート</li><li>🤿 ダイビング</li><li>🐋 ジンベエザメ</li><li>⛴ アイランドホッピング</li><li>💆 スパ</li></ul>
+    <p class="todo"><b>できること:</b> 離島ホッピングで白砂ビーチへ、ジンベエザメと泳ぐツアー、ウミガメとシュノーケル、格安マッサージ、完熟マンゴーシェイク。</p>
+  </article>
+
+  <article class="city f9 b2 ng1 ng2 ng12">
+    <h3>バリ島<span class="cc">インドネシア</span></h3>
+    <p class="meta">✈ 約7.5時間(直行) ・ 時差 −1時間 ・ 💰 目安 10〜18万円</p>
+    <p class="season">🗓 ベスト: 5〜9月(乾季) ／ 苦手: 12〜2月(雨季)</p>
+    <ul class="tags"><li>🏖 ビーチ&サーフィン</li><li>⛩ 寺院・文化</li><li>💆 スパ・ヨガ</li><li>🏞 棚田の絶景</li><li>🎭 ケチャダンス</li><li>☕ 海辺カフェ</li></ul>
+    <p class="todo"><b>できること:</b> ウブドで棚田を眺めながらスパ、タナロット寺院の夕日、炎のケチャダンス鑑賞、初心者OKのサーフィンレッスン、ヴィラでのんびり。</p>
+  </article>
+
+  <article class="city f13 b2 ng9 ng10">
+    <h3>プーケット<span class="cc">タイ</span></h3>
+    <p class="meta">✈ 約10時間〜(バンコク等乗継) ・ 時差 −2時間 ・ 💰 目安 10〜18万円</p>
+    <p class="season">🗓 ベスト: 11〜3月(乾季) ／ 苦手: 9〜10月(雨季ピーク)</p>
+    <ul class="tags"><li>🏖 ビーチリゾート</li><li>⛴ ピピ島ツアー</li><li>🤿 マリンスポーツ</li><li>🦐 シーフード</li><li>🌃 ナイトライフ</li><li>💆 スパ</li></ul>
+    <p class="todo"><b>できること:</b> 絶景のピピ島・パンガー湾ツアー、パトンビーチでパラセーリング、浜辺のシーフードBBQ、かわいい旧市街(オールドタウン)散策、スパ。</p>
+  </article>
+
+  <article class="city f9 b2 ng4 ng9 ng10">
+    <h3>シェムリアップ<span class="cc">カンボジア</span></h3>
+    <p class="meta">✈ 約9時間〜(乗継) ・ 時差 −2時間 ・ 💰 目安 10〜17万円</p>
+    <p class="season">🗓 ベスト: 11〜2月 ／ 苦手: 4月(酷暑)・9〜10月(雨季)</p>
+    <ul class="tags"><li>🏛 アンコールワット</li><li>🌅 遺跡で朝日</li><li>🌳 ガジュマルの遺跡</li><li>🛶 水上集落</li><li>🍛 クメール料理</li></ul>
+    <p class="todo"><b>できること:</b> アンコールワットで朝日鑑賞、ガジュマルに呑まれたタ・プローム遺跡、トンレサップ湖の水上集落、夜はパブストリートとアプサラダンス。</p>
+  </article>
+
+  <article class="city f13 b3 ng6 ng7 ng8 ng9">
+    <h3>ドバイ<span class="cc">アラブ首長国連邦</span></h3>
+    <p class="meta">✈ 約11時間(直行) ・ 時差 −5時間 ・ 💰 目安 18〜30万円</p>
+    <p class="season">🗓 ベスト: 11〜3月 ／ 苦手: 6〜9月(酷暑・40℃超)</p>
+    <ul class="tags"><li>🏙 近未来建築</li><li>🐪 砂漠サファリ</li><li>🛍 巨大モール</li><li>🏖 ビーチ</li><li>🌃 噴水ショー</li><li>🥇 ゴールドスーク</li></ul>
+    <p class="todo"><b>できること:</b> 世界一高いブルジュ・ハリファの展望台、4WDの砂漠サファリとラクダ体験、世界最大級モールと夜の噴水ショー、金市場(ゴールドスーク)、人工島のビーチ。</p>
+  </article>
+
+  <article class="city f13 b3 ng1 ng2">
+    <h3>イスタンブール<span class="cc">トルコ</span></h3>
+    <p class="meta">✈ 約13時間(直行) ・ 時差 −6時間 ・ 💰 目安 18〜30万円</p>
+    <p class="season">🗓 ベスト: 4〜6月・9〜10月 ／ 苦手: 1〜2月(寒く雨がち)</p>
+    <ul class="tags"><li>🕌 モスク・世界遺産</li><li>🛍 グランドバザール</li><li>⛴ 海峡クルーズ</li><li>🍢 トルコ料理</li><li>♨ ハマム</li><li>🏛 歴史</li></ul>
+    <p class="todo"><b>できること:</b> アヤソフィアとブルーモスク、迷宮のグランドバザールで値切り交渉、ボスポラス海峡クルーズ、サバサンドと伸びるトルコアイス、ハマム(トルコ式風呂)。</p>
+  </article>
+
+  <article class="city f5 b2 ng9 ng10">
+    <h3>グアム<span class="cc">アメリカ(準州)</span></h3>
+    <p class="meta">✈ 約3.5時間(直行) ・ 時差 +1時間 ・ 💰 目安 9〜16万円</p>
+    <p class="season">🗓 ベスト: 12〜5月(乾季) ／ 苦手: 9〜10月(雨・台風シーズン)</p>
+    <ul class="tags"><li>🏖 ビーチ</li><li>🤿 マリンスポーツ</li><li>🛍 免税ショッピング</li><li>🏞 恋人岬の絶景</li><li>🐠 水族館</li></ul>
+    <p class="todo"><b>できること:</b> タモンビーチでシュノーケル、パラセーリングやジェットスキー、恋人岬から紺碧の海を一望、免税店ショッピング、水曜夜はチャモロビレッジの夜市。</p>
+  </article>
+
+  <article class="city f5 b2 ng9 ng10">
+    <h3>サイパン<span class="cc">アメリカ(自治領)</span></h3>
+    <p class="meta">✈ 約3.5時間(直行) ・ 時差 +1時間 ・ 💰 目安 9〜15万円</p>
+    <p class="season">🗓 ベスト: 12〜5月(乾季) ／ 苦手: 9〜10月(雨・台風シーズン)</p>
+    <ul class="tags"><li>🏝 マニャガハ島</li><li>🤿 ダイビング</li><li>🏛 歴史(戦跡)</li><li>🥾 トレッキング</li><li>🌌 星空</li></ul>
+    <p class="todo"><b>できること:</b> 透明度抜群のマニャガハ島でシュノーケル、体験ダイビング、戦跡を巡る歴史ツアー、タポチョ山から島を一望、夜は満天の星。</p>
+  </article>
+
+  <article class="city f9 b3">
+    <h3>ホノルル<span class="cc">アメリカ(ハワイ州)</span></h3>
+    <p class="meta">✈ 約7〜9時間(直行・往路が短め) ・ 時差 −19時間 ・ 💰 目安 20〜35万円</p>
+    <p class="season">🗓 ベスト: ほぼ通年(4〜9月は特に安定) ／ 苦手: 特になし</p>
+    <ul class="tags"><li>🏖 ワイキキビーチ</li><li>🥾 ダイヤモンドヘッド</li><li>🛍 ショッピング</li><li>🥞 パンケーキ</li><li>🏛 真珠湾(歴史)</li><li>🏄 サーフィン</li></ul>
+    <p class="todo"><b>できること:</b> ワイキキビーチと朝のダイヤモンドヘッド登山、ノースショアでガーリックシュリンプ、アラモアナでショッピング、真珠湾の歴史見学、サーフィンレッスン。</p>
+  </article>
+
+  <article class="city f13 b3">
+    <h3>シドニー<span class="cc">オーストラリア</span></h3>
+    <p class="meta">✈ 約9.5時間(直行) ・ 時差 +1時間(夏 +2) ・ 💰 目安 20〜35万円</p>
+    <p class="season">🗓 ベスト: 9〜11月・3〜5月 ／ 苦手: 特になし(夏冬も過ごしやすい) ※季節は日本と逆</p>
+    <ul class="tags"><li>🏛 オペラハウス</li><li>⛴ ハーバークルーズ</li><li>🏖 ボンダイビーチ</li><li>🐨 コアラ・カンガルー</li><li>🏞 ブルーマウンテンズ</li><li>☕ カフェ</li></ul>
+    <p class="todo"><b>できること:</b> オペラハウスとハーバーブリッジ、ボンダイビーチの海辺さんぽ、動物園でコアラに会う、世界遺産ブルーマウンテンズへ日帰り、朝はフラットホワイト。</p>
+  </article>
+
+  <article class="city f13 b3">
+    <h3>メルボルン<span class="cc">オーストラリア</span></h3>
+    <p class="meta">✈ 約10.5時間(直行) ・ 時差 +1時間(夏 +2) ・ 💰 目安 20〜35万円</p>
+    <p class="season">🗓 ベスト: 11〜3月 ／ 苦手: 特になし(1日の寒暖差は大きめ) ※季節は日本と逆</p>
+    <ul class="tags"><li>☕ カフェの街</li><li>🖼 路地裏アート</li><li>🏞 グレートオーシャンロード</li><li>🐧 ペンギンパレード</li><li>🛍 市場</li><li>🎾 スポーツ観戦</li></ul>
+    <p class="todo"><b>できること:</b> 路地裏のストリートアートとカフェ巡り、絶景のグレートオーシャンロード日帰り、フィリップ島で野生ペンギンの行進、クイーンビクトリアマーケット。</p>
+  </article>
+
+  <article class="city f9 b3 ng1 ng2 ng3">
+    <h3>ケアンズ<span class="cc">オーストラリア</span></h3>
+    <p class="meta">✈ 約7.5時間(直行) ・ 時差 +1時間 ・ 💰 目安 18〜32万円</p>
+    <p class="season">🗓 ベスト: 5〜10月(乾季) ／ 苦手: 1〜3月(雨季・サイクロン)</p>
+    <ul class="tags"><li>🐠 グレートバリアリーフ</li><li>🤿 ダイビング</li><li>🌳 世界最古の熱帯雨林</li><li>🚞 高原鉄道</li><li>🐨 コアラ抱っこ</li><li>🛶 ラフティング</li></ul>
+    <p class="todo"><b>できること:</b> 世界遺産グレートバリアリーフでシュノーケル・ダイビング、キュランダ高原鉄道とスカイレール、熱帯雨林ウォーク、コアラ抱っこ写真、急流ラフティング。</p>
+  </article>
+
+  <article class="city f9 b3 ng1 ng2">
+    <h3>ゴールドコースト<span class="cc">オーストラリア</span></h3>
+    <p class="meta">✈ 約8.5時間(直行) ・ 時差 +1時間 ・ 💰 目安 18〜32万円</p>
+    <p class="season">🗓 ベスト: 9〜11月・3〜5月 ／ 苦手: 1〜2月(雨が多め) ※季節は日本と逆</p>
+    <ul class="tags"><li>🏖 サーファーズパラダイス</li><li>🏄 サーフィン</li><li>🎢 テーマパーク</li><li>✨ 土ボタルの洞窟</li><li>🐨 動物園</li></ul>
+    <p class="todo"><b>できること:</b> 延々と続くビーチで朝さんぽとサーフィン、ムービーワールドなどテーマパークはしご、夜は神秘的な土ボタル観賞ツアー、カランビン動物園で動物とふれあい。</p>
+  </article>
+
+  <article class="city f13 b3 ng6 ng7">
+    <h3>オークランド<span class="cc">ニュージーランド</span></h3>
+    <p class="meta">✈ 約11時間(直行) ・ 時差 +3時間(夏 +4) ・ 💰 目安 22〜35万円</p>
+    <p class="season">🗓 ベスト: 11〜3月 ／ 苦手: 6〜7月(冬・雨がち) ※季節は日本と逆</p>
+    <ul class="tags"><li>⛵ ヨットの街</li><li>🎬 ホビット村</li><li>🌋 火山ハイク</li><li>🍷 ワイナリー</li><li>🏛 ミュージアム</li></ul>
+    <p class="todo"><b>できること:</b> ハーバーサイドでシーフード、映画のロケ地ホビット村(マタマタ)へ日帰り、ランギトト島の火山ハイキング、ワイヘキ島のワイナリー巡り。</p>
+  </article>
+
+  <article class="city f13 b3">
+    <h3>ロサンゼルス<span class="cc">アメリカ</span></h3>
+    <p class="meta">✈ 約10時間(直行) ・ 時差 −17時間(夏 −16) ・ 💰 目安 20〜35万円</p>
+    <p class="season">🗓 ベスト: ほぼ通年(雨が少ない) ／ 苦手: 特になし</p>
+    <ul class="tags"><li>🎢 ディズニー&ユニバーサル</li><li>🎬 ハリウッド</li><li>🏖 サンタモニカ</li><li>🖼 美術館</li><li>🍔 グルメ</li><li>⚾ スポーツ観戦</li></ul>
+    <p class="todo"><b>できること:</b> 本場のディズニーランドとユニバーサル・スタジオ、ハリウッドの星の道、サンタモニカピアで夕日、ゲッティ美術館(入場無料)、大リーグ観戦。</p>
+  </article>
+
+  <article class="city f13 b3">
+    <h3>サンフランシスコ<span class="cc">アメリカ</span></h3>
+    <p class="meta">✈ 約9.5時間(直行) ・ 時差 −17時間(夏 −16) ・ 💰 目安 20〜35万円</p>
+    <p class="season">🗓 ベスト: 9〜10月(霧が晴れる季節) ／ 苦手: 特になし(夏も涼しく上着が必要)</p>
+    <ul class="tags"><li>🌉 ゴールデンゲートブリッジ</li><li>🚋 ケーブルカー</li><li>🦀 シーフード</li><li>🏝 アルカトラズ島</li><li>🍷 ワイナリー</li><li>🚶 街歩き</li></ul>
+    <p class="todo"><b>できること:</b> ゴールデンゲートブリッジを自転車で渡る、ケーブルカーで坂の街巡り、フィッシャーマンズワーフでクラムチャウダー、伝説の監獄島アルカトラズ、ナパのワイナリー。</p>
+  </article>
+
+  <article class="city f13 b3 ng7 ng8">
+    <h3>ラスベガス<span class="cc">アメリカ</span></h3>
+    <p class="meta">✈ 約13時間〜(乗継) ・ 時差 −17時間(夏 −16) ・ 💰 目安 20〜35万円</p>
+    <p class="season">🗓 ベスト: 3〜5月・10〜11月 ／ 苦手: 7〜8月(酷暑・40℃超)</p>
+    <ul class="tags"><li>🎭 本場のショー</li><li>🎰 カジノ</li><li>🌃 きらめく夜景</li><li>🏜 グランドキャニオン</li><li>🍽 巨大ビュッフェ</li><li>🛍 アウトレット</li></ul>
+    <p class="todo"><b>できること:</b> シルク・ドゥ・ソレイユなど本場のショー、ストリップ通りの夜さんぽ、グランドキャニオン日帰りツアー、豪華ビュッフェ、アウトレットでお買い物。</p>
+  </article>
+
+  <article class="city f13 b4 ng1 ng2">
+    <h3>ニューヨーク<span class="cc">アメリカ</span></h3>
+    <p class="meta">✈ 約13時間(直行) ・ 時差 −14時間(夏 −13) ・ 💰 目安 28〜50万円</p>
+    <p class="season">🗓 ベスト: 4〜6月・9〜11月 ／ 苦手: 1〜2月(厳寒)</p>
+    <ul class="tags"><li>🎭 ブロードウェイ</li><li>🖼 MET・MoMA</li><li>🌃 摩天楼の夜景</li><li>🌳 セントラルパーク</li><li>🍕 多国籍グルメ</li><li>🛍 ショッピング</li></ul>
+    <p class="todo"><b>できること:</b> ブロードウェイでミュージカル、METとMoMAで名画三昧、展望台から摩天楼の夜景、セントラルパークさんぽ、ベーグルとピザの食べ歩き。</p>
+  </article>
+
+  <article class="city f9 b3 ng11 ng12">
+    <h3>バンクーバー<span class="cc">カナダ</span></h3>
+    <p class="meta">✈ 約9時間(直行) ・ 時差 −17時間(夏 −16) ・ 💰 目安 20〜35万円</p>
+    <p class="season">🗓 ベスト: 5〜9月 ／ 苦手: 11〜12月(雨季)</p>
+    <ul class="tags"><li>🌳 スタンレーパーク</li><li>🛍 グランビルアイランド</li><li>🐟 サーモン料理</li><li>🌉 キャピラノ吊り橋</li><li>🏔 山と海の絶景</li></ul>
+    <p class="todo"><b>できること:</b> スタンレーパークをレンタサイクルで一周、グランビルアイランドの市場で食べ歩き、名物サーモン料理、スリル満点のキャピラノ吊り橋、夏はウィスラーへ。</p>
+  </article>
+
+  <article class="city f13 b4 ng1 ng2">
+    <h3>ロンドン<span class="cc">イギリス</span></h3>
+    <p class="meta">✈ 約14時間(直行) ・ 時差 −9時間(夏 −8) ・ 💰 目安 28〜50万円</p>
+    <p class="season">🗓 ベスト: 5〜9月 ／ 苦手: 1〜2月(暗く寒い) ※12月はクリスマス装飾が見事</p>
+    <ul class="tags"><li>🏛 大英博物館(無料)</li><li>🎭 ミュージカル</li><li>👑 王室スポット</li><li>🍺 パブ&アフタヌーンティー</li><li>🛍 マーケット</li><li>🌳 公園</li></ul>
+    <p class="todo"><b>できること:</b> 大英博物館・ナショナルギャラリー(入場無料)、ウエストエンドでミュージカル、バッキンガム宮殿の衛兵交代、パブ飯と優雅なアフタヌーンティー、カムデンマーケット。</p>
+  </article>
+
+  <article class="city f13 b4 ng1 ng2">
+    <h3>パリ<span class="cc">フランス</span></h3>
+    <p class="meta">✈ 約14.5時間(直行) ・ 時差 −8時間(夏 −7) ・ 💰 目安 28〜50万円</p>
+    <p class="season">🗓 ベスト: 5〜9月 ／ 苦手: 1〜2月(暗く寒い)</p>
+    <ul class="tags"><li>🖼 ルーブル・オルセー</li><li>🗼 エッフェル塔</li><li>🥐 パン・スイーツ</li><li>🏰 ヴェルサイユ宮殿</li><li>☕ カフェ</li><li>🛍 蚤の市</li></ul>
+    <p class="todo"><b>できること:</b> ルーブルとオルセーで名画巡り、エッフェル塔とセーヌ河岸さんぽ、朝のブーランジェリーで焼きたてクロワッサン、ヴェルサイユ宮殿、週末は蚤の市で宝探し。</p>
+  </article>
+
+  <article class="city f13 b3 ng8">
+    <h3>ローマ<span class="cc">イタリア</span></h3>
+    <p class="meta">✈ 約15時間(直行) ・ 時差 −8時間(夏 −7) ・ 💰 目安 24〜38万円</p>
+    <p class="season">🗓 ベスト: 4〜6月・9〜10月 ／ 苦手: 8月(酷暑・夏休みで閉まる店も)</p>
+    <ul class="tags"><li>🏛 コロッセオ・遺跡</li><li>⛪ バチカン</li><li>🍝 イタリアン&ジェラート</li><li>⛲ 広場・噴水巡り</li><li>🚶 世界遺産の街歩き</li></ul>
+    <p class="todo"><b>できること:</b> コロッセオとフォロ・ロマーノで古代遺跡、バチカン美術館とサン・ピエトロ大聖堂、トレビの泉にコイン投げ、本場のカルボナーラとジェラート食べ歩き。</p>
+  </article>
+
+  <article class="city f13 b3 ng8">
+    <h3>バルセロナ<span class="cc">スペイン</span></h3>
+    <p class="meta">✈ 約16時間〜(乗継) ・ 時差 −8時間(夏 −7) ・ 💰 目安 24〜38万円</p>
+    <p class="season">🗓 ベスト: 5〜6月・9〜10月 ／ 苦手: 8月(酷暑・観光客のピーク)</p>
+    <ul class="tags"><li>⛪ サグラダファミリア</li><li>🍷 バル巡り</li><li>🏖 地中海ビーチ</li><li>🖼 ピカソ美術館</li><li>🛍 市場(ボケリア)</li><li>⚽ サッカー観戦</li></ul>
+    <p class="todo"><b>できること:</b> サグラダファミリアとグエル公園でガウディ三昧、バルをはしごしてタパスとワイン、ボケリア市場、地中海ビーチ、カンプ・ノウでサッカー観戦。</p>
+  </article>
+
+  <article class="city f13 b3 ng1 ng2">
+    <h3>ウィーン<span class="cc">オーストリア</span></h3>
+    <p class="meta">✈ 約13〜15時間(直行または乗継) ・ 時差 −8時間(夏 −7) ・ 💰 目安 24〜38万円</p>
+    <p class="season">🗓 ベスト: 4〜6月・9〜10月 ／ 苦手: 1〜2月(寒い) ※12月はクリスマス市が有名</p>
+    <ul class="tags"><li>🎻 オペラ・コンサート</li><li>🖼 クリムト鑑賞</li><li>☕ カフェ文化</li><li>🏰 シェーンブルン宮殿</li><li>🚶 音楽の都さんぽ</li></ul>
+    <p class="todo"><b>できること:</b> 国立オペラ座で本場の音楽(立見席なら格安)、ベルヴェデーレ宮殿でクリムトの「接吻」、老舗カフェでザッハトルテ、シェーンブルン宮殿。</p>
+  </article>
+
+  <article class="city f13 b3 ng1 ng2">
+    <h3>プラハ<span class="cc">チェコ</span></h3>
+    <p class="meta">✈ 約15時間〜(乗継) ・ 時差 −8時間(夏 −7) ・ 💰 目安 24〜38万円</p>
+    <p class="season">🗓 ベスト: 4〜6月・9〜10月 ／ 苦手: 1〜2月(寒い)</p>
+    <ul class="tags"><li>🏰 プラハ城・カレル橋</li><li>🚶 世界遺産の旧市街</li><li>🍺 チェコビール</li><li>🕰 天文時計</li><li>🎻 音楽・人形劇</li></ul>
+    <p class="todo"><b>できること:</b> 朝霧のカレル橋さんぽ、プラハ城と黄金の小路、旧市街広場のからくり天文時計、本場のチェコビール(水より安いと言われる街)、夜景と音楽会。</p>
+  </article>
+
+  <article class="city f13 b3 ng11">
+    <h3>ヘルシンキ<span class="cc">フィンランド</span></h3>
+    <p class="meta">✈ 約13.5時間(直行) ・ 時差 −7時間(夏 −6) ・ 💰 目安 24〜38万円</p>
+    <p class="season">🗓 ベスト: 6〜8月(白夜の季節) ／ 苦手: 11月(暗く雨がち)</p>
+    <ul class="tags"><li>🧺 北欧デザイン・雑貨</li><li>🧖 本場のサウナ</li><li>🛍 マーケット広場</li><li>⛪ 岩の教会</li><li>🎠 ムーミン(近郊)</li><li>⛴ 群島クルーズ</li></ul>
+    <p class="todo"><b>できること:</b> マリメッコやイッタラのアウトレット、海辺の公衆サウナで本場のロウリュ、マーケット広場でサーモンスープ、岩をくり抜いたテンペリアウキオ教会、夏は近郊のムーミンワールド。</p>
+  </article>
+
+</div><!-- /.cards -->
+
+<details class="exbox">
+  <summary>条件で外れた都市を見る(理由つき)</summary>
+  <p class="exnote">外れた都市は「縁がなかった」のではなく「今回の条件に合わなかった」だけ。理由が見えていると、決めたあとの後悔が減ります。条件を選ぶと、ここに外れた都市と理由が表示されます。</p>
+  <ul class="exlist">
+    <li class="ex f5 b1 ng1 ng7"><b>ソウル</b><span class="cc">韓国</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(1月・7月)</span></li>
+    <li class="ex f5 b1 ng1 ng7"><b>釜山</b><span class="cc">韓国</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(1月・7月)</span></li>
+    <li class="ex f5 b1 ng6 ng8"><b>台北</b><span class="cc">台湾</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(6月・8月)</span></li>
+    <li class="ex f5 b1 ng7 ng8"><b>高雄</b><span class="cc">台湾</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(7〜8月)</span></li>
+    <li class="ex f5 b1 ng6 ng7 ng8"><b>上海</b><span class="cc">中国</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(6〜8月)</span></li>
+    <li class="ex f5 b2 ng6 ng8"><b>香港</b><span class="cc">中国(特別行政区)</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(6月・8月)</span></li>
+    <li class="ex f5 b2 ng6 ng8"><b>マカオ</b><span class="cc">中国(特別行政区)</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(6月・8月)</span></li>
+    <li class="ex f9 b2 ng4 ng9 ng10"><b>バンコク</b><span class="cc">タイ</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(4月・9〜10月)</span></li>
+    <li class="ex f9 b2 ng3 ng4 ng9"><b>チェンマイ</b><span class="cc">タイ</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(3〜4月・9月)</span></li>
+    <li class="ex f9 b2 ng12"><b>シンガポール</b><span class="cc">シンガポール</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(12月)</span></li>
+    <li class="ex f9 b2 ng4 ng11"><b>クアラルンプール</b><span class="cc">マレーシア</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(4月・11月)</span></li>
+    <li class="ex f9 b1 ng7 ng8"><b>ハノイ</b><span class="cc">ベトナム</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(7〜8月)</span></li>
+    <li class="ex f9 b2 ng10 ng11"><b>ダナン</b><span class="cc">ベトナム</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(10〜11月)</span></li>
+    <li class="ex f9 b2 ng4 ng9"><b>ホーチミン</b><span class="cc">ベトナム</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(4月・9月)</span></li>
+    <li class="ex f5 b2 ng8 ng9"><b>セブ島</b><span class="cc">フィリピン</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(8〜9月)</span></li>
+    <li class="ex f9 b2 ng1 ng2 ng12"><b>バリ島</b><span class="cc">インドネシア</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(12〜2月)</span></li>
+    <li class="ex f13 b2 ng9 ng10"><b>プーケット</b><span class="cc">タイ</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(9〜10月)</span></li>
+    <li class="ex f9 b2 ng4 ng9 ng10"><b>シェムリアップ</b><span class="cc">カンボジア</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(4月・9〜10月)</span></li>
+    <li class="ex f13 b3 ng6 ng7 ng8 ng9"><b>ドバイ</b><span class="cc">UAE</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(6〜9月)</span></li>
+    <li class="ex f13 b3 ng1 ng2"><b>イスタンブール</b><span class="cc">トルコ</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(1〜2月)</span></li>
+    <li class="ex f5 b2 ng9 ng10"><b>グアム</b><span class="cc">アメリカ(準州)</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(9〜10月)</span></li>
+    <li class="ex f5 b2 ng9 ng10"><b>サイパン</b><span class="cc">アメリカ(自治領)</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(9〜10月)</span></li>
+    <li class="ex f9 b3"><b>ホノルル</b><span class="cc">アメリカ(ハワイ州)</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span></li>
+    <li class="ex f13 b3"><b>シドニー</b><span class="cc">オーストラリア</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span></li>
+    <li class="ex f13 b3"><b>メルボルン</b><span class="cc">オーストラリア</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span></li>
+    <li class="ex f9 b3 ng1 ng2 ng3"><b>ケアンズ</b><span class="cc">オーストラリア</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(1〜3月)</span></li>
+    <li class="ex f9 b3 ng1 ng2"><b>ゴールドコースト</b><span class="cc">オーストラリア</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(1〜2月)</span></li>
+    <li class="ex f13 b3 ng6 ng7"><b>オークランド</b><span class="cc">ニュージーランド</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(6〜7月)</span></li>
+    <li class="ex f13 b3"><b>ロサンゼルス</b><span class="cc">アメリカ</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span></li>
+    <li class="ex f13 b3"><b>サンフランシスコ</b><span class="cc">アメリカ</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span></li>
+    <li class="ex f13 b3 ng7 ng8"><b>ラスベガス</b><span class="cc">アメリカ</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(7〜8月)</span></li>
+    <li class="ex f13 b4 ng1 ng2"><b>ニューヨーク</b><span class="cc">アメリカ</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(1〜2月)</span></li>
+    <li class="ex f9 b3 ng11 ng12"><b>バンクーバー</b><span class="cc">カナダ</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(11〜12月)</span></li>
+    <li class="ex f13 b4 ng1 ng2"><b>ロンドン</b><span class="cc">イギリス</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(1〜2月)</span></li>
+    <li class="ex f13 b4 ng1 ng2"><b>パリ</b><span class="cc">フランス</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(1〜2月)</span></li>
+    <li class="ex f13 b3 ng8"><b>ローマ</b><span class="cc">イタリア</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(8月)</span></li>
+    <li class="ex f13 b3 ng8"><b>バルセロナ</b><span class="cc">スペイン</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(8月)</span></li>
+    <li class="ex f13 b3 ng1 ng2"><b>ウィーン</b><span class="cc">オーストリア</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(1〜2月)</span></li>
+    <li class="ex f13 b3 ng1 ng2"><b>プラハ</b><span class="cc">チェコ</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(1〜2月)</span></li>
+    <li class="ex f13 b3 ng11"><b>ヘルシンキ</b><span class="cc">フィンランド</span><span class="why w-f">飛行時間が長い</span><span class="why w-b">予算オーバー</span><span class="why w-m">その月が苦手(11月)</span></li>
+  </ul>
+</details>
+
+<div class="sec-head">
+  <h2>残った候補をくらべる</h2>
+  <p class="lede">「近いけど高い」「安いけど遠い」——違いが見えると選びやすくなります。気になる都市にチェックを付けると色が付きます(この表も条件に合わせて絞られます)。</p>
+</div>
+
+<div class="tblwrap">
+<table>
+  <thead><tr><th>都市</th><th>飛行時間</th><th>時差</th><th>予算目安</th><th>ベスト時期</th></tr></thead>
+  <tbody>
+    <tr class="cmp f5 b1 ng1 ng7"><td><label><input class="pin" type="checkbox">ソウル</label></td><td>2.5h 直行</td><td>0h</td><td>5〜10万</td><td>3〜5・9〜11月</td></tr>
+    <tr class="cmp f5 b1 ng1 ng7"><td><label><input class="pin" type="checkbox">釜山</label></td><td>2h 直行</td><td>0h</td><td>5〜9万</td><td>4〜6・9〜11月</td></tr>
+    <tr class="cmp f5 b1 ng6 ng8"><td><label><input class="pin" type="checkbox">台北</label></td><td>3.5〜4h 直行</td><td>−1h</td><td>6〜11万</td><td>10〜12・3〜4月</td></tr>
+    <tr class="cmp f5 b1 ng7 ng8"><td><label><input class="pin" type="checkbox">高雄</label></td><td>4h 直行</td><td>−1h</td><td>6〜11万</td><td>11〜4月</td></tr>
+    <tr class="cmp f5 b1 ng6 ng7 ng8"><td><label><input class="pin" type="checkbox">上海</label></td><td>3h 直行</td><td>−1h</td><td>7〜12万</td><td>3〜5・10〜11月</td></tr>
+    <tr class="cmp f5 b2 ng6 ng8"><td><label><input class="pin" type="checkbox">香港</label></td><td>4.5〜5h 直行</td><td>−1h</td><td>8〜15万</td><td>10〜12・3〜4月</td></tr>
+    <tr class="cmp f5 b2 ng6 ng8"><td><label><input class="pin" type="checkbox">マカオ</label></td><td>5h 直行</td><td>−1h</td><td>8〜15万</td><td>10〜12・3〜4月</td></tr>
+    <tr class="cmp f9 b2 ng4 ng9 ng10"><td><label><input class="pin" type="checkbox">バンコク</label></td><td>6.5h 直行</td><td>−2h</td><td>8〜16万</td><td>11〜2月</td></tr>
+    <tr class="cmp f9 b2 ng3 ng4 ng9"><td><label><input class="pin" type="checkbox">チェンマイ</label></td><td>9h〜 乗継</td><td>−2h</td><td>9〜16万</td><td>11〜2月</td></tr>
+    <tr class="cmp f9 b2 ng12"><td><label><input class="pin" type="checkbox">シンガポール</label></td><td>7h 直行</td><td>−1h</td><td>10〜18万</td><td>2〜7月</td></tr>
+    <tr class="cmp f9 b2 ng4 ng11"><td><label><input class="pin" type="checkbox">クアラルンプール</label></td><td>7.5h 直行</td><td>−1h</td><td>8〜15万</td><td>6〜8月</td></tr>
+    <tr class="cmp f9 b1 ng7 ng8"><td><label><input class="pin" type="checkbox">ハノイ</label></td><td>6h 直行</td><td>−2h</td><td>7〜13万</td><td>10〜12・3〜4月</td></tr>
+    <tr class="cmp f9 b2 ng10 ng11"><td><label><input class="pin" type="checkbox">ダナン</label></td><td>6h 直行</td><td>−2h</td><td>8〜15万</td><td>5〜8月</td></tr>
+    <tr class="cmp f9 b2 ng4 ng9"><td><label><input class="pin" type="checkbox">ホーチミン</label></td><td>6.5h 直行</td><td>−2h</td><td>8〜14万</td><td>12〜3月</td></tr>
+    <tr class="cmp f5 b2 ng8 ng9"><td><label><input class="pin" type="checkbox">セブ島</label></td><td>5h 直行</td><td>−1h</td><td>9〜16万</td><td>12〜5月</td></tr>
+    <tr class="cmp f9 b2 ng1 ng2 ng12"><td><label><input class="pin" type="checkbox">バリ島</label></td><td>7.5h 直行</td><td>−1h</td><td>10〜18万</td><td>5〜9月</td></tr>
+    <tr class="cmp f13 b2 ng9 ng10"><td><label><input class="pin" type="checkbox">プーケット</label></td><td>10h〜 乗継</td><td>−2h</td><td>10〜18万</td><td>11〜3月</td></tr>
+    <tr class="cmp f9 b2 ng4 ng9 ng10"><td><label><input class="pin" type="checkbox">シェムリアップ</label></td><td>9h〜 乗継</td><td>−2h</td><td>10〜17万</td><td>11〜2月</td></tr>
+    <tr class="cmp f13 b3 ng6 ng7 ng8 ng9"><td><label><input class="pin" type="checkbox">ドバイ</label></td><td>11h 直行</td><td>−5h</td><td>18〜30万</td><td>11〜3月</td></tr>
+    <tr class="cmp f13 b3 ng1 ng2"><td><label><input class="pin" type="checkbox">イスタンブール</label></td><td>13h 直行</td><td>−6h</td><td>18〜30万</td><td>4〜6・9〜10月</td></tr>
+    <tr class="cmp f5 b2 ng9 ng10"><td><label><input class="pin" type="checkbox">グアム</label></td><td>3.5h 直行</td><td>+1h</td><td>9〜16万</td><td>12〜5月</td></tr>
+    <tr class="cmp f5 b2 ng9 ng10"><td><label><input class="pin" type="checkbox">サイパン</label></td><td>3.5h 直行</td><td>+1h</td><td>9〜15万</td><td>12〜5月</td></tr>
+    <tr class="cmp f9 b3"><td><label><input class="pin" type="checkbox">ホノルル</label></td><td>7〜9h 直行</td><td>−19h</td><td>20〜35万</td><td>ほぼ通年</td></tr>
+    <tr class="cmp f13 b3"><td><label><input class="pin" type="checkbox">シドニー</label></td><td>9.5h 直行</td><td>+1〜2h</td><td>20〜35万</td><td>9〜11・3〜5月</td></tr>
+    <tr class="cmp f13 b3"><td><label><input class="pin" type="checkbox">メルボルン</label></td><td>10.5h 直行</td><td>+1〜2h</td><td>20〜35万</td><td>11〜3月</td></tr>
+    <tr class="cmp f9 b3 ng1 ng2 ng3"><td><label><input class="pin" type="checkbox">ケアンズ</label></td><td>7.5h 直行</td><td>+1h</td><td>18〜32万</td><td>5〜10月</td></tr>
+    <tr class="cmp f9 b3 ng1 ng2"><td><label><input class="pin" type="checkbox">ゴールドコースト</label></td><td>8.5h 直行</td><td>+1h</td><td>18〜32万</td><td>9〜11・3〜5月</td></tr>
+    <tr class="cmp f13 b3 ng6 ng7"><td><label><input class="pin" type="checkbox">オークランド</label></td><td>11h 直行</td><td>+3〜4h</td><td>22〜35万</td><td>11〜3月</td></tr>
+    <tr class="cmp f13 b3"><td><label><input class="pin" type="checkbox">ロサンゼルス</label></td><td>10h 直行</td><td>−16〜17h</td><td>20〜35万</td><td>ほぼ通年</td></tr>
+    <tr class="cmp f13 b3"><td><label><input class="pin" type="checkbox">サンフランシスコ</label></td><td>9.5h 直行</td><td>−16〜17h</td><td>20〜35万</td><td>9〜10月</td></tr>
+    <tr class="cmp f13 b3 ng7 ng8"><td><label><input class="pin" type="checkbox">ラスベガス</label></td><td>13h〜 乗継</td><td>−16〜17h</td><td>20〜35万</td><td>3〜5・10〜11月</td></tr>
+    <tr class="cmp f13 b4 ng1 ng2"><td><label><input class="pin" type="checkbox">ニューヨーク</label></td><td>13h 直行</td><td>−13〜14h</td><td>28〜50万</td><td>4〜6・9〜11月</td></tr>
+    <tr class="cmp f9 b3 ng11 ng12"><td><label><input class="pin" type="checkbox">バンクーバー</label></td><td>9h 直行</td><td>−16〜17h</td><td>20〜35万</td><td>5〜9月</td></tr>
+    <tr class="cmp f13 b4 ng1 ng2"><td><label><input class="pin" type="checkbox">ロンドン</label></td><td>14h 直行</td><td>−8〜9h</td><td>28〜50万</td><td>5〜9月</td></tr>
+    <tr class="cmp f13 b4 ng1 ng2"><td><label><input class="pin" type="checkbox">パリ</label></td><td>14.5h 直行</td><td>−7〜8h</td><td>28〜50万</td><td>5〜9月</td></tr>
+    <tr class="cmp f13 b3 ng8"><td><label><input class="pin" type="checkbox">ローマ</label></td><td>15h 直行</td><td>−7〜8h</td><td>24〜38万</td><td>4〜6・9〜10月</td></tr>
+    <tr class="cmp f13 b3 ng8"><td><label><input class="pin" type="checkbox">バルセロナ</label></td><td>16h〜 乗継</td><td>−7〜8h</td><td>24〜38万</td><td>5〜6・9〜10月</td></tr>
+    <tr class="cmp f13 b3 ng1 ng2"><td><label><input class="pin" type="checkbox">ウィーン</label></td><td>13〜15h</td><td>−7〜8h</td><td>24〜38万</td><td>4〜6・9〜10月</td></tr>
+    <tr class="cmp f13 b3 ng1 ng2"><td><label><input class="pin" type="checkbox">プラハ</label></td><td>15h〜 乗継</td><td>−7〜8h</td><td>24〜38万</td><td>4〜6・9〜10月</td></tr>
+    <tr class="cmp f13 b3 ng11"><td><label><input class="pin" type="checkbox">ヘルシンキ</label></td><td>13.5h 直行</td><td>−6〜7h</td><td>24〜38万</td><td>6〜8月</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="tbl-note">※チェックの色付けが効かない古い環境でも、チェック印そのものは目印として使えます。</p>
+
+<div class="nudge">
+  <b>🌏 2〜3都市まで残ったら、それはぜんぶ「条件を満たした正解」です。</b>
+  どれを選んでも大丈夫。最後は「行き先が決まったと想像して、いちばん嬉しかった所」を選んでOKです。行き先が決まったら、同じフォルダの<a href="kaigai_travel_kit.html">海外旅行キット</a>で入国手続きや持ち物の準備へ。
+</div>
+
+<footer>
+  <h2>この情報の性質と確認先(必ずお読みください)</h2>
+  <ul>
+    <li>掲載内容はすべて<b>2026年7月12日時点で作成した参考目安</b>です(一般的な旅行情報に基づく二次情報を含みます)。断定するものではありません。</li>
+    <li><b>飛行時間</b>は東京発の直行便のおおよその目安(直行便がない都市は「乗継」と明記)。就航状況は変わるため、最新は各航空会社の公式サイトでご確認ください。</li>
+    <li><b>予算</b>は1人・3〜5日の「航空券+宿+現地費」のざっくりした幅です。時期・為替・予約タイミングで大きく変動します。</li>
+    <li><b>ベストシーズン/苦手な時期</b>は一般的な気候傾向です。その年の天候は必ず直前に確認を。</li>
+    <li><b>ビザ・入国手続き・治安</b>はこのアプリでは扱いません。渡航前に必ず公式情報を: <a href="https://www.anzen.mofa.go.jp/">外務省 海外安全ホームページ</a> / <a href="https://www.mofa.go.jp/mofaj/toko/visa/index.html">外務省 ビザ情報</a> / <a href="https://www.ezairyu.mofa.go.jp/tabireg/">たびレジ(登録推奨)</a></li>
+  </ul>
+  <p>行動経済学メモ: このアプリは「選択肢が多すぎると選べなくなる(選択過負荷)」への対策として、①ゆずれない条件による消去 → ②残った候補の並列比較 → ③外した理由の見える化(後悔対策)、という流れで設計されています。おすすめ順への並べ替えは意図的にしていません。</p>
+</footer>
+
+</div><!-- /.wrap -->
+</body>
+</html>

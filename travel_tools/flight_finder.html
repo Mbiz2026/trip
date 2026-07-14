@@ -171,7 +171,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
     <span><span class="dot"></span>関西発を優先収録(伊丹・関空・神戸)</span>
     <span><span class="dot"></span>入力データは端末内のみ保存</span>
   </div>
-  <noscript><div class="callout warn" style="margin-top:10px"><b>プレビュー表示中(ファイルAppなど)</b>情報の閲覧・タブ切り替えはこのまま全部使えます。「条件入力→リンク一括生成」「計算機」「メモ保存」はブラウザで開くと有効になります。JSが無くても、各サイトへの入口リンクとGoogleフライト検索フォームは使えます。</div></noscript>
+  <noscript><div class="callout danger" style="margin-top:10px"><b>⚠ この開き方では「検索リンクを生成」ボタンが動きません</b>いまはJavaScriptが無効なプレビュー表示です(チャットの添付プレビューやファイルAppの内覧など)。<b style="display:inline">① このファイルを端末にダウンロード → ② Chrome・Edge・Safariなどのブラウザで直接開いて</b>ください。それで条件入りリンクの一括生成・計算機・メモ保存がすべて有効になります。※情報の閲覧・タブ切り替え・各サイトへの入口リンクは、このままでも使えます。</div></noscript>
 </header>
 
 <input class="tabradio" type="radio" name="tab" id="t-search" checked>
@@ -244,7 +244,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
         <label class="checkline" style="padding:4px 0"><input type="checkbox" id="f-owcombo" checked><span>片道×片道の組み合わせも出す(往復より安いことがある)</span></label>
       </div>
       <button class="btn big" type="button" id="f-go">検索リンクを生成</button>
-      <noscript><p class="small">※ この一括生成はブラウザ(JSあり)で動きます。JSなしの環境では、下の「JSなしでも使える検索」と「各サイトの入口リンク」をお使いください。</p></noscript>
+      <noscript><div class="cdanger"><b>この表示ではこのボタンは動きません。</b>ファイルをダウンロードしてブラウザ(Chrome/Edge/Safari)で直接開くと、押した瞬間に条件入りリンクが並びます。いま使いたい場合は、下の「JSなしでも使える検索」(Googleフライト)をどうぞ。</div></noscript>
     </div>
     <datalist id="airports"></datalist>
   </div>

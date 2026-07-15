@@ -1,0 +1,45 @@
+# 航空券サーチ司令塔をGitHub Pagesへ自動配信するワークフロー
+# travel_tools/flight_finder.html か travel_tools/pwa/ を更新してプッシュすると、
+# https://<owner>.github.io/trip/ に反映される(PWA: ホーム画面インストール・オフライン対応)
+name: Deploy flight-finder PWA to Pages
+
+on:
+  push:
+    branches: [claude/flight-search-app-55ozq4, main]
+    paths:
+      - travel_tools/flight_finder.html
+      - travel_tools/pwa/**
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build dist (single-file app + PWA assets)
+        run: |
+          mkdir dist
+          cp travel_tools/flight_finder.html dist/index.html
+          cp travel_tools/pwa/* dist/
+          ls -la dist
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4

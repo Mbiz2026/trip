@@ -36,6 +36,14 @@
 
 詳細は `.claude/commands/tabi-shiori.md` を参照。行き先・時期をWeb調査し、`travel_tools/kaigai_travel_kit.html` とデザインの統一感を保った、1ファイルのしおりHTMLを作る。
 
+## 航空券サーチ司令塔のWeb版(PWA)
+
+`flight_finder.html` はGitHub Pagesで「普通のアプリ」として配信している(ホーム画面インストール・オフライン起動対応)。
+
+- 配信の仕組み: `.github/workflows/pages.yml` が push のたびに `flight_finder.html`(→index.html)+ `travel_tools/pwa/`(manifest・sw.js・アイコン)を自動デプロイ
+- **本体HTMLを更新したら `travel_tools/pwa/sw.js` の `VERSION` を上げること**(利用者側のキャッシュが確実に更新される)
+- 前提: GitHub PagesはリポジトリがPublicか有料プランでのみ動く。デプロイ失敗時はまずここを疑う
+
 ## 開発のお作法
 
 - 新しいツールを追加するときも1と2のルールは例外なく適用する

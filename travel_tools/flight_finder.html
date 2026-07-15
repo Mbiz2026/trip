@@ -4,6 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#0D6B65">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1726">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="航空券司令塔">
 <title>航空券サーチ司令塔</title>
 </head>
 <body>
@@ -303,6 +312,15 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   <div class="callout danger">
     <b>⚠ 激安OTA(旅行販売サイト)の注意</b>
     横断検索の最安に出てくる無名OTAは、変更・欠航時に連絡がつかない/高額手数料/座席・荷物が別料金、というトラブルが典型です。差が数千円なら<b>航空会社公式か大手</b>で買うのが結局安全。本アプリのリンクは検索サイトと航空会社公式のみ案内しています。
+  </div>
+
+  <div class="card">
+    <h3>📲 スマホ・PCに「アプリ」として入れる</h3>
+    <p style="font-size:14px">このページをWeb版(〜github.io のURL)で開いているときは、そのままアプリとしてインストールできます。ホーム画面・デスクトップのアイコンから全画面で起動し、<b>圏外でも開けます</b>(検索リンクの利用はネット接続時)。</p>
+    <p style="font-size:14px">・<b>iPhone / iPad</b>: Safariで開く → 共有ボタン(□に↑) → 「ホーム画面に追加」<br>
+    ・<b>Android</b>: Chromeで開く → メニュー(︙) → 「アプリをインストール」<br>
+    ・<b>パソコン(Chrome / Edge)</b>: アドレスバー右端のインストールアイコン → 「インストール」</p>
+    <p class="small">ファイルとして開いている場合も全機能そのまま使えます(この案内はWeb版向け)。アプリ版は更新も自動で届きます。</p>
   </div>
 </section>
 
@@ -961,6 +979,10 @@ window.addEventListener('DOMContentLoaded',()=>{
   hookFilter('#lccsearch','#lcclist details.country','#lccnohit');
   hookFilter('#bagsearch','#bagtbl tbody tr','#bagnohit');
   renderMemo();renderTrack();
+  /* Web版(GitHub Pages)ではオフライン対応のService Workerを登録。file://やプレビューでは何もしない */
+  if('serviceWorker' in navigator&&(location.hostname.endsWith('.github.io')||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  }
 });
 </script>
 </body>

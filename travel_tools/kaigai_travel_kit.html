@@ -214,6 +214,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 
   <input class="search" id="csearch" type="search" placeholder="国名で検索(例: 韓国、ハワイ)" aria-label="国名で検索">
+  <noscript><p class="small">※ この検索欄はブラウザで開いたときだけ動きます。今の表示(プレビュー等)では下の一覧(全19件)をスクロールして探してください。</p></noscript>
   <div id="clist">
 <details class="country" data-name="韓国ソウル・釜山など"><summary><span class="flag">🇰🇷</span><span><span class="cname">韓国</span><span class="csub">ソウル・釜山など</span></span><span class="spacer"><span class="badge card-need">無料の事前登録</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>K-ETAは日本人は免除中(2026年12月31日まで延長済み)。紙の入国カードは廃止 → 事前に「e-Arrival Card」をオンライン登録(無料)</dd><dt>料金</dt><dd class="fee">無料</dd><dt>いつまでに</dt><dd>到着3日前から登録可</dd><dt>滞在できる日数</dt><dd>90日</dd><dt>パスポート残存</dt><dd>入国時に有効(残存3か月以上が安心)</dd></dl><div class="cdanger">2027年以降のK-ETA免除は未定。渡航前に大使館情報を確認</div><div class="clink"><span class="badge official">✓ 公式</span><a href="https://www.k-eta.go.kr/" rel="noopener">k-eta.go.kr(公式)</a></div></div></details>
 <details class="country" data-name="台湾台北・高雄など"><summary><span class="flag">🇹🇼</span><span><span class="cname">台湾</span><span class="csub">台北・高雄など</span></span><span class="spacer"><span class="badge card-need">無料の事前登録</span><span class="chev">▶</span></span></summary><div class="cbody"><dl><dt>手続き</dt><dd>ビザ免除。紙の入国カードは2025年10月に廃止 → 「TWAC」オンライン入国カードを事前登録(無料)</dd><dt>料金</dt><dd class="fee">無料</dd><dt>いつまでに</dt><dd>到着3日前から(到着日を含む)</dd><dt>滞在できる日数</dt><dd>90日</dd><dt>パスポート残存</dt><dd>滞在日数以上</dd></dl><div class="clink"><span class="badge official">✓ 公式</span><a href="https://twac.immigration.gov.tw/" rel="noopener">twac.immigration.gov.tw(公式)</a></div></div></details>
@@ -303,7 +304,25 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
     <div class="calc">
       <div>
         <label for="cur">通貨を選ぶ</label>
-        <select id="cur"></select>
+        <select id="cur">
+          <option value="USD" selected>米ドル(アメリカ・ハワイ・グアム)</option>
+          <option value="EUR">ユーロ(ヨーロッパ)</option>
+          <option value="GBP">英ポンド</option>
+          <option value="KRW">韓国ウォン</option>
+          <option value="TWD">台湾ドル</option>
+          <option value="THB">タイバーツ</option>
+          <option value="SGD">シンガポールドル</option>
+          <option value="MYR">マレーシアリンギット</option>
+          <option value="IDR">インドネシアルピア</option>
+          <option value="VND">ベトナムドン</option>
+          <option value="PHP">フィリピンペソ</option>
+          <option value="HKD">香港ドル</option>
+          <option value="CNY">中国元</option>
+          <option value="AUD">豪ドル</option>
+          <option value="NZD">NZドル</option>
+          <option value="CAD">カナダドル</option>
+          <option value="AED">UAEディルハム(ドバイ)</option>
+        </select>
       </div>
       <div>
         <label for="rate" id="ratelabel">レート(1通貨=何円か)</label>
@@ -688,7 +707,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
     <h2>持ち物チェックリスト</h2>
     <p class="lede">チェックの保存と項目追加は、ブラウザで開いたとき有効です。</p>
   </div>
-  <p class="progress" id="packprog"></p>
+  <p class="progress" id="packprog">準備できた: <b>0 / 23</b>(ブラウザで開くとチェックが反映されます)</p>
   <div id="packlist">
 <div class="card pgroup"><h3>書類・手続き(最重要)</h3><div class="pitem"><input type="checkbox" id="cb-p0_0"><label for="cb-p0_0">パスポート<span class="why">残存有効期間を「手続き」タブで確認!</span></label></div><div class="pitem"><input type="checkbox" id="cb-p0_1"><label for="cb-p0_1">電子渡航認証・入国カードの承認画面スクショ<span class="why">ESTA・ETA・TDACなど。電波がなくても見せられるように</span></label></div><div class="pitem"><input type="checkbox" id="cb-p0_2"><label for="cb-p0_2">eチケット控え・ホテル予約確認</label></div><div class="pitem"><input type="checkbox" id="cb-p0_3"><label for="cb-p0_3">海外旅行保険の証券番号・緊急連絡先<span class="why">クレカ付帯なら補償条件(利用付帯か)も確認</span></label></div><div class="pitem"><input type="checkbox" id="cb-p0_4"><label for="cb-p0_4">パスポートのコピー+証明写真2枚<span class="why">本体と別の場所に。紛失時の再発行が速くなる</span></label></div><div class="pitem"><input type="checkbox" id="cb-p0_5"><label for="cb-p0_5">国際運転免許証<span class="why">現地で運転する人だけ</span></label></div></div>
 <div class="card pgroup"><h3>お金</h3><div class="pitem"><input type="checkbox" id="cb-p1_0"><label for="cb-p1_0">クレジットカード2枚以上(Visa/Master別ブランド)<span class="why">1枚は予備として別の場所に</span></label></div><div class="pitem"><input type="checkbox" id="cb-p1_1"><label for="cb-p1_1">現金(日本円)<span class="why">帰国後の交通費分も</span></label></div><div class="pitem"><input type="checkbox" id="cb-p1_2"><label for="cb-p1_2">現地通貨(少額)<span class="why">空港到着後のATM引き出しでも可</span></label></div><div class="pitem"><input type="checkbox" id="cb-p1_3"><label for="cb-p1_3">カード紛失時の連絡先メモ<span class="why">「緊急」タブのメモに書いておく</span></label></div></div>
@@ -942,9 +961,7 @@ var CURRENCIES = [
  {code:"AED",label:"UAEディルハム(ドバイ)",unit:1,ph:"例: 42"}
 ];
 var curSel = document.getElementById("cur");
-CURRENCIES.forEach(function(c){
-  var o = document.createElement("option"); o.value = c.code; o.textContent = c.label; curSel.appendChild(o);
-});
+/* optionはHTMLに静的に用意済み(JS無しでも選べるように)。ここでは追加しない */
 var rateIn = document.getElementById("rate"), fIn = document.getElementById("famt"), jIn = document.getElementById("jamt");
 var rates = store.get("rates", {});
 function curMeta(){ return CURRENCIES.filter(function(c){return c.code===curSel.value;})[0]; }

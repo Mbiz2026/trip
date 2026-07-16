@@ -158,8 +158,37 @@ details.dest>summary::-webkit-details-marker{display:none}
 .dest.reach-ok .reach{display:inline-block}
 
 .cat-h{font-family:var(--font-disp);font-size:11px;letter-spacing:.14em;color:var(--muted);font-weight:600;margin:16px 2px 8px;text-transform:uppercase}
-#pane-list table{min-width:640px}
-#pane-list td:first-child{white-space:nowrap}
+/* 一覧表(段組み・横スクロールなし) */
+.lrow{padding:10px 0;border-bottom:1px solid var(--line)}
+.lrow:last-child{border-bottom:none}
+.lrow-top{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.lrow-top .lflag{font-size:17px}
+.lrow-top b{font-size:14.5px}
+.lco{font-size:11.5px;color:var(--muted)}
+.lrow-top .ldir{margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap}
+.lnums{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:8px;margin-top:3px}
+.lnum small{display:block;font-size:10.5px;color:var(--muted)}
+.lnum b{font-family:var(--font-mono);font-size:13.5px;font-variant-numeric:tabular-nums;font-weight:600;line-height:1.4}
+.lnum i,.csub i{font-style:normal;font-size:.9em;color:var(--muted)}
+.tbl.fit{overflow-x:visible}
+.tbl.fit table{min-width:0}
+.tbl.fit th,.tbl.fit td{padding:8px 9px}
+.tbl.fit td.num{white-space:normal}
+.tbl.fit td:first-child{min-width:6.5em}
+/* マイル術タブ: 縦積みリスト・チップ */
+.plist .prow{padding:9px 0;border-bottom:1px solid var(--line)}
+.plist .prow:last-child{border-bottom:none}
+.pr-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.pr-top b{font-size:14px}
+.pr-rate{margin-left:auto;font-family:var(--font-mono);font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink)}
+.pr-note{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+.owgrid{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.owchip{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:5px 9px;font-size:12.5px;display:inline-flex;align-items:center;gap:5px}
+.hand{border-left:4px solid var(--line);padding:2px 2px 2px 12px;margin:10px 0}
+.hand.jal{border-left-color:var(--jal)}
+.hand.mr{border-left-color:var(--mr)}
+.hand>b{font-size:14px}
+.hand p{margin:4px 0;font-size:13.5px}
 .lbtn{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:10px 13px;margin:0 0 8px;text-decoration:none;color:var(--ink);font-size:14.5px;font-weight:600;min-height:44px}
 .lbtn small{display:block;color:var(--muted);font-weight:400;font-size:12px;line-height:1.45}
 .lbtn .go{color:var(--accent);flex:none;font-size:13px;font-weight:700}
@@ -263,7 +292,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   <div class="cat-h" style="display:flex;justify-content:space-between;align-items:baseline">行き先カード(開くと早見表) <span id="visCnt" style="letter-spacing:0"></span></div>
 <!-- DESTCARDS:BEGIN (生成: travel_tools/dev/gen_mile_compass_cards.py・データ確認日2026-07-16) -->
 <details class="dest rg-easia t1 b1 dt yq1" data-jal="15000" data-avios="25000" data-ana="12000">
-  <summary><span class="flag">🇰🇷</span><span style="flex:1;min-width:0"><span class="cname">ソウル<span class="small"> 韓国</span></span><span class="csub">東アジア・✈ 約2時間・最少 <span class="num">12,000</span>〜・燃油往復 <span class="num">約¥14,800</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇰🇷</span><span style="flex:1;min-width:0"><span class="cname">ソウル<span class="small"> 韓国</span></span><span class="csub">東アジア・✈ 約2時間<br>JAL <span class="num">15,000※</span> / MR <span class="num">12,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥14,800</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: JAL(羽田-金浦ほか)・ANA</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>15,000</b>〜 ※</td><td class="num">約¥14,800</td><td>基本マイル・空席次第で増える変動制(片道7,500〜)</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>12,000</b> / R 15,000 / H 24,000</td><td class="num">約¥14,800</td><td>MRから1:1移行(要ANAコース)。往復Cは H 50,000</td></tr><tr><td><b>Avios</b><span class="badge mr">MR 0.8</span> <span class="small">→JAL便(羽田-金浦)</span> <span class="badge ow">OW</span></td><td><b>25,000</b><span class="small">(MR 31,250P)</span></td><td class="num">約¥14,800</td><td>片道12,500×2。2025年12月改定後・二次情報</td></tr></tbody></table></div>
@@ -271,7 +300,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-easia t1 b2 dk dt yq1" data-jal="20000" data-avios="25000" data-ana="17000">
-  <summary><span class="flag">🇹🇼</span><span style="flex:1;min-width:0"><span class="cname">台北<span class="small"> 台湾</span></span><span class="csub">東アジア・✈ 約3時間・最少 <span class="num">17,000</span>〜・燃油往復 <span class="num">約¥33,800</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇹🇼</span><span style="flex:1;min-width:0"><span class="cname">台北<span class="small"> 台湾</span></span><span class="csub">東アジア・✈ 約3時間<br>JAL <span class="num">20,000※</span> / MR <span class="num">17,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥33,800</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: JAL(桃園)※二次 / 東京から: JAL(羽田-松山/成田-桃園)・ANA</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>20,000</b>〜 ※</td><td class="num">約¥33,800</td><td>基本マイル・変動制</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>17,000</b> / R 20,000 / H 30,000</td><td class="num">約¥30,800</td><td>ANAは羽田・成田発</td></tr><tr><td><b>Avios</b><span class="badge mr">MR 0.8</span> <span class="small">→JAL便(関空-台北も)</span> <span class="badge ow">OW</span></td><td><b>25,000</b><span class="small">(MR 31,250P)</span></td><td class="num">約¥33,800</td><td>片道12,500×2・二次情報</td></tr></tbody></table></div>
@@ -279,7 +308,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-easia t1 b2 dk dt yq1" data-jal="20000" data-asia="26000" data-ana="17000">
-  <summary><span class="flag">🇭🇰</span><span style="flex:1;min-width:0"><span class="cname">香港</span><span class="csub">東アジア・✈ 約4時間・最少 <span class="num">17,000</span>〜・燃油往復 <span class="num">約¥33,800</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇭🇰</span><span style="flex:1;min-width:0"><span class="cname">香港</span><span class="csub">東アジア・✈ 約4時間<br>JAL <span class="num">20,000※</span> / MR <span class="num">17,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥33,800</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: キャセイ(毎日複数便) / 東京から: JAL・キャセイ</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>20,000</b>〜 ※</td><td class="num">約¥33,800</td><td>基本マイル・変動制</td></tr><tr><td><b>アジアマイル</b><span class="badge mr">MR 0.8</span> <span class="small">→キャセイ便</span> <span class="badge ow">OW</span></td><td><b>26,000</b><span class="small">(MR 32,500P)</span></td><td class="num">あり(HK$建て・要確認)</td><td>片道13,000×2(Standard=席少なめ)。往復C 66,000</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>17,000</b> / R 20,000 / H 30,000</td><td class="num">約¥30,800</td><td>ANAは羽田・成田発</td></tr></tbody></table></div>
@@ -287,7 +316,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-easia t1 b2 dk dt yq1" data-jal="20000" data-ana="17000">
-  <summary><span class="flag">🇨🇳</span><span style="flex:1;min-width:0"><span class="cname">上海<span class="small"> 中国</span></span><span class="csub">東アジア・✈ 約2.5時間・最少 <span class="num">17,000</span>〜・燃油往復 <span class="num">約¥33,800</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇨🇳</span><span style="flex:1;min-width:0"><span class="cname">上海<span class="small"> 中国</span></span><span class="csub">東アジア・✈ 約2.5時間<br>JAL <span class="num">20,000※</span> / MR <span class="num">17,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥33,800</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: JAL(浦東)※二次・ANA(浦東) / 東京から: JAL(羽田-虹橋ほか)・ANA</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>20,000</b>〜 ※</td><td class="num">約¥33,800</td><td>基本マイル・変動制</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>17,000</b> / R 20,000 / H 30,000</td><td class="num">約¥30,800</td><td>関空-上海はANAも運航(数少ない関空ANA国際線)</td></tr></tbody></table></div>
@@ -295,7 +324,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-seasia t1 b2 dt" data-jal="20000" data-ana="17000">
-  <summary><span class="flag">🇵🇭</span><span style="flex:1;min-width:0"><span class="cname">マニラ<span class="small"> フィリピン</span></span><span class="csub">東南アジア・✈ 約4.5時間・最少 <span class="num">17,000</span>〜・燃油往復 <span class="num">約¥45,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇵🇭</span><span style="flex:1;min-width:0"><span class="cname">マニラ<span class="small"> フィリピン</span></span><span class="csub">東南アジア・✈ 約4.5時間<br>JAL <span class="num">20,000※</span> / MR <span class="num">17,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥45,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: JAL(成田)・ANA</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>20,000</b>〜 ※(旧チャート値)</td><td class="num">約¥45,000</td><td>2025年6月改定後の値は要確認</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>17,000</b> / R 20,000 / H 30,000</td><td class="num">約¥45,000</td><td>マニラは「アジア1」扱いで東南アジアより安い</td></tr></tbody></table></div>
@@ -303,7 +332,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-seasia t2 b3 dk dt" data-jal="35000" data-ana="30000">
-  <summary><span class="flag">🇹🇭</span><span style="flex:1;min-width:0"><span class="cname">バンコク<span class="small"> タイ</span></span><span class="csub">東南アジア・✈ 約6時間・最少 <span class="num">30,000</span>〜・燃油往復 <span class="num">約¥70,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇹🇭</span><span style="flex:1;min-width:0"><span class="cname">バンコク<span class="small"> タイ</span></span><span class="csub">東南アジア・✈ 約6時間<br>JAL <span class="num">35,000※</span> / MR <span class="num">30,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥70,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: JAL(毎日) / 東京から: JAL・ANA</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>35,000</b>〜 ※二次</td><td class="num">約¥70,000</td><td>片道17,500〜。関空発直行あり</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>30,000</b> / R 35,000 / H 要確認</td><td class="num">約¥67,000</td><td>H期の改定後値は要確認</td></tr></tbody></table></div>
@@ -311,7 +340,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-seasia t2 b3 dt" data-jal="35000" data-ana="30000">
-  <summary><span class="flag">🇸🇬</span><span style="flex:1;min-width:0"><span class="cname">シンガポール</span><span class="csub">東南アジア・✈ 約7時間・最少 <span class="num">30,000</span>〜・燃油往復 <span class="num">約¥70,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇸🇬</span><span style="flex:1;min-width:0"><span class="cname">シンガポール</span><span class="csub">東南アジア・✈ 約7時間<br>JAL <span class="num">35,000※</span> / MR <span class="num">30,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥70,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: JAL・ANA</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>35,000</b>〜 ※(旧チャート値)</td><td class="num">約¥70,000</td><td>改定後の値は要確認</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>30,000</b> / R 35,000 / H 要確認</td><td class="num">約¥67,000</td><td>シンガポール航空(MR移行可・スタアラ)という選択肢も</td></tr></tbody></table></div>
@@ -319,7 +348,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-seasia t2 b3 dk dt" data-jal="35000" data-ana="30000">
-  <summary><span class="flag">🇲🇾</span><span style="flex:1;min-width:0"><span class="cname">クアラルンプール<span class="small"> マレーシア</span></span><span class="csub">東南アジア・✈ 約7時間・最少 <span class="num">30,000</span>〜・燃油往復 <span class="num">約¥70,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇲🇾</span><span style="flex:1;min-width:0"><span class="cname">クアラルンプール<span class="small"> マレーシア</span></span><span class="csub">東南アジア・✈ 約7時間<br>JAL <span class="num">35,000※</span> / MR <span class="num">30,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥70,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: マレーシア航空(週5) / 東京から: JAL(成田)・MH(毎日)</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>35,000</b>〜 ※(旧チャート値)</td><td class="num">約¥70,000</td><td>改定後の値は要確認</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>30,000</b> / R 35,000 / H 要確認</td><td class="num">約¥67,000</td><td></td></tr><tr><td><b>JALマイル</b> <span class="small">→マレーシア航空便(提携特典)</span> <span class="badge ow">OW</span></td><td>距離制・要確認</td><td class="num">あり※</td><td>関空-KL直行。MHは2024年12月から燃油徴収に変更(二次)</td></tr></tbody></table></div>
@@ -327,7 +356,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-seasia t2 b3 dt" data-jal="35000" data-ana="30000">
-  <summary><span class="flag">🇻🇳</span><span style="flex:1;min-width:0"><span class="cname">ハノイ<span class="small"> ベトナム</span></span><span class="csub">東南アジア・✈ 約5時間・最少 <span class="num">30,000</span>〜・燃油往復 <span class="num">約¥45,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇻🇳</span><span style="flex:1;min-width:0"><span class="cname">ハノイ<span class="small"> ベトナム</span></span><span class="csub">東南アジア・✈ 約5時間<br>JAL <span class="num">35,000※</span> / MR <span class="num">30,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥45,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: JAL(成田)・ANA(羽田)</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>35,000</b>〜 ※(旧チャート値)</td><td class="num">約¥45,000</td><td>改定後の値は要確認</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>30,000</b> / R 35,000 / H 要確認</td><td class="num">約¥45,000</td><td></td></tr></tbody></table></div>
@@ -335,7 +364,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-seasia t2 b3 dt" data-jal="35000" data-ana="30000">
-  <summary><span class="flag">🇻🇳</span><span style="flex:1;min-width:0"><span class="cname">ホーチミン<span class="small"> ベトナム</span></span><span class="csub">東南アジア・✈ 約5.5時間・最少 <span class="num">30,000</span>〜・燃油往復 <span class="num">約¥45,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇻🇳</span><span style="flex:1;min-width:0"><span class="cname">ホーチミン<span class="small"> ベトナム</span></span><span class="csub">東南アジア・✈ 約5.5時間<br>JAL <span class="num">35,000※</span> / MR <span class="num">30,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥45,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: JAL(成田)・ANA</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>35,000</b>〜 ※(旧チャート値)</td><td class="num">約¥45,000</td><td>改定後の値は要確認</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>30,000</b> / R 35,000 / H 要確認</td><td class="num">約¥45,000</td><td></td></tr></tbody></table></div>
@@ -343,7 +372,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-seasia t2 b3 dt" data-jal="35000" data-ana="30000">
-  <summary><span class="flag">🇮🇩</span><span style="flex:1;min-width:0"><span class="cname">ジャカルタ<span class="small"> インドネシア</span></span><span class="csub">東南アジア・✈ 約7.5時間・最少 <span class="num">30,000</span>〜・燃油往復 <span class="num">約¥80,800</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇮🇩</span><span style="flex:1;min-width:0"><span class="cname">ジャカルタ<span class="small"> インドネシア</span></span><span class="csub">東南アジア・✈ 約7.5時間<br>JAL <span class="num">35,000※</span> / MR <span class="num">30,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥80,800</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: JAL(成田)・ANA</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>35,000</b>〜 ※(旧チャート値)</td><td class="num">約¥80,800</td><td>改定後の値は要確認</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>30,000</b> / R 35,000 / H 要確認</td><td class="num">約¥80,800</td><td></td></tr></tbody></table></div>
@@ -351,7 +380,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-sasia t3 b3 dt" data-ana="30000">
-  <summary><span class="flag">🇮🇳</span><span style="flex:1;min-width:0"><span class="cname">デリー<span class="small"> インド</span></span><span class="csub">南アジア・中東・✈ 約10時間・最少 <span class="num">30,000</span>〜・燃油往復 <span class="num">約¥80,800</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇮🇳</span><span style="flex:1;min-width:0"><span class="cname">デリー<span class="small"> インド</span></span><span class="csub">南アジア・中東・✈ 約10時間<br>JAL <span class="num">要確認</span> / MR <span class="num">30,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥80,800</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: JAL(羽田・成田)・ANA</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td>路線別・要確認</td><td class="num">約¥80,800</td><td>2026年1月に成田-デリー線が新規就航し便数増</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>30,000</b> / R 35,000 / H 要確認</td><td class="num">約¥80,800</td><td>「アジア2」扱い</td></tr></tbody></table></div>
@@ -359,7 +388,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-sasia t3 b4 dt yq1">
-  <summary><span class="flag">🇱🇰</span><span style="flex:1;min-width:0"><span class="cname">コロンボ<span class="small"> スリランカ</span></span><span class="csub">南アジア・中東・✈ 約9.5時間・距離制チャート(要確認)・燃油 ゼロ可※</span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇱🇰</span><span style="flex:1;min-width:0"><span class="cname">コロンボ<span class="small"> スリランカ</span></span><span class="csub">南アジア・中東・✈ 約9.5時間<br>JAL <span class="num">距離制※</span> / MR <span class="num">—</span> / 燃油 <span class="num">ゼロ可※</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: スリランカ航空(成田)</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→スリランカ航空便(提携特典)</span> <span class="badge ow">OW</span></td><td>距離制・公式早見表で要確認</td><td class="num"><b>なし</b>※(諸税のみ)</td><td>成田-コロンボ直行</td></tr></tbody></table></div>
@@ -367,7 +396,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-sasia t3 b4 dk dt yq1">
-  <summary><span class="flag">🇶🇦</span><span style="flex:1;min-width:0"><span class="cname">ドーハ<span class="small"> カタール</span></span><span class="csub">南アジア・中東・✈ 約12時間・距離制チャート(要確認)・燃油 ゼロ可※</span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇶🇦</span><span style="flex:1;min-width:0"><span class="cname">ドーハ<span class="small"> カタール</span></span><span class="csub">南アジア・中東・✈ 約12時間<br>JAL <span class="num">距離制※</span> / MR <span class="num">要確認 <i>QR Avios</i></span> / 燃油 <span class="num">ゼロ可※</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: カタール航空(週5) / 東京から: カタール(成田2便・羽田)</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→カタール航空便(提携特典)</span> <span class="badge ow">OW</span></td><td>距離制・要確認(ワンワールド特典は25,000〜)</td><td class="num"><b>なし</b>※(諸税のみ)</td><td>関空-ドーハ直行!欧州・アフリカへの乗継にも</td></tr><tr><td><b>カタールAvios</b><span class="badge mr">MR 0.8</span> <span class="small">→カタール便</span> <span class="badge ow">OW</span></td><td>QR独自価格・要確認</td><td class="num">Qsuite課金あり※</td><td>ビジネス「Qsuite」が名物</td></tr></tbody></table></div>
@@ -375,7 +404,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-beach t1 b2 dt" data-jal="20000">
-  <summary><span class="flag">🇬🇺</span><span style="flex:1;min-width:0"><span class="cname">グアム<span class="small"> アメリカ領</span></span><span class="csub">ビーチ・島・✈ 約3.5時間・最少 <span class="num">20,000</span> ※〜・燃油往復 <span class="num">約¥45,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇬🇺</span><span style="flex:1;min-width:0"><span class="cname">グアム<span class="small"> アメリカ領</span></span><span class="csub">ビーチ・島・✈ 約3.5時間<br>JAL <span class="num">20,000※</span> / MR <span class="num">要確認 <i>ANA→UA</i></span> / 燃油 <span class="num">約¥45,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: JAL(成田・毎日)</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>20,000</b>〜 ※(旧チャート値)</td><td class="num">約¥45,000</td><td>成田発のみ</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ユナイテッド便(提携特典)</span> <span class="badge warn2">スタアラ</span></td><td>提携チャート・要確認</td><td class="num"><b>なし</b>※(諸税のみ)</td><td>関空-グアム直行のUA便をANAマイルで発券する迂回ルート(二次)</td></tr></tbody></table></div>
@@ -383,7 +412,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-beach t2 b3 dk dt" data-jal="40000" data-ana="35000">
-  <summary><span class="flag">🌺</span><span style="flex:1;min-width:0"><span class="cname">ホノルル<span class="small"> ハワイ</span></span><span class="csub">ビーチ・島・✈ 約7.5時間・最少 <span class="num">35,000</span>〜・燃油往復 <span class="num">約¥80,800</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🌺</span><span style="flex:1;min-width:0"><span class="cname">ホノルル<span class="small"> ハワイ</span></span><span class="csub">ビーチ・島・✈ 約7.5時間<br>JAL <span class="num">40,000※</span> / MR <span class="num">35,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥80,800</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: JAL(週5〜) / 東京から: JAL・ANA</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>40,000</b>〜 ※(改定後は路線別・要確認)</td><td class="num">約¥80,800</td><td>関空直行あり。Fは片道90,000〜</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>35,000</b> / R 40,000 / H 65,000</td><td class="num">約¥80,800</td><td>往復C 80,000/85,000/135,000。A380フライングホヌ</td></tr></tbody></table></div>
@@ -391,7 +420,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-beach t3 b4 dt">
-  <summary><span class="flag">🇫🇯</span><span style="flex:1;min-width:0"><span class="cname">ナンディ(フィジー)</span><span class="csub">ビーチ・島・✈ 約9時間・距離制チャート(要確認)・燃油 要確認</span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇫🇯</span><span style="flex:1;min-width:0"><span class="cname">ナンディ(フィジー)</span><span class="csub">ビーチ・島・✈ 約9時間<br>JAL <span class="num">距離制※</span> / MR <span class="num">—</span> / 燃油 <span class="num">要確認</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: フィジー・エアウェイズ(成田)※二次</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→フィジー・エアウェイズ便(提携特典)</span> <span class="badge ow">OW</span></td><td>距離制・要確認</td><td class="num">要確認</td><td>2025年4月にワンワールド正式加盟</td></tr></tbody></table></div>
@@ -399,7 +428,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-oceania t3 b3 dt" data-jal="36000" data-ana="37000">
-  <summary><span class="flag">🇦🇺</span><span style="flex:1;min-width:0"><span class="cname">シドニー<span class="small"> オーストラリア</span></span><span class="csub">オセアニア・✈ 約9.5時間・最少 <span class="num">36,000</span> ※〜・燃油往復 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇦🇺</span><span style="flex:1;min-width:0"><span class="cname">シドニー<span class="small"> オーストラリア</span></span><span class="csub">オセアニア・✈ 約9.5時間<br>JAL <span class="num">36,000※</span> / MR <span class="num">37,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: JAL(羽田)・カンタス(羽田2便)・ANA</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>36,000</b>〜 ※(旧チャート値)</td><td class="num">約¥130,000</td><td>改定後の値は要確認</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>37,000</b> / R 45,000 / H 要確認</td><td class="num">約¥130,000</td><td>H期の改定後値は要確認</td></tr><tr><td><b>JALマイル</b> <span class="small">→カンタス便(提携特典)</span> <span class="badge ow">OW</span></td><td>距離制・要確認</td><td class="num">あり・要確認</td><td>羽田発1日2便</td></tr></tbody></table></div>
@@ -407,7 +436,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-oceania t3 b3 dt" data-jal="36000">
-  <summary><span class="flag">🇦🇺</span><span style="flex:1;min-width:0"><span class="cname">メルボルン<span class="small"> オーストラリア</span></span><span class="csub">オセアニア・✈ 約10.5時間・最少 <span class="num">36,000</span> ※〜・燃油往復 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇦🇺</span><span style="flex:1;min-width:0"><span class="cname">メルボルン<span class="small"> オーストラリア</span></span><span class="csub">オセアニア・✈ 約10.5時間<br>JAL <span class="num">36,000※</span> / MR <span class="num">要確認 <i>カンタス</i></span> / 燃油 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: JAL(成田・10/25〜毎日)・カンタス(成田)</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>36,000</b>〜 ※(旧チャート値)</td><td class="num">約¥130,000</td><td>改定後の値は要確認</td></tr><tr><td><b>JALマイル</b> <span class="small">→カンタス便(提携特典)</span> <span class="badge ow">OW</span></td><td>距離制・要確認</td><td class="num">あり・要確認</td><td>2026年12月から週11便に増便</td></tr></tbody></table></div>
@@ -415,7 +444,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-europe t3 b4 dt" data-jal="54000" data-ana="45000" data-vsy="65000">
-  <summary><span class="flag">🇬🇧</span><span style="flex:1;min-width:0"><span class="cname">ロンドン<span class="small"> イギリス</span></span><span class="csub">ヨーロッパ・✈ 約14.5時間・最少 <span class="num">45,000</span>〜・燃油往復 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇬🇧</span><span style="flex:1;min-width:0"><span class="cname">ロンドン<span class="small"> イギリス</span></span><span class="csub">ヨーロッパ・✈ 約14.5時間<br>JAL <span class="num">54,000</span> / MR <span class="num">45,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: JAL(羽田)・BA(羽田2便)・ANA</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>54,000</b><span class="small">(C 114,000)</span></td><td class="num">約¥130,000</td><td>2025年6月改定後の確認値</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>45,000</b> / R 55,000 / H 要確認</td><td class="num">約¥130,000</td><td>往復CはH期180,000(L/R要確認)</td></tr><tr><td><b>ヴァージン</b><span class="badge mr">MR 0.8</span> <span class="small">→ANA便</span></td><td>Y <b>65,000</b> / C 120,000<span class="small">(MR 81,250P〜)</span></td><td class="num">約¥130,000</td><td>電話発券のみ・二次情報。ANAの燃油が転嫁される</td></tr></tbody></table></div>
@@ -423,7 +452,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-europe t3 b4 dt" data-jal="54000" data-ana="45000">
-  <summary><span class="flag">🇫🇷</span><span style="flex:1;min-width:0"><span class="cname">パリ<span class="small"> フランス</span></span><span class="csub">ヨーロッパ・✈ 約14.5時間・最少 <span class="num">45,000</span>〜・燃油往復 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇫🇷</span><span style="flex:1;min-width:0"><span class="cname">パリ<span class="small"> フランス</span></span><span class="csub">ヨーロッパ・✈ 約14.5時間<br>JAL <span class="num">54,000</span> / MR <span class="num">45,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: JAL(羽田)・ANA</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>54,000</b><span class="small">(C 114,000)</span></td><td class="num">約¥130,000</td><td>2025年6月改定後の確認値</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>45,000</b> / R 55,000 / H 要確認</td><td class="num">約¥130,000</td><td>往復CはH期180,000(L/R要確認)</td></tr></tbody></table></div>
@@ -431,7 +460,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-europe t3 b4 dk dt" data-jal="54000">
-  <summary><span class="flag">🇫🇮</span><span style="flex:1;min-width:0"><span class="cname">ヘルシンキ<span class="small"> フィンランド</span></span><span class="csub">ヨーロッパ・✈ 約13時間・最少 <span class="num">54,000</span> ※〜・燃油往復 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇫🇮</span><span style="flex:1;min-width:0"><span class="cname">ヘルシンキ<span class="small"> フィンランド</span></span><span class="csub">ヨーロッパ・✈ 約13時間<br>JAL <span class="num">54,000※</span> / MR <span class="num">要確認 <i>Avios</i></span> / 燃油 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: フィンエアー(週10) / 東京から: JAL(羽田)・フィンエアー(羽田・成田)</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>54,000</b> ※(欧州同水準と推定・路線別要確認)</td><td class="num">約¥130,000</td><td>羽田発</td></tr><tr><td><b>JALマイル</b> <span class="small">→フィンエアー便(提携特典)</span> <span class="badge ow">OW</span></td><td>距離制・要確認</td><td class="num">あり・要確認</td><td>関空直行が週10便。欧州乗継の入口</td></tr></tbody></table></div>
@@ -439,7 +468,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-namerica t3 b3 dt" data-jal="54000" data-ana="40000">
-  <summary><span class="flag">🗽</span><span style="flex:1;min-width:0"><span class="cname">ニューヨーク<span class="small"> アメリカ</span></span><span class="csub">北米・✈ 約13時間・最少 <span class="num">40,000</span>〜・燃油往復 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🗽</span><span style="flex:1;min-width:0"><span class="cname">ニューヨーク<span class="small"> アメリカ</span></span><span class="csub">北米・✈ 約13時間<br>JAL <span class="num">54,000</span> / MR <span class="num">40,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: JAL(羽田)・ANA・AA(羽田)</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>54,000</b><span class="small">(C 110,000)</span></td><td class="num">約¥130,000</td><td>2025年6月改定後の確認値</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>40,000</b> / R 50,000 / H 72,000</td><td class="num">約¥130,000</td><td><b>Lなら40,000=MR年間上限ぴったり</b>。往復C 100,000〜165,000</td></tr><tr><td><b>JALマイル</b> <span class="small">→アメリカン便(提携特典)</span> <span class="badge ow">OW</span></td><td>距離制・要確認</td><td class="num"><b>なし</b>※(諸税のみ)</td><td>羽田-NY直行のAA便なら燃油ゼロ(二次)</td></tr></tbody></table></div>
@@ -447,7 +476,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-namerica t3 b3 dk dt" data-jal="54000" data-ana="40000">
-  <summary><span class="flag">🌴</span><span style="flex:1;min-width:0"><span class="cname">ロサンゼルス<span class="small"> アメリカ</span></span><span class="csub">北米・✈ 約10時間・最少 <span class="num">40,000</span>〜・燃油往復 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🌴</span><span style="flex:1;min-width:0"><span class="cname">ロサンゼルス<span class="small"> アメリカ</span></span><span class="csub">北米・✈ 約10時間<br>JAL <span class="num">54,000</span> / MR <span class="num">40,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: JAL(週5〜毎日) / 東京から: JAL・ANA・AA(羽田)</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>54,000</b><span class="small">(C 110,000)</span></td><td class="num">約¥130,000</td><td><b>関空-LA直行(JL60/69)</b>。2025年6月改定後の確認値</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>40,000</b> / R 50,000 / H 72,000</td><td class="num">約¥130,000</td><td>Lなら40,000=MR年間上限内</td></tr><tr><td><b>JALマイル</b> <span class="small">→アメリカン便(提携特典)</span> <span class="badge ow">OW</span></td><td>距離制・要確認</td><td class="num"><b>なし</b>※(諸税のみ)</td><td>羽田-LA直行のAA便なら燃油ゼロ(二次)</td></tr></tbody></table></div>
@@ -455,7 +484,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-namerica t3 b3 dt" data-jal="54000" data-ana="40000">
-  <summary><span class="flag">🌉</span><span style="flex:1;min-width:0"><span class="cname">サンフランシスコ<span class="small"> アメリカ</span></span><span class="csub">北米・✈ 約9.5時間・最少 <span class="num">40,000</span>〜・燃油往復 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🌉</span><span style="flex:1;min-width:0"><span class="cname">サンフランシスコ<span class="small"> アメリカ</span></span><span class="csub">北米・✈ 約9.5時間<br>JAL <span class="num">54,000</span> / MR <span class="num">40,000 <i>ANA(L)</i></span> / 燃油 <span class="num">約¥130,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: JAL(羽田)※・ANA</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>54,000</b><span class="small">(C 110,000)</span></td><td class="num">約¥130,000</td><td>2025年6月改定後の確認値</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>40,000</b> / R 50,000 / H 72,000</td><td class="num">約¥130,000</td><td>Lなら40,000=MR年間上限内</td></tr></tbody></table></div>
@@ -463,7 +492,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   </div>
 </details>
 <details class="dest rg-namerica t3 b4 dt yq1">
-  <summary><span class="flag">🇨🇦</span><span style="flex:1;min-width:0"><span class="cname">バンクーバー<span class="small"> カナダ</span></span><span class="csub">北米・✈ 約9時間・距離制チャート(要確認)・燃油 ゼロ可※</span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
+  <summary><span class="flag">🇨🇦</span><span style="flex:1;min-width:0"><span class="cname">バンクーバー<span class="small"> カナダ</span></span><span class="csub">北米・✈ 約9時間<br>JAL <span class="num">—</span> / MR <span class="num">要確認 <i>ANA→AC</i></span> / 燃油 <span class="num">ゼロ可※</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: エアカナダ(羽田・成田)※二次</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→エアカナダ便(提携特典)</span> <span class="badge warn2">スタアラ</span></td><td>提携チャート・要確認</td><td class="num"><b>なし</b>※(諸税のみ)</td><td>直行AC便をANAマイルで発券(二次)</td></tr></tbody></table></div>
@@ -478,42 +507,39 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   <div class="sec-head">
     <span class="eyebrow">All Destinations</span>
     <h2>全行き先 くらべる表</h2>
-    <p class="lede">往復エコノミーの「最少マイル」順。※印は公式ページで最終確認できていない参考値(基礎と出典タブ参照)。燃油は2026年7〜8月発券分の往復目安。</p>
+    <p class="lede">安い順(往復エコノミー)。<b>JALマイルで行く場合</b>と<b>MR移行で一番安い場合</b>を並べて表示。※印=公式ページで最終確認できていない参考値(基礎と出典タブ参照)。燃油は2026年7〜8月発券分の往復目安。</p>
   </div>
-  <div class="tbl"><table>
-    <thead><tr><th>行き先</th><th>最少(往復Y)</th><th>使うマイル</th><th>燃油往復</th><th>関西直行</th><th>東京直行</th></tr></thead>
-    <tbody>
+  <div class="card" style="padding:4px 15px 6px">
 <!-- LISTROWS:BEGIN -->
-<tr><td>🇰🇷 <b>ソウル</b><span class="small">(韓国)</span></td><td class="num"><b>12,000</b></td><td>ANA(L)</td><td class="num">約¥14,800</td><td>—</td><td>○JAL/ANA</td></tr>
-<tr><td>🇹🇼 <b>台北</b><span class="small">(台湾)</span></td><td class="num"><b>17,000</b></td><td>ANA(L)</td><td class="num">約¥33,800</td><td>○JAL※</td><td>○JAL/ANA</td></tr>
-<tr><td>🇭🇰 <b>香港</b><span class="small"></span></td><td class="num"><b>17,000</b></td><td>ANA(L)</td><td class="num">約¥33,800</td><td>○CX</td><td>○JAL/CX</td></tr>
-<tr><td>🇨🇳 <b>上海</b><span class="small">(中国)</span></td><td class="num"><b>17,000</b></td><td>ANA(L)</td><td class="num">約¥33,800</td><td>○JAL※/ANA</td><td>○JAL/ANA</td></tr>
-<tr><td>🇵🇭 <b>マニラ</b><span class="small">(フィリピン)</span></td><td class="num"><b>17,000</b></td><td>ANA(L)</td><td class="num">約¥45,000</td><td>—</td><td>○JAL/ANA</td></tr>
-<tr><td>🇬🇺 <b>グアム</b><span class="small">(アメリカ領)</span></td><td class="num"><b>20,000</b> ※</td><td>JAL(旧値)</td><td class="num">約¥45,000</td><td>—</td><td>○JAL</td></tr>
-<tr><td>🇹🇭 <b>バンコク</b><span class="small">(タイ)</span></td><td class="num"><b>30,000</b></td><td>ANA(L)</td><td class="num">約¥70,000</td><td>○JAL</td><td>○JAL/ANA</td></tr>
-<tr><td>🇸🇬 <b>シンガポール</b><span class="small"></span></td><td class="num"><b>30,000</b></td><td>ANA(L)</td><td class="num">約¥70,000</td><td>—</td><td>○JAL/ANA</td></tr>
-<tr><td>🇲🇾 <b>クアラルンプール</b><span class="small">(マレーシア)</span></td><td class="num"><b>30,000</b></td><td>ANA(L)</td><td class="num">約¥70,000</td><td>○MH</td><td>○JAL/MH</td></tr>
-<tr><td>🇻🇳 <b>ハノイ</b><span class="small">(ベトナム)</span></td><td class="num"><b>30,000</b></td><td>ANA(L)</td><td class="num">約¥45,000</td><td>—</td><td>○JAL/ANA</td></tr>
-<tr><td>🇻🇳 <b>ホーチミン</b><span class="small">(ベトナム)</span></td><td class="num"><b>30,000</b></td><td>ANA(L)</td><td class="num">約¥45,000</td><td>—</td><td>○JAL/ANA</td></tr>
-<tr><td>🇮🇩 <b>ジャカルタ</b><span class="small">(インドネシア)</span></td><td class="num"><b>30,000</b></td><td>ANA(L)</td><td class="num">約¥80,800</td><td>—</td><td>○JAL/ANA</td></tr>
-<tr><td>🇮🇳 <b>デリー</b><span class="small">(インド)</span></td><td class="num"><b>30,000</b></td><td>ANA(L)</td><td class="num">約¥80,800</td><td>—</td><td>○JAL/ANA</td></tr>
-<tr><td>🌺 <b>ホノルル</b><span class="small">(ハワイ)</span></td><td class="num"><b>35,000</b></td><td>ANA(L)</td><td class="num">約¥80,800</td><td>○JAL</td><td>○JAL/ANA</td></tr>
-<tr><td>🇦🇺 <b>シドニー</b><span class="small">(オーストラリア)</span></td><td class="num"><b>36,000</b> ※</td><td>JAL(旧値)</td><td class="num">約¥130,000</td><td>—</td><td>○JAL/QF/ANA</td></tr>
-<tr><td>🇦🇺 <b>メルボルン</b><span class="small">(オーストラリア)</span></td><td class="num"><b>36,000</b> ※</td><td>JAL(旧値)</td><td class="num">約¥130,000</td><td>—</td><td>○JAL/QF</td></tr>
-<tr><td>🗽 <b>ニューヨーク</b><span class="small">(アメリカ)</span></td><td class="num"><b>40,000</b></td><td>ANA(L)</td><td class="num">約¥130,000</td><td>—</td><td>○JAL/ANA/AA</td></tr>
-<tr><td>🌴 <b>ロサンゼルス</b><span class="small">(アメリカ)</span></td><td class="num"><b>40,000</b></td><td>ANA(L)</td><td class="num">約¥130,000</td><td>○JAL</td><td>○JAL/ANA/AA</td></tr>
-<tr><td>🌉 <b>サンフランシスコ</b><span class="small">(アメリカ)</span></td><td class="num"><b>40,000</b></td><td>ANA(L)</td><td class="num">約¥130,000</td><td>—</td><td>○JAL※/ANA</td></tr>
-<tr><td>🇬🇧 <b>ロンドン</b><span class="small">(イギリス)</span></td><td class="num"><b>45,000</b></td><td>ANA(L)</td><td class="num">約¥130,000</td><td>—</td><td>○JAL/BA/ANA</td></tr>
-<tr><td>🇫🇷 <b>パリ</b><span class="small">(フランス)</span></td><td class="num"><b>45,000</b></td><td>ANA(L)</td><td class="num">約¥130,000</td><td>—</td><td>○JAL/ANA</td></tr>
-<tr><td>🇫🇮 <b>ヘルシンキ</b><span class="small">(フィンランド)</span></td><td class="num"><b>54,000</b> ※</td><td>JAL(推定)</td><td class="num">約¥130,000</td><td>○AY</td><td>○JAL/AY</td></tr>
-<tr><td>🇱🇰 <b>コロンボ</b><span class="small">(スリランカ)</span></td><td class="num">要確認</td><td>JAL提携(距離制)</td><td class="num">ゼロ可※</td><td>—</td><td>○UL</td></tr>
-<tr><td>🇶🇦 <b>ドーハ</b><span class="small">(カタール)</span></td><td class="num">要確認</td><td>JAL提携(距離制)</td><td class="num">ゼロ可※</td><td>○QR</td><td>○QR</td></tr>
-<tr><td>🇫🇯 <b>ナンディ(フィジー)</b><span class="small"></span></td><td class="num">要確認</td><td>JAL提携(距離制)</td><td class="num">要確認</td><td>—</td><td>○FJ※</td></tr>
-<tr><td>🇨🇦 <b>バンクーバー</b><span class="small">(カナダ)</span></td><td class="num">要確認</td><td>ANA提携(要確認)</td><td class="num">ゼロ可※</td><td>—</td><td>○AC※</td></tr>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇰🇷</span><b>ソウル</b><span class="lco">韓国</span><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>15,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>12,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥14,800</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇹🇼</span><b>台北</b><span class="lco">台湾</span><span class="ldir">直行: 関 ○・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>20,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>17,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥33,800</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇭🇰</span><b>香港</b><span class="ldir">直行: 関 ○・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>20,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>17,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥33,800</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇨🇳</span><b>上海</b><span class="lco">中国</span><span class="ldir">直行: 関 ○・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>20,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>17,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥33,800</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇵🇭</span><b>マニラ</b><span class="lco">フィリピン</span><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>20,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>17,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥45,000</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇬🇺</span><b>グアム</b><span class="lco">アメリカ領</span><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>20,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>要確認 <i>ANA→UA</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥45,000</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇹🇭</span><b>バンコク</b><span class="lco">タイ</span><span class="ldir">直行: 関 ○・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>35,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>30,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥70,000</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇸🇬</span><b>シンガポール</b><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>35,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>30,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥70,000</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇲🇾</span><b>クアラルンプール</b><span class="lco">マレーシア</span><span class="ldir">直行: 関 ○・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>35,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>30,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥70,000</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇻🇳</span><b>ハノイ</b><span class="lco">ベトナム</span><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>35,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>30,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥45,000</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇻🇳</span><b>ホーチミン</b><span class="lco">ベトナム</span><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>35,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>30,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥45,000</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇮🇩</span><b>ジャカルタ</b><span class="lco">インドネシア</span><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>35,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>30,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥80,800</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇮🇳</span><b>デリー</b><span class="lco">インド</span><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>要確認</b></span><span class="lnum"><small>MR移行で最安</small><b>30,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥80,800</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🌺</span><b>ホノルル</b><span class="lco">ハワイ</span><span class="ldir">直行: 関 ○・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>40,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>35,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥80,800</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇦🇺</span><b>シドニー</b><span class="lco">オーストラリア</span><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>36,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>37,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥130,000</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇦🇺</span><b>メルボルン</b><span class="lco">オーストラリア</span><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>36,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>要確認 <i>カンタス</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥130,000</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🗽</span><b>ニューヨーク</b><span class="lco">アメリカ</span><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>54,000</b></span><span class="lnum"><small>MR移行で最安</small><b>40,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥130,000</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🌴</span><b>ロサンゼルス</b><span class="lco">アメリカ</span><span class="ldir">直行: 関 ○・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>54,000</b></span><span class="lnum"><small>MR移行で最安</small><b>40,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥130,000</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🌉</span><b>サンフランシスコ</b><span class="lco">アメリカ</span><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>54,000</b></span><span class="lnum"><small>MR移行で最安</small><b>40,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥130,000</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇬🇧</span><b>ロンドン</b><span class="lco">イギリス</span><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>54,000</b></span><span class="lnum"><small>MR移行で最安</small><b>45,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥130,000</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇫🇷</span><b>パリ</b><span class="lco">フランス</span><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>54,000</b></span><span class="lnum"><small>MR移行で最安</small><b>45,000 <i>ANA(L)</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥130,000</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇫🇮</span><b>ヘルシンキ</b><span class="lco">フィンランド</span><span class="ldir">直行: 関 ○・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>54,000※</b></span><span class="lnum"><small>MR移行で最安</small><b>要確認 <i>Avios</i></b></span><span class="lnum"><small>燃油(往復)</small><b>約¥130,000</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇱🇰</span><b>コロンボ</b><span class="lco">スリランカ</span><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>距離制※</b></span><span class="lnum"><small>MR移行で最安</small><b>—</b></span><span class="lnum"><small>燃油(往復)</small><b>ゼロ可※</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇶🇦</span><b>ドーハ</b><span class="lco">カタール</span><span class="ldir">直行: 関 ○・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>距離制※</b></span><span class="lnum"><small>MR移行で最安</small><b>要確認 <i>QR Avios</i></b></span><span class="lnum"><small>燃油(往復)</small><b>ゼロ可※</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇫🇯</span><b>ナンディ(フィジー)</b><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>距離制※</b></span><span class="lnum"><small>MR移行で最安</small><b>—</b></span><span class="lnum"><small>燃油(往復)</small><b>要確認</b></span></div></div>
+<div class="lrow"><div class="lrow-top"><span class="lflag">🇨🇦</span><b>バンクーバー</b><span class="lco">カナダ</span><span class="ldir">直行: 関 —・東 ○</span></div><div class="lnums"><span class="lnum"><small>JALマイルで</small><b>—</b></span><span class="lnum"><small>MR移行で最安</small><b>要確認 <i>ANA→AC</i></b></span><span class="lnum"><small>燃油(往復)</small><b>ゼロ可※</b></span></div></div>
 <!-- LISTROWS:END -->
-    </tbody>
-  </table></div>
-  <p class="small">「最少」はシーズン最安(ANAはL期)・基本マイル(JALは空席により増える変動制)。実際の必要数は日程しだいで上がります。</p>
+  </div>
+  <p class="small">「JALマイルで」は基本マイル(空席により増える変動制)、「MR移行で最安」はシーズン最安(ANAはL期)。実際の必要数は日程しだいで上がります。詳細は「さがす」タブのカードで。</p>
 </section>
 
 <!-- ============ マイル術 ============ -->
@@ -526,51 +552,80 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
 
   <div class="card">
     <h3>🗺 全体マップ — どの札でどこへ飛ぶか</h3>
-    <p><b>JALマイル</b>はそのまま使う:</p>
-    <p style="margin-left:10px">① <b>JAL便</b>(基本マイル〜の変動制・燃油あり)<br>② <b>ワンワールド他社便</b>(距離制・25,000マイル〜)— <b>カタール航空・スリランカ航空・アメリカン航空なら燃油ゼロ</b>(二次情報)</p>
-    <p><b>アメックスMR</b>は「使う直前に」移行する(MRのままなら実質無期限):</p>
-    <p style="margin-left:10px">① <b>ANA 1,000P→1,000マイル</b>(最強レート。ただし年40,000マイル上限+ANAコース参加費)<br>② <b>Avios/アジアマイル/カタール/カンタス 1,250P→1,000</b>(ワンワールド系)<br>③ <b>ヴァージン 1,250P→1,000</b>(ANA長距離の隠し玉)<br>④ JALへは2,500P→1,000(レート半分。補充用の非常口)</p>
-    <div class="callout ok"><b>鉄則</b>MRは移行した瞬間から各社マイルの有効期限が走り出す。行き先と空席を確認してから移行する。</div>
+    <div class="hand jal"><b>🔴 JALマイル</b> → そのまま使う
+      <p>① <b>JAL便</b> — 基本マイル〜の変動制・燃油あり</p>
+      <p>② <b>ワンワールド他社便</b> — 距離制・25,000マイル〜。<b>カタール・スリランカ・アメリカンなら燃油ゼロ</b>(二次情報)</p>
+    </div>
+    <div class="hand mr"><b>🔵 アメックスMR</b> → 使う直前に移行(MRのままなら実質無期限)
+      <p>① <b>ANA</b> 1,000P→1,000 — 最強レート。ただし<b>年40,000マイル上限</b>+ANAコース参加費</p>
+      <p>② <b>Avios/アジアマイル/カタール/カンタス</b> 1,250P→1,000 — ワンワールド系</p>
+      <p>③ <b>ヴァージン</b> 1,250P→1,000 — ANA長距離の隠し玉</p>
+      <p>④ JALへは2,500P→1,000 — レート半分。補充用の非常口</p>
+    </div>
+    <div class="callout ok" style="margin-top:10px"><b>鉄則</b>MRは移行した瞬間から各社マイルの有効期限が走り出す。行き先と空席を確認してから移行する。</div>
   </div>
 
   <div class="card">
     <h3>💳 MR移行先 早見表(プラス加入時)</h3>
-    <div class="tbl"><table>
-      <thead><tr><th>移行先</th><th>レート</th><th>同盟</th><th>得意ワザ</th></tr></thead>
-      <tbody>
-        <tr><td><b>ANA</b></td><td class="num">1,000P→1,000</td><td><span class="badge warn2">スタアラ</span></td><td>ANA便全般。Lシーズン北米往復Y 40,000。<b>年40,000マイル上限</b>・ANAコース¥5,500/年</td></tr>
-        <tr><td><b>ブリティッシュ・エアウェイズ(Avios)</b></td><td class="num">1,250P→1,000</td><td><span class="badge ow">OW</span></td><td>JAL便の短距離(ソウル・台北 片道12,500)</td></tr>
-        <tr><td><b>キャセイ(アジアマイル)</b></td><td class="num">1,250P→1,000</td><td><span class="badge ow">OW</span></td><td>香港往復Y 26,000。香港経由アジアも距離制</td></tr>
-        <tr><td><b>カタール航空(Avios)</b></td><td class="num">1,250P→1,000</td><td><span class="badge ow">OW</span></td><td>関空-ドーハ〜欧州・アフリカ方面</td></tr>
-        <tr><td><b>カンタス</b></td><td class="num">1,250P→1,000</td><td><span class="badge ow">OW</span></td><td>オーストラリア方面</td></tr>
-        <tr><td><b>ヴァージンアトランティック</b></td><td class="num">1,250P→1,000</td><td>—</td><td>ANA便のロンドン往復Y 65,000/C 120,000(電話発券・二次情報)</td></tr>
-        <tr><td>シンガポール航空</td><td class="num">1,250P→1,000</td><td><span class="badge warn2">スタアラ</span></td><td>シンガポール方面・A380</td></tr>
-        <tr><td>タイ国際航空/デルタ/エミレーツ/エールフランスKLM/SAS</td><td class="num">1,250P→1,000</td><td>各種</td><td>補助的に</td></tr>
-        <tr><td>JAL</td><td class="num">2,500P→1,000</td><td><span class="badge ow">OW</span></td><td>レートが悪く基本は非推奨。JALマイルの端数補充用</td></tr>
-      </tbody>
-    </table></div>
+    <div class="plist">
+      <div class="prow"><div class="pr-top"><b>ANA</b><span class="badge warn2">スタアラ</span><span class="pr-rate">1,000P→1,000</span></div>
+        <p class="pr-note">ANA便全般に最強レート。Lシーズン北米往復Y 40,000。<b>年40,000マイル上限</b>・ANAコース¥5,500/年</p></div>
+      <div class="prow"><div class="pr-top"><b>ブリティッシュ・エアウェイズ(Avios)</b><span class="badge ow">OW</span><span class="pr-rate">1,250P→1,000</span></div>
+        <p class="pr-note">JAL便の短距離が得意(ソウル・台北 片道12,500)</p></div>
+      <div class="prow"><div class="pr-top"><b>キャセイ(アジアマイル)</b><span class="badge ow">OW</span><span class="pr-rate">1,250P→1,000</span></div>
+        <p class="pr-note">香港往復Y 26,000。香港経由アジアも距離制で組める</p></div>
+      <div class="prow"><div class="pr-top"><b>カタール航空(Avios)</b><span class="badge ow">OW</span><span class="pr-rate">1,250P→1,000</span></div>
+        <p class="pr-note">関空-ドーハ〜欧州・アフリカ方面</p></div>
+      <div class="prow"><div class="pr-top"><b>カンタス</b><span class="badge ow">OW</span><span class="pr-rate">1,250P→1,000</span></div>
+        <p class="pr-note">オーストラリア方面</p></div>
+      <div class="prow"><div class="pr-top"><b>ヴァージンアトランティック</b><span class="pr-rate">1,250P→1,000</span></div>
+        <p class="pr-note">ANA便のロンドン往復Y 65,000/C 120,000(電話発券・二次情報)</p></div>
+      <div class="prow"><div class="pr-top">シンガポール航空<span class="badge warn2">スタアラ</span><span class="pr-rate">1,250P→1,000</span></div>
+        <p class="pr-note">シンガポール方面・A380</p></div>
+      <div class="prow"><div class="pr-top">タイ国際航空/デルタ/エミレーツ/AF-KLM/SAS<span class="pr-rate">1,250P→1,000</span></div>
+        <p class="pr-note">補助的に</p></div>
+      <div class="prow"><div class="pr-top">JAL<span class="badge ow">OW</span><span class="pr-rate">2,500P→1,000</span></div>
+        <p class="pr-note">レートが悪く基本は非推奨。JALマイルの端数補充用</p></div>
+    </div>
     <p class="small">前提: メンバーシップ・リワード・プラス(¥3,300/年)加入。未加入は全社2,000P→1,000(ANA・JALはさらに低率)。<b>エティハドは2026年6月・フィンエアーは2024年8月に移行終了</b> — 古いブログ情報に注意。初回移行は約2週間かかる(公式FAQ)。</p>
   </div>
 
   <div class="card">
     <h3>🌐 ワンワールド加盟16社(2026年7月)</h3>
     <p class="small">全社<b>JALマイル(提携特典・距離制)で搭乗可</b>。<span class="badge mr">MR</span>=MRから直接マイル移行できる会社、<span class="badge okb">燃油0</span>=JALマイル発券で燃油がかからない会社(二次情報)。</p>
-    <p>JAL / <b>キャセイパシフィック</b><span class="badge mr">MR</span> / <b>ブリティッシュ・エアウェイズ</b><span class="badge mr">MR</span> / <b>カタール航空</b><span class="badge mr">MR</span><span class="badge okb">燃油0</span> / <b>カンタス</b><span class="badge mr">MR</span> / アメリカン航空<span class="badge okb">燃油0</span> / アラスカ航空<span class="badge okb">燃油0</span> / スリランカ航空<span class="badge okb">燃油0</span> / フィンエアー / イベリア / マレーシア航空 / ロイヤル・エア・モロッコ / ロイヤル・ヨルダン / オマーン航空(2025年6月加盟) / フィジー・エアウェイズ(2025年4月加盟) / ハワイアン航空(2026年4月加盟・アラスカに統合)</p>
+    <div class="owgrid">
+      <span class="owchip"><b>JAL</b></span>
+      <span class="owchip"><b>キャセイパシフィック</b><span class="badge mr">MR</span></span>
+      <span class="owchip"><b>ブリティッシュ・エアウェイズ</b><span class="badge mr">MR</span></span>
+      <span class="owchip"><b>カタール航空</b><span class="badge mr">MR</span><span class="badge okb">燃油0</span></span>
+      <span class="owchip"><b>カンタス</b><span class="badge mr">MR</span></span>
+      <span class="owchip">アメリカン航空<span class="badge okb">燃油0</span></span>
+      <span class="owchip">アラスカ航空<span class="badge okb">燃油0</span></span>
+      <span class="owchip">スリランカ航空<span class="badge okb">燃油0</span></span>
+      <span class="owchip">フィンエアー</span>
+      <span class="owchip">イベリア</span>
+      <span class="owchip">マレーシア航空</span>
+      <span class="owchip">ロイヤル・エア・モロッコ</span>
+      <span class="owchip">ロイヤル・ヨルダン</span>
+      <span class="owchip">オマーン航空 <i class="lco">2025/6加盟</i></span>
+      <span class="owchip">フィジー・エアウェイズ <i class="lco">2025/4加盟</i></span>
+      <span class="owchip">ハワイアン航空 <i class="lco">2026/4加盟・AS統合</i></span>
+    </div>
     <p class="small">フィリピン航空が加盟予定(2027年ごろ見込み)。ANAは<b>スターアライアンス</b>なのでこのリストには入らない(MR→ANAで別ルートとして使う)。</p>
   </div>
 
   <div class="card">
     <h3>⛽ 燃油サーチャージ早見表 — <b>いま過去最高水準</b></h3>
-    <p class="small">2026年7月1日〜8月31日発券分・日本発<b>片道</b>1人あたり。特典航空券にも同額かかる(JAL・ANA公式)。</p>
-    <div class="tbl"><table>
-      <thead><tr><th>方面</th><th>JAL便</th><th>ANA便</th><th>往復にすると</th></tr></thead>
+    <p class="small">2026年7月1日〜8月31日発券分・日本発1人あたり。片道はJAL基準(カッコ=ANAが安い場合)。特典航空券にも同額かかる(JAL・ANA公式)。</p>
+    <div class="tbl fit"><table>
+      <thead><tr><th>方面</th><th>片道</th><th>往復目安</th></tr></thead>
       <tbody>
-        <tr><td>韓国</td><td class="num">¥7,400</td><td class="num">¥7,400</td><td class="num">約¥14,800</td></tr>
-        <tr><td>中国・台湾・香港</td><td class="num">¥16,900</td><td class="num">¥15,400</td><td class="num">約¥31,000〜34,000</td></tr>
-        <tr><td>ベトナム・フィリピン・グアム</td><td class="num">¥22,500</td><td class="num">¥22,500</td><td class="num">約¥45,000</td></tr>
-        <tr><td>タイ・シンガポール・マレーシア</td><td class="num">¥35,000</td><td class="num">¥33,500</td><td class="num">約¥67,000〜70,000</td></tr>
-        <tr><td>ハワイ・インド・インドネシア</td><td class="num">¥40,400</td><td class="num">¥40,400</td><td class="num">約¥80,800</td></tr>
-        <tr><td>北米・欧州・中東・オセアニア</td><td class="num">¥65,000</td><td class="num">¥65,000</td><td class="num">約¥130,000</td></tr>
+        <tr><td>韓国</td><td class="num">¥7,400</td><td class="num">¥14,800</td></tr>
+        <tr><td>中国・台湾・香港</td><td class="num">¥16,900<br><i class="lco">(ANA ¥15,400)</i></td><td class="num">¥31,000〜33,800</td></tr>
+        <tr><td>ベトナム・フィリピン・グアム</td><td class="num">¥22,500</td><td class="num">¥45,000</td></tr>
+        <tr><td>タイ・シンガポール・マレーシア</td><td class="num">¥35,000<br><i class="lco">(ANA ¥33,500)</i></td><td class="num">¥67,000〜70,000</td></tr>
+        <tr><td>ハワイ・インド・インドネシア</td><td class="num">¥40,400</td><td class="num">¥80,800</td></tr>
+        <tr><td>北米・欧州・中東・オセアニア</td><td class="num">¥65,000</td><td class="num">¥130,000</td></tr>
       </tbody>
     </table></div>
     <div class="callout warn"><b>9月以降の発券分は8月中旬に発表(未定)</b>報道では下落方向の観測あり。急ぎでない長距離の発券は、発表を見てからでも遅くない(座席と相談)。燃油は「発券日」基準で決まる。</div>
@@ -646,16 +701,18 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
 
   <div class="card">
     <h3>⏳ 失効メモ — マイルの寿命</h3>
-    <div class="tbl"><table>
-      <thead><tr><th>プログラム</th><th>有効期限</th><th>メモ</th></tr></thead>
-      <tbody>
-        <tr><td><b>アメックスMR</b></td><td>実質無期限</td><td>プラス加入時。<b>だからMRのまま置いて、使う直前に移行</b></td></tr>
-        <tr><td><b>JAL</b></td><td class="num">60ヶ月</td><td>2025年1月以降に貯めた分から(それ以前分は36ヶ月)。上位ステータスは無期限</td></tr>
-        <tr><td><b>ANA</b></td><td class="num">36ヶ月</td><td>MRから移行した分もここから3年。移行タイミングに注意</td></tr>
-        <tr><td>Avios(BA)</td><td class="num">36ヶ月<span class="small">※</span></td><td>無活動で失効・出入りがあれば延命(要確認)</td></tr>
-        <tr><td>アジアマイル</td><td class="num">18ヶ月<span class="small">※</span></td><td>無活動で失効・出入りがあれば延命(要確認)</td></tr>
-      </tbody>
-    </table></div>
+    <div class="plist">
+      <div class="prow"><div class="pr-top"><b>アメックスMR</b><span class="pr-rate">実質無期限</span></div>
+        <p class="pr-note">プラス加入時。<b>だからMRのまま置いて、使う直前に移行</b></p></div>
+      <div class="prow"><div class="pr-top"><b>JAL</b><span class="pr-rate">60ヶ月</span></div>
+        <p class="pr-note">2025年1月以降に貯めた分から(それ以前分は36ヶ月)。上位ステータスは無期限</p></div>
+      <div class="prow"><div class="pr-top"><b>ANA</b><span class="pr-rate">36ヶ月</span></div>
+        <p class="pr-note">MRから移行した分もここから3年。移行タイミングに注意</p></div>
+      <div class="prow"><div class="pr-top">Avios(BA)<span class="pr-rate">36ヶ月※</span></div>
+        <p class="pr-note">無活動で失効・出入りがあれば延命(要確認)</p></div>
+      <div class="prow"><div class="pr-top">アジアマイル<span class="pr-rate">18ヶ月※</span></div>
+        <p class="pr-note">無活動で失効・出入りがあれば延命(要確認)</p></div>
+    </div>
   </div>
 </section>
 
@@ -669,7 +726,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
 
   <div class="card">
     <h3>📖 用語ミニ辞典</h3>
-    <div class="tbl"><table>
+    <div class="tbl fit"><table>
       <tbody>
         <tr><td><b>基本マイル</b></td><td>JAL便特典の「最低ライン」。空席が少ないと自動で増える変動制(JAL国際線特典航空券PLUS・2025年6月10日改定で路線別に)。このアプリの「JAL ◯◯〜」はこの最低ライン</td></tr>
         <tr><td><b>L / R / H</b></td><td>ANAのシーズン区分(ロー/レギュラー/ハイ)。同じ行き先でも時期で必要マイルが変わる。夏休み・年末年始はH</td></tr>
@@ -682,7 +739,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
 
   <div class="card">
     <h3>🔴 JAL便 基本マイル(往復エコノミー・確認できた分のみ)</h3>
-    <div class="tbl"><table>
+    <div class="tbl fit"><table>
       <thead><tr><th>方面</th><th>往復Y</th><th>往復C</th><th>確度</th></tr></thead>
       <tbody>
         <tr><td>ソウル</td><td class="num">15,000</td><td class="num">36,000</td><td>※改定後の据え置き未確認</td></tr>
@@ -697,7 +754,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
 
   <div class="card">
     <h3>🔵 ANA便 必要マイル(往復エコノミー L/R/H)</h3>
-    <div class="tbl"><table>
+    <div class="tbl fit"><table>
       <thead><tr><th>方面</th><th>L</th><th>R</th><th>H</th></tr></thead>
       <tbody>
         <tr><td>韓国</td><td class="num">12,000</td><td class="num">15,000</td><td class="num">24,000</td></tr>

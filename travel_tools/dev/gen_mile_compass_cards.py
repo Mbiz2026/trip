@@ -21,6 +21,36 @@ LNG = '約¥130,000'
 ZERO = '<b>なし</b>※(諸税のみ)'
 CXYQ = 'あり(HK$建て・要確認)'
 
+# 一覧表・カードサマリ用: id -> (JALマイルで, MR移行で最安, 並べ替えキー)
+LISTMETA = {
+    'seoul':        ('15,000※', '12,000 <i>ANA(L)</i>', 12000),
+    'taipei':       ('20,000※', '17,000 <i>ANA(L)</i>', 17000),
+    'hongkong':     ('20,000※', '17,000 <i>ANA(L)</i>', 17000),
+    'shanghai':     ('20,000※', '17,000 <i>ANA(L)</i>', 17000),
+    'manila':       ('20,000※', '17,000 <i>ANA(L)</i>', 17000),
+    'bangkok':      ('35,000※', '30,000 <i>ANA(L)</i>', 30000),
+    'singapore':    ('35,000※', '30,000 <i>ANA(L)</i>', 30000),
+    'kualalumpur':  ('35,000※', '30,000 <i>ANA(L)</i>', 30000),
+    'hanoi':        ('35,000※', '30,000 <i>ANA(L)</i>', 30000),
+    'hochiminh':    ('35,000※', '30,000 <i>ANA(L)</i>', 30000),
+    'jakarta':      ('35,000※', '30,000 <i>ANA(L)</i>', 30000),
+    'delhi':        ('要確認', '30,000 <i>ANA(L)</i>', 30000),
+    'colombo':      ('距離制※', '—', 10**9),
+    'doha':         ('距離制※', '要確認 <i>QR Avios</i>', 10**9),
+    'guam':         ('20,000※', '要確認 <i>ANA→UA</i>', 20000),
+    'honolulu':     ('40,000※', '35,000 <i>ANA(L)</i>', 35000),
+    'nadi':         ('距離制※', '—', 10**9),
+    'sydney':       ('36,000※', '37,000 <i>ANA(L)</i>', 36000),
+    'melbourne':    ('36,000※', '要確認 <i>カンタス</i>', 36000),
+    'london':       ('54,000', '45,000 <i>ANA(L)</i>', 45000),
+    'paris':        ('54,000', '45,000 <i>ANA(L)</i>', 45000),
+    'helsinki':     ('54,000※', '要確認 <i>Avios</i>', 54000),
+    'newyork':      ('54,000', '40,000 <i>ANA(L)</i>', 40000),
+    'losangeles':   ('54,000', '40,000 <i>ANA(L)</i>', 40000),
+    'sanfrancisco': ('54,000', '40,000 <i>ANA(L)</i>', 40000),
+    'vancouver':    ('—', '要確認 <i>ANA→AC</i>', 10**9),
+}
+
 def mr(p): return f'<span class="badge mr">MR</span>'
 OW = '<span class="badge ow">OW</span>'
 STAR = '<span class="badge warn2">スタアラ</span>'
@@ -293,11 +323,9 @@ def card(d):
     if d.get('dt'): cls += ' dt'
     if d.get('yq1'): cls += ' yq1'
     attrs = ''.join(f' data-{k}="{v}"' for k, v in d.get('data', {}).items())
-    if d['minv']:
-        mark = ' ※' if d['minmark'] else ''
-        csub = f"{d['rgl']}・✈ {d['time']}・最少 <span class=\"num\">{d['minv']}</span>{mark}〜・燃油往復 <span class=\"num\">{d['yqlist']}</span>"
-    else:
-        csub = f"{d['rgl']}・✈ {d['time']}・距離制チャート(要確認)・燃油 {d['yqlist']}"
+    jd, md, _key = LISTMETA[d['id']]
+    csub = (f"{d['rgl']}・✈ {d['time']}<br>"
+            f"JAL <span class=\"num\">{jd}</span> / MR <span class=\"num\">{md}</span> / 燃油 <span class=\"num\">{d['yqlist']}</span>")
     country = f'<span class="small"> {d["country"]}</span>' if d['country'] else ''
     rows = ''.join(
         f'<tr><td>{r[0]}</td><td>{r[1]}</td><td class="num">{r[2]}</td><td>{r[3]}</td></tr>'
@@ -314,15 +342,17 @@ def card(d):
 </details>'''
 
 def listrow(d):
-    if d['minv']:
-        mark = ' ※' if d['minmark'] else ''
-        mv = f"<b>{d['minv']}</b>{mark}"
-        key = int(d['minv'].replace(',', ''))
-    else:
-        mv = '要確認'
-        key = 10**9
-    country = f"({d['country']})" if d['country'] else ''
-    return key, f"<tr><td>{d['flag']} <b>{d['city']}</b><span class=\"small\">{country}</span></td><td class=\"num\">{mv}</td><td>{d['minprog']}</td><td class=\"num\">{d['yqlist']}</td><td>{d['kx']}</td><td>{d['tk']}</td></tr>"
+    jd, md, key = LISTMETA[d['id']]
+    country = f'<span class="lco">{d["country"]}</span>' if d['country'] else ''
+    dirs = f"直行: 関 {'○' if d.get('dk') else '—'}・東 {'○' if d.get('dt') else '—'}"
+    return key, (
+        f'<div class="lrow"><div class="lrow-top"><span class="lflag">{d["flag"]}</span>'
+        f'<b>{d["city"]}</b>{country}<span class="ldir">{dirs}</span></div>'
+        f'<div class="lnums">'
+        f'<span class="lnum"><small>JALマイルで</small><b>{jd}</b></span>'
+        f'<span class="lnum"><small>MR移行で最安</small><b>{md}</b></span>'
+        f'<span class="lnum"><small>燃油(往復)</small><b>{d["yqlist"]}</b></span>'
+        f'</div></div>')
 
 cards_html = '<!-- DESTCARDS:BEGIN (生成: travel_tools/dev/gen_mile_compass_cards.py・データ確認日2026-07-16) -->\n' \
     + '\n'.join(card(d) for d in D) + '\n<!-- DESTCARDS:END -->'

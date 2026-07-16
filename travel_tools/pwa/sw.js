@@ -1,9 +1,10 @@
-/* 航空券サーチ司令塔 Service Worker
+/* trip系ツール Service Worker(航空券サーチ司令塔 + マイルコンパス)
    方針: 本体(ナビゲーション)はネット優先(常に最新)、圏外ならキャッシュで起動。
    アイコン等の静的ファイルはキャッシュ優先。外部サイトへのリンクは一切触らない。 */
-const VERSION = 'flight-finder-v1';
+const VERSION = 'trip-tools-v2';
 const ASSETS = [
   './',
+  'mile.html',
   'manifest.webmanifest',
   'icon-192.png',
   'icon-512.png',
@@ -32,15 +33,16 @@ self.addEventListener('fetch', (e) => {
   if (url.origin !== location.origin) return; // 外部サイトは素通し
 
   if (req.mode === 'navigate') {
-    // 本体: ネット優先 → 圏外はキャッシュ
+    // 本体: ネット優先 → 圏外はキャッシュ(ページごとに保存。'./'固定にすると
+    // mile.htmlを開いたとき司令塔のオフラインキャッシュが上書きされてしまう)
     e.respondWith(
       fetch(req)
         .then((res) => {
           const copy = res.clone();
-          caches.open(VERSION).then((c) => c.put('./', copy));
+          caches.open(VERSION).then((c) => c.put(req, copy));
           return res;
         })
-        .catch(() => caches.match('./'))
+        .catch(() => caches.match(req).then((hit) => hit || caches.match('./')))
     );
     return;
   }

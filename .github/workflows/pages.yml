@@ -8,6 +8,7 @@ on:
     branches: [claude/flight-search-app-55ozq4, main]
     paths:
       - travel_tools/flight_finder.html
+      - travel_tools/mile_compass.html
       - travel_tools/pwa/**
       - .github/workflows/pages.yml
   workflow_dispatch:
@@ -33,6 +34,7 @@ jobs:
         run: |
           mkdir dist
           cp travel_tools/flight_finder.html dist/index.html
+          cp travel_tools/mile_compass.html dist/mile.html
           cp travel_tools/pwa/* dist/
           ls -la dist
       - uses: actions/configure-pages@v5

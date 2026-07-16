@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#0D6B65">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1726">
+<title>マイルコンパス — マイルで行き先さがし</title>
+</head>
+<body>
+<style>
+:root{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+  --jal:#97282F; --jal-bg:#F7E8E9; --mr:#1D5FA7; --mr-bg:#E4EEF8;
+  --font-body:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium","Yu Gothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
+  --font-disp:"Avenir Next","Avenir","Futura","Trebuchet MS",var(--font-body);
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+    --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+    --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+    --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+    --ok:#86C295; --ok-bg:#16301C;
+    --jal:#E88C92; --jal-bg:#3A1E20; --mr:#8CB8E8; --mr-bg:#182C44;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+  --jal:#97282F; --jal-bg:#F7E8E9; --mr:#1D5FA7; --mr-bg:#E4EEF8;
+}
+:root[data-theme="dark"]{
+  --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+  --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+  --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+  --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+  --ok:#86C295; --ok-bg:#16301C;
+  --jal:#E88C92; --jal-bg:#3A1E20; --mr:#8CB8E8; --mr-bg:#182C44;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);line-height:1.65;font-size:15.5px;-webkit-text-size-adjust:100%}
+.wrap{max-width:700px;margin:0 auto;padding:0 14px 72px}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px;word-break:break-all}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+header.app{padding:22px 2px 10px}
+.eyebrow{font-family:var(--font-disp);font-size:11px;letter-spacing:.16em;color:var(--accent);font-weight:600;text-transform:uppercase}
+header.app h1{margin:2px 0 6px;font-size:26px;line-height:1.3;letter-spacing:.01em;color:var(--navy);text-wrap:balance}
+.stamp{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.stamp span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
+
+/* ラジオボタン式タブ: JavaScriptが無い環境でも動く */
+.tabradio{position:absolute;width:1px;height:1px;opacity:0;margin:0;pointer-events:none}
+nav.tabs{position:sticky;top:0;z-index:30;background:var(--bg);padding:8px 0 10px;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600;cursor:pointer;user-select:none}
+#t-find:checked~nav .tab[for="t-find"],#t-list:checked~nav .tab[for="t-list"],#t-waza:checked~nav .tab[for="t-waza"],#t-base:checked~nav .tab[for="t-base"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+#t-find:focus-visible~nav .tab[for="t-find"],#t-list:focus-visible~nav .tab[for="t-list"],#t-waza:focus-visible~nav .tab[for="t-waza"],#t-base:focus-visible~nav .tab[for="t-base"]{outline:2px solid var(--accent);outline-offset:2px}
+section.pane{display:none}
+#t-find:checked~#pane-find,#t-list:checked~#pane-list,#t-waza:checked~#pane-waza,#t-base:checked~#pane-base{display:block}
+
+.sec-head{margin:16px 2px 12px}
+.sec-head h2{margin:2px 0 4px;font-size:20px;color:var(--navy);letter-spacing:.01em}
+.sec-head .lede{margin:0;font-size:13.5px;color:var(--muted)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 15px;margin:0 0 12px}
+.card h3{margin:0 0 8px;font-size:15.5px;color:var(--navy)}
+.card h4{margin:14px 0 6px;font-size:13.5px;color:var(--navy)}
+.card p{margin:6px 0}
+.small{font-size:12.5px;color:var(--muted)}
+.callout{border:1px solid transparent;border-radius:10px;padding:12px 14px;margin:0 0 12px;font-size:14px}
+.callout.danger{background:var(--danger-bg);color:var(--danger)}
+.callout.warn{background:var(--warn-bg);color:var(--warn)}
+.callout.ok{background:var(--ok-bg);color:var(--ok)}
+.callout b{display:block;margin-bottom:4px}
+.badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:2px 8px;vertical-align:middle;white-space:nowrap}
+.badge.ow{background:var(--accent-soft);color:var(--accent)}
+.badge.mr{background:var(--mr-bg);color:var(--mr)}
+.badge.jalb{background:var(--jal-bg);color:var(--jal)}
+.badge.warn2{background:var(--warn-bg);color:var(--warn)}
+.badge.ng{background:var(--danger-bg);color:var(--danger)}
+.badge.okb{background:var(--ok-bg);color:var(--ok)}
+
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin:0 0 12px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:480px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+th{font-size:12px;color:var(--muted);font-weight:600;background:var(--surface2);white-space:nowrap}
+td.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.calc{display:grid;gap:10px}
+.calc label{font-size:12.5px;color:var(--muted);display:block;margin-bottom:3px}
+.calc input,.calc select{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:10px 12px;font-size:16px}
+.calc input[type="number"]{font-family:var(--font-mono)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.result{background:var(--accent-soft);border-radius:9px;padding:10px 13px;font-size:14px}
+.result b{font-family:var(--font-mono);font-size:19px;font-variant-numeric:tabular-nums;color:var(--accent)}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--on-accent);border-radius:8px;padding:9px 16px;font-size:14px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+
+/* ---- 絞り込みチップ(ラジオ+CSSのみで動く) ---- */
+.fgroup{margin:0 0 10px}
+.fgroup>span.fl{display:block;font-family:var(--font-disp);font-size:11px;letter-spacing:.14em;color:var(--muted);font-weight:600;text-transform:uppercase;margin:0 0 6px}
+.fchips{display:flex;gap:6px;flex-wrap:wrap}
+.fchip{display:inline-flex}
+.fchip input{position:absolute;width:1px;height:1px;opacity:0;margin:0;pointer-events:none}
+.fchip span{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;cursor:pointer;min-height:34px;user-select:none}
+.fchip input:checked+span{background:var(--navy);border-color:var(--navy);color:var(--bg)}
+.fchip input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---- 絞り込みの表示ルール(:has対応ブラウザでJS不要で動く。非対応なら全件表示のまま) ---- */
+body:has(#r-easia:checked) .dest:not(.rg-easia){display:none}
+body:has(#r-seasia:checked) .dest:not(.rg-seasia){display:none}
+body:has(#r-sasia:checked) .dest:not(.rg-sasia){display:none}
+body:has(#r-beach:checked) .dest:not(.rg-beach){display:none}
+body:has(#r-oceania:checked) .dest:not(.rg-oceania){display:none}
+body:has(#r-europe:checked) .dest:not(.rg-europe){display:none}
+body:has(#r-namerica:checked) .dest:not(.rg-namerica){display:none}
+body:has(#mb-15:checked) .dest:not(.b1){display:none}
+body:has(#mb-20:checked) .dest:not(.b1):not(.b2){display:none}
+body:has(#mb-30:checked) .dest:not(.b1):not(.b2):not(.b3){display:none}
+body:has(#mb-40:checked) .dest:not(.b1):not(.b2):not(.b3):not(.b4){display:none}
+body:has(#tm-4:checked) .dest:not(.t1){display:none}
+body:has(#tm-8:checked) .dest:not(.t1):not(.t2){display:none}
+body:has(#d-kansai:checked) .dest:not(.dk){display:none}
+body:has(#d-tokyo:checked) .dest:not(.dt){display:none}
+body:has(#yq-low:checked) .dest:not(.yq1){display:none}
+
+/* ---- 行き先カード ---- */
+details.dest{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:0 0 10px;overflow:hidden}
+details.dest>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;min-height:44px}
+details.dest>summary::-webkit-details-marker{display:none}
+.dest .flag{font-size:22px;flex:none}
+.dest .cname{font-weight:700;font-size:15.5px;line-height:1.35}
+.dest .csub{font-size:11.5px;color:var(--muted);display:block;line-height:1.5;font-weight:400}
+.dest .csub .num{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.dest .spacer{margin-left:auto;display:flex;align-items:center;gap:8px}
+.dest .chev{color:var(--muted);font-size:12px;transition:transform .15s}
+.dest[open] .chev{transform:rotate(90deg)}
+.dbody{border-top:1px solid var(--line);padding:10px 14px 13px;background:var(--surface)}
+.dbody .tbl{margin-top:8px}
+.dbody table{min-width:560px;font-size:13px}
+.dnote{font-size:13px;color:var(--muted);margin:8px 0 0}
+.dwarn{font-size:13px;color:var(--warn);background:var(--warn-bg);border-radius:7px;padding:8px 10px;margin:8px 0 0}
+.reach{display:none}
+.dest.reach-ok .reach{display:inline-block}
+
+.cat-h{font-family:var(--font-disp);font-size:11px;letter-spacing:.14em;color:var(--muted);font-weight:600;margin:16px 2px 8px;text-transform:uppercase}
+.lbtn{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:10px 13px;margin:0 0 8px;text-decoration:none;color:var(--ink);font-size:14.5px;font-weight:600;min-height:44px}
+.lbtn small{display:block;color:var(--muted);font-weight:400;font-size:12px;line-height:1.45}
+.lbtn .go{color:var(--accent);flex:none;font-size:13px;font-weight:700}
+.jsnote{font-size:12px;color:var(--muted);margin:6px 0 0}
+
+footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);line-height:1.7}
+</style>
+<div class="wrap">
+<header class="app">
+  <span class="eyebrow">Mile Compass — 2026</span>
+  <h1>マイルコンパス<br>マイルで行き先さがし</h1>
+  <div class="stamp">
+    <span><span class="dot"></span>情報確認日 2026-07-16</span>
+    <span><span class="dot"></span>JALマイル × アメックスMR 特化</span>
+    <span><span class="dot"></span>関西発を優先収録</span>
+  </div>
+  <noscript><div class="callout warn" style="margin-top:10px"><b>ℹ このままでも行き先さがし・マイル早見はすべて使えます</b>いまはJavaScriptが無効の表示です(ファイルAppのプレビューなど)。「保有マイルで判定」「計算機」だけはブラウザ(Safari/Chrome)で開くと有効になります。</div></noscript>
+</header>
+
+<input class="tabradio" type="radio" name="tab" id="t-find" checked>
+<input class="tabradio" type="radio" name="tab" id="t-list">
+<input class="tabradio" type="radio" name="tab" id="t-waza">
+<input class="tabradio" type="radio" name="tab" id="t-base">
+
+<nav class="tabs" aria-label="メニュー">
+  <label class="tab" for="t-find">🧭 さがす</label>
+  <label class="tab" for="t-list">📊 一覧表</label>
+  <label class="tab" for="t-waza">💳 マイル術</label>
+  <label class="tab" for="t-base">📖 基礎と出典</label>
+</nav>
+
+<!-- ============ さがす ============ -->
+<section class="pane" id="pane-find">
+  <div class="sec-head">
+    <span class="eyebrow">Where Can My Miles Take Me?</span>
+    <h2>条件で行き先をしぼる</h2>
+    <p class="lede">チップを押すと下の行き先カードがその場でしぼり込まれます(JS不要)。カードを開くと「どのマイルで・何マイルで・燃油いくらで」行けるかの早見表が出ます。</p>
+  </div>
+
+  <div class="card">
+    <div class="fgroup">
+      <span class="fl">方面</span>
+      <div class="fchips">
+        <label class="fchip"><input type="radio" name="fr" id="r-all" checked><span>すべて</span></label>
+        <label class="fchip"><input type="radio" name="fr" id="r-easia"><span>東アジア</span></label>
+        <label class="fchip"><input type="radio" name="fr" id="r-seasia"><span>東南アジア</span></label>
+        <label class="fchip"><input type="radio" name="fr" id="r-sasia"><span>南アジア・中東</span></label>
+        <label class="fchip"><input type="radio" name="fr" id="r-beach"><span>ビーチ・島</span></label>
+        <label class="fchip"><input type="radio" name="fr" id="r-oceania"><span>オセアニア</span></label>
+        <label class="fchip"><input type="radio" name="fr" id="r-europe"><span>ヨーロッパ</span></label>
+        <label class="fchip"><input type="radio" name="fr" id="r-namerica"><span>北米</span></label>
+      </div>
+    </div>
+    <div class="fgroup">
+      <span class="fl">マイル予算(往復エコノミーの最低ライン)</span>
+      <div class="fchips">
+        <label class="fchip"><input type="radio" name="fm" id="mb-all" checked><span>指定なし</span></label>
+        <label class="fchip"><input type="radio" name="fm" id="mb-15"><span>〜15,000</span></label>
+        <label class="fchip"><input type="radio" name="fm" id="mb-20"><span>〜20,000</span></label>
+        <label class="fchip"><input type="radio" name="fm" id="mb-30"><span>〜30,000</span></label>
+        <label class="fchip"><input type="radio" name="fm" id="mb-40"><span>〜40,000</span></label>
+      </div>
+    </div>
+    <div class="fgroup">
+      <span class="fl">飛行時間(直行の目安)</span>
+      <div class="fchips">
+        <label class="fchip"><input type="radio" name="ft" id="tm-all" checked><span>指定なし</span></label>
+        <label class="fchip"><input type="radio" name="ft" id="tm-4"><span>〜4時間台</span></label>
+        <label class="fchip"><input type="radio" name="ft" id="tm-8"><span>〜8時間台</span></label>
+      </div>
+    </div>
+    <div class="fgroup">
+      <span class="fl">こだわり</span>
+      <div class="fchips">
+        <label class="fchip"><input type="radio" name="fd" id="d-all" checked><span>指定なし</span></label>
+        <label class="fchip"><input type="radio" name="fd" id="d-kansai"><span>関西から直行あり</span></label>
+        <label class="fchip"><input type="radio" name="fd" id="d-tokyo"><span>東京から直行あり</span></label>
+        <label class="fchip"><input type="radio" name="fd" id="yq-low"><span>燃油が安い(往復1万円台まで)</span></label>
+      </div>
+    </div>
+    <p class="small" style="margin:8px 0 0">カードが1件も出なくなったら、条件をひとつ「すべて/指定なし」に戻してみてください。</p>
+  </div>
+
+  <div class="card" id="reachCard">
+    <h3>🎯 保有マイルで「射程内」を光らせる <span class="badge okb">JS時のみ</span></h3>
+    <div class="calc">
+      <div class="row2">
+        <div>
+          <label for="my-jal">JALマイル残高</label>
+          <input type="number" id="my-jal" inputmode="numeric" placeholder="例: 30000">
+        </div>
+        <div>
+          <label for="my-mr">アメックスMRポイント残高</label>
+          <input type="number" id="my-mr" inputmode="numeric" placeholder="例: 100000">
+        </div>
+      </div>
+      <div class="result" id="reachOut">残高を入れると、往復エコノミーの最低マイルに届く行き先へ「射程内」マークが付きます(MRは移行レート換算)。</div>
+    </div>
+    <p class="jsnote">※ ブラウザで開いたときだけ動く補助機能です。入力値はこの端末の中だけに保存されます。</p>
+  </div>
+
+  <div class="cat-h">行き先カード(カードを開くと早見表)</div>
+<!--DESTCARDS-->
+</section>
+
+<!--MORE-->
+</div>
+</body>
+</html>

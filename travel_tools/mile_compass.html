@@ -67,10 +67,10 @@ header.app h1{margin:2px 0 6px;font-size:26px;line-height:1.3;letter-spacing:.01
 nav.tabs{position:sticky;top:0;z-index:30;background:var(--bg);padding:8px 0 10px;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 nav.tabs::-webkit-scrollbar{display:none}
 .tab{flex:none;display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600;cursor:pointer;user-select:none}
-#t-find:checked~nav .tab[for="t-find"],#t-list:checked~nav .tab[for="t-list"],#t-waza:checked~nav .tab[for="t-waza"],#t-base:checked~nav .tab[for="t-base"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-#t-find:focus-visible~nav .tab[for="t-find"],#t-list:focus-visible~nav .tab[for="t-list"],#t-waza:focus-visible~nav .tab[for="t-waza"],#t-base:focus-visible~nav .tab[for="t-base"]{outline:2px solid var(--accent);outline-offset:2px}
+#t-find:checked~nav .tab[for="t-find"],#t-list:checked~nav .tab[for="t-list"],#t-waza:checked~nav .tab[for="t-waza"],#t-dojo:checked~nav .tab[for="t-dojo"],#t-base:checked~nav .tab[for="t-base"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+#t-find:focus-visible~nav .tab[for="t-find"],#t-list:focus-visible~nav .tab[for="t-list"],#t-waza:focus-visible~nav .tab[for="t-waza"],#t-dojo:focus-visible~nav .tab[for="t-dojo"],#t-base:focus-visible~nav .tab[for="t-base"]{outline:2px solid var(--accent);outline-offset:2px}
 section.pane{display:none}
-#t-find:checked~#pane-find,#t-list:checked~#pane-list,#t-waza:checked~#pane-waza,#t-base:checked~#pane-base{display:block}
+#t-find:checked~#pane-find,#t-list:checked~#pane-list,#t-waza:checked~#pane-waza,#t-dojo:checked~#pane-dojo,#t-base:checked~#pane-base{display:block}
 
 .sec-head{margin:16px 2px 12px}
 .sec-head h2{margin:2px 0 4px;font-size:20px;color:var(--navy);letter-spacing:.01em}
@@ -189,6 +189,20 @@ details.dest>summary::-webkit-details-marker{display:none}
 .hand.mr{border-left-color:var(--mr)}
 .hand>b{font-size:14px}
 .hand p{margin:4px 0;font-size:13.5px}
+/* 取り方道場: アコーディオン */
+details.acc{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:0 0 10px;overflow:hidden}
+details.acc>summary{list-style:none;display:flex;align-items:center;gap:8px;padding:12px 14px;cursor:pointer;font-weight:700;font-size:14.5px;color:var(--navy);min-height:44px}
+details.acc>summary::-webkit-details-marker{display:none}
+details.acc>summary .chev{margin-left:auto;color:var(--muted);font-size:12px;transition:transform .15s;flex:none}
+details.acc[open]>summary .chev{transform:rotate(90deg)}
+.accbody{border-top:1px solid var(--line);padding:10px 14px 13px;font-size:14px}
+.accbody p{margin:6px 0}
+.accbody ul,.accbody ol{margin:6px 0;padding-left:20px}
+.accbody li{margin:4px 0}
+.kpoint{background:var(--accent-soft);border-radius:8px;padding:8px 11px;margin:8px 0;font-size:13.5px}
+.dojo-h{display:flex;align-items:center;gap:8px;margin:20px 2px 10px}
+.dojo-h .dnum{flex:none;width:26px;height:26px;border-radius:8px;background:var(--navy);color:var(--surface);font-family:var(--font-disp);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+.dojo-h h3{margin:0;font-size:16px;color:var(--navy)}
 .lbtn{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:10px 13px;margin:0 0 8px;text-decoration:none;color:var(--ink);font-size:14.5px;font-weight:600;min-height:44px}
 .lbtn small{display:block;color:var(--muted);font-weight:400;font-size:12px;line-height:1.45}
 .lbtn .go{color:var(--accent);flex:none;font-size:13px;font-weight:700}
@@ -211,12 +225,14 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
 <input class="tabradio" type="radio" name="tab" id="t-find" checked>
 <input class="tabradio" type="radio" name="tab" id="t-list">
 <input class="tabradio" type="radio" name="tab" id="t-waza">
+<input class="tabradio" type="radio" name="tab" id="t-dojo">
 <input class="tabradio" type="radio" name="tab" id="t-base">
 
 <nav class="tabs" aria-label="メニュー">
   <label class="tab" for="t-find">🧭 さがす</label>
   <label class="tab" for="t-list">📊 一覧表</label>
   <label class="tab" for="t-waza">💳 マイル術</label>
+  <label class="tab" for="t-dojo">🎓 取り方道場</label>
   <label class="tab" for="t-base">📖 基礎と出典</label>
 </nav>
 
@@ -407,7 +423,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   <summary><span class="flag">🇬🇺</span><span style="flex:1;min-width:0"><span class="cname">グアム<span class="small"> アメリカ領</span></span><span class="csub">ビーチ・島・✈ 約3.5時間<br>JAL <span class="num">20,000※</span> / MR <span class="num">要確認 <i>ANA→UA</i></span> / 燃油 <span class="num">約¥45,000</span></span></span><span class="spacer"><span class="badge okb reach">★射程内</span><span class="chev">▶</span></span></summary>
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: 直行なし / 東京から: JAL(成田・毎日)</p>
-    <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>20,000</b>〜 ※(旧チャート値)</td><td class="num">約¥45,000</td><td>成田発のみ</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ユナイテッド便(提携特典)</span> <span class="badge warn2">スタアラ</span></td><td>提携チャート・要確認</td><td class="num"><b>なし</b>※(諸税のみ)</td><td>関空-グアム直行のUA便をANAマイルで発券する迂回ルート(二次)</td></tr></tbody></table></div>
+    <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>20,000</b>〜 ※(旧チャート値)</td><td class="num">約¥45,000</td><td>成田発のみ</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ユナイテッド便(提携特典)</span> <span class="badge warn2">スタアラ</span></td><td>提携チャート・要確認(往復Y 20,000※)</td><td class="num">あり※(UAは2026年から日本発で徴収・二次)</td><td>関空-グアム直行のUA便をANAマイルで発券する迂回ルート</td></tr></tbody></table></div>
     <p class="dwarn">⚠ 関西からの直行はユナイテッドのみで、JALマイルでは乗れない。</p>
   </div>
 </details>
@@ -416,7 +432,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
   <div class="dbody">
     <p class="small" style="margin:2px 0 6px">🛫 関西から: JAL(週5〜) / 東京から: JAL・ANA</p>
     <div class="tbl"><table><thead><tr><th>使うマイル</th><th>往復エコノミー</th><th>燃油(往復)</th><th>メモ</th></tr></thead><tbody><tr><td><b>JALマイル</b> <span class="small">→JAL便</span> <span class="badge ow">OW</span></td><td><b>40,000</b>〜 ※(改定後は路線別・要確認)</td><td class="num">約¥80,800</td><td>関空直行あり。Fは片道90,000〜</td></tr><tr><td><b>ANAマイル</b><span class="badge mr">MR 1:1</span> <span class="small">→ANA便</span> <span class="badge warn2">スタアラ</span></td><td>L <b>35,000</b> / R 40,000 / H 65,000</td><td class="num">約¥80,800</td><td>往復C 80,000/85,000/135,000。A380フライングホヌ</td></tr></tbody></table></div>
-    <p class="dnote">💡 ハワイアン航空が2026年4月にワンワールド加盟(アラスカ航空に統合)。JALマイルの選択肢が広がる可能性(要確認)。</p>
+    <p class="dnote">💡 ハワイアン航空が2026年4月にワンワールド加盟(アラスカ航空に統合)。JALマイルでハワイアン便を取ると燃油ゼロ+諸税約3,400円/人という報告あり(二次情報・要確認)。</p>
   </div>
 </details>
 <details class="dest rg-beach t3 b4 dt">
@@ -638,7 +654,7 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
       <li><b>JALマイル → カタール航空</b>: 関空-ドーハ直行(週5)。ドーハ乗継で欧州・アフリカも</li>
       <li><b>JALマイル → スリランカ航空</b>: 成田-コロンボ直行</li>
       <li><b>JALマイル → アメリカン航空</b>: 羽田-ダラス/NY/LAや米国内線</li>
-      <li><b>ANAマイル(MRから) → ユナイテッド・エアカナダ・シンガポール航空など</b>: 関空-グアム(UA)、羽田-バンクーバー(AC)など</li>
+      <li><b>ANAマイル(MRから) → エアカナダ・シンガポール航空・ニュージーランド航空・ベトナム航空など</b>: 羽田-バンクーバー(AC)など。<b>ユナイテッドは2026年から日本発で燃油を取るようになった</b>ので「UA=燃油ゼロ」の古い情報に注意</li>
     </ul>
     <p class="small">逆に、JAL便・ANA便・キャセイ便・BA便は特典でも燃油満額。エミレーツ(2024年〜)とマレーシア航空(2024年12月〜)も徴収に変わった。</p>
   </div>
@@ -714,6 +730,326 @@ footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);fon
         <p class="pr-note">無活動で失効・出入りがあれば延命(要確認)</p></div>
     </div>
   </div>
+</section>
+
+<!-- ============ 取り方道場 ============ -->
+<section class="pane" id="pane-dojo">
+  <div class="sec-head">
+    <span class="eyebrow">Award Booking Dojo</span>
+    <h2>特典航空券 取り方道場</h2>
+    <p class="lede">「マイルはあるのに席が取れない」を卒業するための実戦講座。JALマイルを主軸に、ANA・MR系外資の攻め方まで。確認日 2026-07-16(裏技・経験則は二次情報と明記)。</p>
+  </div>
+<div class="callout ok"><b>3行でわかる要点</b>①発売日はJAL=360日前の午前0時/ANA=355日前の朝9時。②JAL特典は「変更不可・取消3,100円」、ANAは「日付変更無料・取消3,000円」— 柔軟さで選ぶならANA。③満席表示でも出発2週間前ごろの「直前開放」で急に取れることがある(経験則)。</div>
+
+  <div class="dojo-h"><span class="dnum">1</span><h3>JALマイル×JAL便 — 「PLUS」を乗りこなす</h3></div>
+
+  <details class="acc"><summary>⏰ いつから・どうやって予約する<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li><b>発売開始: 搭乗日の360日前・午前0時(日本時間)</b>。2024年3月26日からのルールで、昔の「330日前・10時」情報は古い(公式)</li>
+      <li>締切: Webは第1区間出発の<b>48時間前</b>、電話は24時間前まで(公式)</li>
+      <li><b>片道でも取れる</b>(往復の半分のマイル)。往復予約は往路・復路とも360日以内に入っている必要がある</li>
+      <li>Web発券は手数料無料。<b>電話発券は取扱手数料がかかる</b>(公式・金額は要確認)</li>
+      <li>予約完了=即マイル引き落とし・即発券。「仮押さえ」はできない</li>
+      <li>自分の搭乗日の発売日は公式「<a href="https://www.jal.co.jp/jp/ja/inter/reservation/calculation/" rel="noopener">予約開始日検索</a>」で調べられる</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>🎯 空席の出方と「0時打ち」のコツ<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li><b>0時打ち</b>: 事前にログイン+検索条件を準備し、23:58ごろから待機して0時に検索(二次情報)</li>
+      <li><b>往復ではなく片道で検索・確保</b>する(往復検索は復路未発売でエラーになりがち・二次情報)</li>
+      <li>空席の出やすい二大タイミングは「発売直後」と「<b>出発2週間前ごろ</b>」(二次情報)。売れ残り席が特典枠に回るとされ、平日・閑散期に顕著。ファーストは15〜10日前解放の体験談も</li>
+      <li>公式の<b>空席照会カレンダー(月表示)</b>で日別の必要マイルが見える。「基本マイルの日」を探して日程を寄せるのが最効率</li>
+      <li>直前に高額だった便が基本マイル近くまで下がった実例あり(ホノルルC往復 289,000→80,000の日程が出現・二次情報)。あきらめず直前も見る</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>📈 「基本マイル〜」の変動(PLUS)の読み方<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li>基本マイル=その路線の最低額。<b>基本マイルの席が無いときは、混雑予測に応じた追加マイルを払えば予約できる</b>のがPLUS(公式)</li>
+      <li>必要マイルは「予約した時点」の空席状況で決まり、<b>同じ便でも見る日によって上下する</b></li>
+      <li>繁忙期・残席わずかだと基本の3〜8倍まで上がった実例あり(二次情報)。ソウル線エコノミーで基本7,500→上限60,000(片道)という掲載値も</li>
+      <li><b>ファーストクラスは変動なし</b>(PLUS対象外・シーズン3段階制とみられる。要公式確認)</li>
+      <li>マイルが多めにあるなら「PLUSで多めに払って確実に取る」のも立派な戦術(繁忙期の家族旅行など)</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>🔄 変更・取消のルール(ここ重要)<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li><b>予約変更は一切不可</b>(日付変更もできない)。やり直すなら「取消→取り直し」のみ(公式)</li>
+      <li><b>取消手数料: 3,100円/人</b>(クレカ払いのみ)。マイルが戻る条件は「全区間未使用」かつ「発行から1年以内」(公式)</li>
+      <li><b>ノーショー(出発後)はマイル全損</b>。乗れなくなったら必ず出発前に取消手続き</li>
+      <li>取消時に有効期限が切れていたマイルは戻らない</li>
+      <li>裏返しのワザ: <b>往路・復路を別々の片道特典にしておけば</b>、復路だけ不要になったとき復路分だけ払い戻せる(往復1枚だと往路搭乗後は一切戻らない)</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>👨‍👩‍👧 家族の分を取る(JALは登録不要)<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li>使えるのは<b>本人+配偶者+二親等以内の親族+義兄弟姉妹の配偶者</b>。ANAと違って<b>事前登録は不要</b>。予約時に名前と続柄を入れるだけ(公式)</li>
+      <li>名字が違う家族は関係を示す書類を求められる場合あり。友人・三親等以遠は不可(発覚で特典没収リスク)</li>
+      <li><b>JALカード家族プログラム</b>(無料): 生計同一の配偶者+一親等のマイルを<b>特典交換時に合算</b>できる。「貯める合算は一親等まで・使わせるのは二親等まで」と覚える</li>
+      <li>幼児(2歳未満・膝上)は<b>大人のマイル数の10%</b>。座席を使う子供は大人と同額。大人1名につき幼児2名まで(その場合はWeb不可→電話)</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>🛫 関西発の技: 国内線をタダで足す<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li>国際線特典には<b>往路・復路それぞれ国内線1区間を組み込める</b>。例: 伊丹→羽田→ロンドン+パリ→羽田→伊丹が1特典(公式)</li>
+      <li><b>羽田/成田=「東京」、伊丹/関空=「大阪」の同一都市扱い</b>。伊丹発→関空帰着もOK</li>
+      <li>国内区間を足しても<b>追加の基本マイルは不要</b>とみられる(要確認)。国内区間にも特典空席が必要</li>
+      <li>国内乗継は24時間以内。国内での途中降機(24時間超)は不可 — 前泊するなら国内線は別切りに</li>
+      <li>ビジネス以上で予約時、国内区間は空席があればクラスJに乗れる</li>
+      <li>別切りとの最大の違い: <b>同一航空券なので遅延しても乗継が保護される</b>。組めるなら常にこちらを優先</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>🧪 裏技メモ(JAL便編)<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li><b>燃油またぎ</b>: 燃油は発券日の額で確定(以後の改定は影響なし・公式)。値上げ発表(適用の1〜2ヶ月前)を見たら適用前に発券。値下げ改定後なら「取消3,100円→取り直し」で差額どり(往復差額&gt;手数料+空席リスクを天秤に・二次情報)</li>
+      <li><b>キャンセル待ちはファーストクラスのみ存続</b>(上級会員は優先扱い・公式)。他クラスは自力で拾う</li>
+      <li><b>当日アップグレード</b>: 特典航空券でも空港で1つ上のクラスに空席があればマイルでアップグレード可(公式・細部要確認)</li>
+      <li><b>電話デスクの底力</b>: Webでエラーになる国内線接続込み旅程も、電話なら区間単位で在庫を探して組めることがある(手数料あり・二次情報)</li>
+      <li><b>失効間際のマイル</b>: 発券時に有効なら搭乗日は失効後でもOK。先に発券してしまう(ただし取消すと期限切れ分は消える)</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>⚠ 落とし穴(JAL便編)<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li>名義変更・譲渡・売買は不可(家族間でも席の交換不可)。フリマの「マイル発券代行」は規約違反+没収リスク</li>
+      <li>同一日・同一区間の二重予約は不可。「保険の2枚持ち」は予告なく取り消される場合がある</li>
+      <li>燃油・諸税は<b>クレカ払いのみ。e JALポイント充当不可</b></li>
+      <li>ネットの古い情報に注意: 「330日前・10時発売」「2025年6月10日より前のマイル数表」「キャンセル待ち全廃」はすべて古い</li>
+    </ul>
+  </div></details>
+<!--DOJO-PARTNER-->
+  <div class="dojo-h"><span class="dnum">3</span><h3>ANAマイル(MRから移行) — 355日前・朝9時の勝負</h3></div>
+
+  <details class="acc"><summary>⏰ 基本ルールと片道発券<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li><b>発売: 355日前の朝9:00(日本時間)</b>、締切は出発96時間前(公式)。国内線特典は9:30開始で30分ズレる(接続を組むとき注意)</li>
+      <li><b>2025年6月24日から片道発券が解禁</b>。往復は復路も355日以内に入らないと取れないので、<b>「往路を発売初日に片道で確保→復路は復路の発売日に確保」が現在の定石</b></li>
+      <li>ANA便+提携便が混ざる1枚は割高な提携チャート適用になる — 混ぜるより片道×2で分ける</li>
+      <li>Web発券無料・電話は有料(金額要確認)</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>🎯 空席の出方と「空席待ち」制度<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li>9時打ち: 9時少し前に検索画面を準備→9:00に実行(二次情報)。人気路線のC/Fは数分で消えることも</li>
+      <li><b>ANAには空席待ち制度がある</b>(Webで登録可・1区間1便・出発14日前まで・公式)。マイル残高が足りないと繰り上がっても発券できない点に注意</li>
+      <li>空席待ちの人数はANAのチャット/LINEで「空席待ち人数」と聞くと教えてくれる(二次情報)</li>
+      <li><b>直前開放</b>: 公式発表はないが「出発2週間前〜3日前にポンと出る」経験則は有名マイラー間で一致(二次情報)。C/Fほど恩恵大</li>
+      <li>取りにくいときの視点替え: 東京発着より<b>地方・海外発着が緩い</b>。仁川(ソウル)発着に切り替える「仁川ワープ」、欧米全滅でも東南アジア・オセアニアは空きがち(いずれも二次情報)</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>🗓 シーズン(L/R/H)の狙い方<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li>必要マイルはL(ロー)/R(レギュラー)/H(ハイ)の3段階。<b>往路・復路それぞれの搭乗日で判定</b>して半分ずつ合算</li>
+      <li>H=GW・夏休み(7月中旬〜8月末)・年末年始・3月中旬〜末。L=1月中旬〜2月末・12月上旬・4月中旬・11月下旬あたり(傾向。2026年度の正確な期間は<a href="https://www.ana.co.jp/ja/jp/guide/amc/award/international/terms/" rel="noopener">公式チャート</a>で要確認)</li>
+      <li>「2027年度から4月がL→Rに格上げ」という情報あり(二次情報・未確認)。4月渡航派は早めに公式確認を</li>
+      <li>日付変更でシーズンが変わると差額マイルを追加(または返還)</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>🔄 変更・取消(ANAは柔軟)<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li><b>日付・便の変更は無料・回数無制限</b>(区間・クラス・搭乗者・航空会社は変更不可)(公式)</li>
+      <li><b>取消は3,000マイル or 3,000円</b>(クレカ)の選択制(2025年6月24日以降発券分・公式)</li>
+      <li>マイル失効間際は「とりあえず355日先まで発券→あとで日付変更」が正攻法(発券時に有効ならOK)。ただし取消すると失効分は消える=実質乗るしかない</li>
+      <li>この柔軟さがJALとの最大の違い。<b>予定が固まらない家族旅行はANA(かAvios)で押さえるのが実務的</b></li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>🌏 提携特典(スタアラ)と燃油の注意<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li>スタアラ提携特典は固定チャート(シーズンなし)・<b>変更不可</b>・片道可。ANAサイトでオンライン検索/発券できるが表示が不完全なことがあり、<b>ユナイテッドのサイトで空席を見つけてからANAで同便を検索</b>が定番手順(二次情報)</li>
+      <li><b>⚠ ユナイテッドは2026年時点で日本発券に燃油を設定済み</b>(グアム線 片道6,500円という案内あり)。「UA=燃油ゼロ」の古い定説は崩れている(要予約画面確認)</li>
+      <li>燃油がかからない提携社(2026年時点の二次情報): <b>エアカナダ・シンガポール航空・ニュージーランド航空・ベトナム航空</b>など。欧州系(ルフトハンザ等)は高額転嫁</li>
+      <li>関空-グアム(UA)は往復Y 20,000マイルという特例的な安さの記載あり(※要確認)。直前でも取りやすい定番(二次情報)</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>💳 MR→ANA「年4万マイル上限」の攻略<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li>上限の正確な定義: <b>暦年(1/1〜12/31)で40,000マイルまで</b>。移行は1日1回・初回は約2週間かかる(公式)</li>
+      <li><b>年またぎワザ</b>: 12月に4万+1月に4万で、短期間に実質8万マイル(規約の範囲内)</li>
+      <li><b>家族の口座への移行は不可</b>(MRは本人名義のマイレージ口座限定・公式)。回避したいなら配偶者が自分名義のアメックス本会員になる(別枠4万)→ANAカードファミリーマイルで合算利用</li>
+      <li>過去に「上限なしキャンペーン」あり(2026年1〜3月・ただしレート半分)。<b>通常枠4万を1:1で使い切ってから</b>超過分だけ充てるのが正解。再開催は未定</li>
+      <li>シンガポール航空(クリスフライヤー)でANA便を取るのは<b>損</b>(ANAの燃油をそのまま払う+チャートも割高・二次情報)。KrisFlyerは関空-シンガポールなど<b>SQ自社便専用の第二の財布</b>と割り切る</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>👨‍👩‍👧 家族(ANAは事前登録が必須)<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li>使えるのは本人+配偶者+二親等以内。<b>本人以外は「特典利用者登録」(最大10名)が事前に必要</b>(公式)</li>
+      <li><b>登録の変更・削除は1名5,000マイル</b>かかる(戸籍上の変更・スペル修正は無料)。登録メンバーは慎重に選ぶ</li>
+      <li><b>ANAカードファミリーマイル</b>: 同居・生計同一の配偶者+一親等(最大10名)のマイルを特典交換時に合算できる(登録無料・退会/変更は5,000マイル)。夫婦それぞれ貯めて合算が王道</li>
+      <li>幼児(2歳未満・膝上)は大人のマイル数の10%(または幼児運賃を現金購入)。座席ありの子供は大人と同額</li>
+    </ul>
+  </div></details>
+<!--DOJO-GAISHI-->
+  <div class="dojo-h"><span class="dnum">5</span><h3>空席さがしの道具箱</h3></div>
+
+  <details class="acc"><summary>📅 発売日カレンダー(逆算表)<span class="chev">▶</span></summary><div class="accbody">
+    <div class="tbl fit"><table>
+      <thead><tr><th>プログラム</th><th>発売開始</th></tr></thead>
+      <tbody>
+        <tr><td><b>JAL</b></td><td><b>360日前・午前0:00</b>(日本時間)</td></tr>
+        <tr><td><b>ANA</b></td><td><b>355日前・午前9:00</b>(国内線は9:30)</td></tr>
+        <tr><td>BA(Avios)</td><td>355日前</td></tr>
+        <tr><td>キャセイ(アジアマイル)</td><td>360日前 ※二次</td></tr>
+        <tr><td>カンタス</td><td>353日前 ※二次</td></tr>
+        <tr><td>アメリカン</td><td>331日前 ※二次</td></tr>
+      </tbody>
+    </table></div>
+    <p>繁忙期の逆算例(往路): <b>2027年GW(4/29発)→JALは2026年5月4日発売</b>、2027年夏休みハワイ(7/22発)→2026年7月27日、2027年お盆(8/7発)→2026年8月12日、2027-28年末年始(12/25発)→2026年12月30日。<b>復路は復路の発売日</b>に別途取る(往路発売日に往復は取れない)。</p>
+    <p class="small">正確な日付はJAL公式「<a href="https://www.jal.co.jp/jp/ja/inter/reservation/calculation/" rel="noopener">予約開始日検索</a>」で。うるう年をまたぐとズレます。</p>
+  </div></details>
+
+  <details class="acc"><summary>🆓 無料の王道: 他社公式サイトを「検索機」にする<span class="chev">▶</span></summary><div class="accbody">
+    <p>マイルが無くても<b>無料の会員登録だけ</b>で特典空席を検索できるサイトが最強のツール。見つけたら本命(JAL/ANA/BA等)で発券する。</p>
+    <ul>
+      <li><b>ブリティッシュ・エアウェイズ</b>: ログイン→「Aviosで予約」でJAL便の空席と必要Aviosが見える。ただし過去に「BAだけJAL枠が見えない」事例あり(2024年・二次情報)— BAでゼロでも諦めない</li>
+      <li><b>アメリカン(aa.com)</b>: 月間カレンダー表示が見やすく、ワンワールド横断の俯瞰に最適(二次情報)</li>
+      <li><b>キャセイ</b>: 検索窓が360日先までと最長級で、JAL枠の観測精度が高いという評価(二次情報)</li>
+      <li><b>カンタス</b>: 日本居住者は入会金無料。ワンワールド空席がカレンダーで見える</li>
+      <li><b>ユナイテッド</b>: スタアラ(ANA便)探しの定番。カレンダーで3ヶ月俯瞰。最近はログイン必須化の動き(無料登録でOK)</li>
+    </ul>
+    <div class="kpoint"><b>大原則</b>: どのツールで見えるのも「提携他社に開放された枠」だけ。<b>JALが自社会員に出すPLUS枠はJAL公式でしか見えない</b>。「ツールで満席でもJAL公式では取れる」は普通に起きる。探すのはツール、確かめて買うのは公式。</div>
+  </div></details>
+
+  <details class="acc"><summary>🔔 専用ツールとアラート(無料でここまで)<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li><b>seats.aero</b>: 無料で60日先まで+メールアラート。有料PRO($9.99/月)で365日先・ライブ検索(二次情報)。日本語圏で言及最多</li>
+      <li><b>PointsYeah</b>: 無料でアラート4件。無料版で機能の8割(二次情報)</li>
+      <li><b>AwardFares</b>: JALマイレージバンク自体は「未対応」と明記。ワンワールド便はAA/BA経由で見る</li>
+      <li><b>ExpertFlyer</b>: JAL・キャセイ・カタール等の特典在庫は見えない — この用途には不向き(二次情報)</li>
+      <li>すべて英語UI。<b>口座のID/パスワードを外部ツールに入れないこと</b>(検索専用のログイン不要ツールは低リスク)</li>
+    </ul>
+    <p>アラート運用: seats.aero+PointsYeahの無料アラートを重ねる→通知が来たら<b>即・公式で再検索して発券</b>(キャッシュの「幽霊在庫」があるため通知=確保ではない)。</p>
+  </div></details>
+
+  <details class="acc"><summary>🕰 キャンセル拾いの時刻表(経験則)<span class="chev">▶</span></summary><div class="accbody">
+    <p class="small">以下はすべて二次情報の経験則。保証はないが「張るタイミング」の目安に。</p>
+    <ul>
+      <li><b>出発14日前ごろ</b>: JAL/ANAとも「直前開放」の観測が最多。ANAは空席待ち受付が締まる日でもある</li>
+      <li>出発7日前・4日前の追加開放報告(JAL・二次情報)</li>
+      <li>72時間前・24時間前: 予約の最終変更・取消が集中</li>
+      <li>木・金曜の日中: 出張客の予定変更でキャンセルが出やすい説</li>
+      <li>ANAは出発55日前(有償SUPER VALUEの取消無料期限)に在庫が動く説</li>
+    </ul>
+    <p>直前期(2週間前〜)はツールに映らないPLUS枠・自社枠が主戦場になるので、<b>公式の空席カレンダーを朝と深夜に手動巡回</b>するのが結局いちばん強い。</p>
+  </div></details>
+
+  <details class="acc"><summary>⛽ 燃油改定をまたぐ発券術<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li>燃油は<b>「発券日」の額で確定</b>し、その後の改定の影響を受けない(公式)。改定は2ヶ月ごとで、適用の1〜2ヶ月前にプレスリリースで判明する</li>
+      <li><b>値上げ前</b>: 発表を見たら適用開始前に発券(特典は「席だけ確保して発券は後で」ができないので、発表〜適用の窓で予定を確定させる)</li>
+      <li><b>値下げ後</b>: JAL特典は変更不可なので「取消3,100円→取り直し」。往復の燃油差額が手数料+取り直しリスクに勝つなら実行(例: 欧米往復で片道9,000円下がれば往復18,000円の得)</li>
+      <li>ANA特典は日付変更無料なので「変更で燃油が再計算される」という報告あり(二次情報・実行前にANAデスクで要確認)。<b>値上げ局面ではむやみに触らない</b>(変更日基準で追徴の恐れ)</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>🚄 関西発の「成田・羽田問題」(ポジショニング)<span class="chev">▶</span></summary><div class="accbody">
+    <ol>
+      <li><b>第1候補: 特典に国内線を組み込む</b>(JAL/ANAとも可・追加マイルなし)。同一航空券なので遅延時も乗継が保護される。これが取れるなら常に優先</li>
+      <li><b>第2候補: LCC別切り</b>。関空→成田はピーチ/ジェットスターで片道5,000円前後〜(変動)。鉄則は「国際線出発の3時間以上前に着く便」+朝発国際線なら前日入り</li>
+      <li><b>第3候補: Aviosで伊丹→羽田</b>などの単区間特典(片道7,500Avios※要確認)</li>
+      <li>台風シーズンは新幹線+前泊が結局いちばん堅い</li>
+    </ol>
+  </div></details>
+
+  <details class="acc"><summary>🪙 マイルが足りないとき<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li>JAL/ANAとも<b>「マイル+現金」の合わせ払いは無い</b>(必要マイル全額が口座にあることが条件)</li>
+      <li>逃げ道①: マイルを<b>eJALポイント(1万マイル→15,000円分)/ANA SKYコイン(最大1.7倍)</b>に換えて有償航空券を買う — 特典が取れない繁忙期の実質解。有償だからマイルも貯まる</li>
+      <li>逃げ道②: JALなら<b>PLUSで多めに払う</b>(確実性をマイルで買う)</li>
+      <li>逃げ道③: MRの使い分け — 特典が取れるなら移行(ビジネスなら1P=1.5〜3円相当)、取れないならアメックス・トラベルで航空券に充当(1P=0.8円・プラス加入時)</li>
+      <li>逃げ道④: カタール航空の<b>バイAviosセール</b>(年数回・最大40〜60%ボーナス、実質1Avios≒1.8〜2円・二次情報)。中長距離ビジネスで初めて元が取れる。買ったAviosはBAへ無料移動可</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>🚫 やってはいけないこと<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li><b>マイル発券代行・マイル売買は全部規約違反</b>。マイル没収・会員資格取消・搭乗拒否のリスク。フリマの出品も禁止されている</li>
+      <li>特典を使えるのは家族(JAL=二親等等/ANA=登録済み二親等)だけ。<b>友人分は取れない</b></li>
+      <li><b>マイレージ番号とパスワードを入れてよいのは公式サイト・公式アプリだけ</b>。「代行」「買取」「格安ビジネス発券」をうたうサイトには近づかない(JALが2024年12月に不正ログイン注意喚起・公式)</li>
+    </ul>
+  </div></details>
+  <div class="dojo-h"><span class="dnum">6</span><h3>家族と実務・お金まわり</h3></div>
+
+  <details class="acc"><summary>👪 「誰の分まで取れるか」比較<span class="chev">▶</span></summary><div class="accbody">
+    <div class="plist">
+      <div class="prow"><div class="pr-top"><b>JAL</b><span class="pr-rate">登録不要</span></div>
+        <p class="pr-note">本人+配偶者+二親等+義兄弟姉妹の配偶者。予約時に続柄を入れるだけ</p></div>
+      <div class="prow"><div class="pr-top"><b>ANA</b><span class="pr-rate">事前登録 必須</span></div>
+        <p class="pr-note">特典利用者登録(最大10名)。<b>変更・削除は1名5,000マイル</b>なので登録は慎重に</p></div>
+      <div class="prow"><div class="pr-top"><b>アメックスMR</b><span class="pr-rate">本人名義のみ</span></div>
+        <p class="pr-note">家族カード利用分は本会員に自動合算される。ただし<b>マイル移行は本人名義の口座限定</b>(妻のANA口座へは不可)</p></div>
+      <div class="prow"><div class="pr-top"><b>BA(Avios)</b><span class="pr-rate">家族口座あり</span></div>
+        <p class="pr-note">Household Account: 同一住所の最大7名でAviosをプール(無料)。発券対象はメンバー+登録リストの人に限られる点に注意</p></div>
+      <div class="prow"><div class="pr-top"><b>カタール(Avios)</b><span class="pr-rate">家族9名</span></div>
+        <p class="pr-note">Family Programme。2025年から他人分の発券に事前登録+口座の成熟要件あり — 使う予定があれば早めに登録(二次情報)</p></div>
+    </div>
+  </div></details>
+
+  <details class="acc"><summary>🧮 マイル合算のしくみ(JAL/ANA)<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li><b>JALカード家族プログラム</b>(無料): 生計同一の配偶者+一親等(子会員9名まで)のマイルを特典交換時に合算。JALカード会員限定</li>
+      <li><b>ANAカードファミリーマイル</b>(無料): 同居・生計同一の配偶者+一親等(最大10名)を合算。<b>退会・変更は1名5,000マイル</b></li>
+      <li>どちらも「合算できる範囲(一親等)」より「特典を使わせられる範囲(二親等)」の方が広い — <b>貯めるのは親子、乗せるのは祖父母・兄弟までOK</b>と覚える</li>
+      <li>恒常的にマイルを他人へ移す(譲渡する)制度は両社ともない</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>👶 子連れの特典ルール<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li>座席なし幼児(2歳未満・膝上): JAL/ANA自社便とも<b>大人のマイル数の10%</b>(ANAは幼児運賃の現金購入も選べる)。燃油・諸税は幼児分も現金で(一部の税は幼児免除)</li>
+      <li><b>提携他社便の膝上幼児は要注意</b>: JALの提携特典では特典にできず有償購入。ANAも電話で幼児券購入(SQ・ヴァージン等は買えない場合あり — 大人の発券前に電話確認)</li>
+      <li>座席を使う子供(2〜11歳)は<b>大人と同じマイル数</b>(子供割引なし)</li>
+      <li>大人1名+幼児2名などはWeb予約不可→電話。バシネット(赤ちゃんベッド)も電話リクエストが確実</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>💴 燃油以外の「諸税」はいくら?(往復・大人1名の目安)<span class="chev">▶</span></summary><div class="accbody">
+    <p class="small">2026-07-16時点の概算(関空発エコノミー)。<b>出国税は2026年7月1日以降の発券分から3,000円に値上げ済み</b>。日本側は出国税+関空施設使用料などで<b>約6,600円</b>。発券画面の表示額が正。</p>
+    <div class="tbl fit"><table>
+      <thead><tr><th>行き先</th><th>諸税往復(燃油除く)</th></tr></thead>
+      <tbody>
+        <tr><td>韓国</td><td class="num">約1万円</td></tr>
+        <tr><td>香港</td><td class="num">約1.3〜1.4万円</td></tr>
+        <tr><td>タイ</td><td class="num">約1.2万円</td></tr>
+        <tr><td>ハワイ・米国本土</td><td class="num">約1.6〜1.8万円</td></tr>
+        <tr><td>欧州大陸(パリ等)</td><td class="num">約1.5〜2.5万円</td></tr>
+        <tr><td>ロンドン</td><td class="num">約3.5〜4.5万円</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li>ロンドンは英国の航空旅客税(APD)が重い(2026年4月から長距離エコノミー£102、ビジネスはさらに高い)。<b>欧州は「ロンドン直行か、大陸入りか」で税だけで数万円変わる</b></li>
+      <li>米国行きはESTA(40ドル)が航空券とは別にかかる</li>
+      <li>子供(2〜11歳)は大人とほぼ同額の税、幼児は免除が多い。韓国の出国納付金は12歳未満免除</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>📋 特典搭乗の実務あれこれ<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li>特典搭乗では<b>マイル・ステータスポイント(FOP/PP/Life Status)は一切貯まらない</b>(公式)。家族で1人だけ有償にする「混成」ならその人には貯まる</li>
+      <li>座席指定は発券後に通常どおり可能(提携他社便は各社ルール次第)</li>
+      <li>手荷物は搭乗クラス・会員資格ベースで特典による差の規定は見当たらず(要確認)</li>
+      <li>支払い(燃油・諸税・取消料)はクレカのみ</li>
+    </ul>
+  </div></details>
+
+  <details class="acc"><summary>🌀 欠航・台風のときどうなる?<span class="chev">▶</span></summary><div class="accbody">
+    <ul>
+      <li>欠航・大幅遅延時は<b>手数料なしで変更または払い戻し</b>。このときは<b>期限切れマイルも戻る</b>(JAL/ANAとも公式)</li>
+      <li>台風などで影響が「見込まれる」段階でも、対象空港なら事前の無料変更・払い戻しができる特例あり(公式)</li>
+      <li>JALはイレギュラー時、伊丹・関空・神戸を相互利用可能な空港として扱う(公式)。自己都合の空港変更は取消→取り直し</li>
+      <li>振替先の特典空席がない場合の扱いは状況依存(当日は係員判断)。余裕のある乗継で組むのが自衛策</li>
+    </ul>
+  </div></details>
 </section>
 
 <!-- ============ 基礎と出典 ============ -->

@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>4カ国周遊 準備チェックリスト｜2026年8月8日〜13日</title>
+<meta name="description" content="関空→ハノイ→クアラルンプール→シンガポール→ソウル→関空(2026/8/8-13)の準備チェックリスト。手続き・持ち物・薬・電源・お金・関門をオフラインで確認できます。">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="8月の準備">
+<meta name="theme-color" content="#F3F5F4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1726" media="(prefers-color-scheme: dark)">
+<style>
+:root{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+  --font-body:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium","Yu Gothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
+  --font-disp:"Avenir Next","Avenir","Futura","Trebuchet MS",var(--font-body);
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+    --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+    --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+    --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+    --ok:#86C295; --ok-bg:#16301C;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+}
+:root[data-theme="dark"]{
+  --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+  --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+  --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+  --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+  --ok:#86C295; --ok-bg:#16301C;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);line-height:1.65;font-size:15.5px;-webkit-text-size-adjust:100%}
+.wrap{max-width:720px;margin:0 auto;padding:0 14px 72px}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px;word-break:break-all}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+header.app{padding:22px 2px 8px}
+.eyebrow{font-family:var(--font-disp);font-size:11px;letter-spacing:.16em;color:var(--accent);font-weight:600;text-transform:uppercase}
+header.app h1{margin:2px 0 6px;font-size:25px;line-height:1.32;letter-spacing:.01em;color:var(--navy);text-wrap:balance}
+.stamp{display:flex;flex-wrap:wrap;gap:5px 14px;font-size:12px;color:var(--muted);margin:0}
+.stamp span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
+
+.tabradio{position:absolute;width:1px;height:1px;opacity:0;margin:0;pointer-events:none}
+nav.tabs{position:sticky;top:0;z-index:30;background:var(--bg);padding:8px 0 10px;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600;cursor:pointer;user-select:none;min-height:38px}
+#t-plan:checked~nav .tab[for="t-plan"],#t-todo:checked~nav .tab[for="t-todo"],#t-pack:checked~nav .tab[for="t-pack"],#t-med:checked~nav .tab[for="t-med"],#t-power:checked~nav .tab[for="t-power"],#t-money:checked~nav .tab[for="t-money"],#t-care:checked~nav .tab[for="t-care"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+#t-plan:focus-visible~nav .tab[for="t-plan"],#t-todo:focus-visible~nav .tab[for="t-todo"],#t-pack:focus-visible~nav .tab[for="t-pack"],#t-med:focus-visible~nav .tab[for="t-med"],#t-power:focus-visible~nav .tab[for="t-power"],#t-money:focus-visible~nav .tab[for="t-money"],#t-care:focus-visible~nav .tab[for="t-care"]{outline:2px solid var(--accent);outline-offset:2px}
+section.pane{display:none}
+#t-plan:checked~#pane-plan,#t-todo:checked~#pane-todo,#t-pack:checked~#pane-pack,#t-med:checked~#pane-med,#t-power:checked~#pane-power,#t-money:checked~#pane-money,#t-care:checked~#pane-care{display:block}
+
+.sec-head{margin:14px 2px 12px}
+.sec-head h2{margin:2px 0 4px;font-size:20px;color:var(--navy);letter-spacing:.01em}
+.sec-head .lede{margin:0;font-size:13.5px;color:var(--muted)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 15px;margin:0 0 12px}
+.card h3{margin:0 0 8px;font-size:15.5px;color:var(--navy)}
+.card h4{margin:14px 0 6px;font-size:14px;color:var(--ink)}
+.card h4:first-child{margin-top:0}
+.card p{margin:6px 0}
+.card ul,.card ol{margin:6px 0;padding-left:1.25em}
+.card li{margin:3px 0}
+.small{font-size:12.5px;color:var(--muted)}
+.callout{border:1px solid transparent;border-radius:10px;padding:12px 14px;margin:0 0 12px;font-size:14px}
+.callout.danger{background:var(--danger-bg);color:var(--danger)}
+.callout.warn{background:var(--warn-bg);color:var(--warn)}
+.callout.ok{background:var(--ok-bg);color:var(--ok)}
+.callout>b:first-child{display:block;margin-bottom:4px}
+.callout ul{margin:6px 0 0;padding-left:1.2em}
+.badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:2px 8px;vertical-align:middle;white-space:nowrap}
+.badge.auth{background:var(--danger-bg);color:var(--danger)}
+.badge.free{background:var(--ok-bg);color:var(--ok)}
+.badge.official{background:var(--accent-soft);color:var(--accent)}
+.badge.warn{background:var(--warn-bg);color:var(--warn)}
+
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:8px 0 4px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:520px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{background:var(--surface2);color:var(--navy);font-size:12.5px;white-space:nowrap;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:none}
+td.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.leg{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:12px 14px;margin:0 0 10px}
+.leg .route{font-weight:700;font-size:15.5px;color:var(--navy)}
+.leg .when{font-family:var(--font-mono);font-size:13px;color:var(--muted);margin:2px 0 0}
+.leg .meta{font-size:13px;margin:6px 0 0}
+.leg.tight{border-left-color:var(--danger)}
+.leg .flag{font-size:18px;margin-right:4px}
+
+.chk{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:0 0 12px;overflow:hidden}
+.chk>h3{margin:0;padding:11px 14px;font-size:14.5px;color:var(--navy);background:var(--surface2);border-bottom:1px solid var(--line)}
+.chk ul{list-style:none;margin:0;padding:4px 0}
+.chk li{margin:0;padding:0}
+.chk label{display:flex;gap:10px;align-items:flex-start;padding:8px 14px;cursor:pointer;font-size:14.5px;min-height:40px}
+.chk label:hover{background:var(--surface2)}
+.chk input[type=checkbox]{flex:none;width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent)}
+.chk input[type=checkbox]:checked+span{color:var(--muted);text-decoration:line-through}
+.chk .why{display:block;font-size:12.5px;color:var(--muted);text-decoration:none!important;margin-top:1px}
+.chk input[type=checkbox]:checked+span .why{text-decoration:none}
+.must{color:var(--danger);font-weight:700;font-size:11.5px;margin-left:4px}
+
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.tools button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;min-height:38px}
+.tools button:hover{background:var(--surface2)}
+#progress{font-size:12.5px;color:var(--muted);margin:0 2px 10px}
+
+.memo{width:100%;min-height:110px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:11px 13px;font-size:14.5px;font-family:inherit;line-height:1.6}
+footer.app{margin-top:22px;padding:14px 2px 0;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+footer.app p{margin:5px 0}
+.src{font-size:12.5px;color:var(--muted)}
+.src li{margin:4px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<input class="tabradio" type="radio" name="tab" id="t-plan" checked>
+<input class="tabradio" type="radio" name="tab" id="t-todo">
+<input class="tabradio" type="radio" name="tab" id="t-pack">
+<input class="tabradio" type="radio" name="tab" id="t-med">
+<input class="tabradio" type="radio" name="tab" id="t-power">
+<input class="tabradio" type="radio" name="tab" id="t-money">
+<input class="tabradio" type="radio" name="tab" id="t-care">
+
+<header class="app">
+  <div class="eyebrow">Travel Prep &middot; Aug 2026</div>
+  <h1>4カ国周遊 準備チェックリスト<br>ハノイ → KL → シンガポール → ソウル</h1>
+  <p class="stamp">
+    <span><i class="dot"></i>2026年8月8日(土)〜8月13日(木)</span>
+    <span><i class="dot"></i>情報確認日: 2026年7月26日</span>
+    <span><i class="dot"></i>オフラインで開けます</span>
+  </p>
+</header>
+
+<nav class="tabs" aria-label="タブ">
+  <label class="tab" for="t-plan">⏱ 行程と関門</label>
+  <label class="tab" for="t-todo">📝 事前手続き</label>
+  <label class="tab" for="t-pack">🧳 持ち物</label>
+  <label class="tab" for="t-med">💊 薬と健康</label>
+  <label class="tab" for="t-power">🔌 電源と機内</label>
+  <label class="tab" for="t-money">💰 お金と通信</label>
+  <label class="tab" for="t-care">⚠️ 注意と緊急</label>
+</nav>
+
+<!-- ===================== 行程と関門 ===================== -->
+<section class="pane" id="pane-plan">
+  <div class="sec-head">
+    <h2>行程と、時間の関門</h2>
+    <p class="lede">この旅の難しさは観光地ではなく「乗り継ぎの時間」に全部あります。まずここを読んでください。</p>
+  </div>
+
+  <div class="callout danger">
+    <b>最重要: 8月12日 00:50発は「8月11日の深夜」です</b>
+    シンガポール発ソウル行きは日付が変わった直後の出発。8月11日(火)の夜22時ごろにはチャンギ空港ターミナル4に戻っている必要があります。「8/12発だから8/11の夜は自由」と誤解すると乗り遅れます。
+  </div>
+
+  <div class="leg tight">
+    <div class="route"><span class="flag">🇯🇵→🇻🇳</span>関空 → ハノイ</div>
+    <p class="when">8/8(土) 15:30 → 18:30 ／ VJ931 ベトジェット</p>
+    <p class="meta">関空 第1ターミナル発 → ノイバイ空港 第2ターミナル着。<b>空港到着は13:00めやす</b>(出発2時間半前)。時差 −2時間。</p>
+  </div>
+
+  <div class="leg tight">
+    <div class="route"><span class="flag">🇻🇳→🇲🇾</span>ハノイ → クアラルンプール</div>
+    <p class="when">8/9(日) 07:25 → 11:30 ／ VJ905 ベトジェット</p>
+    <p class="meta">ハノイの滞在は実質<b>約9時間だけ</b>。18:30着＋入国・荷物受取で19:30ごろ、市内まで45分〜1時間。翌朝5時台には空港。<br>
+    ノイバイの国際線チェックインは出発の2〜3時間前に開くのが一般的。市内からの路線バス86番は始発5:00なので<b>間に合いません</b>。空港周辺ホテルにするか、深夜のタクシー/Grabを前夜に手配しておくこと。<br>
+    到着は<b>KLIA ターミナル1</b>(ベトジェットはKLIA T1発着)。</p>
+  </div>
+
+  <div class="leg tight">
+    <div class="route"><span class="flag">🇲🇾→🇸🇬</span>クアラルンプール → シンガポール</div>
+    <p class="when">8/11(火) 08:30 → 09:40 ／ AK705 エアアジア</p>
+    <p class="meta"><b>出発は KLIA2</b>(エアアジア専用ターミナル)。8/9に着いたKLIA T1とは別ターミナルで、約1.5km離れており徒歩移動は不可。<br>
+    8:30発なら<b>6:30にはKLIA2</b>。市内からKLIAエクスプレスの始発時刻は要確認(始発に間に合わない場合はGrab/タクシー)。<br>
+    到着は<b>チャンギ ターミナル4</b>。</p>
+  </div>
+
+  <div class="leg tight">
+    <div class="route"><span class="flag">🇸🇬→🇰🇷</span>シンガポール → ソウル</div>
+    <p class="when">8/12(水) 00:50 → 08:40 ／ 7C2624 チェジュ航空</p>
+    <p class="meta">シンガポールは<b>実質12時間の日帰り</b>。ターミナル4に着いてターミナル4から出るので、荷物は空港に預けて手ぶらで街へ出るのが正解(→「注意と緊急」タブ)。<br>
+    約6時間の夜行便。<b>機内でモバイルバッテリーが使えません</b>(→「電源と機内」タブ)。到着は<b>仁川 第1ターミナル</b>。</p>
+  </div>
+
+  <div class="leg tight">
+    <div class="route"><span class="flag">🇰🇷→🇯🇵</span>ソウル → 関空</div>
+    <p class="when">8/13(木) 07:10 → 09:05 ／ 7C1301 チェジュ航空</p>
+    <p class="meta">仁川 第1ターミナル発。07:10発なら<b>05:00〜05:30には空港</b>。空港鉄道AREXの空港方向の始発は5:15ごろなので<b>ソウル市内からでは間に合いません</b>。<br>
+    → <b>仁川空港周辺(空港内ホテル・永宗島)に泊まる</b>のが現実的。仁川空港は24時間休憩できるエリアも多い。</p>
+  </div>
+
+  <div class="callout danger">
+    <b>5便すべて「別切り」の前提で動くこと</b>
+    航空会社が3社(ベトジェット／エアアジア／チェジュ航空)にまたがり、荷物やチェックインを通しで扱う協定がない組み合わせです。つまり:
+    <ul>
+      <li>荷物は各区間で<b>受け取り直し・預け直し</b>。チェックインも毎回自分で。</li>
+      <li>前の便が遅れて次に乗れなくても、次の航空会社に救済義務はなく<b>買い直しは全額自腹</b>。</li>
+      <li>いちばん危ないのは 8/9 ハノイ→KL。8/8の関空発が遅れると逃げ場がありません。</li>
+    </ul>
+    → <b>航空機遅延費用補償つきの海外旅行保険は「あると安心」ではなく必須寄り</b>。LCCは悪天候の遅延・欠航で宿泊代や代替便を補償しません。
+  </div>
+
+  <div class="card">
+    <h3>各都市の実質滞在時間</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>都市</th><th>着</th><th>空港へ戻る時刻</th><th>実質</th><th>宿</th></tr></thead>
+        <tbody>
+          <tr><td>ハノイ</td><td class="num">8/8 18:30</td><td class="num">8/9 05:30</td><td>約9時間</td><td>空港周辺を推奨</td></tr>
+          <tr><td>クアラルンプール</td><td class="num">8/9 11:30</td><td class="num">8/11 06:30</td><td>約43時間</td><td>2泊(メイン)</td></tr>
+          <tr><td>シンガポール</td><td class="num">8/11 09:40</td><td class="num">8/11 22:00</td><td>約12時間</td><td>泊まらない</td></tr>
+          <tr><td>ソウル</td><td class="num">8/12 08:40</td><td class="num">8/13 05:00</td><td>約20時間</td><td>仁川空港周辺を推奨</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">時刻はすべて現地時間。時差は日本比でベトナム −2時間、マレーシア／シンガポール −1時間、韓国 ±0。</p>
+  </div>
+
+  <div class="card">
+    <h3>先に確認しておきたい予約の中身</h3>
+    <ul>
+      <li>5便それぞれの<b>予約番号が別かどうか</b>(別なら完全な別切り)</li>
+      <li>各区間に<b>預け荷物が含まれているか</b>(含まれない区間は事前購入のほうが安い)</li>
+      <li>氏名のスペルがパスポートと一致しているか</li>
+      <li>各便のオンラインチェックイン開始時刻(通常24時間前)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== 事前手続き ===================== -->
+<section class="pane" id="pane-todo">
+  <div class="sec-head">
+    <h2>事前手続き・やっておくこと</h2>
+    <p class="lede">4カ国それぞれ制度が違います。うち2件は<b>旅行中にスマホで申請</b>する必要があります。</p>
+  </div>
+
+  <div class="callout warn">
+    <b>入国申請の「いつやるか」が肝</b>
+    マレーシア・シンガポール・韓国の入国カードはいずれも<b>到着の3日前から</b>しか出せません。マレーシア分は出発前に、シンガポール分と韓国分は<b>旅行中に現地のネットで</b>提出することになります。だから通信手段(eSIM)の確保が最優先です。
+  </div>
+
+  <div class="card">
+    <h3>国別の入国要件(2026年7月26日確認)</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>国</th><th>ビザ</th><th>電子手続き</th><th>提出時期</th><th>費用</th></tr></thead>
+        <tbody>
+          <tr><td>🇻🇳 ベトナム</td><td>45日以内は免除</td><td>なし</td><td>—</td><td>—</td></tr>
+          <tr><td>🇲🇾 マレーシア</td><td>短期は免除</td><td><b>MDAC</b> デジタル入国カード</td><td>到着3日前から</td><td>無料</td></tr>
+          <tr><td>🇸🇬 シンガポール</td><td>短期は免除</td><td><b>SG Arrival Card</b>＋電子健康申告</td><td>到着日を含む3日前から</td><td>無料</td></tr>
+          <tr><td>🇰🇷 韓国</td><td>K-ETA免除(2026/12/31まで)</td><td><b>e-Arrival Card</b> 電子入国申告書</td><td>到着3日前から／72時間で失効</td><td>無料</td></tr>
+          <tr><td>🇯🇵 帰国(関空)</td><td>—</td><td><b>Visit Japan Web</b> 税関申告</td><td>いつでも</td><td>無料</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4>公式サイト(代行サイトは使わない)</h4>
+    <ul class="small">
+      <li>MDAC(マレーシア) <span class="badge official">政府公式</span><br>https://imigresen-online.imi.gov.my/mdac/main</li>
+      <li>SG Arrival Card(シンガポール) <span class="badge official">政府公式</span><br>https://eservices.ica.gov.sg/sgarrivalcard/ ／ MyICA Mobile アプリ</li>
+      <li>e-Arrival Card(韓国) <span class="badge official">政府公式</span><br>https://www.e-arrivalcard.go.kr</li>
+      <li>Visit Japan Web(日本) <span class="badge official">政府公式</span><br>https://services.digital.go.jp/visit-japan-web/</li>
+      <li>外務省 たびレジ <span class="badge official">政府公式</span><br>https://www.ezairyu.mofa.go.jp/tabireg/</li>
+    </ul>
+    <p class="small">MDAC・SGACはいずれも無料。手数料を取る非公式サイトが検索上位に出ることがあるので、URLを見て公式だけを使ってください。SGACの健康申告に虚偽があると感染症法で処罰の対象になります。</p>
+  </div>
+
+  <div class="callout danger">
+    <b>パスポートの残存期間を今すぐ確認</b>
+    ベトナムはビザ免除でも<b>残存6ヶ月以上</b>が必要。2027年2月13日より前に切れるパスポートだと入国できない可能性があります。あわせて、ベトナム・マレーシアの入国審査で<b>出国用の航空券</b>の提示を求められることがあるので、次の便の予約をスクリーンショットで手元に。
+  </div>
+
+  <div class="chk" id="chk-todo">
+    <h3>いま(〜7月末)やること</h3>
+    <ul>
+      <li><label><input type="checkbox" id="td01"><span>パスポート残存6ヶ月以上を確認<span class="must">必須</span><span class="why">ベトナムの条件。切れそうなら日程的に厳しいので即対応</span></span></label></li>
+      <li><label><input type="checkbox" id="td02"><span>5便の予約内容を確認(予約番号・預け荷物・スペル)<span class="why">預け荷物が無い区間があると空港で高額に</span></span></label></li>
+      <li><label><input type="checkbox" id="td03"><span>航空機遅延費用補償つきの海外旅行保険に加入<span class="must">必須寄り</span><span class="why">別切りLCCなので遅延の損害は自己負担。クレカ付帯だと遅延補償が無い場合あり</span></span></label></li>
+      <li><label><input type="checkbox" id="td04"><span>宿を確保: ハノイ=ノイバイ空港周辺 / KL=2泊 / ソウル=仁川空港周辺<span class="why">早朝便に間に合う立地かどうかが唯一の判断基準</span></span></label></li>
+      <li><label><input type="checkbox" id="td05"><span>ハノイの深夜タクシー/Grabまたはホテル送迎を予約<span class="why">8/9の5時台に空港。路線バスは始発5:00で間に合わない</span></span></label></li>
+      <li><label><input type="checkbox" id="td06"><span>処方薬があれば英文の処方箋・薬剤情報を用意<span class="why">シンガポールは規制対象薬に事前承認が必要。日数がかかるので今すぐ</span></span></label></li>
+      <li><label><input type="checkbox" id="td07"><span>外務省「たびレジ」に4カ国分を登録<span class="why">現地の安全情報・緊急時の連絡が届く。無料</span></span></label></li>
+      <li><label><input type="checkbox" id="td08"><span>クレジットカードを2枚以上・別ブランドで用意、海外利用の制限を解除<span class="why">1枚止まると詰む</span></span></label></li>
+      <li><label><input type="checkbox" id="td09"><span>必要ならトラベルクリニックに相談(A型肝炎など)<span class="why">短期旅行に必須の接種はないが、屋台・生水があるなら相談価値あり</span></span></label></li>
+    </ul>
+  </div>
+
+  <div class="chk" id="chk-week">
+    <h3>1週間前(8/1〜)</h3>
+    <ul>
+      <li><label><input type="checkbox" id="tw01"><span>アジア周遊eSIMを購入し、<b>日本にいる間にインストール</b><span class="must">重要</span><span class="why">現地でQRを読むにはネットが必要という詰みを回避。韓国も含むプランを選ぶ</span></span></label></li>
+      <li><label><input type="checkbox" id="tw02"><span>Grabをインストールして電話番号認証まで完了<span class="why">現地でSMSが受け取れないと登録できない。ベトナム・マレーシア・シンガポールで使う</span></span></label></li>
+      <li><label><input type="checkbox" id="tw03"><span>Kakao T / Naver Map(韓国用)をインストール<span class="why">韓国ではGoogleマップの機能が制限される</span></span></label></li>
+      <li><label><input type="checkbox" id="tw04"><span>買い物: 変換プラグ・虫除け・薬・晴雨兼用の折りたたみ傘・冷感グッズ<span class="why">→「持ち物」タブ</span></span></label></li>
+      <li><label><input type="checkbox" id="tw05"><span><b>7kgで実際にパッキングして計る</b><span class="must">重要</span><span class="why">ベトジェット・エアアジアは7kg。100g単位で厳しい。吊り下げはかりがあると安心</span></span></label></li>
+      <li><label><input type="checkbox" id="tw06"><span>各便の座席指定・預け荷物を事前購入<span class="why">空港で買うと高い</span></span></label></li>
+      <li><label><input type="checkbox" id="tw07"><span>Googleマップで4都市をオフライン保存<span class="why">通信が切れた時の保険</span></span></label></li>
+      <li><label><input type="checkbox" id="tw08"><span>予約・保険証券・パスポートを全部スクリーンショット＋紙で1枚<span class="why">PDFより画像。バッテリー切れ対策に紙も</span></span></label></li>
+      <li><label><input type="checkbox" id="tw09"><span>家族に行程と宿を共有<span class="why">連絡が取れない時間帯が多い行程</span></span></label></li>
+    </ul>
+  </div>
+
+  <div class="chk" id="chk-3days">
+    <h3>3日前〜出発日</h3>
+    <ul>
+      <li><label><input type="checkbox" id="t301"><span>8/7ごろ: <b>MDAC(マレーシア)</b>を登録<span class="must">必須</span><span class="why">8/9到着なので8/6〜7以降。無料・公式サイトのみ</span></span></label></li>
+      <li><label><input type="checkbox" id="t302"><span><b>Visit Japan Web</b>の税関申告を登録<span class="why">帰国時の関空でQRを見せるだけで済む</span></span></label></li>
+      <li><label><input type="checkbox" id="t303"><span>台風・天候の確認<span class="why">8月のベトナム北部は台風シーズン。行程が崩れる前提で情報を取る</span></span></label></li>
+      <li><label><input type="checkbox" id="t304"><span>現金の準備(円→少額のUSD、または出発時に最低限)<span class="why">ベトナムドンは現地両替のほうがレートが良い</span></span></label></li>
+      <li><label><input type="checkbox" id="t305"><span>8/8の関空: 13:00めやすに第1ターミナル<span class="why">出発2時間半前</span></span></label></li>
+    </ul>
+  </div>
+
+  <div class="chk" id="chk-during">
+    <h3>旅行中(忘れると入国で止まる)</h3>
+    <ul>
+      <li><label><input type="checkbox" id="tr01"><span>8/9〜11: <b>SG Arrival Card</b>を提出<span class="must">必須</span><span class="why">8/11到着なので8/9以降に。健康申告も同時</span></span></label></li>
+      <li><label><input type="checkbox" id="tr02"><span>8/11〜12: <b>e-Arrival Card(韓国)</b>を提出<span class="must">必須</span><span class="why">72時間で失効するので早すぎてもダメ。出す直前が安全</span></span></label></li>
+      <li><label><input type="checkbox" id="tr03"><span>各便の24時間前にオンラインチェックイン<span class="why">空港カウンターの列と手数料を避ける</span></span></label></li>
+      <li><label><input type="checkbox" id="tr04"><span>8/11: チャンギ空港で荷物を預ける<span class="why">T4着→T4発なので手ぶらで街へ</span></span></label></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== 持ち物 ===================== -->
+<section class="pane" id="pane-pack">
+  <div class="sec-head">
+    <h2>持ち物</h2>
+    <p class="lede">この旅の制約は<b>7kg</b>と<b>セキュリティ検査5回</b>。それを前提に組んだリストです。</p>
+  </div>
+
+  <div class="callout danger">
+    <b>機内持ち込みは「一番厳しい7kg」に全行程を合わせる</b>
+    <div class="tablewrap" style="margin-top:8px">
+      <table>
+        <thead><tr><th>航空会社</th><th>機内持ち込み</th><th>サイズ</th></tr></thead>
+        <tbody>
+          <tr><td>ベトジェット</td><td class="num">7kg</td><td class="num">56×36×23cm</td></tr>
+          <tr><td>エアアジア</td><td class="num">合計2個で7kg</td><td class="num">56×36×23cm</td></tr>
+          <tr><td>チェジュ航空</td><td class="num">1個10kg未満＋身の回り品1個</td><td class="num">55×40×20cm</td></tr>
+        </tbody>
+      </table>
+    </div>
+    ベトジェット・エアアジアはゲートで抜き打ち計量されることがあり、100g超過でも指摘される例があります。土産物も含めた総重量で判定されます。
+  </div>
+
+  <div class="callout warn">
+    <b>キャリーよりバックパックが有利</b>
+    KLIA T1↔KLIA2 の移動、雨季の冠水した歩道、階段の多い旧市街、空港での仮眠 —— この行程はどれもキャリーが不利です。機内持ち込みサイズ(56×36×23cm以内)のバックパック1つが最適解。
+  </div>
+
+  <div class="tools">
+    <button type="button" id="btn-reset">チェックを全部消す</button>
+  </div>
+  <p id="progress">チェックした数はここに表示されます(JavaScriptが動く環境のみ)。動かなくてもチェック自体は使えます。</p>
+
+  <div class="chk" id="chk-core">
+    <h3>絶対に忘れられないもの</h3>
+    <ul>
+      <li><label><input type="checkbox" id="p001"><span>パスポート(残存6ヶ月以上)<span class="must">必須</span></span></label></li>
+      <li><label><input type="checkbox" id="p002"><span>クレジットカード2枚以上(別ブランド)＋現金</span></label></li>
+      <li><label><input type="checkbox" id="p003"><span>スマホ＋充電ケーブル(USB-C / Lightning 両方あれば)</span></label></li>
+      <li><label><input type="checkbox" id="p004"><span>海外旅行保険の証券番号・緊急連絡先(紙とスクショ)</span></label></li>
+      <li><label><input type="checkbox" id="p005"><span>予約控え5便分・宿の予約(スクショ)</span></label></li>
+      <li><label><input type="checkbox" id="p006"><span>パスポートのコピー1枚＋顔写真データ<span class="why">紛失時の再発給が早くなる</span></span></label></li>
+    </ul>
+  </div>
+
+  <div class="chk" id="chk-heat">
+    <h3>暑さ対策 ── この旅の最大リスク</h3>
+    <ul>
+      <li><label><input type="checkbox" id="p101"><span>晴雨兼用の折りたたみ傘<span class="must">最優先</span><span class="why">日除けとスコール対応を1本で兼ねる。この行程で一番働く道具</span></span></label></li>
+      <li><label><input type="checkbox" id="p102"><span>経口補水パウダー(粉末)3〜5本<span class="why">粉末なら液体制限にかからない。猛暑と下痢の両方に効く</span></span></label></li>
+      <li><label><input type="checkbox" id="p103"><span>塩タブレット / 塩飴</span></label></li>
+      <li><label><input type="checkbox" id="p104"><span>冷感タオル・瞬間冷却シート</span></label></li>
+      <li><label><input type="checkbox" id="p105"><span>ハンディファン<span class="why">充電式はモバイルバッテリー扱いで機内使用不可の可能性。乾電池式か小容量を</span></span></label></li>
+      <li><label><input type="checkbox" id="p106"><span>日焼け止め SPF50+(汗に強いもの・100ml以下)</span></label></li>
+      <li><label><input type="checkbox" id="p107"><span>帽子・サングラス</span></label></li>
+      <li><label><input type="checkbox" id="p108"><span><b>薄い羽織り</b>(パーカー／ストール)<span class="must">重要</span><span class="why">KL・シンガポールの屋内とソウルの店、そして機内5回は極寒</span></span></label></li>
+      <li><label><input type="checkbox" id="p109"><span>速乾インナー・速乾靴下(3日分＋洗う)</span></label></li>
+      <li><label><input type="checkbox" id="p110"><span>空のペットボトル／軽い水筒<span class="why">シンガポール・韓国は水道水が飲める。ベトナム・マレーシアは不可</span></span></label></li>
+    </ul>
+  </div>
+
+  <div class="chk" id="chk-rain">
+    <h3>雨季と濡れ対策</h3>
+    <ul>
+      <li><label><input type="checkbox" id="p201"><span>ポンチョ or レインジャケット<span class="why">傘が使えない突風のスコール用</span></span></label></li>
+      <li><label><input type="checkbox" id="p202"><span>濡れてもいい靴 or サンダル<span class="why">ハノイ・KLは冠水することがある</span></span></label></li>
+      <li><label><input type="checkbox" id="p203"><span>ジップロック 大小5枚<span class="why">パスポート・スマホ・充電器の防水。用途が多すぎて必ず足りなくなる</span></span></label></li>
+      <li><label><input type="checkbox" id="p204"><span>速乾タオル(薄手)</span></label></li>
+      <li><label><input type="checkbox" id="p205"><span>圧縮袋 or 防水スタッフサック</span></label></li>
+      <li><label><input type="checkbox" id="p206"><span>旅行用洗剤(シート／ジェルボール)＋洗濯ロープ<span class="why">3日分の服で回すため</span></span></label></li>
+    </ul>
+  </div>
+
+  <div class="chk" id="chk-night">
+    <h3>夜行便と早朝移動の装備</h3>
+    <ul>
+      <li><label><input type="checkbox" id="p301"><span>ネックピロー(空気式で軽いもの)</span></label></li>
+      <li><label><input type="checkbox" id="p302"><span>アイマスク＋耳栓<span class="must">重要</span><span class="why">8/12の6時間夜行便と、空港での仮眠に効く</span></span></label></li>
+      <li><label><input type="checkbox" id="p303"><span>マスク(機内の乾燥・冷房)</span></label></li>
+      <li><label><input type="checkbox" id="p304"><span>目薬</span></label></li>
+      <li><label><input type="checkbox" id="p305"><span>常温の非常食(カロリーメイト等)<span class="why">深夜・早朝に店が閉まっている時間帯が多い行程</span></span></label></li>
+      <li><label><input type="checkbox" id="p306"><span>携帯スリッパ</span></label></li>
+    </ul>
+  </div>
+
+  <div class="chk" id="chk-conv">
+    <h3>便利アイテム</h3>
+    <ul>
+      <li><label><input type="checkbox" id="p401"><span><b>吊り下げ式ラゲッジスケール</b><span class="why">7kg制限が3社ぶん。地味だがこの旅で一番投資効率が良い</span></span></label></li>
+      <li><label><input type="checkbox" id="p402"><span>4ポート以上のUSB急速充電器(GaN)1個<span class="why">変換プラグが1個で済む</span></span></label></li>
+      <li><label><input type="checkbox" id="p403"><span>小型の電源タップ(3口)<span class="why">ホテルのコンセントが1口でも困らない</span></span></label></li>
+      <li><label><input type="checkbox" id="p404"><span>ウェットティッシュ(除菌)＋ポケットティッシュ<span class="why">東南アジアはトイレに紙が無いことがある</span></span></label></li>
+      <li><label><input type="checkbox" id="p405"><span>折りたたみエコバッグ<span class="why">シンガポールはレジ袋有料</span></span></label></li>
+      <li><label><input type="checkbox" id="p406"><span>小型南京錠＋カラビナ<span class="why">バックパックのジッパー・空港での仮眠時</span></span></label></li>
+      <li><label><input type="checkbox" id="p407"><span>首かけスマホホルダー／薄型セキュリティポーチ</span></label></li>
+      <li><label><input type="checkbox" id="p408"><span>ボールペン<span class="why">入国書類は電子化されたが、書く場面はまだある</span></span></label></li>
+      <li><label><input type="checkbox" id="p409"><span>通貨ごとの小袋4つ<span class="why">ドン／リンギット／シンガポールドル／ウォンが混ざると必ず事故る</span></span></label></li>
+      <li><label><input type="checkbox" id="p410"><span>予備メガネ／コンタクト・洗浄液(100ml以下)</span></label></li>
+      <li><label><input type="checkbox" id="p411"><span>S字フック(狭いホテル・機内)</span></label></li>
+    </ul>
+  </div>
+
+  <div class="callout warn">
+    <b>持っていかない・置いていくもの</b>
+    <ul>
+      <li><b>電子タバコ・加熱式タバコ</b> ── シンガポールは所持自体が違法。日本に置いていく(→「注意と緊急」タブ)</li>
+      <li><b>チューインガム</b> ── シンガポールは持ち込み禁止。うっかりカバンに入れない</li>
+      <li><b>ドライヤー・ヘアアイロン</b> ── 220〜240Vに非対応の製品が多く発火の危険。ホテルの備品を使う</li>
+      <li><b>ライター・マッチ</b> ── 蚊取り線香用に持ちたくなるが機内の扱いが面倒</li>
+      <li>分厚い本・予備の靴・化粧品の大瓶 ── 7kgを削る最初の候補</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>液体はセキュリティを5回通る</h3>
+    <p>この行程では保安検査が<b>5回</b>あります。液体・ジェル・エアゾールは<b>1容器100ml以下</b>で、合計1L以下の透明ジップ袋1つにまとめるのが原則(各空港のルールは要確認)。</p>
+    <ul>
+      <li>シャンプー・洗顔は<b>固形かシートタイプ</b>にすると袋が空く</li>
+      <li>虫除け・日焼け止めも液体扱い。100ml以下の容器を選ぶ</li>
+      <li>経口補水は<b>粉末</b>を選ぶ(液体制限を回避できる)</li>
+      <li>爪切り・眉毛用ハサミ・カミソリは機内持ち込みで没収される可能性がある。預けないなら諦める前提で</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== 薬と健康 ===================== -->
+<section class="pane" id="pane-med">
+  <div class="sec-head">
+    <h2>薬と健康</h2>
+    <p class="lede">4カ国連続の猛暑＋睡眠不足＋屋台。体調を崩す確率がふつうの旅行より高い行程です。</p>
+  </div>
+
+  <div class="callout danger">
+    <b>デング熱の疑いがあるときは、痛み止めの種類を間違えないこと</b>
+    高熱・発疹・強い筋肉痛や関節痛が出たときは、<b>アスピリンやイブプロフェン(ロキソニン等の一部を含む)は出血リスクを高めるため避ける</b>のが一般的な対応で、<b>アセトアミノフェン(カロナール／タイレノール)</b>が選ばれます。<br>
+    だからこの旅では<b>アセトアミノフェンを必ず1箱</b>持ってください。高熱が出たら自己判断せず現地の医療機関へ(保険会社の日本語デスクに電話するのが最短)。
+  </div>
+
+  <div class="chk" id="chk-med">
+    <h3>持っていく薬</h3>
+    <ul>
+      <li><label><input type="checkbox" id="m001"><span><b>アセトアミノフェン</b>(カロナール／タイレノール)<span class="must">必須</span><span class="why">解熱鎮痛の第一選択。デング熱疑い時にも使える</span></span></label></li>
+      <li><label><input type="checkbox" id="m002"><span>整腸剤(ビオフェルミン等)<span class="why">屋台・食事の変化に</span></span></label></li>
+      <li><label><input type="checkbox" id="m003"><span>止瀉薬(ロペラミド等)<span class="why">移動日の緊急用。ただし食中毒が疑われるときに止めるのは慎重に</span></span></label></li>
+      <li><label><input type="checkbox" id="m004"><span>経口補水パウダー<span class="why">下痢でも熱中症でも使う。粉末なので液体制限にかからない</span></span></label></li>
+      <li><label><input type="checkbox" id="m005"><span>胃薬・制酸薬<span class="why">辛いもの・脂っぽいもの・不規則な食事</span></span></label></li>
+      <li><label><input type="checkbox" id="m006"><span>酔い止め<span class="why">LCCの短距離＋夜行＋Grabの荒い運転</span></span></label></li>
+      <li><label><input type="checkbox" id="m007"><span>抗ヒスタミン薬(飲み薬)<span class="why">虫刺され・食物アレルギー・冷房での鼻炎</span></span></label></li>
+      <li><label><input type="checkbox" id="m008"><span>かゆみ止め・虫刺され用の塗り薬(ステロイド外用)<span class="why">あせもにも使える</span></span></label></li>
+      <li><label><input type="checkbox" id="m009"><span>総合感冒薬・のど飴<span class="why">強い冷房で喉をやられる定番パターン</span></span></label></li>
+      <li><label><input type="checkbox" id="m010"><span>絆創膏・消毒<span class="why">サンダルの擦れ、濡れた足の靴擦れ</span></span></label></li>
+      <li><label><input type="checkbox" id="m011"><span>常備薬・処方薬は<b>元の箱と説明書ごと</b><span class="must">重要</span><span class="why">税関で中身を説明できる状態にする</span></span></label></li>
+      <li><label><input type="checkbox" id="m012"><span>処方薬がある人は英文の処方箋／薬剤情報1枚</span></label></li>
+    </ul>
+  </div>
+
+  <div class="callout danger">
+    <b>シンガポールは薬のルールが厳しい</b>
+    <ul>
+      <li>処方薬は概ね<b>3ヶ月分以内</b>なら持ち込み可。ただし<b>向精神薬・睡眠薬(ゾルピデム等)・抗不安薬・コデイン含有の咳止め・医療用麻薬</b>は保健科学庁(HSA)の<b>事前承認が必要</b>。</li>
+      <li>該当する薬を持つ場合は、渡航前にHSAへオンライン申請し、<b>承認メールを印刷</b>して、英文診断書と<b>元の箱</b>とあわせて携帯。</li>
+      <li>入国時は持参した薬を税関で申告する必要があります。</li>
+      <li>申請には日数がかかるので、該当しそうなら<b>今すぐ</b>確認を。<span class="badge warn">要確認</span></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>蚊対策 ── 夜だけでは足りない</h3>
+    <p>2026年もハノイでデング熱の報告が前年同期を上回っており、ベトナム全体では毎年10万人以上が感染しています。マレーシア・シンガポールも流行地域です。</p>
+    <ul>
+      <li>デング熱を運ぶ蚊は<b>日中(朝夕がピーク)に刺します</b>。夜だけの対策では不足。</li>
+      <li>虫除けは<b>ディート30%前後</b>または<b>イカリジン15%</b>。イカリジンは服やプラスチックを傷めず匂いも少ない。<b>日本で買っていく</b>(現地品は成分表記が読めない)。</li>
+      <li>虫除けは液体制限の対象。<b>100ml以下</b>の容器で透明袋に。</li>
+      <li>蚊は暗い色に寄るので<b>明るい色の長袖・長ズボン</b>が有効。薄手の速乾なら暑さもしのげる。</li>
+      <li>刺されたら掻き壊さない(高温多湿で感染しやすい)。かゆみ止めを早めに。</li>
+      <li><b>予防接種</b>: 短期旅行で必須のものはありません。屋台や生水のリスクを考えるならA型肝炎を検討する価値がありますが、接種スケジュールが日程に間に合うかはトラベルクリニックに要確認。<span class="badge warn">要確認</span></li>
+      <li>犬・猫・サルには触らない(狂犬病の回避は「触らない」が基本)。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>各都市の8月の気候</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>都市</th><th>目安</th><th>特徴</th></tr></thead>
+        <tbody>
+          <tr><td>ハノイ</td><td class="num">平均29.3℃／湿度80%超</td><td>蒸し暑さのピーク。台風の多い季節</td></tr>
+          <tr><td>クアラルンプール</td><td class="num">月平均28℃超</td><td>雨季の終わり。急な豪雨</td></tr>
+          <tr><td>シンガポール</td><td class="num">最高30℃前後／湿度80%以上</td><td>スコールが多い。日差しが強い</td></tr>
+          <tr><td>ソウル</td><td class="num">平均湿度73.5%</td><td>韓国で最も暑い時期。台風の影響も</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">4カ国すべて高温多湿。屋内と機内は逆に冷えるので、羽織りが1枚あると体調を崩しにくくなります。</p>
+  </div>
+
+  <div class="card">
+    <h3>水と食べ物</h3>
+    <ul>
+      <li><b>水道水を飲める</b>: シンガポール、韓国(ミネラルウォーター推奨)</li>
+      <li><b>水道水は飲まない</b>: ベトナム、マレーシア。ペットボトルの水を。氷にも注意</li>
+      <li>屋台は「回転が速く、火が通っているもの」を選ぶ。生野菜・カットフルーツはリスクが上がる</li>
+      <li>体調を崩すと行程が破綻するので、<b>移動日の前夜は無理をしない</b>のが最善の予防</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== 電源と機内 ===================== -->
+<section class="pane" id="pane-power">
+  <div class="sec-head">
+    <h2>電源と機内のルール</h2>
+    <p class="lede">4カ国でプラグ形状が2種類に分かれます。そしてモバイルバッテリーのルールが2026年に変わりました。</p>
+  </div>
+
+  <div class="card">
+    <h3>コンセント: Gタイプが2カ国で必須</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>国</th><th>電圧</th><th>プラグ形状</th><th>日本のプラグ</th></tr></thead>
+        <tbody>
+          <tr><td>🇻🇳 ベトナム</td><td class="num">220V</td><td>A / C(SE)が主。まれにG</td><td>Aならそのまま挿せる場所が多い</td></tr>
+          <tr><td>🇲🇾 マレーシア</td><td class="num">240V</td><td><b>G(BF)</b> 太い3本足</td><td>不可 → 変換必須</td></tr>
+          <tr><td>🇸🇬 シンガポール</td><td class="num">230V</td><td><b>G(BF)</b> 太い3本足</td><td>不可 → 変換必須</td></tr>
+          <tr><td>🇰🇷 韓国</td><td class="num">220V</td><td><b>C / SE</b> 丸2本</td><td>不可 → 変換必須</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4>買うもの</h4>
+    <ul>
+      <li><b>マルチ変換プラグ1個</b>(G・C両対応のもの)。これ1つで4カ国いける製品が多い</li>
+      <li>心配なら<b>Gタイプ単体をもう1個</b>(マレーシア＋シンガポールで実質3日使う)</li>
+      <li><b>変圧器は不要</b>。スマホ・PC・カメラの充電器は「100-240V」表記なら世界対応。表記を出発前に確認</li>
+      <li><b>ドライヤー・ヘアアイロンは要注意</b>。100V専用品を240Vに挿すと発火します。持たずにホテルの備品を使うのが安全</li>
+      <li>USB充電器は<b>4ポート以上のGaN 1個</b>にまとめると、変換プラグも1個で足りる</li>
+      <li><b>小型の電源タップ(3口)</b>があると、ホテルのコンセントが1口でも困らない</li>
+    </ul>
+  </div>
+
+  <div class="callout danger">
+    <b>モバイルバッテリー: 2026年4月24日から新ルール</b>
+    ICAOの安全基準改正にともない、国内線・国際線共通で運用が変わりました。
+    <ul>
+      <li><b>預け荷物に入れるのは禁止</b>。必ず手荷物で。</li>
+      <li>160Whを超えるものは<b>持ち込み不可</b>。100〜160Whは航空会社の事前承認が必要で<b>最大2個</b>まで。</li>
+      <li><b>機内での使用が禁止</b>(バッテリー本体の充電も、スマホへの給電も)。</li>
+      <li><b>座席上の収納棚に入れるのは禁止</b>。膝の上か前ポケットなど、常に見える場所で管理。</li>
+      <li>端子には絶縁テープを貼るか、個別ケースに入れる。</li>
+      <li>チェジュ航空は<b>2026年1月22日から全路線で機内使用を全面禁止</b>にしています。</li>
+    </ul>
+    → <b>8/12のシンガポール→ソウル(約6時間の夜行)では機内でスマホを充電できない前提</b>で。搭乗前に満充電にしておくこと。<br>
+    → 容量が<b>Wh表記されている</b>製品を選ぶ(mAhだけの表記だと検査で揉めることがある)。目安として20,000mAh／3.7Vなら約74Wh。
+  </div>
+
+  <div class="card">
+    <h3>そのほか機内・保安検査まわり</h3>
+    <ul>
+      <li>保安検査は<b>5回</b>。液体は1容器100ml以下・透明袋1つにまとめる(→「持ち物」タブ)</li>
+      <li>ライター・マッチは扱いが厳しい。蚊取り線香を持つなら電池式蚊取り器に</li>
+      <li>ハンディファンは充電式だとモバイルバッテリー扱いになり<b>機内で使えない</b>可能性がある</li>
+      <li>ノートPC・タブレットは検査で出す。取り出しやすい位置に</li>
+      <li>予備の乾電池も端子の絶縁を(ショート防止)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== お金と通信 ===================== -->
+<section class="pane" id="pane-money">
+  <div class="sec-head">
+    <h2>お金と通信</h2>
+    <p class="lede">4通貨(ドン／リンギット／シンガポールドル／ウォン)を6日で使い分けます。</p>
+  </div>
+
+  <div class="card">
+    <h3>国別の支払い事情</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>国</th><th>通貨</th><th>現金の必要度</th><th>カード</th><th>チップ</th></tr></thead>
+        <tbody>
+          <tr><td>🇻🇳 ベトナム</td><td>ドン(VND)</td><td><b>高い</b> 市場・屋台は現金のみが多い</td><td>ホテル・レストランは可</td><td>基本不要</td></tr>
+          <tr><td>🇲🇾 マレーシア</td><td>リンギット(MYR)</td><td>中 屋台・小店で必要</td><td>広く可</td><td>不要(サービス料込み)</td></tr>
+          <tr><td>🇸🇬 シンガポール</td><td>Sドル(SGD)</td><td><b>低い</b> タッチ決済がほぼ通る</td><td>ほぼ全て可</td><td>不要(サービス料込み)</td></tr>
+          <tr><td>🇰🇷 韓国</td><td>ウォン(KRW)</td><td>低 交通カードのチャージ用に少額</td><td>ほぼ全て可</td><td>不要</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4>使い方のコツ</h4>
+    <ul>
+      <li><b>ベトナムドンは日本で両替しない</b>。レートが悪いので現地で。今回ハノイは実質9時間なので、両替は空港で数千円分あれば足りるはず</li>
+      <li>ドンは桁が多く、<b>20万ドンと2万ドンの見間違い</b>が定番の事故。払う前に桁を数える</li>
+      <li>シンガポールは現金をほぼ使わずに1日過ごせる(ホーカーの一部は現金／QRのみ)</li>
+      <li>韓国は交通カード(T-money)を現金でチャージするぶんだけウォンがあれば足りる</li>
+      <li><b>通貨ごとに小袋を分ける</b>。4通貨が混ざると必ず間違える</li>
+      <li>使い残した端数は、その国の空港で使い切る(帰国後は両替しにくい)</li>
+      <li>クレジットカードは<b>2枚以上・別ブランド</b>。1枚が止まったときの保険。海外利用の制限があれば事前に解除</li>
+      <li>ATMでの現地通貨引き出しは手数料の安い手段を選ぶ(各サービスの条件は<span class="badge warn">要確認</span>)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>通信 ── アジア周遊eSIM 1本が正解</h3>
+    <ul>
+      <li>4カ国をまたぐのでSIMを4枚買うのは非現実的。<b>アジア周遊eSIM</b>を1本にまとめる</li>
+      <li><b>韓国が含まれるプランを選ぶ</b>。「東南アジア周遊」だと韓国が入っていないことが多い</li>
+      <li><b>日本にいる間にインストールまで済ませる</b>。現地でQRコードを読むにはネットが必要という詰みを避ける</li>
+      <li>eSIM非対応の端末なら物理SIMかWi-Fiルーター</li>
+      <li>マレーシアとシンガポールで<b>入国カードをオンライン提出する</b>ので、通信は必須設備です</li>
+      <li>Googleマップで4都市を<b>オフライン保存</b>しておく</li>
+      <li>予約類は<b>スクリーンショット</b>で(PDFはアプリと通信が必要になりがち)</li>
+    </ul>
+    <h4>入れておくアプリ</h4>
+    <ul>
+      <li><b>Grab</b> ── ベトナム・マレーシア・シンガポールの配車。<b>日本で電話番号認証まで済ませる</b>(現地でSMSが受け取れないと登録できない)。支払いは現金・カードどちらも可だが、カードが通らない場合に備えて現金も</li>
+      <li><b>Kakao T / Naver Map</b> ── 韓国用。韓国ではGoogleマップの機能が制限される</li>
+      <li>各航空会社アプリ(ベトジェット／エアアジア／チェジュ航空) ── オンラインチェックイン用</li>
+      <li>翻訳アプリ(オフライン辞書をダウンロード)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>予算の考え方</h3>
+    <p>航空券は13万60円で確定済み。追加で見込んでおく費用は:</p>
+    <ul>
+      <li>宿4泊(ハノイ空港周辺／KL2泊／仁川空港周辺)</li>
+      <li><b>預け荷物の追加料金</b>(必要な区間ぶん・事前購入が安い)</li>
+      <li>海外旅行保険</li>
+      <li>アジア周遊eSIM</li>
+      <li>空港↔市内の移動 ×4都市。ハノイの深夜移動とKLIA2への早朝移動は割高になりがち</li>
+      <li>チャンギの荷物一時預かり(8/11)</li>
+      <li>変換プラグ・虫除け・薬などの買い物</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== 注意と緊急 ===================== -->
+<section class="pane" id="pane-care">
+  <div class="sec-head">
+    <h2>注意点と緊急時</h2>
+    <p class="lede">法律・空港の実務・トラブル対応。とくにシンガポールは「知らなかった」が通りません。</p>
+  </div>
+
+  <div class="callout danger">
+    <b>シンガポールで絶対にやってはいけないこと</b>
+    <ul>
+      <li><b>電子タバコ・加熱式タバコの所持が違法</b>。2025年9月1日から罰則が強化され、一般の旅行者でも2回目の摘発で強制送還・今後の入国禁止の可能性があります。<b>日本に置いていく</b>のが唯一の正解。</li>
+      <li><b>チューインガムの持ち込み禁止</b>。最大S$10,000の罰金という記述があります(歯科・医療用の認可品のみ例外)。カバンの底に残っていないか確認。</li>
+      <li><b>タバコは免税枠ゼロ</b>。1本から申告・課税の対象。</li>
+      <li><b>酒の免税枠が使えない</b> ── 免税の条件は「48時間以上シンガポール国外にいた」かつ「マレーシアからの入国でない」こと。今回はKLから入るので<b>対象外</b>。KLの免税店で酒を買うのは避け、買うなら最後の韓国で。</li>
+      <li>規制対象の薬はHSAの事前承認が必要(→「薬と健康」タブ)。</li>
+      <li>ゴミのポイ捨て・電車内の飲食などにも罰金があります。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>空港の実務メモ</h3>
+    <h4>8/9 ハノイ → クアラルンプール</h4>
+    <ul>
+      <li>ノイバイの国際線チェックインは出発2〜3時間前に開くのが一般的。05:25〜ごろ開くと見て、5時台に空港へ</li>
+      <li>市内からの86番バスは<b>始発5:00</b>で間に合わない。前夜にタクシー／Grabを手配、または空港周辺に泊まる</li>
+      <li>着くのは<b>KLIA ターミナル1</b>。市内へはKLIAエクスプレス／バス／Grab</li>
+    </ul>
+    <h4>8/11 クアラルンプール → シンガポール</h4>
+    <ul>
+      <li>出発は<b>KLIA2</b>。8/9に着いたT1とは別ターミナル(約1.5km・徒歩不可)</li>
+      <li>ターミナル間はERL(KLIAトランジット)で約10〜20分、または無料シャトルバス約15分。ただし早朝は運行時間に注意<span class="badge warn">要確認</span></li>
+      <li>08:30発なら<b>06:30にはKLIA2</b>に居たい。市内から始発に乗れない場合はGrab/タクシー</li>
+    </ul>
+    <h4>8/11 シンガポール(日帰り)</h4>
+    <ul>
+      <li>到着も出発も<b>チャンギ ターミナル4</b>。荷物はチャンギの一時預かり(Baggage Storage by Smarte Carte)へ預けて手ぶらで街へ。24時間営業</li>
+      <li>料金の目安: 小さな手荷物 S$6/日〜、機内持ち込みサイズ S$11/日〜(<b>改定があるので現地で確認</b>)<span class="badge warn">要確認</span></li>
+      <li>夜は<b>22:00〜22:30にはT4へ戻る</b>(00:50発)</li>
+      <li>8/9(日)がシンガポールの建国記念日、8/10(月)が振替休日。8/11(火)は平常日ですが観光地は混みやすい<span class="badge warn">要確認</span></li>
+    </ul>
+    <h4>8/12〜13 ソウル</h4>
+    <ul>
+      <li>仁川 第1ターミナル着08:40 → 翌07:10発。<b>05:00〜05:30には空港</b></li>
+      <li>AREXの空港方向の始発は5:15ごろで、<b>ソウル市内からでは間に合わない</b></li>
+      <li>→ 仁川空港周辺(空港内ホテル／永宗島)に泊まるのが現実的。仁川空港には24時間休憩できるエリアもある</li>
+      <li>市内で過ごすなら、荷物はコインロッカーか宿に預けて動く</li>
+    </ul>
+    <h4>8/13 帰国(関空)</h4>
+    <ul>
+      <li><b>Visit Japan Web</b>で税関申告を登録しておけば、QRを見せるだけで電子申告ゲートを通れる</li>
+      <li>免税範囲を超える買い物・100万円相当以上の現金は申告が必要</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>定番のトラブルと回避</h3>
+    <ul>
+      <li><b>タクシーのぼったくり</b> ── ベトナム・マレーシアでは<b>Grabで事前に金額が出る</b>状態にしてから乗る。流しの声かけには乗らない</li>
+      <li><b>お釣りの少なさ・桁の間違い</b> ── ベトナムドンは特に。払う前に桁を確認、受け取ったお釣りをその場で数える</li>
+      <li><b>スリ・置き引き</b> ── 混雑した市場・駅。バッグは前に。スマホをテーブルに置かない</li>
+      <li><b>ATMのスキミング</b> ── 銀行の建物に併設されたATMを選ぶ</li>
+      <li><b>両替詐欺</b> ── 街の非正規両替所は避け、銀行や正規の両替店で</li>
+      <li><b>入国カードの代行サイト</b> ── MDAC・SGACはどちらも無料。手数料を取るサイトは公式ではない</li>
+      <li><b>スマホ紛失</b> ── パスコード、位置追跡、カードの停止方法を出発前に確認。予約のスクショが端末内だけにあると詰むので紙も1枚</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>安全情報</h3>
+    <p>外務省の海外安全ホームページで、4カ国それぞれの最新情報を出発前に確認してください。シンガポールは危険情報の発出なし、マレーシア・ベトナムも一般的な注意レベルですが、地域や時期によって変わります。<span class="badge warn">要確認</span></p>
+    <ul class="small">
+      <li>外務省 海外安全ホームページ <span class="badge official">政府公式</span><br>https://www.anzen.mofa.go.jp/</li>
+      <li>たびレジ(登録すると現地情報がメールで届く) <span class="badge official">政府公式</span><br>https://www.ezairyu.mofa.go.jp/tabireg/</li>
+      <li>厚生労働省 検疫所 FORTH(感染症情報) <span class="badge official">政府公式</span><br>https://www.forth.go.jp/</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>緊急メモ(自分で書き込んでください)</h3>
+    <p class="small">保険の証券番号・日本語デスクの番号・宿の連絡先・家族の連絡先など。紙にも書いて別の場所に入れておくと安心です。</p>
+    <textarea class="memo" id="memo" placeholder="保険会社の日本語緊急デスク:&#10;証券番号:&#10;カード会社の紛失窓口:&#10;宿(ハノイ):&#10;宿(KL):&#10;宿(仁川):&#10;日本の家族:"></textarea>
+    <p class="small">※このメモはブラウザ内にだけ保存されます(JavaScriptが動く環境のみ)。動かない環境では紙に書き写してください。</p>
+    <h4>各国の日本大使館・総領事館</h4>
+    <ul class="small">
+      <li>在ベトナム日本国大使館(ハノイ) https://www.vn.emb-japan.go.jp/</li>
+      <li>在マレーシア日本国大使館 https://www.my.emb-japan.go.jp/</li>
+      <li>在シンガポール日本国大使館 https://www.sg.emb-japan.go.jp/</li>
+      <li>在大韓民国日本国大使館 https://www.kr.emb-japan.go.jp/</li>
+    </ul>
+    <p class="small">パスポートを紛失した場合は、現地警察で証明をもらってから大使館・総領事館へ。この行程は滞在が短いので、紛失＝以降の便に乗れないと考えて、管理を厳重に。</p>
+  </div>
+</section>
+
+<footer class="app">
+  <p><b>情報確認日: 2026年7月26日</b>。制度・料金・運行時刻は変わります。<b>渡航前に必ず各公式サイトで再確認してください</b>。「要確認」と書いた項目は、この資料の作成時点で公式ソースまで裏どりできていない項目です。</p>
+  <p>入国手続きは政府公式サイトのみを使ってください(MDAC・SG Arrival Card・e-Arrival Cardはいずれも無料です)。手数料を取る代行サイトは公式ではありません。</p>
+  <p>医療・薬に関する記載は一般的な情報であり、診断や処方の代わりにはなりません。持病・常用薬がある場合は必ず医師・薬剤師に相談してください。</p>
+  <p class="small">オフラインで使うには、このファイルを端末に保存してください。iPhoneならSafariで開いてから「共有 → ホーム画面に追加」でアプリのように起動できます。</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var KEY = "prep_asia4_20260808_v1";
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.chk input[type=checkbox]'));
+  var memo = document.getElementById('memo');
+  var progress = document.getElementById('progress');
+  var store = null;
+  try { store = window.localStorage; } catch(e) { store = null; }
+
+  function load(){
+    if(!store) return {};
+    try { return JSON.parse(store.getItem(KEY) || "{}") || {}; } catch(e){ return {}; }
+  }
+  function save(state){
+    if(!store) return;
+    try { store.setItem(KEY, JSON.stringify(state)); } catch(e){}
+  }
+
+  var state = load();
+  boxes.forEach(function(b){ if(state[b.id]) b.checked = true; });
+  if(memo && typeof state.__memo === "string") memo.value = state.__memo;
+
+  function render(){
+    if(!progress) return;
+    var done = boxes.filter(function(b){ return b.checked; }).length;
+    progress.textContent = "チェック済み " + done + " / " + boxes.length + " 項目"
+      + (done === boxes.length ? " — 準備完了です。いい旅を。" : "");
+  }
+
+  boxes.forEach(function(b){
+    b.addEventListener('change', function(){
+      state[b.id] = b.checked;
+      if(!b.checked) delete state[b.id];
+      save(state); render();
+    });
+  });
+
+  if(memo){
+    memo.addEventListener('input', function(){
+      state.__memo = memo.value;
+      save(state);
+    });
+  }
+
+  var reset = document.getElementById('btn-reset');
+  if(reset){
+    reset.addEventListener('click', function(){
+      boxes.forEach(function(b){ b.checked = false; delete state[b.id]; });
+      save(state); render();
+    });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

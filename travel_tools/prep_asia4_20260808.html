@@ -69,10 +69,10 @@ header.app h1{margin:2px 0 6px;font-size:25px;line-height:1.32;letter-spacing:.0
 nav.tabs{position:sticky;top:0;z-index:30;background:var(--bg);padding:8px 0 10px;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 nav.tabs::-webkit-scrollbar{display:none}
 .tab{flex:none;display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600;cursor:pointer;user-select:none;min-height:38px}
-#t-plan:checked~nav .tab[for="t-plan"],#t-todo:checked~nav .tab[for="t-todo"],#t-pack:checked~nav .tab[for="t-pack"],#t-med:checked~nav .tab[for="t-med"],#t-power:checked~nav .tab[for="t-power"],#t-money:checked~nav .tab[for="t-money"],#t-care:checked~nav .tab[for="t-care"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-#t-plan:focus-visible~nav .tab[for="t-plan"],#t-todo:focus-visible~nav .tab[for="t-todo"],#t-pack:focus-visible~nav .tab[for="t-pack"],#t-med:focus-visible~nav .tab[for="t-med"],#t-power:focus-visible~nav .tab[for="t-power"],#t-money:focus-visible~nav .tab[for="t-money"],#t-care:focus-visible~nav .tab[for="t-care"]{outline:2px solid var(--accent);outline-offset:2px}
+#t-plan:checked~nav .tab[for="t-plan"],#t-todo:checked~nav .tab[for="t-todo"],#t-pack:checked~nav .tab[for="t-pack"],#t-med:checked~nav .tab[for="t-med"],#t-power:checked~nav .tab[for="t-power"],#t-money:checked~nav .tab[for="t-money"],#t-lounge:checked~nav .tab[for="t-lounge"],#t-care:checked~nav .tab[for="t-care"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+#t-plan:focus-visible~nav .tab[for="t-plan"],#t-todo:focus-visible~nav .tab[for="t-todo"],#t-pack:focus-visible~nav .tab[for="t-pack"],#t-med:focus-visible~nav .tab[for="t-med"],#t-power:focus-visible~nav .tab[for="t-power"],#t-money:focus-visible~nav .tab[for="t-money"],#t-lounge:focus-visible~nav .tab[for="t-lounge"],#t-care:focus-visible~nav .tab[for="t-care"]{outline:2px solid var(--accent);outline-offset:2px}
 section.pane{display:none}
-#t-plan:checked~#pane-plan,#t-todo:checked~#pane-todo,#t-pack:checked~#pane-pack,#t-med:checked~#pane-med,#t-power:checked~#pane-power,#t-money:checked~#pane-money,#t-care:checked~#pane-care{display:block}
+#t-plan:checked~#pane-plan,#t-todo:checked~#pane-todo,#t-pack:checked~#pane-pack,#t-med:checked~#pane-med,#t-power:checked~#pane-power,#t-money:checked~#pane-money,#t-lounge:checked~#pane-lounge,#t-care:checked~#pane-care{display:block}
 
 .sec-head{margin:14px 2px 12px}
 .sec-head h2{margin:2px 0 4px;font-size:20px;color:var(--navy);letter-spacing:.01em}
@@ -145,6 +145,7 @@ footer.app p{margin:5px 0}
 <input class="tabradio" type="radio" name="tab" id="t-med">
 <input class="tabradio" type="radio" name="tab" id="t-power">
 <input class="tabradio" type="radio" name="tab" id="t-money">
+<input class="tabradio" type="radio" name="tab" id="t-lounge">
 <input class="tabradio" type="radio" name="tab" id="t-care">
 
 <header class="app">
@@ -152,7 +153,7 @@ footer.app p{margin:5px 0}
   <h1>4カ国周遊 準備チェックリスト<br>ハノイ → KL → シンガポール → ソウル</h1>
   <p class="stamp">
     <span><i class="dot"></i>2026年8月8日(土)〜8月13日(木)</span>
-    <span><i class="dot"></i>情報確認日: 2026年7月26日</span>
+    <span><i class="dot"></i>情報確認日: 2026年8月7〜8日</span>
     <span><i class="dot"></i>オフラインで開けます</span>
   </p>
 </header>
@@ -164,6 +165,7 @@ footer.app p{margin:5px 0}
   <label class="tab" for="t-med">💊 薬と健康</label>
   <label class="tab" for="t-power">🔌 電源と機内</label>
   <label class="tab" for="t-money">💰 お金と通信</label>
+  <label class="tab" for="t-lounge">🍽 ラウンジ</label>
   <label class="tab" for="t-care">⚠️ 注意と緊急</label>
 </nav>
 
@@ -266,7 +268,7 @@ footer.app p{margin:5px 0}
   </div>
 
   <div class="card">
-    <h3>国別の入国要件(2026年7月26日確認)</h3>
+    <h3>国別の入国要件(2026年8月7日確認)</h3>
     <div class="tablewrap">
       <table>
         <thead><tr><th>国</th><th>ビザ</th><th>電子手続き</th><th>提出時期</th><th>費用</th></tr></thead>
@@ -679,6 +681,110 @@ footer.app p{margin:5px 0}
   </div>
 </section>
 
+<!-- ===================== ラウンジ ===================== -->
+<section class="pane" id="pane-lounge">
+  <div class="sec-head">
+    <h2>PPラウンジ ── 食事とシャワー</h2>
+    <p class="lede">プライオリティ・パス(PP)で入れる施設を行程順に。確認日: 2026年8月8日。営業時間・特典内容は変わりやすいので、<b>当日PPアプリで再確認</b>してから向かうこと。</p>
+  </div>
+
+  <div class="callout ok">
+    <b>セゾンプラチナ・アメックスのPPで、下の5施設すべて無料で入れます</b>
+    <ul>
+      <li>最上位「プレステージ」相当が無料付帯・<b>回数無制限</b>(公式サイトで確認 2026/8/8)。同伴者は1名につきUS$35</li>
+      <li><b>2025年11月4日からデジタル会員証(プライオリティ・パス アプリ)に移行済み</b>。旧プラスチック会員証は2025年12月1日で失効しているので、物理カードしか持っていない場合はそのままでは入れません</li>
+      <li>デジタル会員証は<b>申込後すぐ発行(即時)</b>。未登録なら今から「セゾンPortal」アプリ(またはNetアンサー)→プライオリティ・パス申込→「Priority Pass」アプリに会員証表示、で<b>出発当日でも間に合います</b></li>
+      <li>ラウンジ以外のレストラン型・カフェ型の提携特典もデジタル会員証で利用可(セゾン公式FAQに明記)</li>
+      <li>入場時は<b>PPアプリの会員証+当日の搭乗券</b>を見せる</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🇯🇵 8/8(土) 関空 15:30発 ── NODOKA <span class="badge free">PP無料</span></h3>
+    <ul>
+      <li><b>KIX Airport Cafe Lounge NODOKA</b> ── エアロプラザ2F・<b>保安検査前</b>・24時間営業・滞在3時間まで</li>
+      <li>特典は「食事・ドリンク・シャワー(40分)」などからの<b>選択制</b>。組み合わせは時期で変わるので入店時に確認 <span class="badge warn">要確認</span></li>
+      <li>⚠️ 関空の国際線は<b>出国審査後にPP施設がありません</b>(ANAラウンジの提携は2024年11月末で終了)。食事もシャワーもここで済ませてから出国する</li>
+      <li><b>動き方</b>: 13:00空港着 → NODOKA 13:10〜14:00 → 第1ターミナルへ移動(徒歩数分) → 14:30までにチェックイン完了 → 保安検査・出国審査</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🇻🇳 8/9(日) ハノイT2 07:25発 ── SH Premium Lounge <span class="badge free">PP無料</span></h3>
+    <ul>
+      <li><b>SH Premium Lounge(旧Song Hong Business Lounge)</b> ── T2出国審査後・4階西ウイング(37番ゲート付近)・<b>4:30〜23:00</b></li>
+      <li>ライブクッキング(フォー等)のビュッフェ。<b>シャワー室あり</b>(有料の場合あり・空き状況次第) <span class="badge warn">要確認</span></li>
+      <li>開店4:30なので早朝便でも使えます。ただし<b>出国審査の所要時間次第</b>なので「入れたら朝食」くらいの構えで</li>
+      <li><b>動き方</b>: 05:00空港着 → チェックイン(06:25ごろ締切目安) → 出国審査 → 06:00前後に入場できれば滞在30〜45分 → 06:45にはゲートへ</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🇲🇾 8/9(日) KL到着 11:30 ── PP施設なし</h3>
+    <ul>
+      <li>KLIA T1のPPラウンジ(Plaza Premium系)は<b>国際線出発エアサイドのみ</b>(Contact Pier・G2付近)。<b>到着時には入れません</b></li>
+      <li>→ <b>到着側でのシャワーは不可</b>。シャワーは「ハノイの宿(出発前)」「ハノイ空港のSH Premium」「KLのホテル(チェックイン後)」のどれかで</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🇲🇾 8/11(火) KLIA2 08:30発 ── Plaza Premium <span class="badge free">PP無料</span></h3>
+    <ul>
+      <li><b>Plaza Premium Lounge (Gateway@klia2)</b> ── <b>保安検査前</b>(Gateway@klia2モール内・Aerotel隣)・24時間・<b>PPは滞在2時間まで</b></li>
+      <li>ライブキッチンのビュッフェ。朝食利用に最適。ラウンジ内シャワーの有無・料金は要確認(当日はホテルでシャワー済みのはずなので実害なし) <span class="badge warn">要確認</span></li>
+      <li>検査前ゾーンなので<b>チェックイン前でも入れる</b>。荷物を持ったまま朝食→そのままカウンターへ</li>
+      <li><b>動き方</b>: 05:45〜06:00 KLIA2着 → ラウンジで朝食 06:00〜07:00 → チェックイン(07:30締切目安) → 保安検査 → ゲート(締切20分前)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🇸🇬 8/11(火)深夜 チャンギT4 00:50発 ── BLOSSOM <span class="badge free">PP無料</span></h3>
+    <ul>
+      <li><b>BLOSSOM (SATS &amp; Plaza Premium Lounge)</b> ── T4出国審査後・レベル2M・<b>24時間営業</b>(チャンギ公式で確認)</li>
+      <li>タパスバー含む食事+<b>温水シャワー室6室</b>。シャワーは有料・空き次第の記載あり(それでも夜行便前に浴びる価値大) <span class="badge warn">料金要確認</span></li>
+      <li><b>この旅で一番大事なラウンジ</b>。猛暑のシンガポール観光のあと、ここで夕食+シャワーを済ませてから6時間の夜行便へ</li>
+      <li><b>動き方</b>: 22:00〜22:30 T4に戻る → チェックイン(23:50までに・目安) → 出国審査 → ラウンジ22:45〜00:00(夕食+シャワー) → 00:10ごろゲートへ</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🇰🇷 8/13(木) 仁川T1 07:10発 ── SKY HUB West <span class="badge free">PP無料</span></h3>
+    <ul>
+      <li><b>SKY HUB Lounge West</b> ── T1出国審査後・西側4F(29番ゲート付近)・<b>24時間営業</b>・滞在5時間まで</li>
+      <li>韓国式の軽食ビュッフェ。シャワーは無し(施設案内に記載なし)</li>
+      <li>⚠️ 同じくPP対象の<b>アシアナラウンジ3ヶ所は「アシアナ/スターアライアンス搭乗者限定」なのでチェジュ航空の今回は入れません</b>。開店7時前後の施設も間に合わない。早朝はSKY HUB West一択</li>
+      <li><b>動き方</b>: 05:00〜05:15空港着 → チェックイン → 出国審査 → 05:45〜06:00入場・朝食30〜40分 → 06:40にはゲートへ</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>シャワーが浴びられる場所まとめ</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>タイミング</th><th>場所</th><th>シャワー</th></tr></thead>
+        <tbody>
+          <tr><td>8/8 関空</td><td>NODOKA(検査前)</td><td>○ 40分・特典枠(組合せ次第)</td></tr>
+          <tr><td>8/9 ハノイ発 早朝</td><td>SH Premium Lounge</td><td>○ あり(有料の場合あり)</td></tr>
+          <tr><td>8/9 KL着 11:30</td><td>PP施設なし</td><td>✕ 不可 → ホテルで</td></tr>
+          <tr><td>8/11 KLIA2発 朝</td><td>Plaza Premium(検査前)</td><td>△ 要確認(ホテルで済ませて出る)</td></tr>
+          <tr><td>8/11深夜 チャンギT4</td><td><b>BLOSSOM</b></td><td><b>◎ 6室・ここが本命</b></td></tr>
+          <tr><td>8/13 仁川発 早朝</td><td>SKY HUB West</td><td>✕ なし</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">行程全体で確実に浴びられるのは「ホテル3泊+チャンギBLOSSOM」。8/11(シンガポール日帰り)だけホテルが無い日なので、BLOSSOMのシャワーが実質その日の風呂になります。速乾タオルと着替え1組を機内持ち込みバッグの取り出しやすい場所に。</p>
+  </div>
+
+  <div class="callout warn">
+    <b>ラウンジ利用の共通注意</b>
+    <ul>
+      <li>滞在上限に注意: NODOKA 3時間 / KLIA2 Plaza Premium 2時間 / SKY HUB 5時間。「早く行き過ぎて上限で追い出される」より、搭乗締切から逆算して入る</li>
+      <li>営業時間・特典・シャワー料金は頻繁に変わります。<b>当日PPアプリの施設ページで最終確認</b>(臨時休業もアプリに出ます)</li>
+      <li>ラウンジで食べ過ぎ注意 ── 各国の食事も旅の目的のはず。ラウンジは「移動日の栄養補給と時間調整」と割り切るのが吉</li>
+    </ul>
+  </div>
+</section>
+
 <!-- ===================== 注意と緊急 ===================== -->
 <section class="pane" id="pane-care">
   <div class="sec-head">
@@ -773,7 +879,7 @@ footer.app p{margin:5px 0}
 </section>
 
 <footer class="app">
-  <p><b>情報確認日: 2026年7月26日</b>。制度・料金・運行時刻は変わります。<b>渡航前に必ず各公式サイトで再確認してください</b>。「要確認」と書いた項目は、この資料の作成時点で公式ソースまで裏どりできていない項目です。</p>
+  <p><b>情報確認日: 2026年8月7〜8日(ラウンジ・プライオリティパス情報は8月8日)</b>。制度・料金・運行時刻は変わります。<b>渡航前に必ず各公式サイトで再確認してください</b>。「要確認」と書いた項目は、この資料の作成時点で公式ソースまで裏どりできていない項目です。</p>
   <p>入国手続きは政府公式サイトのみを使ってください(MDAC・SG Arrival Card・e-Arrival Cardはいずれも無料です)。手数料を取る代行サイトは公式ではありません。</p>
   <p>医療・薬に関する記載は一般的な情報であり、診断や処方の代わりにはなりません。持病・常用薬がある場合は必ず医師・薬剤師に相談してください。</p>
   <p class="small"><b>ホーム画面にアプリとして追加するには</b>: このファイルを端末に保存し、<b>Safariのタブとして一度開いてから</b>、共有ボタン → 「ホーム画面に追加」。次からはアイコンをタップするだけで、Safariのバーが無い独立したアプリとして起動します。<br>

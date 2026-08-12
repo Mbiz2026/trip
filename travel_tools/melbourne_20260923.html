@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ja" >
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0D6B65">
+<title>メルボルン弾丸 作戦司令室｜2026.9.23–26</title>
+<style>
+:root{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+  --font-body:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium","Yu Gothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
+  --font-disp:"Avenir Next","Avenir","Futura","Trebuchet MS",var(--font-body);
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+    --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+    --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+    --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+    --ok:#86C295; --ok-bg:#16301C;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+}
+:root[data-theme="dark"]{
+  --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+  --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+  --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+  --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+  --ok:#86C295; --ok-bg:#16301C;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--font-body); font-size:15px; line-height:1.75;
+  padding:0 16px calc(40px + env(safe-area-inset-bottom));
+  max-width:720px; margin-inline:auto;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent); text-underline-offset:2px}
+h1,h2,h3,h4{line-height:1.4}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+header.app{padding:22px 2px 10px}
+.eyebrow{font-family:var(--font-disp);font-size:11px;letter-spacing:.16em;color:var(--accent);font-weight:600;text-transform:uppercase}
+header.app h1{margin:2px 0 6px;font-size:26px;line-height:1.3;letter-spacing:.01em;color:var(--navy);text-wrap:balance}
+.stamp{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.stamp span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
+
+/* ラジオボタン式タブ: JavaScriptが無い環境(ファイルAppのプレビュー等)でも動く */
+.tabradio{position:absolute;width:1px;height:1px;opacity:0;margin:0;pointer-events:none}
+nav.tabs{position:sticky;top:0;z-index:30;background:var(--bg);padding:8px 0 10px;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600;cursor:pointer;user-select:none;min-height:38px}
+#t-plan:checked~nav .tab[for="t-plan"],
+#t-route:checked~nav .tab[for="t-route"],
+#t-hack:checked~nav .tab[for="t-hack"],
+#t-days:checked~nav .tab[for="t-days"],
+#t-local:checked~nav .tab[for="t-local"],
+#t-src:checked~nav .tab[for="t-src"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+#t-plan:focus-visible~nav .tab[for="t-plan"],
+#t-route:focus-visible~nav .tab[for="t-route"],
+#t-hack:focus-visible~nav .tab[for="t-hack"],
+#t-days:focus-visible~nav .tab[for="t-days"],
+#t-local:focus-visible~nav .tab[for="t-local"],
+#t-src:focus-visible~nav .tab[for="t-src"]{outline:2px solid var(--accent);outline-offset:2px}
+section.pane{display:none}
+#t-plan:checked~#pane-plan,
+#t-route:checked~#pane-route,
+#t-hack:checked~#pane-hack,
+#t-days:checked~#pane-days,
+#t-local:checked~#pane-local,
+#t-src:checked~#pane-src{display:block}
+
+.sec-head{margin:16px 2px 12px}
+.sec-head h2{margin:2px 0 4px;font-size:20px;color:var(--navy);letter-spacing:.01em}
+.sec-head .lede{margin:0;font-size:13.5px;color:var(--muted)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 15px;margin:0 0 12px}
+.card h3{margin:0 0 8px;font-size:15.5px;color:var(--navy)}
+.card h4{margin:14px 0 4px;font-size:13.5px;color:var(--muted);font-weight:700;letter-spacing:.02em}
+.card p{margin:6px 0}
+.card ul,.card ol{margin:6px 0;padding-left:1.25em}
+.card li{margin:4px 0}
+.small{font-size:12.5px;color:var(--muted)}
+.tiny{font-size:11.5px;color:var(--muted);line-height:1.6}
+
+.callout{border:1px solid transparent;border-radius:10px;padding:12px 14px;margin:0 0 12px;font-size:14px}
+.callout.danger{background:var(--danger-bg);color:var(--danger)}
+.callout.warn{background:var(--warn-bg);color:var(--warn)}
+.callout.ok{background:var(--ok-bg);color:var(--ok)}
+.callout.tip{background:var(--accent-soft);color:var(--accent)}
+.callout b{display:block;margin-bottom:4px}
+.callout p{margin:5px 0}
+.callout a{color:inherit}
+
+.badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:2px 8px;vertical-align:middle;white-space:nowrap}
+.badge.good{background:var(--ok-bg);color:var(--ok)}
+.badge.mid{background:var(--warn-bg);color:var(--warn)}
+.badge.bad{background:var(--danger-bg);color:var(--danger)}
+.badge.official{background:var(--accent-soft);color:var(--accent)}
+.badge.check{background:var(--warn-bg);color:var(--warn)}
+
+/* 経由地・直行便のカード(表は使わない。スマホで横スクロールが発生しないようにするため) */
+.route{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px 13px;margin:0 0 10px}
+.rhead{display:flex;align-items:flex-start;gap:10px}
+.rno{flex:none;min-width:26px;height:26px;padding:0 6px;border-radius:7px;background:var(--accent-soft);color:var(--accent);font-family:var(--font-disp);font-weight:700;font-size:13px;display:inline-flex;align-items:center;justify-content:center}
+.rname{flex:1 1 auto;min-width:0}
+.rname b{font-size:15px;color:var(--navy);display:block;line-height:1.4}
+.rname .rcode{font-family:var(--font-mono);font-size:11.5px;color:var(--muted);font-weight:400}
+.rname .rair{display:block;font-size:12.5px;color:var(--muted);line-height:1.5}
+.rhead .badge{flex:none;margin-top:3px}
+.route p{margin:9px 0 0;font-size:13.5px}
+.rtimes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 0}
+.rtimes div{background:var(--surface2);border-radius:8px;padding:8px 10px}
+.rtimes dt{font-size:11px;color:var(--muted);margin-bottom:2px}
+.rtimes dd{margin:0;font-family:var(--font-mono);font-size:13px;font-variant-numeric:tabular-nums;line-height:1.5}
+
+.plan{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:14px 15px;margin:0 0 12px}
+.plan.b{border-left-color:var(--warn)}
+.plan.c{border-left-color:var(--navy)}
+.plan h3{margin:0 0 2px;font-size:16px;color:var(--navy)}
+.plan .tagline{font-size:12.5px;color:var(--muted);margin:0 0 10px}
+.kv{display:grid;grid-template-columns:5.5em 1fr;gap:5px 10px;margin:8px 0;font-size:13.5px}
+.kv dt{color:var(--muted);font-size:12.5px;padding-top:1px}
+.kv dd{margin:0}
+
+.steps{counter-reset:st;list-style:none;margin:0;padding:0}
+.steps li{position:relative;padding:0 0 14px 44px}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:1px;width:30px;height:30px;border-radius:8px;background:var(--navy);color:var(--surface);font-family:var(--font-disp);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center}
+.steps b{display:block;margin-bottom:2px}
+.steps p{margin:2px 0;font-size:14px}
+
+.day{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:0 0 12px;overflow:hidden}
+.day>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;min-height:44px}
+.day>summary::-webkit-details-marker{display:none}
+.day .dnum{font-family:var(--font-disp);font-weight:700;font-size:12px;color:var(--on-accent);background:var(--accent);border-radius:6px;padding:3px 8px;flex:none}
+.day .dname{font-weight:700;font-size:15px}
+.day .dsub{font-size:11.5px;color:var(--muted);display:block;line-height:1.4;font-weight:400}
+.day .chev{margin-left:auto;color:var(--muted);font-size:12px;transition:transform .15s}
+.day[open] .chev{transform:rotate(90deg)}
+.dbody{border-top:1px solid var(--line);padding:12px 14px 14px}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:4.6em 1fr;gap:10px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.tl li:last-child{border-bottom:none}
+.tl time{font-family:var(--font-mono);font-size:12.5px;color:var(--accent);font-weight:700;padding-top:3px;font-variant-numeric:tabular-nums}
+.tl b{display:block}
+.tl span{font-size:12.5px;color:var(--muted)}
+
+.linkgrid{display:grid;gap:8px;margin:8px 0 4px}
+.linkbtn{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:11px 13px;text-decoration:none;color:var(--ink);font-size:14px;min-height:46px}
+.linkbtn .lb-main{font-weight:600}
+.linkbtn .lb-sub{display:block;font-size:11.5px;color:var(--muted);font-weight:400;line-height:1.4}
+.linkbtn .arrow{margin-left:auto;color:var(--muted);font-size:13px;flex:none}
+
+.calc{display:grid;gap:10px}
+.calc label{font-size:12.5px;color:var(--muted);display:block;margin-bottom:3px}
+.calc input,.calc select{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:10px 12px;font-size:16px;font-family:var(--font-mono)}
+.calc select{font-family:var(--font-body);font-size:15px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.result{background:var(--accent-soft);border-radius:9px;padding:11px 13px;font-size:13.5px;color:var(--accent)}
+.result b{font-family:var(--font-mono);font-size:19px;font-variant-numeric:tabular-nums;color:var(--accent);display:inline-block}
+.result .rline{margin:3px 0}
+
+.srclist{list-style:none;margin:0;padding:0}
+.srclist li{padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.srclist li:last-child{border-bottom:none}
+.srclist b{display:block;font-size:14px}
+.srclist .u{font-size:11.5px;word-break:break-all}
+.srclist .d{font-size:11.5px;color:var(--muted)}
+
+footer.app{margin-top:26px;padding:16px 2px 0;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+footer.app p{margin:6px 0}
+</style>
+</head>
+<body>
+
+<header class="app">
+  <div class="eyebrow">Operation Melbourne</div>
+  <h1>メルボルン弾丸<br>作戦司令室</h1>
+  <div class="stamp">
+    <span><i class="dot"></i>2026年9月23日(水)→26日(土)</span>
+    <span><i class="dot"></i>大阪発</span>
+    <span><i class="dot"></i>情報確認日: 2026年8月12日</span>
+  </div>
+</header>
+
+<input type="radio" name="tab" id="t-plan" class="tabradio" checked>
+<input type="radio" name="tab" id="t-route" class="tabradio">
+<input type="radio" name="tab" id="t-hack" class="tabradio">
+<input type="radio" name="tab" id="t-days" class="tabradio">
+<input type="radio" name="tab" id="t-local" class="tabradio">
+<input type="radio" name="tab" id="t-src" class="tabradio">
+
+<nav class="tabs" aria-label="セクション">
+  <label class="tab" for="t-plan">🎯 結論</label>
+  <label class="tab" for="t-route">✈️ ルート比較</label>
+  <label class="tab" for="t-hack">🃏 裏技</label>
+  <label class="tab" for="t-days">🗓 旅程</label>
+  <label class="tab" for="t-local">🦘 現地</label>
+  <label class="tab" for="t-src">📖 出典</label>
+</nav>
+
+<!-- ══════════════ 1. 結論 ══════════════ -->
+<section class="pane" id="pane-plan">
+  <div class="sec-head">
+    <h2>まず、この3つ</h2>
+    <p class="lede">この日程には「知らないと損する」条件が3つ揃っています。</p>
+  </div>
+
+  <div class="callout warn">
+    <b>① 9/26(土)はAFLグランドファイナル。メルボルンは年に一度のお祭り週</b>
+    <p>豪州最大のスポーツイベントがMCG(メルボルン・クリケット・グラウンド)で開催されます。前日の<b>9/25(金)はビクトリア州の祝日</b>(グランドファイナル前日)。街は最高に盛り上がる反面、<b>宿は年間最高値クラス</b>になります。宿の確保が今回いちばんの勝負どころです。</p>
+  </div>
+
+  <div class="callout tip">
+    <b>② 直行便は「成田発着」だけ。大阪発の直行便は存在しません</b>
+    <p>日本↔メルボルンの直行便は日本航空・カンタス航空・ジェットスターの3社で、いずれも<b>成田発着</b>。つまり大阪の人は必ず「①国内線で成田へ+直行便」か「②関空からアジア経由」のどちらかになります。ここに節約の余地が生まれます。</p>
+  </div>
+
+  <div class="callout ok">
+    <b>③ 9/23(水)は「帰国ラッシュの日」。日本発は逆方向なので有利</b>
+    <p>2026年は11年ぶりのシルバーウィークで、<b>9/19(土)〜23(水)が5連休</b>。混雑のピークは9/18夜〜19の「日本発」と、9/22〜23の「日本着」です。9/23に日本を出るのは<b>ちょうど空いている向き</b>。連休のど真ん中に出発するより取りやすい日程です。</p>
+  </div>
+
+  <div class="sec-head">
+    <h2>結論: おすすめは「A + 裏技」</h2>
+    <p class="lede">4日間という短さが、選択肢をほぼ決めてしまいます。</p>
+  </div>
+
+  <div class="plan">
+    <h3>プランA｜成田直行 <span class="badge good">おすすめ</span></h3>
+    <p class="tagline">大阪 →(国内線)→ 成田 →(直行10時間)→ メルボルン</p>
+    <dl class="kv">
+      <dt>現地滞在</dt><dd><b>約49時間</b>(丸2日+朝)</dd>
+      <dt>移動</dt><dd>片道 約13〜15時間(乗り継ぎ込み)</dd>
+      <dt>航空券</dt><dd>高め。ただし<b>国内線を別買い</b>すれば数万円下がる余地あり</dd>
+      <dt>向く人</dt><dd>9/26中に日本へ戻る必要がある人</dd>
+    </dl>
+    <p class="small">9/23(水)午後に大阪→成田、成田を夕方発。9/24(木)早朝にメルボルン着。9/26(土)朝の便で発ち、その日の夕方〜夜に大阪着。<b>この日程なら、これ以外はほぼ成立しません。</b></p>
+  </div>
+
+  <div class="plan b">
+    <h3>プランB｜アジア経由で安く <span class="badge mid">帰国が9/27になる</span></h3>
+    <p class="tagline">関空 →(広州など)→ メルボルン</p>
+    <dl class="kv">
+      <dt>現地滞在</dt><dd>約40〜50時間(便により大きく変動)</dd>
+      <dt>移動</dt><dd>片道 <b>約18〜24時間</b></dd>
+      <dt>航空券</dt><dd>直行より<b>安くなりやすい</b>(特に中国系)</dd>
+      <dt>向く人</dt><dd>9/27(日)帰国でもよく、金額を優先する人</dd>
+    </dl>
+    <p class="small">経由便は片道でまる1日近くかかります。9/26中に日本へ戻る前提だと、メルボルン発が9/25夜になり<b>現地滞在が1日分消えます</b>。安さの価値が出るのは9/27帰国を許容できる場合です。</p>
+  </div>
+
+  <div class="plan c">
+    <h3>プランC｜行きだけ経由・帰りは直行 <span class="badge good">裏技本命</span></h3>
+    <p class="tagline">関空 →(アジア経由・安)→ メルボルン →(直行)→ 成田 →(国内線)→ 大阪</p>
+    <dl class="kv">
+      <dt>現地滞在</dt><dd>プランAと同等〜以上</dd>
+      <dt>航空券</dt><dd>行きで節約、帰りで時間を買う</dd>
+      <dt>仕掛け</dt><dd><b>片道×片道</b>+<b>発着空港ちがい(オープンジョー)</b></dd>
+      <dt>向く人</dt><dd>手間をかけてでも最適化したい人</dd>
+    </dl>
+    <p class="small">往復を1枚で買う縛りを捨てると、行きと帰りで別の最適解を選べます。<b>9/22(火)は「国民の休日」なので、22日夜に出れば有給を1日も増やさずに現地が半日〜1日伸びます。</b>詳しくは「裏技」タブへ。</p>
+  </div>
+
+  <div class="callout danger">
+    <b>先に予約すべきは航空券より「宿」</b>
+    <p>グランドファイナル週のメルボルンCBDは、平常時の2〜3倍の宿泊料になることがあります(二次情報)。8月半ばの今、<b>安い部屋から先に消えていきます</b>。日程が確定しているなら、キャンセル無料の宿を今日押さえてから航空券を詰めるのが安全です。</p>
+  </div>
+
+  <div class="sec-head">
+    <h2>「時間の値段」で決める</h2>
+    <p class="lede">経由便で浮くお金を、失う現地時間で割ってみると判断しやすくなります。</p>
+  </div>
+  <div class="card">
+    <div class="calc">
+      <div class="row2">
+        <div>
+          <label for="c-direct">直行プランの総額(円)</label>
+          <input type="number" id="c-direct" value="230000" min="0" step="1000" inputmode="numeric">
+        </div>
+        <div>
+          <label for="c-via">経由プランの総額(円)</label>
+          <input type="number" id="c-via" value="165000" min="0" step="1000" inputmode="numeric">
+        </div>
+      </div>
+      <div>
+        <label for="c-hours">経由にすると減る現地滞在(時間)</label>
+        <input type="number" id="c-hours" value="14" min="1" step="1" inputmode="numeric">
+      </div>
+      <div class="result" id="c-result">
+        <p class="rline">例の数字では、経由にすると <b>65,000円</b> 浮いて、現地時間は 14 時間 減ります。</p>
+        <p class="rline">= 現地の1時間を <b>約4,643円</b> で売っている計算です。</p>
+        <p class="rline tiny">この金額を「安い」と思えるなら経由便、「高い」と思えるなら直行便。数字は上の欄を書き換えると再計算されます(JavaScriptが動く環境のみ)。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 2. ルート比較 ══════════════ -->
+<section class="pane" id="pane-route">
+  <div class="sec-head">
+    <h2>どこの乗り換えが安いのか</h2>
+    <p class="lede">結論から言うと、<b>中国系(広州・厦門・上海)</b>がいちばん安くなりやすく、次が<b>東南アジア(マニラ・クアラルンプール・ホーチミン)</b>です。</p>
+  </div>
+
+  <div class="callout tip">
+    <b>安さの理由はシンプル</b>
+    <p>日本↔豪州は距離のわりに便数が少なく、直行便は高止まりします。一方、中国・東南アジアのハブは「自国発の豪州線」と「自国発の日本線」を別々に大量に飛ばしていて、その2本を繋いだ通し運賃を安く出せます。<b>遠回りするほど安い</b>のはこの構造のためです。</p>
+  </div>
+
+  <div class="route">
+    <div class="rhead"><span class="rno">1</span>
+      <div class="rname"><b>広州 <span class="rcode">CAN</span></b><span class="rair">中国南方航空</span></div>
+      <span class="badge good">最安級</span></div>
+    <p>2026年から広州↔メルボルンが<b>通年1日2便</b>に。関空↔広州もあるので、<b>1社の通し券で買える</b>のが最大の強み(乗り継ぎが保証される)。<b>今回の第一候補です。</b></p>
+  </div>
+  <div class="route">
+    <div class="rhead"><span class="rno">2</span>
+      <div class="rname"><b>厦門 <span class="rcode">XMN</span></b><span class="rair">厦門航空</span></div>
+      <span class="badge good">最安級</span></div>
+    <p>厦門↔メルボルンが<b>週3便</b>と少なく、4日間の日程にハマりにくいのが難点。日程が合えば非常に安く出ます。</p>
+  </div>
+  <div class="route">
+    <div class="rhead"><span class="rno">3</span>
+      <div class="rname"><b>上海浦東 <span class="rcode">PVG</span></b><span class="rair">中国東方航空</span></div>
+      <span class="badge good">安い</span></div>
+    <p>関空↔上海は便数が多く、出発時刻と乗り継ぎ時間を選びやすいのが利点。</p>
+  </div>
+  <div class="route">
+    <div class="rhead"><span class="rno">4</span>
+      <div class="rname"><b>マニラ <span class="rcode">MNL</span></b><span class="rair">フィリピン航空 / セブパシフィック</span></div>
+      <span class="badge good">安い</span></div>
+    <p>関空↔マニラが多頻度。フィリピン航空なら通し券で買えます。セブパシフィックは最安級ですがLCCなので、預け荷物代を足して比較を。</p>
+  </div>
+  <div class="route">
+    <div class="rhead"><span class="rno">5</span>
+      <div class="rname"><b>クアラルンプール <span class="rcode">KUL</span></b><span class="rair">エアアジアX / バティックエア / マレーシア航空</span></div>
+      <span class="badge good">安い</span></div>
+    <p>LCC主体で最安が出ることも。ただし<b>関空↔KLの直行はバティックエア(2025年12月〜)が中心</b>で、エアアジアは高雄経由(2026年6月〜)。<span class="badge check">要確認</span></p>
+  </div>
+  <div class="route">
+    <div class="rhead"><span class="rno">6</span>
+      <div class="rname"><b>ホーチミン <span class="rcode">SGN</span></b><span class="rair">ベトナム航空 / ベトジェット</span></div>
+      <span class="badge mid">中くらい</span></div>
+    <p>ベトナム航空は関空発着あり。乗り継ぎ待ちが長くなりがちです。</p>
+  </div>
+  <div class="route">
+    <div class="rhead"><span class="rno">7</span>
+      <div class="rname"><b>バンコク <span class="rcode">BKK</span></b><span class="rair">タイ国際航空</span></div>
+      <span class="badge mid">中くらい</span></div>
+    <p>大回りになるぶん所要が伸びます。機内の快適性は高め。</p>
+  </div>
+  <div class="route">
+    <div class="rhead"><span class="rno">8</span>
+      <div class="rname"><b>香港 <span class="rcode">HKG</span></b><span class="rair">キャセイパシフィック / 香港航空</span></div>
+      <span class="badge mid">やや高</span></div>
+    <p>乗り継ぎが速くて楽。関空↔香港の選択肢が非常に多く、<b>時間あたりの満足度は高い</b>選択です。</p>
+  </div>
+  <div class="route">
+    <div class="rhead"><span class="rno">9</span>
+      <div class="rname"><b>台北 <span class="rcode">TPE</span></b><span class="rair">チャイナエアライン</span></div>
+      <span class="badge mid">やや高</span></div>
+    <p>関空から近く、行きの前半が軽い。豪州線の本数が限られるので日程は合わせにくい。</p>
+  </div>
+  <div class="route">
+    <div class="rhead"><span class="rno">10</span>
+      <div class="rname"><b>シンガポール <span class="rcode">SIN</span></b><span class="rair">シンガポール航空</span></div>
+      <span class="badge bad">高い</span></div>
+    <p>いちばん快適でいちばん高い。安さが目的なら今回は外してよいです。</p>
+  </div>
+  <p class="tiny">就航状況は2026年8月12日時点の調査。運休・増便は頻繁に起きるため、予約前に各社公式で必ず確認してください。順位は「安くなりやすさ」の傾向であって、特定日の最安を保証するものではありません。</p>
+
+  <div class="callout warn">
+    <b>中国経由を選ぶときの3つの確認事項</b>
+    <p>① <b>乗り継ぎだけなら中国入国は不要</b>になる制度がありますが、空港・便・所要時間によって条件が変わります。予約前に航空会社に確認を。</p>
+    <p>② <b>荷物が最終目的地までスルーで運ばれるか</b>。別々の予約だと一度受け取って預け直しになり、乗り継ぎ時間が余分に必要です。</p>
+    <p>③ 中国国内では日本で常用するアプリ・サービスの一部が使えません。空港で長時間待つなら、<b>事前にオフラインで見られるものを用意</b>しておくと安心です。</p>
+  </div>
+
+  <div class="sec-head">
+    <h2>直行便の3社(すべて成田発着)</h2>
+    <p class="lede">時刻は2026年8月12日時点で公開されている情報からの<b>目安</b>です。9月下旬のメルボルンは夏時間前(日本との時差+1時間)。</p>
+  </div>
+
+  <div class="route">
+    <div class="rhead"><span class="rno">JL</span>
+      <div class="rname"><b>日本航空</b><span class="rair">JL773 / JL774 ・ 成田発着</span></div></div>
+    <dl class="rtimes">
+      <div><dt>行き(日本発)</dt><dd>成田 18:40<br>→ 翌 05:45 着</dd></div>
+      <div><dt>帰り(メルボルン発)</dt><dd>07:20<br>→ 成田 15:15 着</dd></div>
+    </dl>
+    <p>2026年度の計画では<b>10/24まで毎日運航</b>。帰りが成田15:15着なので、<b>その日のうちに大阪へ余裕で戻れます</b>。今回の日程との相性がいちばん良い便。</p>
+  </div>
+  <div class="route">
+    <div class="rhead"><span class="rno">QF</span>
+      <div class="rname"><b>カンタス航空</b><span class="rair">QF79 / QF80 ・ 成田発着</span></div></div>
+    <dl class="rtimes">
+      <div><dt>行き(日本発)</dt><dd>成田 19:20<br>→ 翌 07:45 着</dd></div>
+      <div><dt>帰り(メルボルン発)</dt><dd>09:25<br>→ 成田 17:40 着</dd></div>
+    </dl>
+    <p>羽田への移管は<b>保留</b>となり成田のままです(2026年時点)。帰りの出発が日本航空より2時間遅いので、<b>最終日の朝がラク</b>。ただし大阪着は夜になります。</p>
+  </div>
+  <div class="route">
+    <div class="rhead"><span class="rno">JQ</span>
+      <div class="rname"><b>ジェットスター</b><span class="rair">成田発着 ・ 時刻は<span class="badge check">要確認</span></span></div></div>
+    <p>LCC。<b>券面価格は最安</b>ですが、預け荷物・座席指定・機内食がすべて別料金です。10時間超のフライトで座席指定なしはかなり厳しいので、<b>それらを足した総額</b>で他社と比べてください。</p>
+  </div>
+  <p class="tiny">時刻は運航日によって変わります。<span class="badge check">要確認</span> 予約時に各社公式サイトの時刻表で確認してください。</p>
+
+  <div class="sec-head">
+    <h2>今すぐ値段を見る</h2>
+    <p class="lede">9/23発・9/26帰りの条件を入れたリンクです。まず横断検索で相場を掴み、最後は公式サイトで買うのが基本です。</p>
+  </div>
+
+  <div class="linkgrid">
+    <a class="linkbtn" href="https://www.google.com/travel/flights?q=Flights%20from%20KIX%20to%20MEL%20on%202026-09-23%20through%202026-09-26&hl=ja&curr=JPY" target="_blank" rel="noopener">
+      <span><span class="lb-main">Googleフライト｜関空 → メルボルン</span><span class="lb-sub">往復 9/23→9/26 ・ 経由地ごとの最安が一望できる</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.google.com/travel/flights?q=Flights%20from%20TYO%20to%20MEL%20on%202026-09-23%20through%202026-09-26&hl=ja&curr=JPY" target="_blank" rel="noopener">
+      <span><span class="lb-main">Googleフライト｜東京 → メルボルン</span><span class="lb-sub">往復 9/23→9/26 ・ 直行便の相場はこちら</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.skyscanner.jp/transport/flights/kix/mela/260923/260926/?adultsv2=1&adults=1&cabinclass=economy&rtn=1" target="_blank" rel="noopener">
+      <span><span class="lb-main">スカイスキャナー｜関空 → メルボルン</span><span class="lb-sub">往復 9/23→9/26 ・ LCCや中国系も拾いやすい</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.skyscanner.jp/transport/flights/kix/mela/260923/?adultsv2=1&adults=1&cabinclass=economy&rtn=0" target="_blank" rel="noopener">
+      <span><span class="lb-main">スカイスキャナー｜片道 関空 → メルボルン</span><span class="lb-sub">9/23発 ・ 片道×片道を組むときの行き側</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.skyscanner.jp/transport/flights/mela/tyoa/260926/?adultsv2=1&adults=1&cabinclass=economy&rtn=0" target="_blank" rel="noopener">
+      <span><span class="lb-main">スカイスキャナー｜片道 メルボルン → 東京</span><span class="lb-sub">9/26発 ・ 片道×片道を組むときの帰り側</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://jp.trip.com/flights/showfarefirst?dcity=kix&acity=mel&ddate=2026-09-23&rdate=2026-09-26&triptype=rt&class=y&quantity=1&locale=ja-JP&curr=JPY" target="_blank" rel="noopener">
+      <span><span class="lb-main">Trip.com｜関空 → メルボルン</span><span class="lb-sub">往復 9/23→9/26 ・ 中国系の運賃に強い</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.kayak.co.jp/flights/KIX-MEL/2026-09-23/2026-09-26?sort=bestflight_a" target="_blank" rel="noopener">
+      <span><span class="lb-main">KAYAK｜関空 → メルボルン</span><span class="lb-sub">往復 9/23→9/26 ・ 価格推移の参考に</span></span><span class="arrow">›</span></a>
+  </div>
+
+  <h4 style="margin:16px 2px 6px;font-size:13.5px;color:var(--muted)">公式サイト(最終的にはここで買う)</h4>
+  <div class="linkgrid">
+    <a class="linkbtn" href="https://www.jal.co.jp/jp/ja/inter/route/mel/" target="_blank" rel="noopener"><span><span class="lb-main">日本航空 <span class="badge official">公式</span></span><span class="lb-sub">成田↔メルボルン直行便の案内</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.qantas.com/jp/ja.html" target="_blank" rel="noopener"><span><span class="lb-main">カンタス航空 <span class="badge official">公式</span></span><span class="lb-sub">日本語サイト</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.jetstar.com/jp/ja/home" target="_blank" rel="noopener"><span><span class="lb-main">ジェットスター <span class="badge official">公式</span></span><span class="lb-sub">成田↔メルボルン(LCC)</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.csair.com/jp/ja/" target="_blank" rel="noopener"><span><span class="lb-main">中国南方航空 <span class="badge official">公式</span></span><span class="lb-sub">広州経由・今回の第一候補</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.xiamenair.com/ja-jp/" target="_blank" rel="noopener"><span><span class="lb-main">厦門航空 <span class="badge official">公式</span></span><span class="lb-sub">厦門経由・週3便</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://jp.ceair.com/" target="_blank" rel="noopener"><span><span class="lb-main">中国東方航空 <span class="badge official">公式</span></span><span class="lb-sub">上海経由</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.philippineairlines.com/" target="_blank" rel="noopener"><span><span class="lb-main">フィリピン航空 <span class="badge official">公式</span></span><span class="lb-sub">マニラ経由</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.cebupacificair.com/ja-jp/" target="_blank" rel="noopener"><span><span class="lb-main">セブパシフィック航空 <span class="badge official">公式</span></span><span class="lb-sub">マニラ経由(LCC)</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.airasia.com/ja/jp" target="_blank" rel="noopener"><span><span class="lb-main">エアアジア <span class="badge official">公式</span></span><span class="lb-sub">クアラルンプール経由(LCC)</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.malaysiaairlines.com/jp/ja.html" target="_blank" rel="noopener"><span><span class="lb-main">マレーシア航空 <span class="badge official">公式</span></span><span class="lb-sub">クアラルンプール経由</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.cathaypacific.com/cx/ja_JP.html" target="_blank" rel="noopener"><span><span class="lb-main">キャセイパシフィック航空 <span class="badge official">公式</span></span><span class="lb-sub">香港経由</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.vietnamairlines.com/ja-jp/" target="_blank" rel="noopener"><span><span class="lb-main">ベトナム航空 <span class="badge official">公式</span></span><span class="lb-sub">ホーチミン経由</span></span><span class="arrow">›</span></a>
+  </div>
+</section>
+
+<!-- ══════════════ 3. 裏技 ══════════════ -->
+<section class="pane" id="pane-hack">
+  <div class="sec-head">
+    <h2>裏技、正直に評価しました</h2>
+    <p class="lede">「今回効くか」を◎○×で先に書いてあります。効かないものは理由も書きました。</p>
+  </div>
+
+  <div class="card">
+    <h3>① 国内線を別に買う(片道×片道) <span class="badge good">◎ 効く</span></h3>
+    <p>直行便は成田発着。大阪の人は「国際線(成田↔メルボルン)」と「国内線(大阪↔成田)」を<b>別々に最安で買う</b>のが基本形です。</p>
+    <h4>なぜ安くなるか</h4>
+    <p>航空会社の「大阪発メルボルン行き」通し運賃には、国内線区間の値段が定価に近い形で乗っています。国内線をLCCや早割で自分で取れば、その差額がまるごと浮きます。時間帯も自由に選べます。</p>
+    <h4>やり方</h4>
+    <ul>
+      <li>行き: 伊丹/関空 → 成田 の<b>片道</b>を最安で(ピーチ、ジェットスター、ANA/JALの早割)</li>
+      <li>帰り: 成田 → 伊丹/関空 の<b>片道</b>を別に最安で</li>
+      <li>国際線は「成田↔メルボルン」の往復で買う</li>
+    </ul>
+    <div class="callout danger" style="margin-top:10px">
+      <b>別々の予約は「遅れても誰も助けてくれない」</b>
+      <p>国内線が遅れて国際線に乗り遅れても、補償はありません。<b>行きは乗り継ぎに最低3時間、できれば前日入り</b>を強く推奨します。9/23は成田周辺のホテルも混むので、前泊するなら早めに。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>② 発着空港ちがい(オープンジョー) <span class="badge good">◎ 効く</span></h3>
+    <p>「行きは関空発、帰りは成田着」のように<b>出発地と到着地を変える</b>買い方です。今回はここに大きな余地があります。</p>
+    <h4>今回のハマる形</h4>
+    <ul>
+      <li><b>行き</b>: 関空 →(広州など経由・安い)→ メルボルン</li>
+      <li><b>帰り</b>: メルボルン →(直行・速い)→ 成田 →(国内線)→ 大阪</li>
+    </ul>
+    <p>行きは時差の関係で夜行になりやすく、経由の長さが体感で薄まります。帰りは直行で一気に戻る。<b>「行きは安さ、帰りは速さ」の両取り</b>ができます。</p>
+    <p class="small">逆パターン(行き直行・帰り経由)は、帰りの経由便で9/26中に戻れなくなるため今回は不利です。</p>
+  </div>
+
+  <div class="card">
+    <h3>③ 9/22(火)夜に出る <span class="badge good">◎ 効く・盲点</span></h3>
+    <p>2026年は<b>9/22(火)が「国民の休日」</b>です。つまり9/22はもともと休み。</p>
+    <p>9/23の朝に出るのではなく<b>9/22の夜に出発</b>すると、<b>有給を1日も追加せずに現地滞在が半日〜1日伸びます</b>。経由便を選ぶ場合、この1日があるかないかで「経由便の割高な時間コスト」がほぼ消えます。</p>
+    <p class="small">9/22は連休のまん中で日本発が混む時期ではありますが、23日出発と比べて数万円変わるほどではないことが多いです。<span class="badge check">要確認</span> 両日の運賃を必ず見比べてください。</p>
+  </div>
+
+  <div class="card">
+    <h3>④ 総額(諸税・燃油こみ)で比べる <span class="badge good">◎ 効く</span></h3>
+    <p>券面価格ではなく<b>支払総額</b>で比べてください。2026年の燃油サーチャージは高い水準にあり(二次情報)、<b>会社によって金額がまるで違います</b>。一般に中国系やLCCは燃油の負担が軽く、券面の安さがそのまま総額の安さになりやすい傾向です。</p>
+    <p>LCCの場合は、これに<b>預け荷物・座席指定・機内食</b>を足して初めて比較になります。10時間超のフライトで座席指定なしはかなり厳しいので、必ず足して計算を。</p>
+    <p class="small">このリポジトリの「マイルコンパス」に燃油サーチャージの早見表があります。手元にあれば合わせてどうぞ。</p>
+  </div>
+
+  <div class="card">
+    <h3>⑤ 販売サイト・通貨を変える <span class="badge mid">○ 小さく効く</span></h3>
+    <p>同じ便でも、航空会社サイトの国設定(日本サイト/豪州サイト)や決済通貨で数%変わることがあります。海外OTAの方が安いこともあります。</p>
+    <p>ただし<b>「日本発」の運賃そのものは日本発として設定されている</b>ので、大化けはしません。海外通貨で払う場合は<b>カードの外貨手数料(だいたい1.6〜2.2%)</b>を足して比較を。手間のわりに効果は限定的です。</p>
+  </div>
+
+  <div class="card">
+    <h3>⑥ 海外発券(ソウル発券・台北発券) <span class="badge bad">× 今回は割に合わない</span></h3>
+    <p>ご要望にあった海外発券ですが、<b>今回の4日間という日程では正直おすすめできません。</b>理由を書きます。</p>
+    <h4>そもそも海外発券とは</h4>
+    <p>「旅程の出発地を海外にする」買い方です。たとえばソウル発券なら <b>ソウル → 東京 → メルボルン → 東京 → ソウル</b> という1枚を買い、別途「日本↔ソウル」の往復を自分で買い足します。ソウル発の方が日本発より運賃設定が安いことがあるので、その差額を取りにいく手法です。</p>
+    <h4>なぜ今回は合わないか</h4>
+    <ul>
+      <li><b>旅の起点が海外になる</b>ので、まずソウル(または台北)へ行く必要がある。片道半日+前泊がかかる</li>
+      <li>帰りも<b>ソウルまで乗ってから</b>日本へ戻る。ここでもう半日〜1日</li>
+      <li>結果、<b>4日間のうち1〜2日を「発券地への往復」に使う</b>ことになる</li>
+      <li>浮くのは数万円。失う現地時間はそれ以上の価値になりがち</li>
+    </ul>
+    <h4>効果が出るのはどんなとき</h4>
+    <p>海外発券が本領を発揮するのは、<b>①滞在が1週間以上ある ②ビジネスクラスを狙う ③発券地でも観光する(ソウルも楽しむ) ④年に何度も飛ぶ</b>ようなケースです。今回のように「4日間・エコノミー・目的地はメルボルンだけ」だと、構造的に元が取れません。</p>
+    <div class="callout danger" style="margin-top:10px">
+      <b>途中で降りて残りを捨てるのは規約違反</b>
+      <p>「帰りのソウル行き区間を成田で降りて捨てる」という話を見かけますが、これは<b>航空会社の運送約款・運賃規則の違反</b>です。以降の区間が無効化される、マイルが没収される、常習だと会員資格を失う等の実害があります。<b>このページでは推奨しません。</b></p>
+    </div>
+    <p class="small">どうしても試すなら、<b>9/26帰国を諦めて9/27以降に延ばし、ソウルか台北の観光も旅程に組み込む</b>形にしてください。そうすれば「発券地への往復」が無駄ではなくなり、初めて計算が合います。</p>
+  </div>
+
+  <div class="card">
+    <h3>⑦ 豪州側でオープンジョー(メルボルンin / シドニーout) <span class="badge bad">× 今回は非推奨</span></h3>
+    <p>2都市を絡めると運賃が下がることがありますが、<b>メルボルン↔シドニーの移動に半日</b>を持っていかれます。実質2日しかない今回では、都市間移動が滞在の大半を食いつぶします。</p>
+    <p class="small">例外: 9/26(土)はグランドファイナル当日でメルボルン発の便が混みます。どうしても取れない・高すぎる場合に限り、シドニー経由やアバロン空港(AVV)発を調べる価値はあります。</p>
+  </div>
+
+  <div class="card">
+    <h3>⑧ ストップオーバー(経由地で1泊) <span class="badge bad">× 今回は不可能</span></h3>
+    <p>経由地に無料で数日滞在できる仕組みですが、4日間では物理的に組み込めません。<b>次回、1週間以上の日程のときに</b>取っておいてください。</p>
+  </div>
+
+  <div class="sec-head">
+    <h2>買う順番</h2>
+  </div>
+  <div class="card">
+    <ol class="steps">
+      <li><b>宿を先に押さえる</b><p>キャンセル無料の条件で、9/23または9/24〜9/26の分を確保。グランドファイナル週なので、ここが最大のボトルネックです。</p></li>
+      <li><b>国際線の相場を掴む</b><p>Googleフライトで「関空発」と「東京発」の両方を見て、直行と経由の価格差を把握します。</p></li>
+      <li><b>9/22発と9/23発を比べる</b><p>9/22(火)は国民の休日。半日〜1日多く滞在できて、値段があまり変わらないことがあります。</p></li>
+      <li><b>国際線を確定させる</b><p>最後は航空会社の公式サイトで購入。変更・払い戻し条件も同時に確認します。</p></li>
+      <li><b>国内線(大阪↔成田)を別に取る</b><p>国際線が確定してから。行きは乗り継ぎ3時間以上、できれば前泊。</p></li>
+      <li><b>ETAを申請する</b><p>公式アプリのみ。詳しくは「現地」タブへ。</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ══════════════ 4. 旅程 ══════════════ -->
+<section class="pane" id="pane-days">
+  <div class="sec-head">
+    <h2>プランAの旅程</h2>
+    <p class="lede">成田直行・9/26中に大阪へ戻る前提。時刻は2026年8月12日時点の公開情報からの<b>目安</b>で、予約時に必ず確認してください。</p>
+  </div>
+
+  <details class="day" open>
+    <summary><span class="dnum">DAY 1</span><span class="dname">9/23(水)<span class="dsub">秋分の日・シルバーウィーク最終日 ｜ 移動日</span></span><span class="chev">▶</span></summary>
+    <div class="dbody">
+      <ul class="tl">
+        <li><time>午前</time><div><b>自宅 → 伊丹または関空</b><span>荷造りは前夜に。ETAの承認メールをスクリーンショットで保存しておく</span></div></li>
+        <li><time>13:00頃</time><div><b>大阪 → 成田</b><span>国内線で移動。<b>国際線に最低3時間の余裕</b>を。遅延に備えて午前便でもよい</span></div></li>
+        <li><time>16:00頃</time><div><b>成田空港着・第2ターミナルへ</b><span>日本航空・カンタスとも第2ターミナル。夕食はここで済ませておくと機内で眠りやすい</span></div></li>
+        <li><time>18:40</time><div><b>成田発(JL773)</b><span>カンタスQF80なら19:20発。所要 約10時間</span></div></li>
+        <li><time>機内</time><div><b>寝る</b><span>メルボルンは日本より1時間進んでいるだけ。到着後すぐ動けるよう、機内で寝るのが最重要</span></div></li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="day" open>
+    <summary><span class="dnum">DAY 2</span><span class="dname">9/24(木)<span class="dsub">まる1日 ｜ 市内探索</span></span><span class="chev">▶</span></summary>
+    <div class="dbody">
+      <ul class="tl">
+        <li><time>05:45</time><div><b>メルボルン着</b><span>カンタスなら07:45着。入国審査はスマートゲート、荷物受取まで30〜60分</span></div></li>
+        <li><time>07:00</time><div><b>SkyBusで市内へ</b><span>サザンクロス駅まで約30分。予約不要で10〜15分間隔</span></div></li>
+        <li><time>08:00</time><div><b>宿に荷物を預ける</b><span>チェックイン前でも荷物だけ預かってもらえる宿がほとんど。朝食は市内のカフェで</span></div></li>
+        <li><time>午前</time><div><b>CBDの路地(レーンウェイ)を歩く</b><span>ホジアレーン、センタープレイス周辺。<b>CBD内のトラムは無料</b>(フリートラムゾーン)</span></div></li>
+        <li><time>昼</time><div><b>クイーン・ヴィクトリア・マーケット</b><span>木曜は営業日。ただし営業曜日と時間は<span class="badge check">要確認</span></span></div></li>
+        <li><time>午後</time><div><b>ヤラ川沿い / サウスバンク、または近郊へ</b><span>フィッツロイ(古着とカフェ)、セントキルダ(ビーチと夕暮れ)が定番。学校休暇中で混雑</span></div></li>
+        <li><time>夕方</time><div><b>Footy Fest(ヤラパーク)を覗く</b><span>MCG隣で開催中の無料イベント。木曜は10:00〜21:00。街の空気を掴むのに最適</span></div></li>
+        <li><time>18:00頃</time><div><b>日没</b><span>9月下旬の日没は18時前後。夜は10℃前後まで下がるので上着必須</span></div></li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="day" open>
+    <summary><span class="dnum">DAY 3</span><span class="dname">9/25(金)<span class="dsub">ビクトリア州の祝日 ｜ グランドファイナル・パレード</span></span><span class="chev">▶</span></summary>
+    <div class="dbody">
+      <div class="callout tip" style="margin-bottom:10px">
+        <b>この日が今回いちばんの「当たり」</b>
+        <p>州の祝日で、街全体がグランドファイナル前夜祭になります。<b>パレードは無料</b>。日本から行って偶然この日に居合わせるのは、かなり運のいいことです。</p>
+      </div>
+      <ul class="tl">
+        <li><time>朝</time><div><b>早めに場所を取る</b><span>沿道は非常に混みます。開始1時間前には到着したい</span></div></li>
+        <li><time>09:00頃</time><div><b>グランドファイナル・パレード</b><span>メルボルンパーク → バラルン・マー → MCG → ヤラパークのルート。無料</span></div></li>
+        <li><time>昼</time><div><b>Footy Fest(ヤラパーク)</b><span>10:00〜21:00・入場無料。パレードの終点なのでそのまま流れ込める</span></div></li>
+        <li><time>午後</time><div><b>祝日なので営業時間に注意</b><span>個人商店は休み・短縮の可能性。大型店とカフェは概ね営業<span class="badge check">要確認</span></span></div></li>
+        <li><time>夕方</time><div><b>選べる過ごし方</b><span>①パブで前夜祭の空気を味わう ②静かに過ごすならグレートオーシャンロードの日帰りツアー(朝発・要事前予約) ③ヤラバレーのワイナリー</span></div></li>
+        <li><time>夜</time><div><b>荷造りと早寝</b><span>翌朝が早い。空港までの足を確定させておく</span></div></li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="day" open>
+    <summary><span class="dnum">DAY 4</span><span class="dname">9/26(土)<span class="dsub">AFLグランドファイナル当日 ｜ 帰国</span></span><span class="chev">▶</span></summary>
+    <div class="dbody">
+      <ul class="tl">
+        <li><time>04:30</time><div><b>起床・空港へ</b><span>JL774(07:20発)なら遅くとも05:00には宿を出る。SkyBusは早朝4時台から運行</span></div></li>
+        <li><time>05:30</time><div><b>空港着・チェックイン</b><span>カンタスQF79(09:25発)ならもう2時間ゆっくりできる</span></div></li>
+        <li><time>07:20</time><div><b>メルボルン発(JL774)</b><span>所要 約10時間</span></div></li>
+        <li><time>15:15</time><div><b>成田着</b><span>カンタスなら17:40着</span></div></li>
+        <li><time>17:00頃</time><div><b>成田 → 伊丹/関空</b><span>国際線の到着から国内線まで<b>最低2時間</b>。入国+荷物受取+ターミナル移動で1時間は見る</span></div></li>
+        <li><time>19:00頃</time><div><b>大阪着</b><span>カンタス便だと大阪着が21〜22時になる。翌日の予定は入れないこと</span></div></li>
+      </ul>
+      <div class="callout warn" style="margin-top:10px">
+        <b>グランドファイナルを見たいなら、この日程では無理</b>
+        <p>試合は9/26(土)午後にMCGで開催されます。観戦するなら<b>帰国を9/27(日)以降にずらす</b>必要があります。チケットは大半が両クラブの会員に配分されるため、一般での入手は非常に困難です。パブや野外のパブリックビューイングで見るのが現実的です。</p>
+      </div>
+    </div>
+  </details>
+
+  <div class="sec-head">
+    <h2>宿をどこに取るか</h2>
+  </div>
+  <div class="card">
+    <p>グランドファイナル週はCBDが最も高騰します。トラムで15分圏に逃がすと、同じ予算で部屋の質が上がります。</p>
+    <div class="route">
+      <div class="rhead"><span class="rno">◎</span><div class="rname"><b>CBD(中心部)</b><span class="rair">トラム無料圏の中</span></div></div>
+      <p>いちばん便利で、今週いちばん高い。空港バスの終点サザンクロス駅から歩ける範囲が取れるなら、高くても価値があります。</p>
+    </div>
+    <div class="route">
+      <div class="rhead"><span class="rno">◎</span><div class="rname"><b>サウスヤラ</b><span class="rair">トラム約15分</span></div></div>
+      <p>落ち着いた高級住宅街。カフェとショッピングが充実していて、治安も良好。CBDが高すぎるときの第一候補。</p>
+    </div>
+    <div class="route">
+      <div class="rhead"><span class="rno">○</span><div class="rname"><b>フィッツロイ / カールトン</b><span class="rair">トラム約10分</span></div></div>
+      <p>飲食店と古着屋が濃いエリア。夜も賑やかで、雰囲気を楽しみたいならここ。</p>
+    </div>
+    <div class="route">
+      <div class="rhead"><span class="rno">○</span><div class="rname"><b>セントキルダ</b><span class="rair">トラム約25分</span></div></div>
+      <p>海沿いで宿代が下がりやすい。夕暮れが美しい一方、夜の一部の通りは治安に注意が必要です。</p>
+    </div>
+    <div class="route">
+      <div class="rhead"><span class="rno">△</span><div class="rname"><b>リッチモンド</b><span class="rair">徒歩+電車で約10分</span></div></div>
+      <p>MCGのすぐ近く。ただし<b>グランドファイナル週は逆に高騰します</b>。安さ狙いでは選ばないこと。</p>
+    </div>
+    <p class="tiny">エリア評価は一般的な傾向にもとづく<b>二次情報</b>です。治安は時間帯と通りによって差があります。最新の状況は外務省 海外安全ホームページも確認してください。</p>
+  </div>
+</section>
+
+<!-- ══════════════ 5. 現地 ══════════════ -->
+<section class="pane" id="pane-local">
+  <div class="sec-head">
+    <h2>出発前に必ずやること</h2>
+  </div>
+
+  <div class="callout danger">
+    <b>ETA(電子渡航許可)は公式アプリからだけ</b>
+    <p>日本国籍で3か月以内の観光なら、<b>ETA(サブクラス601)</b>が必要です。個人が申請できる公式ルートは<b>オーストラリア内務省の「Australian ETA」アプリだけ</b>。手数料は<b>20豪ドル</b>です。</p>
+    <p>「代行します」という業者サイトが検索上位に出ますが、<b>不要な手数料を上乗せされます</b>。使わないでください。</p>
+    <p>申請には<b>NFCとカメラが動くスマホ</b>が必要です(パスポートのICチップを読み取るため)。承認は通常すぐですが、余裕をもって申請を。有効期間は承認日から12か月またはパスポート有効期限のどちらか早い方です。</p>
+  </div>
+  <div class="linkgrid">
+    <a class="linkbtn" href="https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/electronic-travel-authority-601" target="_blank" rel="noopener"><span><span class="lb-main">オーストラリア内務省 ETA案内 <span class="badge official">政府公式</span></span><span class="lb-sub">immi.homeaffairs.gov.au</span></span><span class="arrow">›</span></a>
+    <a class="linkbtn" href="https://www.anzen.mofa.go.jp/info/pcinfectionspothazardinfo_215.html" target="_blank" rel="noopener"><span><span class="lb-main">外務省 海外安全ホームページ(豪州) <span class="badge official">政府公式</span></span><span class="lb-sub">渡航前に危険情報・スポット情報を確認</span></span><span class="arrow">›</span></a>
+  </div>
+
+  <div class="callout warn">
+    <b>持ち込み申告は厳しい国です</b>
+    <p>オーストラリアは検疫が世界有数に厳格です。<b>食品・肉製品・乳製品・種子・木製品</b>などは申告義務があり、申告漏れは高額の罰金になります。<b>迷ったら「申告する」を選ぶ</b>のが正解で、申告して没収されるだけなら罰金はありません。カップ麺やお菓子も対象になり得ます。</p>
+  </div>
+
+  <div class="sec-head">
+    <h2>9月下旬のメルボルン</h2>
+  </div>
+  <div class="card">
+    <h3>気候と服装</h3>
+    <p>春です。日中の最高気温は<b>18℃前後</b>、朝晩の最低は<b>9〜10℃前後</b>。<b>東京の4月中旬</b>くらいの体感です。</p>
+    <p>メルボルンは「1日に四季がある」と言われるほど天気が変わります。<b>重ね着+防風のはおりもの+折りたたみ傘</b>が基本装備。日差しは日本より強いので、晴れたら日焼け対策も。</p>
+    <p class="small">夏時間(サマータイム)の開始は9月末より後なので、滞在中は<b>日本との時差は+1時間</b>だけです。時差ボケがほぼ無いのが、この行き先の隠れた利点です。</p>
+  </div>
+
+  <div class="card">
+    <h3>空港から市内へ</h3>
+    <p><b>SkyBus</b>がいちばん分かりやすい方法です。メルボルン空港とサザンクロス駅を結ぶ赤い2階建てバスで、<b>予約不要</b>、日中は10〜15分間隔、所要約30分。深夜1時〜4時以外は動いています。</p>
+    <p>料金は<b>片道25豪ドル前後</b>(往復で買うと1回あたり安くなる)。<span class="badge check">要確認</span> 改定があるので公式サイトで最新を確認してください。</p>
+    <p class="small">空港からの鉄道は2026年8月時点で未開通です。タクシー/配車アプリは市内まで60〜80豪ドル程度が目安(二次情報)。3人以上ならこちらが得なこともあります。</p>
+  </div>
+
+  <div class="card">
+    <h3>市内交通 — 2026年は半額です</h3>
+    <div class="callout ok" style="margin:0 0 10px">
+      <b>2026年6月1日〜2027年1月1日、ビクトリア州の公共交通が半額</b>
+      <p>1日の上限額が<b>11.40豪ドル → 5.70豪ドル</b>に下がっています。電車・トラム・バスすべて対象。滞在中まるごと期間内です。</p>
+    </div>
+    <p><b>CBD内のトラムは元から無料</b>(フリートラムゾーン)。ゾーン内で完結する乗車なら、カードすら要りません。</p>
+    <p>ゾーンの外へ出るなら<b>myki</b>カードが必要です。駅やコンビニで購入・チャージできます。トラムに乗るときは、<b>ゾーンを出る場合だけタッチする</b>ことに注意(逆に無料ゾーン内でタッチすると課金されることがあります)。</p>
+    <p class="tiny">半額措置の期間・金額は公式サイト(transport.vic.gov.au)で必ず再確認してください。</p>
+  </div>
+
+  <div class="card">
+    <h3>お金</h3>
+    <p>オーストラリアは<b>カード社会</b>で、現金がほぼ要りません。屋台やマーケットもタッチ決済が通ります。ただし店側が<b>カード手数料(1〜2%程度)を客に転嫁</b>することが多く、レシートで確認すると分かります。</p>
+    <p>チップの習慣は<b>基本ありません</b>。高級店で満足したら5〜10%程度置く人もいる、という程度です。</p>
+    <p>現金を持つなら1万円分程度で十分。両替は日本の空港より現地ATMのキャッシングの方がレートが良いことが多い(二次情報)ですが、手数料と繰上返済の手間を考えると、<b>タッチ決済カードを2枚持っていく</b>のがいちばん楽です。</p>
+  </div>
+
+  <div class="card">
+    <h3>グランドファイナル週の歩き方</h3>
+    <ul>
+      <li><b>Footy Fest</b>: 9/23(水)〜9/26(土)、MCG隣のヤラパークで開催。<b>入場無料</b>。水〜金は10:00〜21:00、土は8:00〜22:00</li>
+      <li><b>パレード</b>: 9/25(金)朝9時頃から。メルボルンパーク→バラルン・マー→MCG→ヤラパーク。<b>無料</b></li>
+      <li><b>試合当日(9/26)</b>: 午前中の市内は意外と静か。午後から一気に人が出るので、<b>午前の便で発つなら移動はスムーズ</b></li>
+      <li>MCG周辺と主要駅は<b>試合前後に大混雑</b>します。空港へ向かう時間には余裕を</li>
+    </ul>
+    <p class="tiny">日程・開催内容はAFL公式(afl.com.au)で最新をご確認ください。祝日は「AFLの日程確定を条件」として設定されているものです。</p>
+  </div>
+</section>
+
+<!-- ══════════════ 6. 出典 ══════════════ -->
+<section class="pane" id="pane-src">
+  <div class="sec-head">
+    <h2>出典と確認日</h2>
+    <p class="lede">すべて2026年8月12日に確認。<b>渡航前に必ず各公式サイトで再確認してください。</b></p>
+  </div>
+
+  <div class="card">
+    <h3>公的機関</h3>
+    <ul class="srclist">
+      <li><b>オーストラリア内務省｜ETA(subclass 601)</b><span class="u">immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/electronic-travel-authority-601</span><span class="d">確認日 2026-08-12 ｜ ETAの要否・公式アプリ・手数料</span></li>
+      <li><b>外務省 海外安全ホームページ(オーストラリア)</b><span class="u">anzen.mofa.go.jp</span><span class="d">確認日 2026-08-12 ｜ 危険情報</span></li>
+      <li><b>Business Victoria｜Victorian public holidays 2026</b><span class="u">business.vic.gov.au/business-information/public-holidays/victorian-public-holidays-2026</span><span class="d">確認日 2026-08-12 ｜ 9/25(金)がAFLグランドファイナル前日の祝日(AFLの日程確定が条件)</span></li>
+      <li><b>Transport Victoria｜myki fares</b><span class="u">transport.vic.gov.au/tickets-and-myki/fares</span><span class="d">確認日 2026-08-12 ｜ 2026年6月1日〜2027年1月1日の運賃半額、上限額11.40→5.70豪ドル</span></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>航空会社・空港(公式)</h3>
+    <ul class="srclist">
+      <li><b>日本航空｜成田-メルボルン線</b><span class="u">jal.co.jp/jp/ja/inter/route/mel/</span><span class="d">確認日 2026-08-12</span></li>
+      <li><b>日本航空プレスリリース｜2026年度 路線便数計画(国際)</b><span class="u">press.jal.co.jp</span><span class="d">確認日 2026-08-12 ｜ 成田-メルボルンは3/29〜10/24が週7便、10/25以降 週3便</span></li>
+      <li><b>カンタス航空 日本語サイト</b><span class="u">qantas.com/jp/ja.html</span><span class="d">確認日 2026-08-12</span></li>
+      <li><b>ジェットスター 日本語サイト</b><span class="u">jetstar.com/jp/ja/home</span><span class="d">確認日 2026-08-12</span></li>
+      <li><b>中国南方航空 / 厦門航空 / 中国東方航空</b><span class="u">csair.com ・ xiamenair.com ・ jp.ceair.com</span><span class="d">確認日 2026-08-12</span></li>
+      <li><b>メルボルン空港</b><span class="u">melbourneairport.com.au</span><span class="d">確認日 2026-08-12</span></li>
+      <li><b>SkyBus</b><span class="u">skybus.com.au</span><span class="d">確認日 2026-08-12 ｜ 空港↔サザンクロス駅</span></li>
+      <li><b>AFL公式</b><span class="u">afl.com.au</span><span class="d">確認日 2026-08-12 ｜ グランドファイナルとパレード</span></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>二次情報(断定していない箇所の根拠)</h3>
+    <p class="small">以下はニュースサイト・旅行メディア等の<b>二次情報</b>です。本文では「〜されている」「傾向」等の表現に留め、断定を避けています。</p>
+    <ul class="srclist">
+      <li><b>カンタスの成田/羽田の扱い</b><span class="d">羽田移管は保留され成田のままとの報道(Executive Traveller ほか) ｜ 確認日 2026-08-12</span></li>
+      <li><b>QF79/80・JL773/774の時刻</b><span class="d">フライト情報サイト(airportia、airpaz、TRAICY等)の掲載値 ｜ 確認日 2026-08-12 ｜ 運航日により変動</span></li>
+      <li><b>中国南方航空 広州-メルボルン 通年1日2便化(2026年〜)</b><span class="d">航空業界メディア ｜ 確認日 2026-08-12</span></li>
+      <li><b>厦門航空 厦門-メルボルン 週3便</b><span class="d">flightconnections 等 ｜ 確認日 2026-08-12</span></li>
+      <li><b>関空発の国際線就航状況</b><span class="d">ryokolink.com の一覧 ｜ 確認日 2026-08-12 ｜ バティックエアのKIX-KL就航(2025年12月)、エアアジアの高雄経由(2026年6月)を含む。<b>要確認</b></span></li>
+      <li><b>航空券の相場</b><span class="d">トラベルコ ｜ 確認日 2026-08-12 ｜ 東京発メルボルン最安 92,686円(2026年7月〜2027年6月中の9月)、直行便最安 120,270円(3月)、大阪発最安 97,798円(8月)。<b>いずれも「最も安い月」の値であり、9/23-26の実勢とは異なります</b></span></li>
+      <li><b>燃油サーチャージが2026年に高水準</b><span class="d">出張・マイル系メディア ｜ 確認日 2026-08-12</span></li>
+      <li><b>グランドファイナル週の宿泊費高騰・エリア別の傾向</b><span class="d">旅行メディア ｜ 確認日 2026-08-12</span></li>
+      <li><b>2026年のシルバーウィーク(9/19〜23の5連休)</b><span class="d">祝日カレンダー各社 ｜ 確認日 2026-08-12 ｜ 秋分の日は前年2月の官報で正式決定</span></li>
+      <li><b>ビクトリア州の学校休暇(2026/9/19〜10/4)</b><span class="d">教育関連メディア ｜ 確認日 2026-08-12</span></li>
+    </ul>
+  </div>
+
+  <div class="callout warn">
+    <b>このページで断定していないこと</b>
+    <p>航空券の実勢価格、各便の正確な時刻、乗り継ぎ地の入国要否、宿泊料金は<b>すべて変動します</b>。このページは「どう考えて探すか」の地図であって、価格表ではありません。数字はすべて予約時に公式サイトでご確認ください。</p>
+  </div>
+</section>
+
+<footer class="app">
+  <p><b>メルボルン弾丸 作戦司令室</b> ｜ 2026年9月23日(水)〜26日(土) ｜ 情報確認日 2026年8月12日</p>
+  <p>このページは1つのHTMLファイルで完結し、外部の通信を一切しません。保存すればオフラインでも開けます。</p>
+  <p>渡航制度・運賃・時刻は頻繁に変わります。<b>予約と出発の前に、必ず各公式サイトで最新情報を確認してください。</b>ETAの申請は内務省の公式アプリのみを使い、代行業者は利用しないでください。</p>
+</footer>
+
+<script>
+/* JavaScriptは「あれば便利」機能のみ。無くても全ての情報は読めます。 */
+(function(){
+  "use strict";
+  var d = document.getElementById("c-direct"),
+      v = document.getElementById("c-via"),
+      h = document.getElementById("c-hours"),
+      out = document.getElementById("c-result");
+  if(!d || !v || !h || !out) return;
+
+  function yen(n){ return Math.round(n).toLocaleString("ja-JP"); }
+
+  function calc(){
+    var direct = parseFloat(d.value), via = parseFloat(v.value), hours = parseFloat(h.value);
+    if(!isFinite(direct) || !isFinite(via) || !isFinite(hours) || hours <= 0){
+      out.innerHTML = '<p class="rline">3つの欄すべてに数字を入れてください(時間は1以上)。</p>';
+      return;
+    }
+    var save = direct - via;
+    if(save <= 0){
+      out.innerHTML = '<p class="rline">経由プランの方が <b>' + yen(-save) + '円</b> 高くなっています。</p>' +
+        '<p class="rline">安くもなく、現地時間も ' + yen(hours) + ' 時間 短い。<b>直行便を選んでください。</b></p>';
+      return;
+    }
+    var per = save / hours;
+    var verdict;
+    if(per < 3000){ verdict = "現地1時間を3,000円以下で売る計算。<b>安売りしすぎです。</b>直行便を推します。"; }
+    else if(per < 6000){ verdict = "微妙なライン。<b>体力と、その時間に何をしたいか</b>で決めてください。"; }
+    else { verdict = "1時間あたりの節約額としては大きい。<b>経由便を検討する価値があります。</b>"; }
+    out.innerHTML =
+      '<p class="rline">経由にすると <b>' + yen(save) + '円</b> 浮いて、現地時間は ' + yen(hours) + ' 時間 減ります。</p>' +
+      '<p class="rline">= 現地の1時間を <b>約' + yen(per) + '円</b> で売っている計算です。</p>' +
+      '<p class="rline tiny">' + verdict + '</p>';
+  }
+
+  [d, v, h].forEach(function(el){
+    el.addEventListener("input", calc);
+    el.addEventListener("change", calc);
+  });
+  calc();
+
+  /* タブを切り替えたら先頭へ戻す(スマホで見やすくするため) */
+  Array.prototype.forEach.call(document.querySelectorAll(".tabradio"), function(r){
+    r.addEventListener("change", function(){
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+})();
+</script>
+</body>
+</html>

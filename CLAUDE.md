@@ -2,6 +2,10 @@
 
 ユーザーはコードを書けない。すべての操作はClaudeが代行し、結果だけを平易な日本語で報告すること。
 
+> **⚠ 納品は必ず「タップして開けるURL」で行うこと。HTMLファイルをそのまま送りつけない。**
+> ユーザーはiPhoneで受け取る。ファイルとして送られたHTMLはSafariに持っていけず開けないため、
+> ファイル送付は納品として成立しない。詳細は下の「納品のしかた」を必ず読むこと。
+
 ## このリポジトリについて
 
 海外旅行者向けの実用ツールを作る。今のところ7つ:
@@ -22,6 +26,39 @@
 4. **ライト/ダークテーマ両対応。** 生成物は必ず両方で見た目を確認する
 5. **生成後は表示確認をする。** ヘッドレスブラウザで(JS有り/無しの両方)スクリーンショットを撮ってから納品する。無い環境ではユーザーに確認を依頼する
 6. **迷ったら止まってユーザーに聞く。** 情報の鮮度・法規制が絡む分野(渡航制度・料金など)は特に慎重に。断定できないことは「要確認」と明記する
+
+## 納品のしかた(ここを間違えると全部やり直しになる)
+
+**成果物のアプリは Artifact として公開し、URLを渡す。** これが唯一の正しい納品方法。
+
+- ❌ `SendUserFile` でHTMLを送る → **iPhoneではSafariに渡せないので開けない。やってはいけない**
+- ❌ 「Safariで開いてホーム画面に追加してください」と手順を書く → 前提のSafariで開けないので無意味
+- ✅ `Artifact` ツールで publish して、返ってきた `https://claude.ai/code/artifact/...` を渡す
+  - ユーザーはURLをタップするだけで開ける。ホーム画面への追加もそこからできる
+  - 更新は**同じファイルパスで再publish**すればURLが変わらない。別パスにすると別物になるので注意
+  - 過去のArtifactを更新するときは `action:"list"` でURLを探し、`url` を渡して上書きする
+
+### Artifact用HTMLの作り方
+
+Artifactは publish 時に `<!doctype html><head>…</head><body>` を**自分で被せる**。
+そのため単体HTMLをそのまま渡すと二重になって壊れる。`travel_tools/dev/build_artifact.py` で変換する:
+
+```bash
+python3 travel_tools/dev/build_artifact.py travel_tools/<アプリ>.html /tmp/.../out.html
+```
+
+このスクリプトが `<title>`・`<style>`・`<body>`の中身だけを取り出し、PWA用のmanifest/アイコン
+(data URIで数百KB。Artifactでは`<head>`を書けないので不要)を落とし、Webフォントの`@import`を足す。
+**リポジトリの単体HTMLを唯一の正とし、Artifact版は毎回そこから生成すること**(手で2つ維持すると必ずズレる)。
+
+### Artifact特有の注意
+
+- **テーマは3状態**: 素の`:root`にライト一式 / `@media (prefers-color-scheme:dark)` は
+  `:root:not([data-theme="light"])` で囲う / `:root[data-theme="dark"]` でも同じトークンを再定義する。
+  メディアクエリや`[data-theme]`の中だけで色を定義すると、無指定の閲覧者に片方のテーマが崩れて出る
+- `body`には必ずトークンから背景色を指定する(透明だとホスト側の地色を拾う)
+- 外部リソースはGoogle Fontsだけ許可。それ以外はCSPで落ちる
+- 単体HTML側の「外部リソースを読み込まない」ルールは維持する(フォントはビルド時に足す)
 
 ## 表示確認のやり方(セッション開始時のフックが利用可否を教えてくれる)
 
@@ -45,7 +82,7 @@
 
 ### パターンA: 単体HTMLファイルに埋め込み(`kaigai_travel_kit.html` / `mile_factory.html`)
 
-manifest・アイコン・Apple系メタタグを全部`<head>`にdata URIで埋め込み、ファイル1つだけで完結させる方式。ユーザーにファイルを直接送る/AirDropする配布に向く。
+manifest・アイコン・Apple系メタタグを全部`<head>`にdata URIで埋め込み、ファイル1つだけで完結させる方式。オフラインで確実に開けることが要る場合の保険。**ただしこの形で納品してはいけない**(上の「納品のしかた」参照)。納品はArtifactのURLで行い、単体HTMLはリポジトリ内の正本として置いておく。
 
 - `<link rel="manifest" href="data:application/manifest+json;base64,...">` — name/short_name/display:standalone/icons等をJSONで書き、**base64エンコードしたdata URI**で埋め込む(生JSON+パーセントエンコードだと`"`等のエスケープが面倒なのでbase64が安全)
 - `<meta name="apple-mobile-web-app-capable" content="yes">` などApple系メタタグ一式(iOSはmanifestよりこちら優先で長年対応してきた経緯があるので必ず両方入れる)

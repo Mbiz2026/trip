@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<title>マイル工場 — JALマイルを仕組みで貯める</title>
+<title>マイル工場</title>
 <meta name="description" content="会社員がJALマイルを再現性のある手順で貯めるための実践マニュアル。月次ルーティン・カードの振り分け・案件の選び方・年間シミュレータ。オフラインで動きます。">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#c8203f">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#101318">
@@ -24,47 +24,71 @@
    ============================================================ */
 
 :root{
-  --bg:#f4f6f9;
+  --bg:#f7f4f5;
   --surface:#ffffff;
-  --surface-2:#eef1f6;
-  --text:#171a20;
-  --muted:#5c6675;
-  --border:#dde3ea;
+  --surface-2:#f1ecee;
+  --text:#1c1619;
+  --muted:#6b5f64;
+  --border:#e6dee1;
   --accent:#c8203f;
   --accent-soft:#fdeaee;
   --accent-text:#a3122f;
   --good:#12764d;
-  --good-soft:#e4f5ec;
+  --good-soft:#e2f4ea;
   --warn:#8a5a00;
-  --warn-soft:#fdf1dc;
+  --warn-soft:#fbf0da;
   --bad:#b3261e;
   --bad-soft:#fdeae8;
   --info:#1f5fa8;
   --info-soft:#e6effa;
-  --shadow:0 1px 2px rgba(18,24,36,.06), 0 4px 16px rgba(18,24,36,.06);
+  --hdr:linear-gradient(160deg,#a8112e 0%,#c8203f 55%,#e0455f 100%);
+  --shadow:0 1px 2px rgba(40,20,26,.06), 0 4px 16px rgba(40,20,26,.07);
   --radius:14px;
+  --num:"Archivo",system-ui,-apple-system,sans-serif;
 }
 @media (prefers-color-scheme: dark){
-  :root{
-    --bg:#101318;
-    --surface:#191d24;
-    --surface-2:#212630;
-    --text:#e9ecf1;
-    --muted:#9ba5b4;
-    --border:#2c333e;
+  :root:not([data-theme="light"]){
+    --bg:#141013;
+    --surface:#1d181b;
+    --surface-2:#262023;
+    --text:#f0eaec;
+    --muted:#a89ba0;
+    --border:#352d31;
     --accent:#ff6b83;
-    --accent-soft:#31171e;
+    --accent-soft:#38191f;
     --accent-text:#ff8ea1;
     --good:#4fd39a;
-    --good-soft:#13291f;
+    --good-soft:#15281f;
     --warn:#f0b357;
-    --warn-soft:#2c2213;
+    --warn-soft:#2e2314;
     --bad:#ff8578;
-    --bad-soft:#2e1815;
+    --bad-soft:#331916;
     --info:#77b4f5;
-    --info-soft:#141f2e;
-    --shadow:0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.28);
+    --info-soft:#16202e;
+    --hdr:linear-gradient(160deg,#5d0f21 0%,#8d1c34 55%,#ab3550 100%);
+    --shadow:0 1px 2px rgba(0,0,0,.34), 0 4px 16px rgba(0,0,0,.3);
   }
+}
+:root[data-theme="dark"]{
+  --bg:#141013;
+  --surface:#1d181b;
+  --surface-2:#262023;
+  --text:#f0eaec;
+  --muted:#a89ba0;
+  --border:#352d31;
+  --accent:#ff6b83;
+  --accent-soft:#38191f;
+  --accent-text:#ff8ea1;
+  --good:#4fd39a;
+  --good-soft:#15281f;
+  --warn:#f0b357;
+  --warn-soft:#2e2314;
+  --bad:#ff8578;
+  --bad-soft:#331916;
+  --info:#77b4f5;
+  --info-soft:#16202e;
+  --hdr:linear-gradient(160deg,#5d0f21 0%,#8d1c34 55%,#ab3550 100%);
+  --shadow:0 1px 2px rgba(0,0,0,.34), 0 4px 16px rgba(0,0,0,.3);
 }
 
 *{box-sizing:border-box}
@@ -82,12 +106,9 @@ body{
 
 /* ---------- ヘッダー ---------- */
 .hdr{
-  background:linear-gradient(160deg,#a8112e 0%,#c8203f 55%,#e0455f 100%);
+  background:var(--hdr);
   color:#fff;
   padding:calc(20px + env(safe-area-inset-top,0px)) 18px 18px;
-}
-@media (prefers-color-scheme: dark){
-  .hdr{background:linear-gradient(160deg,#5d0f21 0%,#8d1c34 55%,#a83149 100%)}
 }
 .hdr h1{margin:0;font-size:21px;letter-spacing:.02em;line-height:1.35}
 .hdr .sub{margin:6px 0 0;font-size:13px;opacity:.92;line-height:1.6}
@@ -198,17 +219,18 @@ th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--border);ver
 th{background:var(--surface-2);font-weight:700;font-size:12.5px;white-space:nowrap;color:var(--muted)}
 tbody tr:last-child td{border-bottom:0}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.num{font-family:var(--num);font-size:14px}
 td.mid{text-align:center}
 
 /* 数値ハイライト */
-.big{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.25;color:var(--accent-text)}
+.big{font-family:var(--num);font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1.2;color:var(--accent-text)}
 .kpi{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 13px}
 .kpi > div{
   flex:1 1 130px;background:var(--surface-2);border-radius:12px;
   padding:11px 12px;text-align:center;
 }
 .kpi .lbl{display:block;font-size:11.5px;color:var(--muted);margin-bottom:2px}
-.kpi .val{display:block;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.3}
+.kpi .val{display:block;font-family:var(--num);font-size:21px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.3}
 
 /* 手順ステップ */
 .steps{list-style:none;padding:0;margin:0;counter-reset:st}

@@ -1,0 +1,1120 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#0D6B65">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1726">
+<link rel="manifest" href="radar.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="radar-icon-192.png">
+<link rel="apple-touch-icon" href="radar-icon-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="特典レーダー">
+<title>特典レーダー — JAL特典航空券の空席さがし</title>
+<noscript><style>
+/* JavaScriptが無い環境: 記録機能を隠し、印刷用の白紙台帳に差し替える */
+.jsonly{display:none!important}
+.nojs{display:block!important}
+</style></noscript>
+</head>
+<body>
+<style>
+:root{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+  --jal:#97282F; --jal-bg:#F7E8E9; --mr:#1D5FA7; --mr-bg:#E4EEF8;
+  --font-body:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium","Yu Gothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
+  --font-disp:"Avenir Next","Avenir","Futura","Trebuchet MS",var(--font-body);
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+    --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+    --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+    --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+    --ok:#86C295; --ok-bg:#16301C;
+    --jal:#E88C92; --jal-bg:#3A1E20; --mr:#8CB8E8; --mr-bg:#182C44;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+  --jal:#97282F; --jal-bg:#F7E8E9; --mr:#1D5FA7; --mr-bg:#E4EEF8;
+}
+:root[data-theme="dark"]{
+  --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+  --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+  --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+  --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+  --ok:#86C295; --ok-bg:#16301C;
+  --jal:#E88C92; --jal-bg:#3A1E20; --mr:#8CB8E8; --mr-bg:#182C44;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);line-height:1.65;font-size:15.5px;-webkit-text-size-adjust:100%;line-break:strict;word-break:normal}
+.wrap{max-width:700px;margin:0 auto;padding:0 14px 72px}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px;word-break:break-all}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+header.app{padding:22px 2px 10px}
+.eyebrow{font-family:var(--font-disp);font-size:11px;letter-spacing:.16em;color:var(--jal);font-weight:600;text-transform:uppercase}
+header.app h1{margin:2px 0 6px;font-size:26px;line-height:1.3;letter-spacing:.01em;color:var(--navy);text-wrap:balance}
+.stamp{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.stamp span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--jal);flex:none}
+
+/* ラジオボタン式タブ: JavaScriptが無い環境でも動く */
+.tabradio{position:absolute;width:1px;height:1px;opacity:0;margin:0;pointer-events:none}
+nav.tabs{position:sticky;top:0;z-index:30;background:var(--bg);padding:8px 0 10px;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600;cursor:pointer;user-select:none}
+#t-plan:checked~nav .tab[for="t-plan"],#t-led:checked~nav .tab[for="t-led"],#t-link:checked~nav .tab[for="t-link"],#t-ptn:checked~nav .tab[for="t-ptn"],#t-rule:checked~nav .tab[for="t-rule"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+#t-plan:focus-visible~nav .tab[for="t-plan"],#t-led:focus-visible~nav .tab[for="t-led"],#t-link:focus-visible~nav .tab[for="t-link"],#t-ptn:focus-visible~nav .tab[for="t-ptn"],#t-rule:focus-visible~nav .tab[for="t-rule"]{outline:2px solid var(--accent);outline-offset:2px}
+section.pane{display:none}
+#t-plan:checked~#pane-plan,#t-led:checked~#pane-led,#t-link:checked~#pane-link,#t-ptn:checked~#pane-ptn,#t-rule:checked~#pane-rule{display:block}
+
+.sec-head{margin:16px 2px 12px}
+.sec-head h2{margin:2px 0 4px;font-size:20px;color:var(--navy);letter-spacing:.01em}
+.sec-head .lede{margin:0;font-size:13.5px;color:var(--muted)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 15px;margin:0 0 12px}
+.card h3{margin:0 0 8px;font-size:15.5px;color:var(--navy)}
+.card h4{margin:14px 0 6px;font-size:13.5px;color:var(--navy)}
+.card p{margin:6px 0}
+.card ul,.card ol{margin:6px 0;padding-left:20px}
+.card li{margin:4px 0}
+.small{font-size:12.5px;color:var(--muted)}
+.callout{border:1px solid transparent;border-radius:10px;padding:12px 14px;margin:0 0 12px;font-size:14px}
+.callout.danger{background:var(--danger-bg);color:var(--danger)}
+.callout.warn{background:var(--warn-bg);color:var(--warn)}
+.callout.ok{background:var(--ok-bg);color:var(--ok)}
+.callout.jal{background:var(--jal-bg);color:var(--jal)}
+.callout>b:first-child{display:block;margin-bottom:4px}
+.badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:2px 8px;vertical-align:middle;white-space:nowrap}
+.badge.ow{background:var(--accent-soft);color:var(--accent)}
+.badge.jalb{background:var(--jal-bg);color:var(--jal)}
+.badge.warn2{background:var(--warn-bg);color:var(--warn)}
+.badge.ng{background:var(--danger-bg);color:var(--danger)}
+.badge.okb{background:var(--ok-bg);color:var(--ok)}
+.badge.mrb{background:var(--mr-bg);color:var(--mr)}
+
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin:0 0 12px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:480px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+th{font-size:12px;color:var(--muted);font-weight:600;background:var(--surface2);white-space:nowrap}
+td.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tbl.fit{overflow-x:visible}
+.tbl.fit table{min-width:0}
+.tbl.fit th,.tbl.fit td{padding:8px 9px}
+
+.calc{display:grid;gap:10px}
+.calc label{font-size:12.5px;color:var(--muted);display:block;margin-bottom:3px}
+.calc input,.calc select,.calc textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:10px 12px;font-size:16px;font-family:inherit}
+.calc textarea{font-family:var(--font-mono);font-size:12px;line-height:1.5;min-height:90px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.result{background:var(--accent-soft);border-radius:9px;padding:10px 13px;font-size:14px}
+.result b{font-family:var(--font-mono);font-size:19px;font-variant-numeric:tabular-nums;color:var(--accent)}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--on-accent);border-radius:8px;padding:9px 16px;font-size:14px;font-weight:700;cursor:pointer;min-height:40px}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.mini{padding:6px 11px;font-size:12.5px;min-height:34px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+.lbtn{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:10px 13px;margin:0 0 8px;text-decoration:none;color:var(--ink);font-size:14.5px;font-weight:600;min-height:44px}
+.lbtn small{display:block;color:var(--muted);font-weight:400;font-size:12px;line-height:1.45}
+.lbtn{flex-wrap:wrap}
+.lbtn small{flex:1 0 100%;order:3;margin-top:1px}
+.lbtn .go{color:var(--accent);flex:none;font-size:13px;font-weight:700;order:2;margin-left:auto}
+.lbtn.hero{border-color:var(--jal);background:var(--jal-bg)}
+.lbtn.hero .go{color:var(--jal)}
+.jsnote{font-size:12px;color:var(--muted);margin:6px 0 0}
+
+/* 手順ステップ */
+.step{display:flex;gap:11px;padding:11px 0;border-bottom:1px solid var(--line)}
+.step:last-child{border-bottom:none}
+.step .n{flex:none;width:26px;height:26px;border-radius:8px;background:var(--navy);color:var(--bg);font-family:var(--font-disp);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+.step .sb{flex:1;min-width:0}
+.step .sb b{font-size:14.5px;display:block;color:var(--ink)}
+.step .sb p{margin:3px 0 0;font-size:13.5px;color:var(--muted)}
+.kpoint{background:var(--accent-soft);border-radius:8px;padding:8px 11px;margin:8px 0;font-size:13.5px}
+
+/* アコーディオン */
+details.acc{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:0 0 10px;overflow:hidden}
+details.acc>summary{list-style:none;display:flex;align-items:center;gap:8px;padding:12px 14px;cursor:pointer;font-weight:700;font-size:14.5px;color:var(--navy);min-height:44px}
+details.acc>summary::-webkit-details-marker{display:none}
+details.acc>summary .chev{margin-left:auto;color:var(--muted);font-size:12px;transition:transform .15s;flex:none}
+details.acc[open]>summary .chev{transform:rotate(90deg)}
+.accbody{border-top:1px solid var(--line);padding:10px 14px 13px;font-size:14px}
+.accbody p{margin:6px 0}
+.accbody ul,.accbody ol{margin:6px 0;padding-left:20px}
+.accbody li{margin:4px 0}
+
+/* ---- 台帳 ---- */
+.ledbar{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;margin:0 0 10px}
+.ledbar>div{flex:1 1 120px;min-width:110px}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.lg{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:12px;background:var(--surface)}
+.mk{font-family:var(--font-mono);font-weight:700;font-size:13px}
+.mk.s0{color:var(--muted)} .mk.s1{color:var(--danger)} .mk.s2{color:var(--warn)}
+.mk.s3{color:var(--accent)} .mk.s4{color:var(--ok)}
+
+.route{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 12px 12px;margin:0 0 10px}
+.rhead{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;margin-bottom:4px}
+.rhead .rname{font-weight:700;font-size:14.5px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:7px;padding:7px 9px;flex:1 1 auto;min-width:0;font-family:inherit}
+.rhead .rname:focus{border-color:var(--accent);outline:none}
+.rhead .rdel{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:7px;width:34px;height:34px;font-size:14px;cursor:pointer;flex:none;line-height:1}
+.rsum{font-family:var(--font-mono);font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;margin:0 0 5px 2px;letter-spacing:.02em}
+.strip{display:flex;gap:5px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:2px 0 6px;scrollbar-width:thin}
+.cell{flex:none;width:46px;min-height:52px;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:4px 2px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:var(--ink)}
+.cell .cd{font-size:10px;color:var(--muted);font-family:var(--font-mono);line-height:1.2}
+.cell .cw{font-size:9px;color:var(--muted);line-height:1.1}
+.cell .cs{font-family:var(--font-mono);font-weight:700;font-size:16px;line-height:1.1}
+.cell[data-s="1"]{background:var(--danger-bg);border-color:var(--danger-bg)}
+.cell[data-s="2"]{background:var(--warn-bg);border-color:var(--warn-bg)}
+.cell[data-s="3"]{background:var(--accent-soft);border-color:var(--accent-soft)}
+.cell[data-s="4"]{background:var(--ok-bg);border-color:var(--ok-bg);box-shadow:inset 0 0 0 2px var(--ok)}
+.cell[data-sat="1"] .cd{color:var(--mr)}
+.cell[data-sun="1"] .cd{color:var(--jal)}
+.cell.stale{border-style:dashed;border-color:var(--muted)}
+.cell.istoday{outline:2px solid var(--navy);outline-offset:-3px}
+.ledsum{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;background:var(--surface2);border-radius:9px;padding:10px 13px;margin:0 0 10px}
+.ledsum b{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.nojs{display:none}
+.ledstatic th,.ledstatic td{padding:7px 8px}
+.ledstatic td.blank{height:32px}
+
+footer.app{margin-top:26px;padding:16px 4px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);line-height:1.7}
+@media print{
+  nav.tabs,.btnrow,.jsnote{display:none}
+  body{font-size:12px}
+}
+</style>
+
+<div class="wrap">
+
+<header class="app">
+  <div class="eyebrow">JAL Award Radar</div>
+  <h1>特典レーダー<br>同じ検索を、二度しない</h1>
+  <div class="stamp">
+    <span><i class="dot"></i>確認日 2026-08-22</span>
+    <span><i class="dot"></i>オフラインで開ける</span>
+    <span><i class="dot"></i>記録は端末の中だけ</span>
+  </div>
+</header>
+
+<input class="tabradio" type="radio" name="tab" id="t-plan" checked>
+<input class="tabradio" type="radio" name="tab" id="t-led">
+<input class="tabradio" type="radio" name="tab" id="t-link">
+<input class="tabradio" type="radio" name="tab" id="t-ptn">
+<input class="tabradio" type="radio" name="tab" id="t-rule">
+
+<nav class="tabs" aria-label="メニュー">
+  <label class="tab" for="t-plan">🎯 段取り</label>
+  <label class="tab" for="t-led">📋 台帳</label>
+  <label class="tab" for="t-link">🔗 検索リンク</label>
+  <label class="tab" for="t-ptn">🌐 提携社ガイド</label>
+  <label class="tab" for="t-rule">📖 ルールと出典</label>
+</nav>
+
+<!-- ============================ 段取り ============================ -->
+<section class="pane" id="pane-plan">
+  <div class="sec-head">
+    <h2>探し方の段取り</h2>
+    <p class="lede">「時期は決まっている・行き先は空席次第」を前提にした巡回のしかたです。</p>
+  </div>
+
+  <div class="callout ok">
+    <b>いちばんの時短は「1日ずつ検索」をやめること</b>
+    JALには、<b>行き先を決めずに</b>空席のある行き先を一覧できる「空席照会カレンダー」があります。まずこれを開くだけで、検索の回数が一気に減ります。
+  </div>
+
+  <div class="card">
+    <h3>🗺 まずここを開く — JAL 空席照会カレンダー</h3>
+    <p class="small">JAL公式・確認日 2026-08-22</p>
+    <ul>
+      <li><b>国際線</b>: 旅程・出発エリア・出発都市・搭乗クラスを指定して「検索」を押すと、下段に<b>空席のある行き先</b>が出ます。行き先エリアはタブで切替。必要マイル数や目的地でさらに絞り込めます</li>
+      <li><b>国内線</b>: 旅程と出発都市を指定して「検索」を押すと、<b>空席のある行き先</b>が出ます。マイル数や目的地で絞り込み、そのまま予約へ進めます</li>
+      <li>どちらも<b>ログインが必要</b>です。トップページ右上の「ログイン」からお得意様番号とパスワードを入れ、検索画面の<b>「特典航空券」タブ</b>を選びます</li>
+      <li>見られるのは搭乗日の<b>360日先まで</b></li>
+    </ul>
+    <div class="kpoint">表示されるのは<b>照会した時点</b>の空席です。クリックしても席は押さえられません。Web・電話・カウンター・旅行会社から同時に予約が入るので、席数は常に動きます(JAL公式の注意書き)。</div>
+    <a class="lbtn hero" href="https://www.jal.co.jp/jp/ja/jalmile/use/jal/inter/application.html" rel="noopener">JAL国際線 特典航空券<small>ここからログイン → 空席照会カレンダーへ(公式)</small><span class="go">開く →</span></a>
+    <a class="lbtn hero" href="https://www.jal.co.jp/jp/ja/jalmile/use/jal/domestic-award/application.html" rel="noopener">JAL国内線 特典航空券<small>国内線も同じく、行き先を決めずに探せる(公式)</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.jal.co.jp/jp/ja/jmb/tokuten_rn/inter_flow.html" rel="noopener">国際線カレンダーの操作方法(公式)<small>画面の見方が分からなくなったらここ</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.jal.co.jp/jp/ja/jalmile/use/jal/domestic-award/calendar/" rel="noopener">国内線カレンダーの操作方法(公式)<small>同上・国内線版</small><span class="go">開く →</span></a>
+  </div>
+
+  <div class="card">
+    <h3>🔁 巡回は3周でまわす</h3>
+    <div class="step">
+      <div class="n">1</div>
+      <div class="sb"><b>ふるいにかける(行き先は絞らない)</b>
+        <p>出発地を <b>伊丹 → 関空 → 羽田</b> と変えて、それぞれカレンダーで一覧。空きのある行き先だけを台帳に書き出します。ここでは必要マイルの多い少ないは気にしません。</p></div>
+    </div>
+    <div class="step">
+      <div class="n">2</div>
+      <div class="sb"><b>残った行き先だけ日付をずらす</b>
+        <p>1周目で残った行き先について、日付を前後にずらして<b>基本マイルで取れる日</b>を探します。見つけたら台帳に ◎。ここが必要マイルをいちばん節約できる工程です。</p></div>
+    </div>
+    <div class="step">
+      <div class="n">3</div>
+      <div class="sb"><b>JAL便がだめなら提携他社便</b>
+        <p>提携社サイトで空席を下見してから、JALの提携社特典で同じ便を検索して発券します(→「提携社ガイド」タブ)。燃油が乗らない会社を選べる回でもあります。</p></div>
+    </div>
+    <div class="kpoint">1周ごとに<b>必ず台帳に記録</b>してください。記録が無いと、次の巡回で同じ日付・同じ路線をまた調べることになります。ここが「時間がかかりすぎる」の正体です。</div>
+  </div>
+
+  <div class="card">
+    <h3>⏱ 1回の巡回を短くする5つのコツ</h3>
+    <ul>
+      <li><b>ログインは1回だけ。</b>あとはタブを複数開いて、出発地違い・クラス違いを並べて比べます(リンクを長押し→「新規タブで開く」)</li>
+      <li><b>往復ではなく片道ずつ検索する。</b>往復で検索すると、片方が満席なだけで組み合わせごと消えて何も見えなくなります</li>
+      <li><b>まず1名で検索する。</b>人数を増やすと候補が激減します。席があることを確かめてから人数を戻します</li>
+      <li><b>エコノミー → ビジネスの順で見る。</b>エコノミーが満席でもビジネスが空いていることは珍しくありません</li>
+      <li><b>見つけたらその場で取る。</b>特典航空券は仮押さえができず、予約完了と同時にマイルが引き落とされます。「あとで」は基本的に消えます</li>
+    </ul>
+    <p class="small">最後の1つ以外は操作の工夫です。予約完了=即マイル引き落としはJAL公式のルールです。</p>
+  </div>
+
+  <div class="card">
+    <h3>🧭 巡回メモ <span class="badge okb">JS時のみ</span></h3>
+    <p class="small">毎回入力し直さなくていいように、条件をこの端末に覚えさせます。台帳タブと検索リンクタブにも反映されます。</p>
+    <div class="calc">
+      <div class="row2">
+        <div>
+          <label for="m-from">出発地(第1候補)</label>
+          <input type="text" id="m-from" placeholder="例: 関空(KIX)" value="">
+        </div>
+        <div>
+          <label for="m-from2">出発地(第2・第3候補)</label>
+          <input type="text" id="m-from2" placeholder="例: 伊丹・羽田" value="">
+        </div>
+      </div>
+      <div class="row2">
+        <div>
+          <label for="m-d1">行きたい期間 開始</label>
+          <input type="date" id="m-d1">
+        </div>
+        <div>
+          <label for="m-d2">行きたい期間 終了</label>
+          <input type="date" id="m-d2">
+        </div>
+      </div>
+      <div class="row2">
+        <div>
+          <label for="m-pax">人数</label>
+          <select id="m-pax">
+            <option value="1名">1名</option>
+            <option value="2名">2名</option>
+            <option value="3名">3名</option>
+            <option value="4名">4名</option>
+            <option value="5名以上">5名以上</option>
+          </select>
+        </div>
+        <div>
+          <label for="m-cls">狙うクラス</label>
+          <select id="m-cls">
+            <option value="エコノミー">エコノミー</option>
+            <option value="プレミアムエコノミー">プレミアムエコノミー</option>
+            <option value="ビジネス">ビジネス</option>
+            <option value="ファースト">ファースト</option>
+            <option value="どれでも">どれでも</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label for="m-note">ねらい・条件のメモ</label>
+        <input type="text" id="m-note" placeholder="例: 燃油ゼロの会社優先。3泊以上とれる日程" value="">
+      </div>
+      <div class="btnrow">
+        <button class="btn" type="button" id="m-save">この端末に保存</button>
+        <button class="btn ghost mini" type="button" id="m-clear">消す</button>
+        <span class="small" id="m-status">まだ保存していません</span>
+      </div>
+    </div>
+    <p class="jsnote">保存先はこの端末のブラウザの中だけです。JALのIDやパスワードは入力しないでください(このアプリはJALに接続しません)。</p>
+  </div>
+
+  <div class="card">
+    <h3>🎲 行き先が決まっていないなら「どこかにマイル」</h3>
+    <p>出発地と日付だけ決めて申し込むと、<b>4つの候補地</b>が表示され、その中の1つに自動で決まる国内線のしくみです。「時期だけ決まっていて行き先は空席次第」に、いちばん近い公式サービスです。</p>
+    <ul>
+      <li>必要マイルは行き先によらず<b>一律7,000マイル(往復)</b> <span class="badge warn2">※二次情報</span></li>
+      <li>出発地は 東京(羽田)/大阪(伊丹・関西)/福岡/札幌(新千歳・丘珠) <span class="badge warn2">※二次情報</span></li>
+      <li>申し込み後<b>3日以内</b>に行き先が自動で決まり、メールで通知。マイルもそのときに引き落とし <span class="badge warn2">※二次情報</span></li>
+      <li>申し込みは出発の約1ヶ月前から数日前まで。<b>変更・払い戻しは不可</b> <span class="badge warn2">※二次情報</span></li>
+    </ul>
+    <div class="callout warn" style="margin-top:10px">
+      <b>数字は必ず公式で確認を</b>
+      必要マイル・受付期間はこのアプリでは公式ページの原文を確認できませんでした(JAL公式サイトが自動取得を拒否するため)。申し込む前に下の公式ページで必ず確かめてください。
+    </div>
+    <a class="lbtn" href="https://www.jal.co.jp/jp/ja/jmb/dokokani/" rel="noopener">どこかにマイル(公式)<small>申し込みはここから</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.jal.co.jp/jp/ja/jalmile/use/jal/dokokani/conditions.html" rel="noopener">どこかにマイル ご利用条件(公式)<small>必要マイル・受付期間・取消の可否</small><span class="go">開く →</span></a>
+  </div>
+
+  <div class="card">
+    <h3>🕛 発売日の逆算(360日前)</h3>
+    <p>予約は搭乗日の<b>360日前 午前0時(日本時間)</b>から。国内線・国際線とも同じです(2024年3月26日から。JAL公式プレスリリース)。</p>
+    <div class="calc">
+      <div>
+        <label for="c-board">乗りたい日(搭乗日)</label>
+        <input type="date" id="c-board">
+      </div>
+      <div class="result" id="c-out">日付を入れると、予約開始日と残り日数が出ます。<span class="badge okb">JS時のみ</span></div>
+    </div>
+    <ul style="margin-top:10px">
+      <li>締切は JAL Webサイトで<b>第1区間出発の48時間前</b>まで(公式)</li>
+      <li>JMBダイヤモンド/JGCプレミア会員は、国内線特典のみ<b>361日前 22:00</b>から先行予約(公式プレスリリース)</li>
+      <li>正確な日付は公式の「予約開始日検索」で。うるう年をまたぐとずれます</li>
+    </ul>
+    <div class="callout danger" style="margin-top:10px">
+      <b>ネットの古い情報に注意</b>
+      「330日前・午前9時30分」「360日前・午前10時」は<b>いずれも古い/誤り</b>です。2024年3月26日以降は 360日前・午前0時(日本時間)で統一されています。英語の解説記事にはいまも10時と書いてあるものがあります。
+    </div>
+    <a class="lbtn" href="https://www.jal.co.jp/jp/ja/inter/reservation/calculation/" rel="noopener">国際線 予約開始日検索(公式)<small>搭乗日を入れると発売日が出る</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.jal.co.jp/jp/ja/jalmile/use/jal/dom/calculation/" rel="noopener">国内線特典 予約開始日のご案内(公式)<small>国内線版</small><span class="go">開く →</span></a>
+  </div>
+
+  <div class="card">
+    <h3>🚪 見つからないときの逃げ道4つ</h3>
+    <ol>
+      <li><b>日付をずらす</b> — 前後3日を見るだけで景色が変わります。台帳の期間をずらして一気に確認</li>
+      <li><b>出発空港を変える</b> — 伊丹⇄関空⇄羽田。国際線特典には往路・復路それぞれ国内線1区間を組み込めます(追加の基本マイルは不要とされますが要確認)。同じ航空券なので乗り継ぎが保護されます</li>
+      <li><b>片道ずつ別に取る</b> — 往路と復路を別の特典にすれば、復路だけ不要になったときに復路だけ払い戻せます</li>
+      <li><b>直前を狙う</b> — 出発2週間前ごろに席が戻ってくるという報告が多い時期です <span class="badge warn2">※二次情報</span></li>
+    </ol>
+    <p class="small">1〜3はJALのルール上できること、4は経験則です。詳しい背景は姉妹アプリ「マイルコンパス」の取り方道場にまとめてあります。</p>
+  </div>
+</section>
+
+<!-- ============================ 台帳 ============================ -->
+<section class="pane" id="pane-led">
+  <div class="sec-head">
+    <h2>空席しらべ台帳</h2>
+    <p class="lede">調べた結果をここに置いておけば、同じ路線・同じ日付を二度調べずに済みます。</p>
+  </div>
+
+  <div class="card">
+    <h3>📋 使い方(3つだけ)</h3>
+    <ol>
+      <li>調べたい<b>路線</b>を書く(名前は自由に書き換えられます)</li>
+      <li>JALのカレンダーで見た結果を、日付のマスを<b>タップして記録</b>します。タップするたび <span class="mk s0">—</span> → <span class="mk s1">×</span> → <span class="mk s2">△</span> → <span class="mk s3">○</span> → <span class="mk s4">◎</span> と変わります</li>
+      <li>次に開いたときも記録は残っています。<b>枠が点線のマスは3日以上前に調べたもの</b>なので、調べ直しの目印にしてください</li>
+    </ol>
+    <div class="legend">
+      <span class="lg"><span class="mk s0">—</span>まだ調べていない</span>
+      <span class="lg"><span class="mk s1">×</span>満席</span>
+      <span class="lg"><span class="mk s2">△</span>残りわずか・マイルが高い</span>
+      <span class="lg"><span class="mk s3">○</span>空きあり</span>
+      <span class="lg"><span class="mk s4">◎</span>基本マイルで取れる</span>
+    </div>
+    <p class="jsnote">記録はこの端末のブラウザの中だけに保存されます。ほかの端末とは共有されません。ブラウザの履歴やサイトデータを消すと一緒に消えます(下の「書き出し」で控えを取れます)。</p>
+  </div>
+
+  <!-- JSがあるとき: 操作パネル + 生きた台帳 -->
+  <div class="card jsonly" id="led-ctrl">
+    <h3>🗓 期間と路線 <span class="badge okb">JS時のみ</span></h3>
+    <div class="ledbar">
+      <div>
+        <label class="small" for="l-start">開始日</label>
+        <input type="date" id="l-start">
+      </div>
+      <div>
+        <label class="small" for="l-days">日数</label>
+        <select id="l-days">
+          <option value="7">7日</option>
+          <option value="14" selected>14日</option>
+          <option value="21">21日</option>
+          <option value="28">28日</option>
+        </select>
+      </div>
+    </div>
+    <div class="btnrow">
+      <button class="btn ghost mini" type="button" id="l-prev">◀ 前へ</button>
+      <button class="btn ghost mini" type="button" id="l-today">今日から</button>
+      <button class="btn ghost mini" type="button" id="l-next">次へ ▶</button>
+      <button class="btn mini" type="button" id="l-add">＋ 路線を追加</button>
+    </div>
+    <p class="jsnote">期間をずらしても記録は日付にひもづいて残ります。安心して前後を見に行ってください。</p>
+  </div>
+
+  <div class="jsonly" id="led-live"></div>
+
+  <div class="card jsonly" id="led-tools">
+    <h3>💾 控えを取る・戻す</h3>
+    <p class="small">機種変更やブラウザのデータ削除に備えて、記録を文字として書き出せます。書き出した文字をメモアプリなどに貼って保管し、戻すときは貼り付けて「読み込む」を押します。</p>
+    <div class="calc">
+      <textarea id="l-io" rows="4" placeholder="ここに書き出されます / ここへ貼り付けて読み込みます"></textarea>
+      <div class="btnrow">
+        <button class="btn ghost mini" type="button" id="l-export">書き出す</button>
+        <button class="btn ghost mini" type="button" id="l-import">読み込む</button>
+        <button class="btn ghost mini" type="button" id="l-reset">ぜんぶ消す</button>
+        <span class="small" id="l-msg"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- JSが無いとき: 印刷して手書きで使える白紙台帳 -->
+  <div class="nojs" id="led-static">
+    <div class="callout warn">
+      <b>いまは記録機能が使えません</b>
+      マスをタップして記録する台帳にはJavaScriptが必要です。この画面(ファイルのプレビューなど)ではJavaScriptが動いていないため、代わりに下の白紙の台帳を印刷して手書きで使えます。Safariなどのブラウザで開き直すと、タップで記録できる台帳になります。
+    </div>
+    <div class="card">
+      <h3>🖨 白紙の台帳(印刷・手書き用)</h3>
+      <p class="small">上の行に日付を書き、調べた結果を ×(満席)/ △(わずか)/ ○(空きあり)/ ◎(基本マイル)で埋めてください。路線は関西発を想定した例です。就航状況は変わるので、実際に検索できた路線に書き換えてお使いください。</p>
+      <div class="tbl">
+        <table class="ledstatic">
+          <thead>
+            <tr><th>路線</th><th>／</th><th>／</th><th>／</th><th>／</th><th>／</th><th>／</th><th>／</th><th>／</th><th>／</th><th>／</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>関空 → ホノルル</td><td class="blank"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>関空 → バンコク</td><td class="blank"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>関空 → ソウル</td><td class="blank"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>羽田 → ロンドン</td><td class="blank"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>伊丹 → 那覇</td><td class="blank"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>伊丹 → 新千歳</td><td class="blank"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>　</td><td class="blank"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>　</td><td class="blank"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 検索リンク ============================ -->
+<section class="pane" id="pane-link">
+  <div class="sec-head">
+    <h2>検索リンクと入力キット</h2>
+    <p class="lede">開く先を迷わないための入口集です。リンクはJavaScriptが無くてもそのまま開けます。</p>
+  </div>
+
+  <div class="callout jal">
+    <b>リンクは「入口まで」です</b>
+    JALの特典検索はログインの先にあるため、条件を入れた状態のリンクは作れません。そのぶん、条件を貼り付けやすい形にしておく道具を下に置いています。
+  </div>
+
+  <div class="card">
+    <h3>🔴 JAL公式(ここで取る)</h3>
+    <a class="lbtn hero" href="https://www.jal.co.jp/jp/ja/jalmile/use/jal/inter/application.html" rel="noopener">国際線特典航空券 予約<small>ログイン→空席照会カレンダー。行き先を決めずに探せる</small><span class="go">開く →</span></a>
+    <a class="lbtn hero" href="https://www.jal.co.jp/jp/ja/jalmile/use/jal/domestic-award/application.html" rel="noopener">国内線特典航空券 予約<small>同じくカレンダーで行き先横断</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.jal.co.jp/jp/ja/jalmile/use/partner_air/p_jmb/application.html" rel="noopener">JMB提携航空会社特典航空券 予約<small>提携社1社に乗るとき</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.jal.co.jp/jp/ja/jalmile/use/partner_air/" rel="noopener">提携社特典航空券(入口)<small>JMB提携特典とワンワールド特典の違いもここ</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.jal.co.jp/jp/ja/jmb/dokokani/" rel="noopener">どこかにマイル<small>行き先はおまかせ・国内線</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.jal.co.jp/jp/ja/inter/reservation/calculation/" rel="noopener">予約開始日検索(国際線)<small>360日前がいつか調べる</small><span class="go">開く →</span></a>
+  </div>
+
+  <div class="card">
+    <h3>🌐 空席を「探すだけ」に使う他社サイト</h3>
+    <p class="small">JALマイルで取るとしても、提携他社便の空席は他社サイトのほうが速く見つかります。使い分けは「提携社ガイド」タブに書いてあります。</p>
+    <a class="lbtn" href="https://flightrewardfinder.qantas.com/" rel="noopener">カンタス Flight Reward Finder <span class="badge okb">ログイン不要</span><small>約12ヶ月先まで、地域単位でまとめて見られる下見向き</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.britishairways.com/" rel="noopener">ブリティッシュ・エアウェイズ<small>無料登録+ログインでJAL便の特典空席が見える</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.aa.com/" rel="noopener">アメリカン航空(aa.com)<small>ワンワールド横断。JAL便が見えるかは要確認</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.cathaypacific.com/cx/ja_JP.html" rel="noopener">キャセイパシフィック<small>香港経由を組むとき</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.alaskaair.com/" rel="noopener">アラスカ航空<small>ワンワールド。ハワイ方面の在庫確認に</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.qatarairways.com/" rel="noopener">カタール航空<small>燃油が乗らない会社の代表。関空発の欧州・中東方面</small><span class="go">開く →</span></a>
+  </div>
+
+  <div class="card">
+    <h3>📐 入力キット <span class="badge okb">JS時のみ</span></h3>
+    <p class="small">海外のサイトは日付の書き方が違います。1回入れれば必要な形に変換して並べます。長押しでコピーしてください。</p>
+    <div class="calc">
+      <div>
+        <label for="k-date">日付</label>
+        <input type="date" id="k-date">
+      </div>
+      <div class="tbl fit">
+        <table>
+          <thead><tr><th>形式</th><th>表記</th><th>よく使う場所</th></tr></thead>
+          <tbody>
+            <tr><td>年-月-日</td><td class="num" id="k-iso">—</td><td>日本のサイト全般</td></tr>
+            <tr><td>月/日/年</td><td class="num" id="k-us">—</td><td>アメリカン航空・アラスカ航空</td></tr>
+            <tr><td>日/月/年</td><td class="num" id="k-eu">—</td><td>BA・カンタス・カタール</td></tr>
+            <tr><td>英語表記</td><td class="num" id="k-en">—</td><td>英語サイトの入力確認用</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <h4>空港コード早見(関西発を中心に)</h4>
+    <div class="tbl fit">
+      <table>
+        <thead><tr><th>空港</th><th>コード</th><th>空港</th><th>コード</th></tr></thead>
+        <tbody>
+          <tr><td>伊丹(大阪)</td><td class="num">ITM</td><td>羽田(東京)</td><td class="num">HND</td></tr>
+          <tr><td>関西</td><td class="num">KIX</td><td>成田(東京)</td><td class="num">NRT</td></tr>
+          <tr><td>神戸</td><td class="num">UKB</td><td>那覇</td><td class="num">OKA</td></tr>
+          <tr><td>大阪(都市)</td><td class="num">OSA</td><td>東京(都市)</td><td class="num">TYO</td></tr>
+          <tr><td>新千歳</td><td class="num">CTS</td><td>福岡</td><td class="num">FUK</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="kpoint">検索窓に <b>OSA</b>(大阪)や <b>TYO</b>(東京)の<b>都市コード</b>を入れると、伊丹と関空、羽田と成田をまとめて検索できるサイトがあります。1回の検索で2空港ぶん見られるので、まずこれを試す価値があります。対応していないサイトもあるので、空振りしたら空港ごとのコードで入れ直してください。</div>
+  </div>
+
+  <div class="card">
+    <h3>🔔 空席の見張りツール <span class="badge warn2">※二次情報</span></h3>
+    <p class="small">英語のサービスです。無料枠でも通知を受け取れますが、通知が来た時点で席が消えていることもあります(通知=確保ではありません)。</p>
+    <a class="lbtn" href="https://seats.aero/" rel="noopener">seats.aero<small>無料枠でも一定期間先まで+メール通知</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.pointsyeah.com/" rel="noopener">PointsYeah<small>無料枠でアラート登録</small><span class="go">開く →</span></a>
+    <div class="callout danger" style="margin-top:6px">
+      <b>絶対にやってはいけないこと</b>
+      JALマイレージバンクのお得意様番号とパスワードを、公式サイト・公式アプリ以外に入力しないでください。「発券代行」「マイル買取」をうたうサイトは規約違反で、マイル没収や会員資格取消のリスクがあります。上の見張りツールもログイン情報を渡さずに使ってください。
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 提携社ガイド ============================ -->
+<section class="pane" id="pane-ptn">
+  <div class="sec-head">
+    <h2>提携社サイトでの探し方</h2>
+    <p class="lede">他社のサイトは「探す」ためだけに使い、取るのはJALで。その使い分けを1画面にまとめました。</p>
+  </div>
+
+  <div class="callout jal">
+    <b>まずこの大原則から</b>
+    他社のサイトに出てくるJAL便は「<b>提携社に開放された枠</b>」だけです。JALが自社会員に出しているPLUSの枠は<b>JAL公式でしか見えません</b>。だから「他社サイトで満席でも、JAL公式では取れる」は普通に起きます。逆に、JALの画面に出てこない他社便(カタール航空など)は他社サイトのほうが速く見つかります。<b>探すのはツール、取るのは公式</b>です。
+  </div>
+
+  <div class="card">
+    <h3>🧭 どっちを探しているのか、先に決める</h3>
+    <div class="tbl fit">
+      <table>
+        <thead><tr><th>乗りたいのは</th><th>探す場所</th><th>取る場所</th></tr></thead>
+        <tbody>
+          <tr><td><b>JAL便</b></td><td>JAL公式の空席照会カレンダーだけ</td><td>JAL公式</td></tr>
+          <tr><td><b>提携他社便</b><br>(カタール・キャセイ等)</td><td>他社サイト・見張りツール</td><td>JAL公式の提携社特典<br>→ 出なければ電話</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">JAL便を他社サイトで探すのは、時間のわりに得るものが少ないやり方です。JAL便はJAL公式のカレンダーで一気に見るほうが速く、しかも正確です。</p>
+  </div>
+
+  <details class="acc">
+    <summary>カンタス Flight Reward Finder <span class="badge okb">ログイン不要</span><span class="chev">▶</span></summary>
+    <div class="accbody">
+      <p><b>いちばん下見に向いています。</b>ログインしないまま、約12ヶ月先までの特典空席を、行き先や搭乗クラスごとにまとめて見られます。地域どうし(例: 日本 → ヨーロッパ)の指定ができるので、「行き先は空席次第」の探し方と相性がいいツールです。</p>
+      <p><b>できないこと</b> <span class="badge warn2">※二次情報</span></p>
+      <ul>
+        <li>そのサイト上で予約はできません(下見専用)</li>
+        <li>国内線は出ません</li>
+        <li>航空会社ごと・乗り継ぎ空港ごとの絞り込みはありません</li>
+        <li>ログインできないぶん、下位会員向けの在庫しか映らないとされます</li>
+      </ul>
+      <p class="small">JAL便が映るかどうかについては、このアプリでは裏どりできませんでした。映らなくてもJAL公式には在庫があることが普通にあるので、ここで空振りでも気にしないでください。</p>
+      <a class="lbtn" href="https://flightrewardfinder.qantas.com/" rel="noopener">Flight Reward Finder を開く<small>flightrewardfinder.qantas.com</small><span class="go">開く →</span></a>
+    </div>
+  </details>
+
+  <details class="acc">
+    <summary>ブリティッシュ・エアウェイズ <span class="badge ow">要ログイン(無料)</span><span class="chev">▶</span></summary>
+    <div class="accbody">
+      <p>無料の会員登録とログインが必要ですが、<b>JAL便の特典空席と必要Aviosが見えます</b>。表示はリスト形式で、月ごとのカレンダー表示はありません。</p>
+      <p><b>注意</b> <span class="badge warn2">※二次情報</span></p>
+      <ul>
+        <li>乗り継ぎ便では、実際には取れない「幻の空席」が出ることがあると指摘されています</li>
+        <li>過去に「BAだけJALの枠が見えない」時期もありました。ここでゼロでも、JAL公式では諦めないでください</li>
+      </ul>
+      <a class="lbtn" href="https://www.britishairways.com/" rel="noopener">British Airways を開く<small>ログイン → Aviosで予約</small><span class="go">開く →</span></a>
+    </div>
+  </details>
+
+  <details class="acc">
+    <summary>アメリカン航空(aa.com) <span class="badge warn2">情報が割れています</span><span class="chev">▶</span></summary>
+    <div class="accbody">
+      <p>ワンワールドを横断して見るのに定番のサイトで、月間カレンダー表示が使いやすいと評価されてきました。ただし<b>2026年時点の情報が食い違っています</b>。</p>
+      <ul>
+        <li>「JAL便もaa.comで検索・予約できる」とする解説 <span class="badge warn2">※二次情報</span></li>
+        <li>「JAL便はaa.comの検索対象に含まれない」とする解説 <span class="badge warn2">※二次情報</span></li>
+        <li>「カレンダー表示は画面刷新中で、近く復活予定」という記述 <span class="badge warn2">※二次情報</span></li>
+        <li>2026年3月ごろ、aa.comに<b>実在しないJALの枠が大量に出ている</b>という指摘 <span class="badge warn2">※二次情報</span></li>
+      </ul>
+      <div class="kpoint">結論としては<b>「出たらラッキー、出なくても諦めない」</b>。ここで見えた席は必ずJAL公式か電話で在庫を確かめてから動いてください。</div>
+      <a class="lbtn" href="https://www.aa.com/" rel="noopener">aa.com を開く<small>要ログイン(無料登録)</small><span class="go">開く →</span></a>
+    </div>
+  </details>
+
+  <details class="acc">
+    <summary>キャセイパシフィック / アラスカ航空<span class="chev">▶</span></summary>
+    <div class="accbody">
+      <p><b>キャセイパシフィック</b> — 検索できる期間が長め(360日先まで)で、香港経由を組み立てるときに便利という評価があります <span class="badge warn2">※二次情報</span>。</p>
+      <p><b>アラスカ航空</b> — ワンワールド加盟。ハワイアン航空との統合後、ハワイ路線の特典枠の扱いが変わっています。JALマイルでの予約可否・必要マイルは<b>発券前にJAL公式で要確認</b>です。</p>
+      <a class="lbtn" href="https://www.cathaypacific.com/cx/ja_JP.html" rel="noopener">キャセイパシフィック<small>香港方面</small><span class="go">開く →</span></a>
+      <a class="lbtn" href="https://www.alaskaair.com/" rel="noopener">アラスカ航空<small>ハワイ方面の在庫確認</small><span class="go">開く →</span></a>
+    </div>
+  </details>
+
+  <div class="card">
+    <h3>🎫 見つけたあと、JALで取るまで</h3>
+    <div class="step">
+      <div class="n">1</div>
+      <div class="sb"><b>便名と日付をメモする</b><p>他社サイトで見えた「航空会社・便名・日付・区間・クラス」を控えます。台帳の路線名に書いておくと迷いません。</p></div>
+    </div>
+    <div class="step">
+      <div class="n">2</div>
+      <div class="sb"><b>JALの提携社特典で同じ便を検索</b><p>JAL公式にログインして、提携社特典航空券の画面から同じ便を検索します。</p></div>
+    </div>
+    <div class="step">
+      <div class="n">3</div>
+      <div class="sb"><b>出てこなければ電話</b><p>JAL Webに出ない会社・旅程でも、電話なら区間ごとに在庫を探して組めることがあります(取扱手数料がかかります)。</p></div>
+    </div>
+    <div class="callout warn" style="margin-top:10px">
+      <b>Webで予約できない提携社があります</b>
+      中国東方航空は2024年6月20日から、JALサイトでの特典航空券の新規予約受付を停止し、<b>電話のみ</b>の受付になっています(JAL公式)。ほかにもWeb非対応の会社・旅程があるため、出てこない=空席が無い、とは限りません。
+    </div>
+    <a class="lbtn" href="https://www.jal.co.jp/jp/ja/jalmile/use/partner_air/p_jmb/application.html" rel="noopener">JMB提携社特典 予約お申し込み(公式)<small>対応会社と電話窓口もこのページ</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.jal.co.jp/jp/ja/jalmile/use/partner_air/oneworld/miles.html" rel="noopener">ワンワールド特典 必要マイル(公式)<small>2社以上を組み合わせるとき</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.jal.co.jp/jp/ja/jalmile/use/partner_air/mile/" rel="noopener">提携社特典 マイル数から探す(公式)<small>日本発着の距離制チャート</small><span class="go">開く →</span></a>
+  </div>
+
+  <div class="card">
+    <h3>⛽ 燃油を乗せない会社を選ぶ</h3>
+    <p>提携社特典の燃油サーチャージは<b>実際に乗る会社</b>で決まります。欧米往復で十万円単位の差がつくので、行き先が同じなら「燃油の乗らない会社」で組めないか先に見る価値があります。</p>
+    <p class="small">具体的な会社ごとの燃油の有無と最新額は、姉妹アプリ「マイルコンパス」の燃油サーチャージ早見表にまとめてあります。どちらにしても<b>発券画面の最終金額で確認</b>してください。燃油は発券日の額で確定します(JAL公式)。</p>
+  </div>
+</section>
+
+<!-- ============================ ルールと出典 ============================ -->
+<section class="pane" id="pane-rule">
+  <div class="sec-head">
+    <h2>探す前に知っておくルール</h2>
+    <p class="lede">検索の空振りを減らすために効く決まりごとだけを集めました。確認日 2026-08-22。</p>
+  </div>
+
+  <div class="card">
+    <h3>⏰ いつからいつまで予約できるか</h3>
+    <div class="tbl fit">
+      <table>
+        <thead><tr><th>項目</th><th>いつ</th></tr></thead>
+        <tbody>
+          <tr><td>予約開始</td><td>搭乗日の<b>360日前 午前0時</b>(日本時間)。国内線・国際線とも同じ</td></tr>
+          <tr><td>先行予約</td><td>JMBダイヤモンド/JGCプレミアは国内線特典のみ<b>361日前 22:00</b></td></tr>
+          <tr><td>Web締切</td><td>第1区間出発の<b>48時間前</b>(出発地時間)</td></tr>
+          <tr><td>電話締切</td><td>24時間前まで</td></tr>
+          <tr><td>往復で取るとき</td><td>往路・復路とも申込日から360日以内に入っていることが必要</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">出典: JAL公式(特典航空券の予約可能期間)、JALプレスリリース「国内線・国際線の予約開始を、360日前 午前0時に変更します」(2023年12月18日)。</p>
+  </div>
+
+  <div class="card">
+    <h3>🔒 取ったあとは動かせない</h3>
+    <ul>
+      <li><b>予約の変更は一切できません。</b>日付だけ変えることもできません。やり直すなら「取消 → 取り直し」のみ</li>
+      <li>取消手数料は<b>3,100円/人</b>。マイルが戻るのは「全区間未使用」かつ「発行から1年以内」の場合</li>
+      <li>出発後に乗らなかった(ノーショー)場合はマイルが全額戻りません。乗れなくなったら必ず出発前に取消を</li>
+      <li>仮押さえはできません。予約完了と同時にマイルが引き落とされ、発券されます</li>
+    </ul>
+    <div class="kpoint">だから<b>探す段階で徹底的に比べておく</b>ことに意味があります。台帳をつけるのは、取ったあとに動かせないぶんを、取る前の情報量で埋めるためです。</div>
+  </div>
+
+  <div class="card">
+    <h3>💹 必要マイルは「予約した瞬間」で決まる(特典航空券PLUS)</h3>
+    <p>いちばんマイルの少ない<b>基本マイル</b>の席が埋まっていても、予測残席に応じた<b>追加マイル</b>を払えば予約できるしくみです(JAL公式)。国内線・国際線の両方にあります。</p>
+    <ul>
+      <li>同じ便でも、見る日によって必要マイルが上下します</li>
+      <li>だから台帳では ◎(基本マイルで取れる)と ○(取れるが加算あり)を分けています。◎の日を見つけて日程を寄せるのが、いちばんマイルの効く動き方です</li>
+      <li>マイルに余裕があるなら「PLUSで多めに払って確実に取る」のも正しい選び方です(繁忙期の家族旅行など)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🇯🇵 JAL国内線特典 必要マイルの目安</h3>
+    <p class="small">路線の距離に応じて A(短距離)〜G(長距離)の7つのゾーンに分かれ、<b>片道4,500マイルから</b>交換できます(JAL公式)。以下のゾーン別の数字は二次情報のため、必ず公式の空席照会で確認してください。</p>
+    <div class="tbl fit">
+      <table>
+        <thead><tr><th>ゾーン</th><th>普通席</th><th>クラスJ</th><th>ファースト</th></tr></thead>
+        <tbody>
+          <tr><td>A(短)</td><td class="num">4,500</td><td class="num">5,500</td><td class="num">—</td></tr>
+          <tr><td>B</td><td class="num">5,500</td><td class="num">6,500</td><td class="num">—</td></tr>
+          <tr><td>C</td><td class="num">6,500</td><td class="num">7,500</td><td class="num">14,500</td></tr>
+          <tr><td>D</td><td class="num">7,500</td><td class="num">9,000</td><td class="num">18,000</td></tr>
+          <tr><td>E</td><td class="num">8,500</td><td class="num">10,000</td><td class="num">20,000</td></tr>
+          <tr><td>F</td><td class="num">9,500</td><td class="num">11,500</td><td class="num">22,000</td></tr>
+          <tr><td>G(長)</td><td class="num">10,500</td><td class="num">13,500</td><td class="num">24,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">片道・基本マイル。<span class="badge warn2">※二次情報</span> 2025年6月10日発券分からの数字として掲載されていたものです。</p>
+    <div class="callout warn">
+      <b>2026年10月1日 発券分から改定されます</b>
+      JAL公式に「必要マイル数(2026年10月1日以降発券分)」の案内が出ています(確認日 2026-08-22)。A〜Gの7ゾーン制・片道4,500〜10,500マイルという枠は同じですが、路線ごとのゾーンの割り当てや細かい数字が変わる可能性があります。<b>発券日がこの日以降になる予約は、必ず公式ページで確認</b>してください。
+    </div>
+    <a class="lbtn" href="https://www.jal.co.jp/jp/ja/jalmile/use/jal/domestic-award/miles/" rel="noopener">国内線特典 必要マイル数(公式)<small>ゾーンの割り当てと最新の数字</small><span class="go">開く →</span></a>
+    <a class="lbtn" href="https://www.jal.co.jp/jp/ja/jalmile/use/jal/inter/routemiles.html" rel="noopener">国際線特典 路線別 必要マイル数(公式)<small>国際線は基本マイルからの変動制</small><span class="go">開く →</span></a>
+  </div>
+
+  <div class="card">
+    <h3>📖 用語ミニ辞典</h3>
+    <div class="tbl fit">
+      <table>
+        <tbody>
+          <tr><td><b>基本マイル</b></td><td>その路線でいちばん少ないマイル数。台帳の ◎ はこれで取れる日</td></tr>
+          <tr><td><b>特典航空券PLUS</b></td><td>基本マイルの席が無いとき、追加マイルを払って取れるしくみ</td></tr>
+          <tr><td><b>空席照会カレンダー</b></td><td>行き先を決めずに空席のある行き先を一覧できるJAL公式の画面</td></tr>
+          <tr><td><b>JMB提携特典</b></td><td>JAL以外の提携社1社に乗るときの特典。距離制</td></tr>
+          <tr><td><b>ワンワールド特典</b></td><td>JALを含むワンワールド加盟社2社以上を組み合わせる特典。距離制</td></tr>
+          <tr><td><b>幻の空席</b></td><td>他社サイトには出るのに、実際には取れない在庫のこと</td></tr>
+          <tr><td><b>0時打ち</b></td><td>発売開始の360日前 午前0時ちょうどに検索して取りにいくこと</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>⚠ このアプリの数字の限界(正直な注意書き)</h3>
+    <ul>
+      <li>JALの公式サイトは自動での読み取りを拒否する設定になっているため、<b>公式ページの原文をこのアプリから直接確認できませんでした</b>。公式の内容は検索結果に含まれる公式ページの記述と公式プレスリリースをもとにしています</li>
+      <li><span class="badge warn2">※二次情報</span> が付いている数字・説明は、個人ブログや専門メディアなど公式以外の情報です。断定できないものは「要確認」と書いています</li>
+      <li>特典航空券のルールと必要マイルは改定が続いています。<b>お金とマイルが動く前に、必ず公式ページと発券画面で確認</b>してください</li>
+      <li>このアプリはJALのシステムに接続していません。空席状況を自動で取ってくることはできず、記録するのはあなたが自分の目で見た結果です</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>📚 主な出典(確認日 2026-08-22)</h3>
+    <p class="small">JAL公式</p>
+    <ul class="small">
+      <li>JAL国際線特典航空券 空席照会カレンダーの操作方法 — jal.co.jp/jp/ja/jmb/tokuten_rn/inter_flow.html</li>
+      <li>JAL国内線特典航空券 空席照会カレンダーの操作方法 — jal.co.jp/jp/ja/jalmile/use/jal/domestic-award/calendar/</li>
+      <li>JAL国内線特典航空券 必要マイル数 — jal.co.jp/jp/ja/jalmile/use/jal/domestic-award/miles/</li>
+      <li>JMB提携航空会社特典航空券(予約お申し込み) — jal.co.jp/jp/ja/jalmile/use/partner_air/p_jmb/application.html</li>
+      <li>特典航空券は、いつからいつまで予約ができますか(FAQ) — faq.jal.co.jp</li>
+      <li>プレスリリース「国内線・国際線の予約開始を、360日前 午前0時に変更します」(2023年12月18日) — press.jal.co.jp/ja/release/202312/007828.html</li>
+      <li>どこかにマイル ご利用条件 — jal.co.jp/jp/ja/jalmile/use/jal/dokokani/conditions.html</li>
+    </ul>
+    <p class="small">二次情報(※印の根拠)</p>
+    <ul class="small">
+      <li>Australian Frequent Flyer「What the New Qantas Flight Reward Finder Can (And Can't) Do」 — カンタスのツールの仕様</li>
+      <li>Upgraded Points「The Best Ways to Search for Oneworld Award Availability」 — 各社サイトのログイン要否と表示形式</li>
+      <li>MileagePortfolio「JAL国内線特典航空券 完全ガイド(2026年版)」 — 国内線ゾーン別マイル数</li>
+      <li>VAGUE / SKYWARD+ — どこかにマイルの必要マイル・申込の流れ</li>
+      <li>Voyaige「JAL Award Release Schedule 2026」ほか — 幻の空席・放出タイミングの指摘</li>
+    </ul>
+    <p class="small">姉妹アプリ「マイルコンパス」に、必要マイルのチャート・燃油サーチャージ・特典の取り方の詳しい解説があります。</p>
+  </div>
+</section>
+
+<footer class="app">
+  特典レーダー — JAL特典航空券の空席さがしを、記録しながら進めるための道具です。<br>
+  空席の記録はこの端末の中だけに保存され、外部には送信されません。JALのIDやパスワードは入力しないでください。<br>
+  制度・必要マイル・手数料は変わります。実際に予約する前に、必ずJAL公式サイトと発券画面でご確認ください。確認日 2026-08-22。
+</footer>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- 小道具 ---------- */
+  var $ = function (id) { return document.getElementById(id); };
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  var WD = ['日', '月', '火', '水', '木', '金', '土'];
+  var EN_M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var DAY = 86400000;
+
+  var LS = {
+    get: function (k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { window.localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+    del: function (k) { try { window.localStorage.removeItem(k); } catch (e) { } }
+  };
+
+  function toKey(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function fromKey(k) {
+    var a = String(k).split('-');
+    var d = new Date(+a[0], +a[1] - 1, +a[2]);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  function today() { var n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
+  function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+  function fmtJ(d) { return (d.getMonth() + 1) + '月' + d.getDate() + '日(' + WD[d.getDay()] + ')'; }
+  function fmtJY(d) { return d.getFullYear() + '年' + fmtJ(d); }
+
+  /* ================= 巡回メモ ================= */
+  var MEMO_KEY = 'radar.memo.v1';
+  var MEMO_IDS = ['m-from', 'm-from2', 'm-d1', 'm-d2', 'm-pax', 'm-cls', 'm-note'];
+
+  function memoLoad() {
+    var raw = LS.get(MEMO_KEY);
+    if (!raw) return;
+    var o;
+    try { o = JSON.parse(raw); } catch (e) { return; }
+    if (!o || typeof o !== 'object') return;
+    MEMO_IDS.forEach(function (id) { if ($(id) && typeof o[id] === 'string') $(id).value = o[id]; });
+    if ($('m-status')) $('m-status').textContent = o._at ? ('保存済み(' + o._at + ')') : '保存済み';
+  }
+  function memoSave() {
+    var o = {};
+    MEMO_IDS.forEach(function (id) { if ($(id)) o[id] = $(id).value; });
+    var n = new Date();
+    o._at = (n.getMonth() + 1) + '/' + n.getDate() + ' ' + pad(n.getHours()) + ':' + pad(n.getMinutes());
+    var ok = LS.set(MEMO_KEY, JSON.stringify(o));
+    if ($('m-status')) $('m-status').textContent = ok ? ('保存しました(' + o._at + ')') : 'この環境では保存できませんでした';
+    if (ok && $('m-d1') && $('m-d1').value && $('l-start')) {
+      // 期間の開始日が未設定なら、巡回メモの開始日を台帳にも反映
+      if (!LS.get(LED_KEY)) { $('l-start').value = $('m-d1').value; ledger.start = $('m-d1').value; ledSave(); ledRender(); }
+    }
+  }
+  if ($('m-save')) $('m-save').addEventListener('click', memoSave);
+  if ($('m-clear')) $('m-clear').addEventListener('click', function () {
+    if (!window.confirm('保存した巡回メモを消します。よろしいですか?')) return;
+    LS.del(MEMO_KEY);
+    MEMO_IDS.forEach(function (id) { if ($(id)) $(id).value = ($(id).tagName === 'SELECT') ? $(id).options[0].value : ''; });
+    if ($('m-status')) $('m-status').textContent = '消しました';
+  });
+
+  /* ================= 発売日の逆算 ================= */
+  function calcRelease() {
+    var out = $('c-out'); if (!out) return;
+    var v = $('c-board') ? $('c-board').value : '';
+    var d = v ? fromKey(v) : null;
+    if (!d) { out.innerHTML = '日付を入れると、予約開始日と残り日数が出ます。'; return; }
+    var rel = addDays(d, -360);
+    var diff = Math.round((rel.getTime() - today().getTime()) / DAY);
+    var head = '<b>' + fmtJY(rel) + ' 午前0時</b> から予約できます';
+    var tail;
+    if (diff > 0) tail = 'あと ' + diff + ' 日。0時ちょうどに検索できるよう、前の晩に条件を用意しておきましょう。';
+    else if (diff === 0) tail = '発売は今夜の午前0時ではなく、今日の午前0時です。すでに受付が始まっています。';
+    else tail = 'すでに発売済みです(' + (-diff) + ' 日経過)。いま検索できます。';
+    out.innerHTML = head + '<br><span class="small">' + tail + '</span>';
+  }
+  if ($('c-board')) { $('c-board').addEventListener('change', calcRelease); $('c-board').addEventListener('input', calcRelease); }
+
+  /* ================= 入力キット(日付の書き方) ================= */
+  function calcKit() {
+    var v = $('k-date') ? $('k-date').value : '';
+    var d = v ? fromKey(v) : null;
+    var set = function (id, t) { if ($(id)) $(id).textContent = t; };
+    if (!d) { set('k-iso', '—'); set('k-us', '—'); set('k-eu', '—'); set('k-en', '—'); return; }
+    var y = d.getFullYear(), m = d.getMonth() + 1, day = d.getDate();
+    set('k-iso', y + '-' + pad(m) + '-' + pad(day));
+    set('k-us', pad(m) + '/' + pad(day) + '/' + y);
+    set('k-eu', pad(day) + '/' + pad(m) + '/' + y);
+    set('k-en', day + ' ' + EN_M[m - 1] + ' ' + y);
+  }
+  if ($('k-date')) { $('k-date').addEventListener('change', calcKit); $('k-date').addEventListener('input', calcKit); }
+
+  /* ================= 台帳 ================= */
+  var LED_KEY = 'radar.ledger.v1';
+  var MARKS = ['—', '×', '△', '○', '◎'];
+  var STALE = 3 * DAY;
+  var DEF_ROUTES = ['関空 → ホノルル', '関空 → バンコク', '関空 → ソウル', '羽田 → ロンドン', '伊丹 → 那覇', '伊丹 → 新千歳'];
+
+  var ledger = { start: toKey(today()), days: 14, routes: [] };
+
+  function ledDefault() {
+    return DEF_ROUTES.map(function (n) { return { n: n, c: {} }; });
+  }
+  function ledLoad() {
+    var raw = LS.get(LED_KEY), o = null;
+    if (raw) { try { o = JSON.parse(raw); } catch (e) { o = null; } }
+    if (o && typeof o === 'object' && Object.prototype.toString.call(o.routes) === '[object Array]') {
+      ledger.start = (typeof o.start === 'string' && fromKey(o.start)) ? o.start : toKey(today());
+      ledger.days = ([7, 14, 21, 28].indexOf(+o.days) >= 0) ? +o.days : 14;
+      ledger.routes = o.routes.map(function (r) {
+        return { n: (r && typeof r.n === 'string') ? r.n : '路線', c: (r && r.c && typeof r.c === 'object') ? r.c : {} };
+      });
+      if (!ledger.routes.length) ledger.routes = ledDefault();
+    } else {
+      ledger.routes = ledDefault();
+    }
+  }
+  function ledSave() { LS.set(LED_KEY, JSON.stringify(ledger)); }
+
+  function stripDates() {
+    var s = fromKey(ledger.start) || today();
+    var out = [];
+    for (var i = 0; i < ledger.days; i++) out.push(addDays(s, i));
+    return out;
+  }
+
+  function esc(t) {
+    return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function ledRender() {
+    var host = $('led-live'); if (!host) return;
+    var dates = stripDates();
+    var now = Date.now();
+    var tKey = toKey(today());
+    var tot = 0, done = 0, hit = 0, newest = 0;
+
+    var html = '';
+    ledger.routes.forEach(function (r, ri) {
+      var cnt = [0, 0, 0, 0, 0];
+      var cells = '';
+      dates.forEach(function (d) {
+        var k = toKey(d);
+        var rec = r.c[k];
+        var s = (rec && +rec.s) ? +rec.s : 0;
+        var t = (rec && +rec.t) ? +rec.t : 0;
+        cnt[s]++; tot++;
+        if (s > 0) { done++; if (s >= 3) hit++; }
+        if (t > newest) newest = t;
+        var stale = (s > 0 && t && (now - t) > STALE) ? ' stale' : '';
+        var isT = (k === tKey) ? ' istoday' : '';
+        cells += '<button type="button" class="cell' + stale + isT + '" data-s="' + s + '" data-r="' + ri + '" data-k="' + k + '"' +
+          ' data-sat="' + (d.getDay() === 6 ? 1 : 0) + '" data-sun="' + (d.getDay() === 0 ? 1 : 0) + '"' +
+          ' aria-label="' + fmtJ(d) + ' ' + esc(r.n) + '">' +
+          '<span class="cd">' + (d.getMonth() + 1) + '/' + d.getDate() + '</span>' +
+          '<span class="cw">' + WD[d.getDay()] + '</span>' +
+          '<span class="cs mk s' + s + '">' + MARKS[s] + '</span></button>';
+      });
+      html += '<div class="route">' +
+        '<div class="rhead">' +
+        '<input class="rname" type="text" data-r="' + ri + '" value="' + esc(r.n) + '" placeholder="路線を書いてください(例: 関空 → ホノルル)" aria-label="路線名">' +
+        '<button type="button" class="rdel" data-r="' + ri + '" aria-label="この路線を消す">✕</button>' +
+        '</div>' +
+        '<div class="rsum">◎' + cnt[4] + ' ○' + cnt[3] + ' △' + cnt[2] + ' ×' + cnt[1] + ' 未' + cnt[0] + '</div>' +
+        '<div class="strip">' + cells + '</div></div>';
+    });
+
+    var s0 = fromKey(ledger.start) || today();
+    var s1 = addDays(s0, ledger.days - 1);
+    var sum = '<div class="ledsum">' +
+      '<span>期間 <b>' + fmtJY(s0) + '</b> 〜 <b>' + fmtJ(s1) + '</b></span>' +
+      '<span>調べ済み <b>' + done + '</b> / ' + tot + ' マス</span>' +
+      '<span>空きあり(○◎) <b>' + hit + '</b></span>' +
+      (newest ? '<span>最後の記録 <b>' + fmtJ(new Date(newest)) + '</b></span>' : '<span>まだ記録がありません</span>') +
+      '</div>';
+
+    host.innerHTML = sum + html;
+    syncStrips();
+  }
+
+  /* 横スクロールを全路線で揃える(日付の列を比べやすくする) */
+  var syncing = false;
+  function syncStrips() {
+    var strips = document.querySelectorAll('#led-live .strip');
+    Array.prototype.forEach.call(strips, function (el) {
+      el.addEventListener('scroll', function () {
+        if (syncing) return;
+        syncing = true;
+        Array.prototype.forEach.call(strips, function (o) { if (o !== el) o.scrollLeft = el.scrollLeft; });
+        window.requestAnimationFrame(function () { syncing = false; });
+      });
+    });
+  }
+
+  var live = $('led-live');
+  if (live) {
+    live.addEventListener('click', function (ev) {
+      var cell = ev.target.closest ? ev.target.closest('.cell') : null;
+      if (cell) {
+        var ri = +cell.getAttribute('data-r'), k = cell.getAttribute('data-k');
+        var r = ledger.routes[ri]; if (!r) return;
+        var cur = (r.c[k] && +r.c[k].s) ? +r.c[k].s : 0;
+        var nx = (cur + 1) % 5;
+        if (nx === 0) delete r.c[k]; else r.c[k] = { s: nx, t: Date.now() };
+        ledSave(); ledRender();
+        return;
+      }
+      var del = ev.target.closest ? ev.target.closest('.rdel') : null;
+      if (del) {
+        var di = +del.getAttribute('data-r');
+        var nm = ledger.routes[di] ? ledger.routes[di].n : '';
+        if (!window.confirm('「' + nm + '」の行を、記録ごと消します。よろしいですか?')) return;
+        ledger.routes.splice(di, 1);
+        if (!ledger.routes.length) ledger.routes = [{ n: '路線を書いてください', c: {} }];
+        ledSave(); ledRender();
+      }
+    });
+    live.addEventListener('change', function (ev) {
+      var t = ev.target;
+      if (t && t.classList && t.classList.contains('rname')) {
+        var ri = +t.getAttribute('data-r');
+        if (ledger.routes[ri]) { ledger.routes[ri].n = t.value; ledSave(); }
+      }
+    });
+  }
+
+  function shift(n) {
+    var s = fromKey(ledger.start) || today();
+    ledger.start = toKey(addDays(s, n));
+    if ($('l-start')) $('l-start').value = ledger.start;
+    ledSave(); ledRender();
+  }
+  if ($('l-prev')) $('l-prev').addEventListener('click', function () { shift(-ledger.days); });
+  if ($('l-next')) $('l-next').addEventListener('click', function () { shift(ledger.days); });
+  if ($('l-today')) $('l-today').addEventListener('click', function () {
+    ledger.start = toKey(today());
+    if ($('l-start')) $('l-start').value = ledger.start;
+    ledSave(); ledRender();
+  });
+  if ($('l-start')) $('l-start').addEventListener('change', function () {
+    if (fromKey(this.value)) { ledger.start = this.value; ledSave(); ledRender(); }
+  });
+  if ($('l-days')) $('l-days').addEventListener('change', function () {
+    ledger.days = +this.value || 14; ledSave(); ledRender();
+  });
+  if ($('l-add')) $('l-add').addEventListener('click', function () {
+    ledger.routes.push({ n: '', c: {} });
+    ledSave(); ledRender();
+    var last = document.querySelectorAll('#led-live .rname');
+    if (last.length) { last[last.length - 1].focus(); }
+  });
+
+  /* 控えの書き出し・読み込み */
+  if ($('l-export')) $('l-export').addEventListener('click', function () {
+    if ($('l-io')) $('l-io').value = JSON.stringify(ledger);
+    if ($('l-msg')) $('l-msg').textContent = '書き出しました。長押しでコピーできます';
+  });
+  if ($('l-import')) $('l-import').addEventListener('click', function () {
+    var raw = $('l-io') ? $('l-io').value.trim() : '';
+    if (!raw) { if ($('l-msg')) $('l-msg').textContent = '読み込む文字を貼り付けてください'; return; }
+    var o;
+    try { o = JSON.parse(raw); } catch (e) { if ($('l-msg')) $('l-msg').textContent = '文字の形が違うようです'; return; }
+    if (!o || Object.prototype.toString.call(o.routes) !== '[object Array]') {
+      if ($('l-msg')) $('l-msg').textContent = 'この台帳の控えではないようです'; return;
+    }
+    if (!window.confirm('いまの記録を、貼り付けた内容で置きかえます。よろしいですか?')) return;
+    LS.set(LED_KEY, JSON.stringify(o));
+    ledLoad(); syncControls(); ledRender();
+    if ($('l-msg')) $('l-msg').textContent = '読み込みました';
+  });
+  if ($('l-reset')) $('l-reset').addEventListener('click', function () {
+    if (!window.confirm('台帳の記録をぜんぶ消して、最初の状態に戻します。よろしいですか?')) return;
+    LS.del(LED_KEY);
+    ledger.start = toKey(today()); ledger.days = 14; ledger.routes = ledDefault();
+    ledSave(); syncControls(); ledRender();
+    if ($('l-msg')) $('l-msg').textContent = '最初の状態に戻しました';
+  });
+
+  function syncControls() {
+    if ($('l-start')) $('l-start').value = ledger.start;
+    if ($('l-days')) $('l-days').value = String(ledger.days);
+  }
+
+  /* ---------- 起動 ---------- */
+  memoLoad();
+  ledLoad();
+  syncControls();
+  ledRender();
+  calcRelease();
+  calcKit();
+
+  /* GitHub Pagesで配信されているときだけ、オフライン用のService Workerを登録する */
+  if ('serviceWorker' in navigator &&
+      (location.hostname.endsWith('.github.io') ||
+       location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+    navigator.serviceWorker.register('sw.js').catch(function () { });
+  }
+})();
+</script>
+</body>
+</html>

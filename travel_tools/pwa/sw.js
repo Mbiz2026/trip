@@ -1,15 +1,21 @@
-/* trip系ツール Service Worker(航空券サーチ司令塔 + マイルコンパス)
+/* trip系ツール Service Worker(航空券サーチ司令塔 + マイルコンパス + 特典レーダー)
    方針: 本体(ナビゲーション)はネット優先(常に最新)、圏外ならキャッシュで起動。
    アイコン等の静的ファイルはキャッシュ優先。外部サイトへのリンクは一切触らない。 */
-const VERSION = 'trip-tools-v2';
+const VERSION = 'trip-tools-v3';
 const ASSETS = [
   './',
   'mile.html',
+  'radar.html',
   'manifest.webmanifest',
+  'radar.webmanifest',
   'icon-192.png',
   'icon-512.png',
   'icon-512-maskable.png',
-  'icon-180.png'
+  'icon-180.png',
+  'radar-icon-192.png',
+  'radar-icon-512.png',
+  'radar-icon-512-maskable.png',
+  'radar-icon-180.png'
 ];
 
 self.addEventListener('install', (e) => {

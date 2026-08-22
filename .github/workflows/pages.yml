@@ -2,16 +2,18 @@
 # 対象ファイルを更新してプッシュすると自動反映される(各アプリ: ホーム画面インストール・オフライン対応):
 #   https://<owner>.github.io/trip/            航空券サーチ司令塔(flight_finder.html)
 #   https://<owner>.github.io/trip/mile.html   マイルコンパス(mile_compass.html)
+#   https://<owner>.github.io/trip/radar.html  特典レーダー(award_radar.html)
 #   https://<owner>.github.io/trip/omamori.html 海外旅行おまもりキット(kaigai_travel_kit.html。
 #     manifest/アイコンは自己完結済みのため travel_tools/pwa/ は使わない)
 name: Deploy trip tools to Pages
 
 on:
   push:
-    branches: [claude/flight-search-app-55ozq4, main]
+    branches: [claude/flight-search-app-55ozq4, claude/jal-award-ticket-search-app-4eu5r6, main]
     paths:
       - travel_tools/flight_finder.html
       - travel_tools/mile_compass.html
+      - travel_tools/award_radar.html
       - travel_tools/kaigai_travel_kit.html
       - travel_tools/pwa/**
       - .github/workflows/pages.yml
@@ -39,6 +41,7 @@ jobs:
           mkdir dist
           cp travel_tools/flight_finder.html dist/index.html
           cp travel_tools/mile_compass.html dist/mile.html
+          cp travel_tools/award_radar.html dist/radar.html
           cp travel_tools/kaigai_travel_kit.html dist/omamori.html
           cp travel_tools/pwa/* dist/
           ls -la dist

@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#0D6B65">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1726">
+<title>ホテルブランド図鑑 — マリオット・ヒルトン・ハイアットを格で並べる</title>
+</head>
+<body>
+<style>
+:root{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+  --lux:#8A6A1F; --lux-bg:#F6EFDC;
+  --life:#8A4B7D; --life-bg:#F6E9F3;
+  --full:#1D5FA7; --full-bg:#E4EEF8;
+  --sel:#2F6E40; --sel-bg:#E6F0E8;
+  --stay:#1F6E68; --stay-bg:#DFEEEC;
+  --coll:#A2456B; --coll-bg:#F8E7EE;
+  --ai:#B35A1F; --ai-bg:#FBEADF;
+  --club:#5A6577; --club-bg:#EAEFED;
+  --mar:#97282F; --mar-bg:#F7E8E9;
+  --hil:#1D5FA7; --hil-bg:#E4EEF8;
+  --hya:#2F6E40; --hya-bg:#E6F0E8;
+  --font-body:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium","Yu Gothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
+  --font-disp:"Avenir Next","Avenir","Futura","Trebuchet MS",var(--font-body);
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+    --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+    --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+    --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+    --ok:#86C295; --ok-bg:#16301C;
+    --lux:#DFC27E; --lux-bg:#33290F;
+    --life:#DFA6D0; --life-bg:#331C2E;
+    --full:#8CB8E8; --full-bg:#182C44;
+    --sel:#86C295; --sel-bg:#16301C;
+    --stay:#6FC7BF; --stay-bg:#12302E;
+    --coll:#E7A0BC; --coll-bg:#3A1B27;
+    --ai:#E3AC55; --ai-bg:#33210F;
+    --club:#A6B2C6; --club-bg:#202B3F;
+    --mar:#E88C92; --mar-bg:#3A1E20;
+    --hil:#8CB8E8; --hil-bg:#182C44;
+    --hya:#86C295; --hya-bg:#16301C;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+  --ink:#1B2433; --muted:#5A6577; --line:#D8DEE2;
+  --navy:#223860; --accent:#0D6B65; --accent-soft:#DFEEEC; --on-accent:#FFFFFF;
+  --warn:#8A5310; --warn-bg:#F6EDDC; --danger:#A93226; --danger-bg:#F8E9E6;
+  --ok:#2F6E40; --ok-bg:#E6F0E8;
+  --lux:#8A6A1F; --lux-bg:#F6EFDC;
+  --life:#8A4B7D; --life-bg:#F6E9F3;
+  --full:#1D5FA7; --full-bg:#E4EEF8;
+  --sel:#2F6E40; --sel-bg:#E6F0E8;
+  --stay:#1F6E68; --stay-bg:#DFEEEC;
+  --coll:#A2456B; --coll-bg:#F8E7EE;
+  --ai:#B35A1F; --ai-bg:#FBEADF;
+  --club:#5A6577; --club-bg:#EAEFED;
+  --mar:#97282F; --mar-bg:#F7E8E9;
+  --hil:#1D5FA7; --hil-bg:#E4EEF8;
+  --hya:#2F6E40; --hya-bg:#E6F0E8;
+}
+:root[data-theme="dark"]{
+  --bg:#0F1726; --surface:#172236; --surface2:#1E2C46;
+  --ink:#E7ECF4; --muted:#94A1B5; --line:#2B3A57;
+  --navy:#A9C0E8; --accent:#4EC0B5; --accent-soft:#16343A; --on-accent:#08211D;
+  --warn:#E3AC55; --warn-bg:#2E2410; --danger:#E88075; --danger-bg:#3A1B17;
+  --ok:#86C295; --ok-bg:#16301C;
+  --lux:#DFC27E; --lux-bg:#33290F;
+  --life:#DFA6D0; --life-bg:#331C2E;
+  --full:#8CB8E8; --full-bg:#182C44;
+  --sel:#86C295; --sel-bg:#16301C;
+  --stay:#6FC7BF; --stay-bg:#12302E;
+  --coll:#E7A0BC; --coll-bg:#3A1B27;
+  --ai:#E3AC55; --ai-bg:#33210F;
+  --club:#A6B2C6; --club-bg:#202B3F;
+  --mar:#E88C92; --mar-bg:#3A1E20;
+  --hil:#8CB8E8; --hil-bg:#182C44;
+  --hya:#86C295; --hya-bg:#16301C;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);line-height:1.65;font-size:15.5px;-webkit-text-size-adjust:100%}
+.wrap{max-width:700px;margin:0 auto;padding:0 14px 72px}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px;word-break:break-all}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+header.app{padding:22px 2px 10px}
+.eyebrow{font-family:var(--font-disp);font-size:11px;letter-spacing:.16em;color:var(--accent);font-weight:600;text-transform:uppercase}
+header.app h1{margin:2px 0 6px;font-size:26px;line-height:1.3;letter-spacing:.01em;color:var(--navy);text-wrap:balance}
+.stamp{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.stamp span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
+
+/* ラジオボタン式タブ: JavaScriptが無い環境でも動く */
+.tabradio{position:absolute;width:1px;height:1px;opacity:0;margin:0;pointer-events:none}
+nav.tabs{position:sticky;top:0;z-index:30;background:var(--bg);padding:8px 0 10px;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600;cursor:pointer;user-select:none}
+#t-mar:checked~nav .tab[for="t-mar"],#t-hil:checked~nav .tab[for="t-hil"],#t-hya:checked~nav .tab[for="t-hya"],#t-cmp:checked~nav .tab[for="t-cmp"],#t-src:checked~nav .tab[for="t-src"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+#t-mar:focus-visible~nav .tab[for="t-mar"],#t-hil:focus-visible~nav .tab[for="t-hil"],#t-hya:focus-visible~nav .tab[for="t-hya"],#t-cmp:focus-visible~nav .tab[for="t-cmp"],#t-src:focus-visible~nav .tab[for="t-src"]{outline:2px solid var(--accent);outline-offset:2px}
+section.pane{display:none}
+#t-mar:checked~#pane-mar,#t-hil:checked~#pane-hil,#t-hya:checked~#pane-hya,#t-cmp:checked~#pane-cmp,#t-src:checked~#pane-src{display:block}
+/* 検索欄(JSがあるときだけ中身が入る)はチェーンのタブでのみ表示 */
+#t-cmp:checked~#searchHost,#t-src:checked~#searchHost{display:none}
+
+.sec-head{margin:16px 2px 12px}
+.sec-head h2{margin:2px 0 4px;font-size:20px;color:var(--navy);letter-spacing:.01em}
+.sec-head .lede{margin:0;font-size:13.5px;color:var(--muted)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 15px;margin:0 0 12px}
+.card h3{margin:0 0 8px;font-size:15.5px;color:var(--navy)}
+.card h4{margin:14px 0 6px;font-size:13.5px;color:var(--navy)}
+.card p{margin:6px 0}
+.small{font-size:12.5px;color:var(--muted)}
+.callout{border:1px solid transparent;border-radius:10px;padding:12px 14px;margin:0 0 12px;font-size:14px}
+.callout.warn{background:var(--warn-bg);color:var(--warn)}
+.callout.ok{background:var(--ok-bg);color:var(--ok)}
+.callout b{display:block;margin-bottom:4px}
+.badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:2px 8px;vertical-align:middle;white-space:nowrap}
+.badge.mar{background:var(--mar-bg);color:var(--mar)}
+.badge.hil{background:var(--hil-bg);color:var(--hil)}
+.badge.hya{background:var(--hya-bg);color:var(--hya)}
+.badge.warn2{background:var(--warn-bg);color:var(--warn)}
+.badge.okb{background:var(--ok-bg);color:var(--ok)}
+
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin:0 0 12px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:520px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+th{font-size:12px;color:var(--muted);font-weight:600;background:var(--surface2);white-space:nowrap}
+td.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ---- チェーン概要 ---- */
+.chain{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:14px 15px;margin:0 0 14px}
+.chain h2{margin:0 0 2px;font-size:19px;color:var(--navy)}
+.chain .cprog{font-size:12.5px;color:var(--muted);margin:0 0 8px}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}
+.fact{flex:1 1 30%;min-width:96px;background:var(--surface2);border-radius:8px;padding:8px 10px}
+.fact b{display:block;font-family:var(--font-mono);font-size:17px;font-variant-numeric:tabular-nums;line-height:1.3;color:var(--ink)}
+.fact span{font-size:11px;color:var(--muted)}
+
+/* ---- 格(ティア)ごとの束 ---- */
+.tier{margin:0 0 16px}
+.tier>.thead{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 10px;border-left:4px solid var(--tc,var(--accent));padding:2px 0 2px 10px;margin:0 0 4px}
+.tier>.thead h3{margin:0;font-size:17px;color:var(--ink);letter-spacing:.01em}
+.tier>.thead .ten{font-family:var(--font-disp);font-size:11.5px;letter-spacing:.1em;color:var(--tc,var(--accent));font-weight:700;text-transform:uppercase}
+.tier>.tlede{margin:0 0 9px 14px;font-size:12.5px;color:var(--muted)}
+.tier.t-lux{--tc:var(--lux)} .tier.t-life{--tc:var(--life)} .tier.t-full{--tc:var(--full)}
+.tier.t-sel{--tc:var(--sel)} .tier.t-stay{--tc:var(--stay)} .tier.t-coll{--tc:var(--coll)}
+.tier.t-ai{--tc:var(--ai)} .tier.t-club{--tc:var(--club)}
+
+.brand{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--tc,var(--accent));border-radius:9px;padding:10px 13px;margin:0 0 8px}
+.brand .btop{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px}
+.brand .bname{font-weight:700;font-size:15px;line-height:1.4}
+.brand .bja{font-size:12.5px;color:var(--muted)}
+.brand .bnum{margin-left:auto;font-family:var(--font-mono);font-size:12px;font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.brand .bdesc{margin:3px 0 0;font-size:13.5px}
+.brand .btags{margin:6px 0 0;display:flex;flex-wrap:wrap;gap:5px}
+.chip{display:inline-block;font-size:11px;font-weight:700;border-radius:5px;padding:1px 7px;background:var(--surface2);color:var(--muted)}
+.chip.tone{background:var(--tcbg,var(--accent-soft));color:var(--tc,var(--accent))}
+.tier.t-lux .chip.tone{--tcbg:var(--lux-bg)} .tier.t-life .chip.tone{--tcbg:var(--life-bg)}
+.tier.t-full .chip.tone{--tcbg:var(--full-bg)} .tier.t-sel .chip.tone{--tcbg:var(--sel-bg)}
+.tier.t-stay .chip.tone{--tcbg:var(--stay-bg)} .tier.t-coll .chip.tone{--tcbg:var(--coll-bg)}
+.tier.t-ai .chip.tone{--tcbg:var(--ai-bg)} .tier.t-club .chip.tone{--tcbg:var(--club-bg)}
+.chip.new{background:var(--warn-bg);color:var(--warn)}
+
+/* ---- 検索(JSがあるときだけ現れる) ---- */
+#searchHost:empty{display:none}
+.searchbox{margin:0 0 12px}
+.searchbox label{display:block;font-size:12px;color:var(--muted);margin:0 0 4px}
+.searchbox input{width:100%;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:10px 12px;font-size:16px;font-family:inherit}
+.searchbox .qres{margin:5px 0 0;font-size:12px;color:var(--muted)}
+
+/* ---- 格へのジャンプ(JS不要のアンカー) ---- */
+.tocrow{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.tchip .small{margin-left:5px}
+.tchip{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:600;text-decoration:none;color:var(--ink)}
+.tier{scroll-margin-top:58px}
+
+/* ---- 呼び名の対応(スマホでも読める段組み) ---- */
+.maprow{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;margin:0 0 8px}
+.maprow .mhead{margin:0 0 6px}
+.maprow .mhead b{font-size:14.5px}
+.maprow .mhead span{font-size:11.5px;color:var(--muted);margin-left:6px}
+.mline{display:flex;gap:8px;align-items:baseline;font-size:13px;padding:3px 0;border-top:1px solid var(--line)}
+.mline .badge{flex:none;min-width:74px;text-align:center}
+.tbl.narrow table{min-width:0}
+
+.srcs{margin:0;padding-left:1.1em;font-size:13px}
+.srcs li{margin:0 0 7px}
+footer{margin:26px 2px 0;font-size:11.5px;color:var(--muted);text-align:center}
+</style>
+
+<div class="wrap">
+<header class="app">
+  <span class="eyebrow">Hotel Brand Atlas — 2026</span>
+  <h1>ホテルブランド図鑑<br>3大チェーンを「格」で並べる</h1>
+  <div class="stamp">
+    <span><span class="dot"></span>情報確認日 2026-08-26</span>
+    <span><span class="dot"></span>マリオット/ヒルトン/ハイアット</span>
+    <span><span class="dot"></span>区分はすべて各社の公式表記</span>
+  </div>
+  <noscript><div class="callout warn" style="margin-top:10px"><b>ℹ このままで全ブランドを読めます</b>いまはJavaScriptが無効の表示です(ファイルAppのプレビューなど)。タブ切り替えも一覧もそのまま動きます。ブラウザ(Safari/Chrome)で開くと「ブランド名で探す」入力欄が追加されます。</div></noscript>
+</header>
+
+<input class="tabradio" type="radio" name="tab" id="t-mar" checked>
+<input class="tabradio" type="radio" name="tab" id="t-hil">
+<input class="tabradio" type="radio" name="tab" id="t-hya">
+<input class="tabradio" type="radio" name="tab" id="t-cmp">
+<input class="tabradio" type="radio" name="tab" id="t-src">
+
+<nav class="tabs" aria-label="メニュー">
+  <label class="tab" for="t-mar">🏛 マリオット</label>
+  <label class="tab" for="t-hil">🛎 ヒルトン</label>
+  <label class="tab" for="t-hya">🌿 ハイアット</label>
+  <label class="tab" for="t-cmp">⚖️ 横断くらべ</label>
+  <label class="tab" for="t-src">📖 出典と注意</label>
+</nav>
+
+<div id="searchHost"></div>
+
+<!-- ============ マリオット ============ -->
+<section class="pane" id="pane-mar">
+  <div class="chain">
+    <h2>マリオット・ボンヴォイ</h2>
+    <p class="cprog">Marriott Bonvoy / Marriott International</p>
+    <p class="small" style="margin:0">公式サイトでは<b>ラグジュアリー → プレミアム → セレクト → 長期滞在 → コレクション</b>の5つの並びでブランドを紹介している。年次報告書(10-K)での分け方は少し違い、「ラグジュアリー/プレミアム/セレクト/ミッドスケール」の4段階+長期滞在ブランドは複数の段にまたがる、という説明になっている。カード内の注記はこの違いを示したもの。</p>
+    <div class="facts">
+      <div class="fact"><b>9,805</b><span>軒(2025年末)</span></div>
+      <div class="fact"><b>1,779,936</b><span>室</span></div>
+      <div class="fact"><b>145</b><span>の国と地域</span></div>
+    </div>
+  </div>
+<!-- MARRIOTT:BEGIN (生成: travel_tools/dev/gen_hotel_brands.py・確認日2026-08-26・40ブランド) -->
+<div class="tocrow"><a class="tchip" href="#mar-t1">ラグジュアリー <span class="small">3</span></a><a class="tchip" href="#mar-t2">ディスティンクティブ ラグジュアリー <span class="small">5</span></a><a class="tchip" href="#mar-t3">プレミアム <span class="small">8</span></a><a class="tchip" href="#mar-t4">セレクト <span class="small">12</span></a><a class="tchip" href="#mar-t5">長期滞在 <span class="small">7</span></a><a class="tchip" href="#mar-t6">コレクション <span class="small">5</span></a></div>
+<div class="tier t-lux" id="mar-t1">
+  <div class="thead"><span class="ten">LUXURY</span><h3>ラグジュアリー</h3></div>
+  <p class="tlede">公式ブランド一覧の最上段。3ブランドだけが「ラグジュアリー」と表示される。</p>
+  <div class="brand"><div class="btop"><span class="bname">The Ritz-Carlton</span><span class="bja">ザ・リッツ・カールトン</span><span class="bnum">126軒 / 32,279室</span></div><p class="bdesc">マリオットの看板となる最上級ブランド。米国・カナダ43軒、アジア太平洋24軒、中華圏19軒と地域の偏りが小さい。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">St. Regis</span><span class="bja">セントレジス</span><span class="bnum">66軒 / 14,241室</span></div><p class="bdesc">公式は「完璧なサービスと現代の贅沢」を掲げる最上級。中東・アフリカと中華圏に各15軒あり、新興都市の旗艦ホテルに多い。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">JW Marriott</span><span class="bja">JWマリオット</span><span class="bnum">130軒 / 50,891室</span></div><p class="bdesc">ラグジュアリー段では最大規模で、1軒あたり約390室。宴会場やスパを備えた大型の都市型・リゾート型が中心。</p></div>
+</div>
+<div class="tier t-lux" id="mar-t2">
+  <div class="thead"><span class="ten">DISTINCTIVE LUXURY</span><h3>ディスティンクティブ ラグジュアリー</h3></div>
+  <p class="tlede">同じ最上段のうち、公式が「個性の強いラグジュアリー」として別に並べているグループ。</p>
+  <div class="brand"><div class="btop"><span class="bname">The Ritz-Carlton Reserve</span><span class="bja">ザ・リッツ・カールトン・リザーブ</span><span class="bnum">10-Kに単独記載なし</span></div><p class="bdesc">世界に数えるほどしかない超小規模リゾート。公式は「日常から隔絶された特別な場所」と説明する。軒数はリッツ・カールトンと分けて公表されていない。</p><div class="btags"><span class="chip tone">最小規模</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">The Luxury Collection</span><span class="bja">ラグジュアリーコレクション</span><span class="bnum">132軒 / 32,724室</span></div><p class="bdesc">その土地を象徴する独立系ホテルを集めた枠。ヨーロッパ45軒が最多。</p><div class="btags"><span class="chip tone">ソフトブランド</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">W Hotels</span><span class="bja">Wホテル</span><span class="bnum">72軒 / 20,233室</span></div><p class="bdesc">公式が「ラグジュアリーなライフスタイルブランドの代表格」と位置づけるデザイン重視の系統。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">EDITION</span><span class="bja">エディション</span><span class="bnum">22軒 / 4,617室</span></div><p class="bdesc">22軒だけの少数精鋭。デザイン・食・エンターテインメントを一体にした新世代ラグジュアリー(公式)。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Bvlgari Hotels</span><span class="bja">ブルガリ</span><span class="bnum">9軒 / 807室</span></div><p class="bdesc">宝飾ブランドとの共同ブランド。10-Kではラグジュアリー段に載るが、公式のブランド紹介ページには出てこない(2026年8月時点)。米国・カナダには無く、ヨーロッパ4軒が最多。</p><div class="btags"><span class="chip tone">公式一覧に非掲載</span></div></div>
+</div>
+<div class="tier t-full" id="mar-t3">
+  <div class="thead"><span class="ten">PREMIUM</span><h3>プレミアム</h3></div>
+  <p class="tlede">上級フルサービス。ラウンジや複数のレストラン、宴会場を持つ大型が中心。</p>
+  <div class="brand"><div class="btop"><span class="bname">Marriott Hotels</span><span class="bja">マリオット・ホテル</span><span class="bnum">619軒 / 218,237室</span></div><p class="bdesc">グループの中核ブランド。どの地域にもまとまった数があり、出張・観光どちらでも選択肢に入りやすい。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Sheraton</span><span class="bja">シェラトン</span><span class="bnum">436軒 / 147,958室</span></div><p class="bdesc">公式が「世界400以上のコミュニティに根付く」と説明する老舗。中華圏103軒はプレミアム段で最多。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Westin</span><span class="bja">ウェスティン</span><span class="bnum">251軒 / 89,984室</span></div><p class="bdesc">睡眠・運動などウェルビーイングを前面に出す。米国・カナダ137軒が中心。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Le Méridien</span><span class="bja">ルメリディアン</span><span class="bnum">122軒 / 31,996室</span></div><p class="bdesc">ヨーロッパ流の「佳き人生」を掲げるブランド(公式)。中東・アフリカ19軒、アジア太平洋36軒と国際色が濃い。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Renaissance Hotels</span><span class="bja">ルネッサンス・ホテル</span><span class="bnum">180軒 / 54,077室</span></div><p class="bdesc">土地ごとの発見を掲げるブランド。米国・カナダ92軒、中華圏34軒。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Delta Hotels by Marriott</span><span class="bja">デルタ・ホテル・バイ・マリオット</span><span class="bnum">137軒 / 30,803室</span></div><p class="bdesc">カナダ発。米国・カナダ91軒とヨーロッパ30軒でほぼ全体を占め、アジア太平洋にはない。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Gaylord Hotels</span><span class="bja">ゲイロード・ホテル</span><span class="bnum">7軒 / 11,820室</span></div><p class="bdesc">巨大アトリウムや屋内ウォーターパークを持つ超大型リゾート。米国7軒のみで、1軒あたり約1,690室。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">The Marriott Vacation Clubs</span><span class="bja">マリオット・バケーション・クラブ</span><span class="bnum">95軒 / 22,912室</span></div><p class="bdesc">会員制(タイムシェア)。公式ブランド一覧ではプレミアムに並ぶが、10-Kでは別枠のTimeshareとして集計されている。</p><div class="btags"><span class="chip tone">会員制</span></div></div>
+</div>
+<div class="tier t-sel" id="mar-t4">
+  <div class="thead"><span class="ten">SELECT</span><h3>セレクト</h3></div>
+  <p class="tlede">中級。必要十分な設備で価格を抑えた実用ブランド群。マリオットの軒数の大半はここ。</p>
+  <div class="brand"><div class="btop"><span class="bname">Courtyard</span><span class="bja">コートヤード</span><span class="bnum">1,362軒 / 206,090室</span></div><p class="bdesc">セレクト段の代表格。米国・カナダ1,083軒を軸に、世界各地の郊外・空港近くに広く分布。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Four Points</span><span class="bja">フォーポイント</span><span class="bnum">384軒 / 72,408室</span></div><p class="bdesc">シェラトン系の実用ブランド。中華圏102軒、アジア太平洋57軒とアジアでの存在感が大きい。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">SpringHill Suites</span><span class="bja">スプリングヒル・スイート</span><span class="bnum">579軒 / 68,370室</span></div><p class="bdesc">広めのスイート型セレクト。579軒すべてが米国・カナダ。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Fairfield by Marriott</span><span class="bja">フェアフィールド・バイ・マリオット</span><span class="bnum">1,381軒 / 140,748室</span></div><p class="bdesc">軒数はマリオットのブランドで最多。米国・カナダ1,191軒に加え、中華圏94軒・アジア太平洋77軒。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">AC Hotels</span><span class="bja">ACホテル</span><span class="bnum">267軒 / 42,828室</span></div><p class="bdesc">スペイン発のミニマル系デザイン。ヨーロッパ88軒と米国・カナダ142軒が中心。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">citizenM</span><span class="bja">citizenM</span><span class="bnum">37軒 / 8,789室</span></div><p class="bdesc">オランダ発のコンパクト・ハイテク型。都心立地が中心で、米国16軒・ヨーロッパ19軒。マリオットのブランド一覧に加わったのは最近。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Aloft Hotels</span><span class="bja">アロフトホテル</span><span class="bnum">243軒 / 39,816室</span></div><p class="bdesc">都会的な内装と広いロビーの社交空間が売り。米国・カナダ169軒。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Moxy Hotels</span><span class="bja">モクシー・ホテル</span><span class="bnum">181軒 / 34,042室</span></div><p class="bdesc">小さめの部屋と広いラウンジという構成。ヨーロッパ104軒が最多で、欧州旅行では選択肢に入りやすい。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Protea Hotels by Marriott</span><span class="bja">プロテア・ホテル</span><span class="bnum">65軒 / 7,020室</span></div><p class="bdesc">公式が「アフリカ最大のホテルブランド」と説明。65軒すべてが中東・アフリカ地域。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">City Express by Marriott</span><span class="bja">シティエクスプレス</span><span class="bnum">158軒 / 18,910室</span></div><p class="bdesc">メキシコ発。158軒のうち147軒が中南米。</p><div class="btags"><span class="chip tone">10-Kはミッドスケール</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Four Points Flex by Sheraton</span><span class="bja">フォーポイント フレックス</span><span class="bnum">54軒 / 7,806室</span></div><p class="bdesc">必需品に絞った低価格版フォーポイント。ヨーロッパ34軒・アジア太平洋16軒で、米国・カナダにはまだない。</p><div class="btags"><span class="chip tone">10-Kはミッドスケール</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Series by Marriott</span><span class="bja">Series by Marriott</span><span class="bnum">39軒 / 2,761室</span></div><p class="bdesc">地域の既存ホテルブランドが名前を残したままマリオットの予約網に入る枠。39軒中37軒がアジア太平洋。</p><div class="btags"><span class="chip tone">ソフトブランド</span><span class="chip tone">10-Kはセレクト+ミッドスケール</span></div></div>
+</div>
+<div class="tier t-stay" id="mar-t5">
+  <div class="thead"><span class="ten">LONGER STAYS</span><h3>長期滞在</h3></div>
+  <p class="tlede">キッチンや洗濯機がついた「暮らす」タイプ。1週間以上の滞在なら同じ予算でも快適なことが多い。</p>
+  <div class="brand"><div class="btop"><span class="bname">Residence Inn</span><span class="bja">レジデンス・イン</span><span class="bnum">937軒 / 115,333室</span></div><p class="bdesc">長期滞在の代表格。937軒中889軒が米国・カナダ。</p><div class="btags"><span class="chip tone">10-Kはセレクト</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">TownePlace Suites</span><span class="bja">タウンプレース・スイート</span><span class="bnum">571軒 / 57,577室</span></div><p class="bdesc">価格を抑えた長期滞在型。571軒すべてが米国・カナダ。</p><div class="btags"><span class="chip tone">10-Kはセレクト</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Element Hotels</span><span class="bja">エレメントホテル</span><span class="bnum">122軒 / 17,568室</span></div><p class="bdesc">ウェスティン系の長期滞在。健康志向の設計を掲げる。米国・カナダ102軒。</p><div class="btags"><span class="chip tone">10-Kはセレクト</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">StudioRes</span><span class="bja">StudioRes</span><span class="bnum">4軒 / 496室</span></div><p class="bdesc">立ち上げ期の新しい長期滞在ブランド。2025年末時点で米国に4軒のみ。</p><div class="btags"><span class="chip new">立ち上げ期</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Homes &amp; Villas by Marriott Bonvoy</span><span class="bja">ホーム＆ヴィラ・バイ・マリオットボンヴォイ</span><span class="bnum">2,000軒超(公式)</span></div><p class="bdesc">一棟貸しの民泊型。米国・ヨーロッパ・カリブ海・中南米の100以上の地域で2,000軒超(公式)。10-Kの軒数集計には含まれない。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Apartments by Marriott Bonvoy</span><span class="bja">アパートメント・バイ・マリオットボンヴォイ</span><span class="bnum">5軒 / 656室</span></div><p class="bdesc">寝室と居間が分かれ、キッチンと洗濯乾燥機がつくアパート型。まだ5軒。</p><div class="btags"><span class="chip new">立ち上げ期</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Marriott Executive Apartments</span><span class="bja">マリオット・エグゼクティブ・アパートメント</span><span class="bnum">50軒 / 7,735室</span></div><p class="bdesc">海外赴任者向けの家具付きアパート。中東・アフリカ18軒、アジア太平洋15軒、中華圏12軒で、米国・カナダにはない。</p></div>
+</div>
+<div class="tier t-coll" id="mar-t6">
+  <div class="thead"><span class="ten">COLLECTIONS</span><h3>コレクション</h3></div>
+  <p class="tlede">独立系ホテルが自分の名前を保ったまま参加する「ソフトブランド」。同じ枠でも価格も設備もバラバラ。</p>
+  <div class="brand"><div class="btop"><span class="bname">Autograph Collection</span><span class="bja">オートグラフ コレクション</span><span class="bnum">362軒 / 76,399室</span></div><p class="bdesc">コレクション枠で最大。ブティックからラグジュアリーまで幅があり、ブランド名だけでは格が読めない。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Tribute Portfolio</span><span class="bja">トリビュートポートフォリオ</span><span class="bnum">186軒 / 30,919室</span></div><p class="bdesc">独自の個性を持つ独立系ホテル＆リゾートの集合体(公式)。米国・カナダ102軒、ヨーロッパ36軒。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Design Hotels</span><span class="bja">Design Hotels</span><span class="bnum">223軒 / 15,488室</span></div><p class="bdesc">デザイン重視の独立系。223軒中127軒がヨーロッパで、1軒あたり約70室と小規模が多い。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">MGM Collection with Marriott Bonvoy</span><span class="bja">MGMコレクション</span><span class="bnum">12軒 / 26,210室</span></div><p class="bdesc">MGMリゾーツの大型カジノリゾートをボンヴォイで予約できる枠。米国12軒で26,210室と1軒あたりが巨大。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Outdoor Collection by Marriott Bonvoy</span><span class="bja">Outdoor Collection</span><span class="bnum">32軒 / 1,532室</span></div><p class="bdesc">自然の中のキャビンなどを集めた枠。米国32軒。</p><div class="btags"><span class="chip tone">10-Kはプレミアム+セレクト</span></div></div>
+</div>
+<!-- MARRIOTT:END -->
+  <div class="card">
+    <h3>この一覧の読み方</h3>
+    <p class="small" style="margin:0">軒数・室数は<b>2025年12月末時点で営業中</b>のもの(マリオット10-K)。公式ブランド紹介ページの並び順で載せているため、10-Kでの分類が違うブランドはカード内に注記した。Homes &amp; Villas(民泊型)は10-Kの軒数集計の対象外。ザ・リッツ・カールトン・ヨット・コレクション(3隻・603室)はブランド表とは別枠で集計されている。</p>
+  </div>
+</section>
+
+<!-- ============ ヒルトン ============ -->
+<section class="pane" id="pane-hil">
+  <div class="chain">
+    <h2>ヒルトン・オナーズ</h2>
+    <p class="cprog">Hilton Honors / Hilton Worldwide Holdings</p>
+    <p class="small" style="margin:0">ヒルトン自身が投資家向け資料で使っている区分は<b>ラグジュアリー / ライフスタイル / フルサービス / オールスイート / フォーカストサービス / タイムシェア</b>の6つ。この6区分に入る28ブランドが「ヒルトンのブランド」のすべて。</p>
+    <div class="facts">
+      <div class="fact"><b>28</b><span>ブランド</span></div>
+      <div class="fact"><b>約9,400</b><span>軒(公式)</span></div>
+      <div class="fact"><b>144</b><span>の国と地域</span></div>
+    </div>
+  </div>
+<!-- HILTON:BEGIN (生成: travel_tools/dev/gen_hotel_brands.py・確認日2026-08-26・28ブランド) -->
+<div class="tocrow"><a class="tchip" href="#hil-t1">ラグジュアリー <span class="small">5</span></a><a class="tchip" href="#hil-t2">ライフスタイル <span class="small">9</span></a><a class="tchip" href="#hil-t3">フルサービス <span class="small">2</span></a><a class="tchip" href="#hil-t4">オールスイート <span class="small">5</span></a><a class="tchip" href="#hil-t5">フォーカストサービス <span class="small">4</span></a><a class="tchip" href="#hil-t6">タイムシェア(会員制) <span class="small">3</span></a></div>
+<div class="tier t-lux" id="hil-t1">
+  <div class="thead"><span class="ten">LUXURY</span><h3>ラグジュアリー</h3></div>
+  <p class="tlede">投資家向け資料での最上段。5ブランド。</p>
+  <div class="brand"><div class="btop"><span class="bname">Waldorf Astoria Hotels &amp; Resorts</span><span class="bnum">39軒 / 9,688室・21の国と地域</span></div><p class="bdesc">ヒルトンの最上級。各地のランドマークとなるホテルで構成される(公式)。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Conrad Hotels &amp; Resorts</span><span class="bnum">50軒 / 17,064室・24の国と地域</span></div><p class="bdesc">公式が「ヒルトンのラグジュアリー群で最大」と説明。大胆なデザインと現代アートを掲げる。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">LXR Hotels &amp; Resorts</span><span class="bnum">18軒 / 2,943室・9の国と地域</span></div><p class="bdesc">独立系のラグジュアリーを集めるコレクション型。1軒あたり約160室と小規模。</p><div class="btags"><span class="chip tone">ソフトブランド</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">NoMad Hotels</span><span class="bnum">1軒 / 91室</span></div><p class="bdesc">2024年にヒルトンが出資したブランド(10-K)。2025年末時点で運営中は1軒のみ。</p><div class="btags"><span class="chip new">立ち上げ期</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Signia by Hilton</span><span class="bnum">5軒 / 3,293室</span></div><p class="bdesc">大型の会議・イベント需要に向けた最上級。5軒で3,293室と1軒あたりが大きい。</p></div>
+</div>
+<div class="tier t-life" id="hil-t2">
+  <div class="thead"><span class="ten">LIFESTYLE</span><h3>ライフスタイル</h3></div>
+  <p class="tlede">デザイン系と、独立系ホテルを集めるコレクションはすべてここ。9ブランドと最も数が多い区分。</p>
+  <div class="brand"><div class="btop"><span class="bname">Canopy by Hilton</span><span class="bnum">48軒 / 8,496室・15の国と地域</span></div><p class="bdesc">街の個性に寄せたブティック型(公式)。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Curio Collection by Hilton</span><span class="bnum">196軒 / 38,349室・47の国と地域</span></div><p class="bdesc">ヒルトン最大のソフトブランド。個性のある独立系ホテルを集める枠で、格は物件ごとにかなり違う。</p><div class="btags"><span class="chip tone">ソフトブランド</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Tapestry Collection by Hilton</span><span class="bnum">192軒 / 23,864室・25の国と地域</span></div><p class="bdesc">独立系を集めるもう一つのコレクション。1軒あたり約124室で、Curio(約196室)より小ぶりな物件が多い。</p><div class="btags"><span class="chip tone">ソフトブランド</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Graduate by Hilton</span><span class="bnum">35軒 / 5,881室</span></div><p class="bdesc">大学町に特化したデザインホテル。2024年にヒルトンが買収(10-K)。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Undergraduate by Hilton</span><span class="bnum">2026年6月発表・未開業</span></div><p class="bdesc">Graduateより手頃な価格帯として発表されたアッパーミッドスケール。1号店は2027年開業予定で、営業中の物件はまだない(公式発表)。</p><div class="btags"><span class="chip new">2026年発表</span><span class="chip new">未開業</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Tempo by Hilton</span><span class="bnum">6軒 / 1,424室</span></div><p class="bdesc">生活のリズムを崩さない設計を掲げる新しめのブランド。まだ6軒。</p><div class="btags"><span class="chip new">立ち上げ期</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Motto by Hilton</span><span class="bnum">10軒 / 2,261室・5の国と地域</span></div><p class="bdesc">街の中心に小さな部屋で泊まるマイクロホテル型。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Outset Collection by Hilton</span><span class="bnum">2軒 / 268室</span></div><p class="bdesc">2025年10月に発表されたヒルトン25番目のブランド。物語性のある独立系を集める枠で、対象は米国・カナダ。60軒以上が開発中。</p><div class="btags"><span class="chip new">2025年発表</span><span class="chip tone">ソフトブランド</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Select by Hilton</span><span class="bnum">2026年3月発表</span></div><p class="bdesc">既存の独立ブランドが名前と運営を保ったままヒルトンの予約網とオナーズに参加する枠。第1弾は10か国23軒のYOTELで、2026年後半からヒルトン経由で予約できる予定。</p><div class="btags"><span class="chip new">2026年発表</span><span class="chip tone">ソフトブランド</span></div></div>
+</div>
+<div class="tier t-full" id="hil-t3">
+  <div class="thead"><span class="ten">FULL SERVICE</span><h3>フルサービス</h3></div>
+  <p class="tlede">レストラン・宴会場を備えた上級の主力。2ブランドだけだが、軒数・室数はグループの柱。</p>
+  <div class="brand"><div class="btop"><span class="bname">Hilton Hotels &amp; Resorts</span><span class="bnum">622軒 / 228,611室・94の国と地域</span></div><p class="bdesc">チェーンの看板ブランド。94の国と地域という展開の広さはヒルトンで最大。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">DoubleTree by Hilton</span><span class="bnum">715軒 / 160,138室・62の国と地域</span></div><p class="bdesc">上級系では最も軒数が多い中〜上級フルサービス。62の国と地域に展開。</p></div>
+</div>
+<div class="tier t-stay" id="hil-t4">
+  <div class="thead"><span class="ten">ALL SUITES</span><h3>オールスイート</h3></div>
+  <p class="tlede">全室がスイートまたはキッチン付き。ヒルトンの長期滞在系はここにまとまっている。</p>
+  <div class="brand"><div class="btop"><span class="bname">Embassy Suites by Hilton</span><span class="bnum">270軒 / 62,316室・8の国と地域</span></div><p class="bdesc">寝室と居間が分かれた2ルーム型の上級ブランド。1軒あたり約231室と大きめ。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Homewood Suites by Hilton</span><span class="bnum">559軒 / 64,243室・5の国と地域</span></div><p class="bdesc">キッチン付きの長期滞在型。展開はほぼ北米。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Home2 Suites by Hilton</span><span class="bnum">865軒 / 95,347室・3の国と地域</span></div><p class="bdesc">公式が「価値重視の旅行者向け」と位置づける長期滞在型。3の国と地域で865軒と、軒数の伸びが大きい。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">LivSmart Studios by Hilton</span><span class="bnum">2軒 / 226室</span></div><p class="bdesc">数週間〜数か月の滞在向けスタジオ型。2025年末で2軒と立ち上げ期。</p><div class="btags"><span class="chip new">立ち上げ期</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Apartment Collection by Hilton</span><span class="bnum">2026年1月発表</span></div><p class="bdesc">スタジオ〜4ベッドルームの家具付きアパートをヒルトン経由で予約できる新枠。ニューヨーク・ワシントンD.C.・アトランタから2026年前半に予約開始予定(公式発表)。</p><div class="btags"><span class="chip new">2026年発表</span></div></div>
+</div>
+<div class="tier t-sel" id="hil-t5">
+  <div class="thead"><span class="ten">FOCUSED SERVICE</span><h3>フォーカストサービス</h3></div>
+  <p class="tlede">中級〜手頃。ヒルトンの軒数の大半を占める実用ブランド群。</p>
+  <div class="brand"><div class="btop"><span class="bname">Hilton Garden Inn</span><span class="bnum">1,124軒 / 165,782室・65の国と地域</span></div><p class="bdesc">中級の主力。65の国と地域に1,124軒と、世界のどこでも見つけやすい。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Hampton by Hilton</span><span class="bnum">3,195軒 / 359,886室・46の国と地域</span></div><p class="bdesc">ヒルトン最大のブランドで、全客室の約27%を占める。46の国と地域に3,195軒。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Tru by Hilton</span><span class="bnum">338軒 / 32,937室・7の国と地域</span></div><p class="bdesc">遊び心のある内装で価格を抑えた区分。</p></div>
+  <div class="brand"><div class="btop"><span class="bname">Spark by Hilton</span><span class="bnum">228軒 / 20,191室・9の国と地域</span></div><p class="bdesc">ヒルトンの中で最も価格を抑えた区分。9の国と地域で228軒。</p></div>
+</div>
+<div class="tier t-club" id="hil-t6">
+  <div class="thead"><span class="ten">TIMESHARE</span><h3>タイムシェア(会員制)</h3></div>
+  <p class="tlede">部屋の利用権を買う会員制で、通常の宿泊予約とは別枠。3ブランドをまとめて1枚のカードにしている。</p>
+  <div class="brand"><div class="btop"><span class="bname">Hilton Club / Hilton Grand Vacations Club / Hilton Vacation Club</span><span class="bnum">合計114軒 / 20,404室・8の国と地域</span></div><p class="bdesc">3つのタイムシェアブランド。Hilton Grand Vacations社が長期ライセンスに基づいて独占的に使用している(10-K)。</p><div class="btags"><span class="chip tone">会員制</span></div></div>
+</div>
+<!-- HILTON:END -->
+  <div class="card">
+    <h3>ブランドではないが泊まれる枠</h3>
+    <p style="margin:4px 0"><b>提携ホテル(strategic partner hotels)</b> — ヒルトンのブランドは付かないが、ヒルトンの予約サイトで予約でき、オナーズの対象になるホテル群。2025年末で509軒・23,567室が該当。</p>
+    <p class="small" style="margin:4px 0">2024年にヒルトンは <b>Small Luxury Hotels of the World(SLH)</b> と <b>AutoCamp</b> と提携し、Graduateブランドを買収、NoMadブランドに出資したと10-Kに記載がある。SLHの独立系ラグジュアリーホテルがこの提携枠の代表例。</p>
+  </div>
+  <div class="card">
+    <h3>この一覧の読み方</h3>
+    <p class="small" style="margin:0">6つの区分は2026年8月のヒルトン投資家向け資料の「ブランド一覧」スライドの見出しをそのまま使った。軒数・室数は2025年12月末時点(ヒルトン10-K)。発表済みで開業がこれからのブランドは軒数の代わりに発表日と予定を書いた。</p>
+  </div>
+</section>
+
+<!-- ============ ハイアット ============ -->
+<section class="pane" id="pane-hya">
+  <div class="chain">
+    <h2>ワールド・オブ・ハイアット</h2>
+    <p class="cprog">World of Hyatt / Hyatt Hotels Corporation</p>
+    <p class="small" style="margin:0">ハイアットは<b>ラグジュアリー / ライフスタイル / インクルーシブ・コレクション / クラシックス / エッセンシャルズ</b>という5つのポートフォリオでブランドを分けている。3社の中で唯一、<b>ブランドごとに業界標準のクラス(Luxury / Upper Upscale / Upscale / Upper Midscale)を公式資料で明記</b>しているので、各カードにそのまま載せた。</p>
+    <div class="facts">
+      <div class="fact"><b>1,528</b><span>軒(2025年末)</span></div>
+      <div class="fact"><b>372,763</b><span>室</span></div>
+      <div class="fact"><b>5</b><span>ポートフォリオ</span></div>
+    </div>
+  </div>
+<!-- HYATT:BEGIN (生成: travel_tools/dev/gen_hotel_brands.py・確認日2026-08-26・36ブランド) -->
+<div class="tocrow"><a class="tchip" href="#hya-t1">ラグジュアリー <span class="small">5</span></a><a class="tchip" href="#hya-t2">ライフスタイル <span class="small">9</span></a><a class="tchip" href="#hya-t3">オールインクルーシブ <span class="small">9</span></a><a class="tchip" href="#hya-t4">クラシックス <span class="small">6</span></a><a class="tchip" href="#hya-t5">エッセンシャルズ <span class="small">7</span></a></div>
+<div class="tier t-lux" id="hya-t1">
+  <div class="thead"><span class="ten">LUXURY PORTFOLIO</span><h3>ラグジュアリー</h3></div>
+  <p class="tlede">ハイアットの最上段。5ブランド。</p>
+  <div class="brand"><div class="btop"><span class="bname">Park Hyatt</span><span class="bnum">9,376室</span></div><p class="bdesc">ハイアットの最上位ブランド。「静かなラグジュアリー」を掲げ、文化・金融の中心都市と隠れ家的な保養地に構える(公式)。</p><div class="btags"><span class="chip tone">Luxury</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Alila</span><span class="bnum">1,947室</span></div><p class="bdesc">自然と一体化したデザインの隠れ家型リゾート(公式)。</p><div class="btags"><span class="chip tone">Luxury</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Miraval</span><span class="bnum">383室</span></div><p class="bdesc">大人限定のウェルネス専門リゾート。全体で383室と小規模。</p><div class="btags"><span class="chip tone">Luxury・ウェルネス</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Impression by Secrets</span><span class="bnum">323室</span></div><p class="bdesc">大人限定の最上級オールインクルーシブ。</p><div class="btags"><span class="chip tone">Luxury・オールインクルーシブ</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">The Unbound Collection by Hyatt</span><span class="bnum">9,278室</span></div><p class="bdesc">物語性のある独立系ホテルを集めたコレクション(公式)。</p><div class="btags"><span class="chip tone">Luxury</span><span class="chip tone">ソフトブランド</span></div></div>
+</div>
+<div class="tier t-life" id="hya-t2">
+  <div class="thead"><span class="ten">LIFESTYLE PORTFOLIO</span><h3>ライフスタイル</h3></div>
+  <p class="tlede">デザイン・社交寄りの9ブランド。クラス表記はLuxuryからUpscaleまで幅がある。</p>
+  <div class="brand"><div class="btop"><span class="bname">Andaz</span><span class="bnum">7,970室</span></div><p class="bdesc">ヒンディー語で「自分らしいスタイル」。土地の文化を取り込んだ都市型(公式)。</p><div class="btags"><span class="chip tone">Luxury</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Thompson Hotels</span><span class="bnum">3,854室</span></div><p class="bdesc">定番を洗練させた作りのデザイン系(公式)。</p><div class="btags"><span class="chip tone">Luxury</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">The Standard</span><span class="bnum">1,966室</span></div><p class="bdesc">飲食とイベントで街の話題をつくるタイプ。25年以上の歴史があるブランド(公式)。</p><div class="btags"><span class="chip tone">Upper Upscale</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">The StandardX</span><span class="bnum">187室</span></div><p class="bdesc">The Standardの小型版。これから伸びる地区に小さく出す位置づけ(公式)。</p><div class="btags"><span class="chip tone">Upper Upscale</span><span class="chip new">立ち上げ期</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Dream Hotels</span><span class="bnum">986室</span></div><p class="bdesc">社交空間を前面に出した都市型(公式)。</p><div class="btags"><span class="chip tone">Upper Upscale</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Breathless Resorts &amp; Spas</span><span class="bnum">2,311室</span></div><p class="bdesc">大人限定・社交的なビーチリゾート。</p><div class="btags"><span class="chip tone">Luxury・オールインクルーシブ</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">JdV by Hyatt</span><span class="bnum">8,336室</span></div><p class="bdesc">「joie de vivre(生きる喜び)」が名前の由来。街の個性を映す独立系の集合体(公式)。</p><div class="btags"><span class="chip tone">Upper Upscale</span><span class="chip tone">ソフトブランド</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Bunkhouse Hotels</span><span class="bnum">498室</span></div><p class="bdesc">地域に根ざしたデザインホテル群(公式)。</p><div class="btags"><span class="chip tone">Upper Upscale</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Me and All Hotels</span><span class="bnum">1,364室</span></div><p class="bdesc">都市の社交型。全室がフランチャイズ運営。</p><div class="btags"><span class="chip tone">Upscale</span></div></div>
+</div>
+<div class="tier t-ai" id="hya-t3">
+  <div class="thead"><span class="ten">INCLUSIVE COLLECTION</span><h3>オールインクルーシブ</h3></div>
+  <p class="tlede">食事・ドリンク込みのリゾート専門群。10-Kによると中心はメキシコとカリブ海。3社の中でハイアットだけが専用ブランドを持つ。</p>
+  <div class="brand"><div class="btop"><span class="bname">Zoëtry Wellness &amp; Spa Resorts</span><span class="bnum">543室</span></div><p class="bdesc">小規模で親密なウェルネス型。</p><div class="btags"><span class="chip tone">Luxury AI</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Hyatt Ziva</span><span class="bnum">2,578室</span></div><p class="bdesc">家族向けのオールインクルーシブ。</p><div class="btags"><span class="chip tone">Luxury AI</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Hyatt Zilara</span><span class="bnum">1,320室</span></div><p class="bdesc">大人限定のオールインクルーシブ。</p><div class="btags"><span class="chip tone">Luxury AI</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Secrets Resorts &amp; Spas</span><span class="bnum">10,697室</span></div><p class="bdesc">大人・カップル向け。この区分では2番目の規模。</p><div class="btags"><span class="chip tone">Luxury AI</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Dreams Resorts &amp; Spas</span><span class="bnum">14,712室</span></div><p class="bdesc">家族向けで、この区分では最大規模。</p><div class="btags"><span class="chip tone">Luxury AI</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Hyatt Vivid Hotels &amp; Resorts</span><span class="bnum">924室</span></div><p class="bdesc">若い世代向けのカジュアルなオールインクルーシブ。</p><div class="btags"><span class="chip tone">Upper Upscale AI</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Bahia Principe Hotels &amp; Resorts</span><span class="bnum">11,648室</span></div><p class="bdesc">大型で価値重視のオールインクルーシブ。ハイアット側の合弁が保有するブランド(10-K)。</p><div class="btags"><span class="chip tone">Upper Upscale AI</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Alua Hotels &amp; Resorts</span><span class="bnum">8,705室</span></div><p class="bdesc">手頃な価格帯の海辺リゾート。</p><div class="btags"><span class="chip tone">Upscale AI</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Sunscape Resorts &amp; Spas</span><span class="bnum">4,147室</span></div><p class="bdesc">予算重視の家族向け。キッズクラブやウォーターパークが基本(公式)。</p><div class="btags"><span class="chip tone">Upper Upscale AI</span></div></div>
+</div>
+<div class="tier t-full" id="hya-t4">
+  <div class="thead"><span class="ten">CLASSICS PORTFOLIO</span><h3>クラシックス</h3></div>
+  <p class="tlede">昔からの主力。宴会場や会議室を備えた大型が中心で、ハイアットの室数の大半はここ。</p>
+  <div class="brand"><div class="btop"><span class="bname">Grand Hyatt</span><span class="bnum">34,467室</span></div><p class="bdesc">都市のランドマークとなる大型旗艦。この区分では2番目の規模。</p><div class="btags"><span class="chip tone">Luxury</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Hyatt Regency</span><span class="bnum">99,105室</span></div><p class="bdesc">ハイアット最大のブランド。会議・イベント対応の大型ホテルが中心。</p><div class="btags"><span class="chip tone">Upper Upscale</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Destination by Hyatt</span><span class="bnum">6,806室</span></div><p class="bdesc">土地の個性を映す一点もののホテル・リゾートを集めた枠(公式)。</p><div class="btags"><span class="chip tone">Luxury</span><span class="chip tone">ソフトブランド</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Hyatt Centric</span><span class="bnum">14,961室</span></div><p class="bdesc">街の中心に構える現代的なフルサービス(公式)。</p><div class="btags"><span class="chip tone">Upper Upscale</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Hyatt</span><span class="bnum">3,473室</span></div><p class="bdesc">「Hyatt」の名前だけを使う小型のフルサービス(公式)。</p><div class="btags"><span class="chip tone">Upper Upscale</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Hyatt Vacation Club</span><span class="bnum">室数の公表なし</span></div><p class="bdesc">ポイント制の会員制(タイムシェア)。滞在をWorld of Hyattのボーナスポイントに替えることもできる(公式)。</p><div class="btags"><span class="chip tone">会員制</span></div></div>
+</div>
+<div class="tier t-sel" id="hya-t5">
+  <div class="thead"><span class="ten">ESSENTIALS PORTFOLIO</span><h3>エッセンシャルズ</h3></div>
+  <p class="tlede">実用重視。価格を抑えた中級〜中位で、フランチャイズ運営の比率が高い。</p>
+  <div class="brand"><div class="btop"><span class="bname">Caption by Hyatt</span><span class="bnum">1,000室</span></div><p class="bdesc">社交空間を重視した軽めのライフスタイル型(公式)。</p><div class="btags"><span class="chip tone">Upscale</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Unscripted by Hyatt</span><span class="bnum">1,854室</span></div><p class="bdesc">独立系ホテルが最小限の変更でハイアットに参加できる枠(公式)。</p><div class="btags"><span class="chip tone">Upscale</span><span class="chip tone">ソフトブランド</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Hyatt Place</span><span class="bnum">67,416室</span></div><p class="bdesc">エッセンシャルズの主力。必要なものだけを備えたセレクトサービス型で、室数の7割超がフランチャイズ運営。</p><div class="btags"><span class="chip tone">Upscale</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Hyatt House</span><span class="bnum">20,396室</span></div><p class="bdesc">キッチン付きスイートの長期滞在型(公式)。</p><div class="btags"><span class="chip tone">Upscale・長期滞在</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Hyatt Studios</span><span class="bnum">242室</span></div><p class="bdesc">新しい中価格帯の長期滞在ブランド。2025年末で242室と立ち上げ期。</p><div class="btags"><span class="chip tone">Upper Midscale</span><span class="chip new">立ち上げ期</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">Hyatt Select</span><span class="bnum">203室</span></div><p class="bdesc">朝食込み・24時間セルフマーケットなど基本を押さえた新しい中価格帯ブランド(公式)。立ち上げ期。</p><div class="btags"><span class="chip tone">Upper Midscale</span><span class="chip new">立ち上げ期</span></div></div>
+  <div class="brand"><div class="btop"><span class="bname">UrCove</span><span class="bnum">10,147室</span></div><p class="bdesc">中国本土の中価格帯向けに作られたブランド(公式)。合弁が保有し、全室がフランチャイズ運営。</p><div class="btags"><span class="chip tone">Upper Midscale</span></div></div>
+</div>
+<!-- HYATT:END -->
+  <div class="card">
+    <h3>ブランドではないが泊まれる枠</h3>
+    <p style="margin:4px 0"><b>Mr &amp; Mrs Smith</b> — ハイアットが持つブティック/ラグジュアリー宿の予約プラットフォーム。約2,400軒が掲載され、うち約1,300軒はhyatt.comから予約できる(2025年末)。</p>
+    <p style="margin:4px 0"><b>Homes &amp; Hideaways by World of Hyatt</b> — 米国の一棟貸し民泊を直接予約できるサービス。</p>
+  </div>
+  <div class="card">
+    <h3>この一覧の読み方</h3>
+    <p class="small" style="margin:0">室数は2025年12月末時点(ハイアット10-K)の運営・フランチャイズ・直営の合計。ハイアットは公式資料でブランド別の軒数を出していないため、ここでは室数だけを載せている。クラス表記(Luxury/Upper Upscale/Upscale/Upper Midscale)は業界標準の区分で、ウェルネス・オールインクルーシブ・タイムシェアだけはハイアット独自の呼び方だと10-Kに注記がある。</p>
+  </div>
+</section>
+
+<!-- ============ 横断くらべ ============ -->
+<section class="pane" id="pane-cmp">
+  <div class="sec-head">
+    <h2>3社の「格」を横に並べる</h2>
+    <p class="lede">同じ行に並んでいても「まったく同格」という意味ではない。各社が自分で置いている段を、上から順に並べただけの対応表。</p>
+  </div>
+
+  <div class="card">
+    <h3>呼び名の対応</h3>
+    <div class="maprow"><div class="mhead"><b>最上級</b><span>ラグジュアリー</span></div><div class="mline"><span class="badge mar">マリオット</span><span>ラグジュアリー / ディスティンクティブ ラグジュアリー</span></div><div class="mline"><span class="badge hil">ヒルトン</span><span>Luxury</span></div><div class="mline"><span class="badge hya">ハイアット</span><span>Luxury Portfolio</span></div></div>
+    <div class="maprow"><div class="mhead"><b>デザイン・遊び系</b><span>ライフスタイル</span></div><div class="mline"><span class="badge mar">マリオット</span><span>専用の段はなく各段に分散(W・EDITION・Moxy・Aloft・ACなど)</span></div><div class="mline"><span class="badge hil">ヒルトン</span><span>Lifestyle</span></div><div class="mline"><span class="badge hya">ハイアット</span><span>Lifestyle Portfolio</span></div></div>
+    <div class="maprow"><div class="mhead"><b>上級フルサービス</b><span>大型・宴会場つき</span></div><div class="mline"><span class="badge mar">マリオット</span><span>プレミアム</span></div><div class="mline"><span class="badge hil">ヒルトン</span><span>Full Service</span></div><div class="mline"><span class="badge hya">ハイアット</span><span>Classics Portfolio</span></div></div>
+    <div class="maprow"><div class="mhead"><b>中級・実用</b><span>セレクトサービス</span></div><div class="mline"><span class="badge mar">マリオット</span><span>セレクト(10-Kではミッドスケールも)</span></div><div class="mline"><span class="badge hil">ヒルトン</span><span>Focused Service</span></div><div class="mline"><span class="badge hya">ハイアット</span><span>Essentials Portfolio</span></div></div>
+    <div class="maprow"><div class="mhead"><b>長期滞在</b><span>キッチンつき</span></div><div class="mline"><span class="badge mar">マリオット</span><span>長期滞在</span></div><div class="mline"><span class="badge hil">ヒルトン</span><span>All Suites</span></div><div class="mline"><span class="badge hya">ハイアット</span><span>Hyatt House / Hyatt Studios(Essentials内)</span></div></div>
+    <div class="maprow"><div class="mhead"><b>独立系のゆるい傘</b><span>コレクション/ソフトブランド</span></div><div class="mline"><span class="badge mar">マリオット</span><span>コレクション</span></div><div class="mline"><span class="badge hil">ヒルトン</span><span>Curio / Tapestry / Outset(Lifestyle内)</span></div><div class="mline"><span class="badge hya">ハイアット</span><span>Unbound / Destination / JdV / Unscripted</span></div></div>
+    <div class="maprow"><div class="mhead"><b>オールインクルーシブ</b><span>食事込みリゾート</span></div><div class="mline"><span class="badge mar">マリオット</span><span>専用ブランドなし(既存ブランドのリゾートで提供)</span></div><div class="mline"><span class="badge hil">ヒルトン</span><span>専用ブランドなし(同上)</span></div><div class="mline"><span class="badge hya">ハイアット</span><span>Inclusive Collection(専用9ブランド)</span></div></div>
+    <div class="maprow"><div class="mhead"><b>会員制(タイムシェア)</b></div><div class="mline"><span class="badge mar">マリオット</span><span>The Marriott Vacation Clubs</span></div><div class="mline"><span class="badge hil">ヒルトン</span><span>Hilton Club など3ブランド</span></div><div class="mline"><span class="badge hya">ハイアット</span><span>Hyatt Vacation Club</span></div></div>
+    <p class="small" style="margin:2px 0 0">「だいたいの位置」列はこのアプリでまとめた見出しで、公式の呼び名ではない。右の3列だけが各社の公式表記。</p>
+  </div>
+
+  <div class="card">
+    <h3>規模くらべ</h3>
+    <div class="tbl narrow"><table>
+      <thead><tr><th>チェーン</th><th class="num">軒数</th><th class="num">室数</th><th>時点・出典</th></tr></thead>
+      <tbody>
+        <tr><td><b>マリオット</b> <span class="badge mar">Bonvoy</span></td><td class="num">9,805</td><td class="num">1,779,936</td><td>2025年末・10-K</td></tr>
+        <tr><td><b>ヒルトン</b> <span class="badge hil">Honors</span></td><td class="num">9,158</td><td class="num">1,351,351</td><td>2025年末・10-K<span class="small">(タイムシェア込み)</span></td></tr>
+        <tr><td><b>ハイアット</b> <span class="badge hya">WoH</span></td><td class="num">1,528</td><td class="num">372,763</td><td>2025年末・10-K</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small" style="margin:2px 0 0">ハイアットは軒数でマリオット・ヒルトンの6分の1程度。「近くに必ずある」のは前2社、「数は少ないが上位ブランドの比率が高い」のがハイアット、という規模差になっている。</p>
+  </div>
+
+  <div class="card">
+    <h3>知っておくと迷わない用語</h3>
+    <h4>コレクション(ソフトブランド)</h4>
+    <p style="margin:4px 0">元から独立系のホテルが、名前と内装をそのままにチェーンの予約網と会員プログラムだけに参加する枠。マリオットのオートグラフ・コレクション/トリビュートポートフォリオ/デザインホテルズ、ヒルトンのCurio/Tapestry/Outset、ハイアットのUnbound/Destination/JdV/Unscriptedがこれにあたる。<b>同じコレクション内でも価格も設備もバラバラ</b>なので、ブランド名より個別ホテルの中身を見る必要がある。</p>
+    <h4>オールスイート/長期滞在</h4>
+    <p style="margin:4px 0">キッチンや洗濯機がついた「暮らす」タイプ。1週間以上の滞在や家族旅行だと、同じ値段でも普通のホテルより快適なことが多い。</p>
+    <h4>オールインクルーシブ</h4>
+    <p style="margin:4px 0">食事・ドリンク・アクティビティ込みの料金体系。ハイアットだけが専用ブランド群(Inclusive Collection)を持っていて、カリブ海・メキシコ・スペインに集中している。</p>
+    <h4>タイムシェア(会員制)</h4>
+    <p style="margin:4px 0">部屋の利用権を買う仕組み。通常の宿泊予約とは別枠なので、旅行者としては「同じ名前でも普通には泊まれない場合がある」とだけ覚えておけばよい。</p>
+  </div>
+</section>
+
+<!-- ============ 出典と注意 ============ -->
+<section class="pane" id="pane-src">
+  <div class="sec-head">
+    <h2>出典と注意</h2>
+    <p class="lede">数字と区分はすべて各社の公式発表から取っている(確認日 2026-08-26)。</p>
+  </div>
+
+  <div class="card">
+    <h3>使った公式ソース</h3>
+    <ul class="srcs">
+      <li><b>マリオットの区分・ブランド名・説明</b><br>マリオット公式ブランド紹介ページ(日本語版・英語版) <span class="small">marriott.com/ja/brands.mi / marriott.com/brands.mi</span></li>
+      <li><b>マリオットの軒数・室数・品質段階</b><br>Marriott International 2025年12月期 Form 10-K(2026年2月10日提出・米SEC)</li>
+      <li><b>ヒルトンの6区分とブランドの割り当て</b><br>Hilton 投資家向けプレゼンテーション 2026年8月版(ir.hilton.com)の「INDUSTRY LEADING PORTFOLIO OF BRANDS」</li>
+      <li><b>ヒルトンの軒数・室数</b><br>Hilton Worldwide Holdings 2025年12月期 Form 10-K(2026年2月11日提出・米SEC)</li>
+      <li><b>ヒルトンのブランド説明・新ブランド発表</b><br>Hilton 公式ニュースルーム(stories.hilton.com)の各ブランドページとプレスリリース</li>
+      <li><b>ハイアットの5ポートフォリオ・ブランド説明・室数・クラス</b><br>Hyatt Hotels Corporation 2025年12月期 Form 10-K(2026年2月13日提出・米SEC)</li>
+    </ul>
+    <p class="small" style="margin:6px 0 0">10-K(年次報告書)は各社が米国証券取引委員会に提出する法定書類で、ブランド一覧・軒数・室数が最も正確に載っている資料。</p>
+  </div>
+
+  <div class="card">
+    <h3>このアプリに載せていないこと</h3>
+    <p style="margin:4px 0"><b>日本での展開状況</b> — 「このブランドは日本にあるか」は各社の公式検索で確認してほしい。ヒルトンとハイアットの日本語公式サイトは今回この端末から取得できず、確認できていない情報を書かない方針のため未収録。</p>
+    <p style="margin:4px 0"><b>宿泊料金・必要ポイント数</b> — 変動制で日々変わるため未収録。</p>
+    <p style="margin:4px 0"><b>会員ステータスの特典差</b> — 朝食・ラウンジの扱いは同じチェーンでもブランドごとに例外があり、各プログラムの規約で確認が必要。</p>
+    <p style="margin:4px 0"><b>ポイント移行の可否</b> — クレジットカードのポイントからホテルへ移行できるかは、カード会社の公式ページで要確認。</p>
+  </div>
+
+  <div class="card">
+    <h3>日本語表記について</h3>
+    <p class="small" style="margin:0">ブランド名は<b>予約サイトで実際に表示される英語表記</b>を見出しにしている。カタカナを併記しているのはマリオットのみで、これは公式日本語サイトの表記をそのまま使ったもの。ヒルトン・ハイアットは公式日本語ページを確認できなかったため、勝手なカタカナ表記は付けていない。</p>
+  </div>
+
+  <div class="card">
+    <h3>更新のしかた(作業者向け)</h3>
+    <p class="small" style="margin:0">ブランドのカードは <span class="badge okb">travel_tools/dev/gen_hotel_brands.py</span> が生成している。スクリプト内のデータを直して再実行すると、HTML内の <code>&lt;!-- MARRIOTT:BEGIN --&gt;</code> 〜 <code>END</code> などが丸ごと差し替わる(何度実行しても同じ結果になる)。各社の年次報告書は毎年2月に更新されるので、そのタイミングで軒数・室数とブランドの増減を見直すとよい。</p>
+  </div>
+</section>
+
+<footer>ホテルブランド図鑑 · 情報確認日 2026-08-26 · 数字は各社公式(10-K・投資家向け資料・公式サイト)より</footer>
+</div>
+
+<script>
+/* JavaScriptが無くても全ブランドは読める。ここは「あれば便利」な検索だけを足す。 */
+(function () {
+  var host = document.getElementById('searchHost');
+  if (!host) return;
+  var brands = Array.prototype.slice.call(document.querySelectorAll('.brand'));
+  if (!brands.length) return;
+
+  host.innerHTML =
+    '<div class="searchbox">' +
+    '<label for="q">ブランド名で探す(全チェーン横断・ひらがな以外の部分一致)</label>' +
+    '<input id="q" type="search" placeholder="例: Ritz / モクシー / Hampton / 長期滞在" autocomplete="off">' +
+    '<p class="qres" id="qres">全ブランドを表示中</p>' +
+    '</div>';
+
+  var q = document.getElementById('q');
+  var res = document.getElementById('qres');
+  var panes = { 'pane-mar': 'マリオット', 'pane-hil': 'ヒルトン', 'pane-hya': 'ハイアット' };
+
+  brands.forEach(function (b) {
+    b.dataset.q = (b.textContent || '').toLowerCase().replace(/\s+/g, ' ');
+  });
+
+  function apply() {
+    var v = q.value.trim().toLowerCase();
+    var count = { 'pane-mar': 0, 'pane-hil': 0, 'pane-hya': 0 };
+    brands.forEach(function (b) {
+      var hit = !v || b.dataset.q.indexOf(v) >= 0;
+      b.style.display = hit ? '' : 'none';
+      if (hit) {
+        var p = b.closest('section.pane');
+        if (p && count[p.id] !== undefined) count[p.id]++;
+      }
+    });
+    // 1件も残らなかった格の見出しは隠す
+    Array.prototype.forEach.call(document.querySelectorAll('.tier'), function (t) {
+      var any = t.querySelector('.brand:not([style*="none"])');
+      t.style.display = any ? '' : 'none';
+    });
+    if (!v) {
+      res.textContent = '全ブランドを表示中';
+      return;
+    }
+    var line = Object.keys(panes).map(function (k) {
+      return panes[k] + ' ' + count[k] + '件';
+    }).join(' / ');
+    var open = document.querySelector('.tabradio:checked');
+    var openPane = open ? 'pane-' + open.id.slice(2) : '';
+    if (count[openPane] === 0) line = 'いま開いているタブには該当なし … ' + line;
+    res.textContent = line;
+  }
+  q.addEventListener('input', apply);
+  Array.prototype.forEach.call(document.querySelectorAll('.tabradio'), function (r) {
+    r.addEventListener('change', apply);
+  });
+})();
+</script>
+</body>
+</html>

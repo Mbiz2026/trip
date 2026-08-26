@@ -4,7 +4,7 @@
 
 ## このリポジトリについて
 
-海外旅行者向けの実用ツールを作る。今のところ4つ:
+海外旅行者向けの実用ツールを作る。いまのところ次の7つ:
 
 1. `travel_tools/kaigai_travel_kit.html` — 入国手続き・航空券の探し方・両替とチップ・指さし会話・持ち物・緊急連絡先をまとめた、オフラインで動くスマホ用Webアプリ(1ファイル)。ホーム画面に追加すると独立したアプリとして起動する(PWA化済み。詳細は末尾「ホーム画面アプリ化」参照)
 2. `/tabi-shiori` コマンド(`.claude/commands/tabi-shiori.md`) — 行き先と日程を伝えると、その渡航専用の「旅のしおり」HTMLを調査つきで生成する
@@ -12,6 +12,7 @@
 4. `/flight-mihari` コマンド(`.claude/commands/flight-mihari.md`) — 航空券の7日間価格追跡/期間セール監視をRoutine(毎日1回)で代行し、基準額を下回ったら通知。取得失敗は正直に報告するベストエフォート設計
 5. `travel_tools/mile_compass.html` — 「マイルコンパス」。JALマイル×アメックスMR(メンバーシップ・リワード)特化の行き先さがしアプリ(1ファイル・オフライン動作)。5タブ構成: 🧭さがす(条件チップで26都市を絞り込み・CSSの`:has`のみで動作)/📊一覧表(JAL列とMR列を併記した段組み)/💳マイル術(MR移行先・燃油早見・燃油回避ワザ)/🎓取り方道場(特典航空券の取り方の基礎と裏技を6章のアコーディオンで解説。JAL便PLUS・JAL提携・ANA・MR系外資・空席道具箱・家族実務)/📖基礎と出典。保有マイル射程判定・MR移行シミュレータ・マイル価値計算機はJS時のみ。数字はすべて確認日付き、公式未確認値は※表記・経験則は二次情報と明記。行き先カードと一覧表は `travel_tools/dev/gen_mile_compass_cards.py` で生成(冪等。データ編集→再実行で差し替わる)。GitHub Pagesでは `/mile.html` として配信(pages.ymlが自動デプロイ)
 6. `/mile-mihari` コマンド(`.claude/commands/mile-mihari.md`) — マイルコンパスのデータ点検・更新手順。**毎月18日 朝9時(JST)のRoutineが新規セッションでこれを実行**し、燃油サーチャージ改定(2ヶ月ごと・偶数月中旬発表)やチャート改定を調査→公式+独立報道で裏どりできた確定情報だけをmainに反映する(未確定は報告のみ・推測での更新は禁止)
+7. `travel_tools/hotel_brands.html` — 「ホテルブランド図鑑」。マリオット/ヒルトン/ハイアットのブランドを各社公式の格(ラグジュアリー〜中級〜長期滞在など)ごとに並べた1ファイルアプリ(オフライン動作)。5タブ構成: 🏛マリオット(公式の5段=ラグジュアリー/プレミアム/セレクト/長期滞在/コレクション)/🛎ヒルトン(公式6区分=Luxury/Lifestyle/Full Service/All Suites/Focused Service/Timeshare)/🌿ハイアット(公式5ポートフォリオ+ブランド別クラス表記)/⚖️横断くらべ(3社の呼び名の対応表・規模くらべ・ソフトブランド等の用語解説)/📖出典と注意。全102ブランドに軒数・室数(各社10-K)を併記。ブランド名で探す検索欄はJS時のみ(無くても全件読める)。カードは `travel_tools/dev/gen_hotel_brands.py` で生成(冪等)。GitHub Pagesでは `/hotel.html` として配信
 
 ## 絶対に守ること
 
@@ -53,7 +54,7 @@ manifest・アイコン・Apple系メタタグを全部`<head>`にdata URIで埋
 - Service Workerは入れていない: ローカルファイルは`file://`オリジンのためSW登録不可(仕様上の制約)で、そもそもローカルファイルは常にオフライン。Claude Artifactとして公開する経路はhead部を自分で書けない制約があるため、PWA化は「配布するHTMLファイル自身」に対して行う
 - ユーザーへの案内が無いと意味が無い機能なので、納品時は必ず「Safariの共有→ホーム画面に追加」の手順を日本語で添える(Quick Look等のプレビューから追加すると正しく動かないことがあるため、一度Safariのタブとして開いてから追加するよう案内する)
 
-### パターンB: GitHub Pages常設ホスティング(`flight_finder.html` / `mile_compass.html`)
+### パターンB: GitHub Pages常設ホスティング(`flight_finder.html` / `mile_compass.html` / `hotel_brands.html`)
 
 `.github/workflows/pages.yml` が push のたびに対象HTML(→index.html等)+ `travel_tools/pwa/`(manifest・sw.js・アイコン)を自動デプロイし、真のService Workerによるオフラインキャッシュを持つ。常にURLでアクセスする使い方(ブックマーク・ホーム画面リンク)に向く。
 

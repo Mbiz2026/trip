@@ -2,6 +2,7 @@
 # 対象ファイルを更新してプッシュすると自動反映される(各アプリ: ホーム画面インストール・オフライン対応):
 #   https://<owner>.github.io/trip/            航空券サーチ司令塔(flight_finder.html)
 #   https://<owner>.github.io/trip/mile.html   マイルコンパス(mile_compass.html)
+#   https://<owner>.github.io/trip/hotel.html  ホテルブランド図鑑(hotel_brands.html)
 #   https://<owner>.github.io/trip/omamori.html 海外旅行おまもりキット(kaigai_travel_kit.html。
 #     manifest/アイコンは自己完結済みのため travel_tools/pwa/ は使わない)
 name: Deploy trip tools to Pages
@@ -12,6 +13,7 @@ on:
     paths:
       - travel_tools/flight_finder.html
       - travel_tools/mile_compass.html
+      - travel_tools/hotel_brands.html
       - travel_tools/kaigai_travel_kit.html
       - travel_tools/pwa/**
       - .github/workflows/pages.yml
@@ -39,6 +41,7 @@ jobs:
           mkdir dist
           cp travel_tools/flight_finder.html dist/index.html
           cp travel_tools/mile_compass.html dist/mile.html
+          cp travel_tools/hotel_brands.html dist/hotel.html
           cp travel_tools/kaigai_travel_kit.html dist/omamori.html
           cp travel_tools/pwa/* dist/
           ls -la dist

@@ -10,7 +10,7 @@ name: Deploy trip tools to Pages
 
 on:
   push:
-    branches: [claude/flight-search-app-55ozq4, main]
+    branches: [claude/flight-search-app-55ozq4, claude/travel-guide-creation-lf2q06, main]
     paths:
       - travel_tools/flight_finder.html
       - travel_tools/mile_compass.html

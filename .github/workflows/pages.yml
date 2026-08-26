@@ -6,11 +6,13 @@
 #     manifest/アイコンは自己完結済みのため travel_tools/pwa/ は使わない)
 #   https://<owner>.github.io/trip/shiori.html  旅のしおり(最新のもの。manifest/アイコンは自己完結済み)
 #     日付つきの固定URLも同時に配信する: /shiori-20260923.html
+# 注意: github-pages 環境の保護ルールにより、デプロイは main からのみ成功する。
+# 作業ブランチからpushしてもジョブは即failするので、公開URLを更新するには main への取り込みが必要。
 name: Deploy trip tools to Pages
 
 on:
   push:
-    branches: [claude/flight-search-app-55ozq4, claude/travel-guide-creation-lf2q06, main]
+    branches: [claude/flight-search-app-55ozq4, main]
     paths:
       - travel_tools/flight_finder.html
       - travel_tools/mile_compass.html

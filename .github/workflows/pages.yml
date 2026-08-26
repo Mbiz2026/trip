@@ -4,6 +4,8 @@
 #   https://<owner>.github.io/trip/mile.html   マイルコンパス(mile_compass.html)
 #   https://<owner>.github.io/trip/omamori.html 海外旅行おまもりキット(kaigai_travel_kit.html。
 #     manifest/アイコンは自己完結済みのため travel_tools/pwa/ は使わない)
+#   https://<owner>.github.io/trip/shiori.html  旅のしおり(最新のもの。manifest/アイコンは自己完結済み)
+#     日付つきの固定URLも同時に配信する: /shiori-20260923.html
 name: Deploy trip tools to Pages
 
 on:
@@ -13,6 +15,7 @@ on:
       - travel_tools/flight_finder.html
       - travel_tools/mile_compass.html
       - travel_tools/kaigai_travel_kit.html
+      - travel_tools/shiori_*.html
       - travel_tools/pwa/**
       - .github/workflows/pages.yml
   workflow_dispatch:
@@ -40,6 +43,9 @@ jobs:
           cp travel_tools/flight_finder.html dist/index.html
           cp travel_tools/mile_compass.html dist/mile.html
           cp travel_tools/kaigai_travel_kit.html dist/omamori.html
+          # 旅のしおり: 短いURL(共有用)と日付つきURL(保存用)の両方で配信
+          cp travel_tools/shiori_bangkok_siemreap_20260923.html dist/shiori.html
+          cp travel_tools/shiori_bangkok_siemreap_20260923.html dist/shiori-20260923.html
           cp travel_tools/pwa/* dist/
           ls -la dist
       - uses: actions/configure-pages@v5

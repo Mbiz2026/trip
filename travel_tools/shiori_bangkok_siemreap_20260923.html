@@ -1372,5 +1372,16 @@ footer.app p{margin:5px 0}
   render();
 })();
 </script>
+<script>
+/* オフライン動作(ホーム画面アプリ用)。
+   納品が共有URLのみになったため、圏外・機内でも開けるようService Workerを登録する。
+   https のときだけ登録する: ローカルファイル(file://)では仕様上登録できず例外になるため。
+   これは「あれば便利」機能で、登録に失敗してもしおりの閲覧には一切影響しない。 */
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  addEventListener('load', function () {
+    navigator.serviceWorker.register('./sw.js').catch(function () { /* 失敗しても無視 */ });
+  });
+}
+</script>
 </body>
 </html>

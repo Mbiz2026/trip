@@ -26,8 +26,8 @@ description: 旅程・予約のスクリーンショットを貼るだけで、�
    → **1ソースで確定にしない。** 特に時刻・金額・営業時間・法規は2ソース以上で突合する。
 4. **旅行中にも質問が飛んでくる。盛り込んだ情報はすぐ出せるよう明確なソースを元にストックしておくこと**
    → しおり本体とは別に **`travel_tools/notes/shiori_<地名>_<YYYYMMDD>_sources.md`** を必ず作る。旅行中の質問はまずここを読む。
-5. **友人にも共有する。Claudeを持っていない相手も開ける形を徹底的に確認し、確定した形で出力すること**
-   → **Artifactだけで済ませない。** 下記「共有形式」の2経路を両方用意し、実際に開いて確認してから渡す。
+5. **友人にも共有する。納品は「共有可能なURL」のみ**
+   → **ファイルは渡さない。Artifactも使わない。** GitHub PagesのURL1本だけを出す。そのURLは**ホーム画面に追加でき、Service Workerでオフラインでも開ける**こと。実際にURLを開いて確認してから渡す。
 
 ### 修正依頼を受けたときの追加ルール
 
@@ -43,7 +43,7 @@ description: 旅程・予約のスクリーンショットを貼るだけで、�
 |---|---|---|
 | 1 | しおり本体(1ファイル・オフライン動作・PWA) | `travel_tools/shiori_<ローマ字地名>_<出発日YYYYMMDD>.html` |
 | 2 | **調査ノート**(旅行中Q&Aの根拠) | `travel_tools/notes/shiori_<同名>_sources.md` |
-| 3 | 共有URL(GitHub Pages) | `/shiori.html`(短縮・共有用)と `/shiori-<YYYYMMDD>.html`(保存用) |
+| 3 | **共有URL(GitHub Pages)— これが唯一の納品物** | `/shiori.html`(共有用)と `/shiori-<YYYYMMDD>.html`(保存用) |
 
 3つ揃って初めて納品。`.github/workflows/pages.yml` の paths と dist コピー処理に新しいファイルを追加する。
 
@@ -91,7 +91,16 @@ description: 旅程・予約のスクリーンショットを貼るだけで、�
 - デザイントークン(色・フォント・タブ構成)は `travel_tools/kaigai_travel_kit.html` と既存しおりから流用し、姉妹アプリに見えるようにする
 - **外部リソース禁止**(CDN・画像URL・Webフォント)。1ファイル完結・オフライン動作
 - **CSSだけでタブが動く構造**(`.tabradio` ラジオ + `:checked` + `~`)。JavaScriptは計算機・検索・チェック保存のみ
-- **PWA自己完結**: manifest・アイコンをbase64 data URIで`<head>`に埋め込む
+- **PWA**: manifest・アイコンは**しおり固有の名前と `start_url` が必要なのでbase64 data URIで`<head>`に埋め込む**。加えて **Service Workerを登録する**(共有の `travel_tools/pwa/sw.js` を使う。Pages配信時に `shiori.html` と同じ階層に置かれる)
+  ```html
+  <script>
+  // オフライン動作用。https のときだけ登録する(ローカルファイルで開かれたとき例外を出さないため)
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+  }
+  </script>
+  ```
+  **納品がURLのみになったため、オフラインの保証はService Workerが負う。** 圏外・機内で開けないしおりは納品不可
 - ヘッダーに **情報確認日**(更新したら「(○○は△月△日に更新)」を追記)、フッターに免責
 - 不確かな情報は `<span class="badge warn">要確認</span>` / `二次情報` と明記し、**行程を左右する判断には使わない**
 - **最後のタブは必ず「出典と確認日」**。旅行中の質問の回答根拠になる
@@ -111,22 +120,32 @@ python3 travel_tools/dev/verify_shiori.py travel_tools/shiori_<...>.html
 
 直接起動(`--screenshot`)は幅が最小500pxに切り上げられ右端が切れて写る。`--blink-settings=scriptEnabled=false` はこの環境で無出力に失敗する実績あり。**Playwrightを使う。**
 
-### 5. 配信と共有形式(ここを確定させるまで納品ではない)
+### 5. 配信(納品物はURL1本だけ)
 
-**Claudeを持っていない人が開ける形は、実際に確認した結果この2つ:**
+**納品は共有URLのみ。HTMLファイルを渡さない。Artifactも使わない。**
 
-1. **単体HTMLファイルそのもの** — AirDrop/メール添付/LINEで送って、ブラウザで開ける。オフラインで全機能動作
-2. **GitHub Pages のURL** — `https://mbiz2026.github.io/trip/shiori.html`
+`https://mbiz2026.github.io/trip/shiori.html`(共有用) / `/shiori-<YYYYMMDD>.html`(保存用)
 
 手順:
 - `.github/workflows/pages.yml` の `paths` と dist コピー処理に新ファイルを追加
-- **`travel_tools/pwa/sw.js` の `VERSION` を上げる**(利用者のキャッシュを確実に更新)
+- **`travel_tools/pwa/sw.js` の `VERSION` を上げる**(利用者のキャッシュを確実に更新。本体を更新したら必ず)
 - **デプロイは `main` からのみ成功する**(`github-pages` 環境の保護ルール。作業ブランチからの実行は約1秒で失敗する)→ PRを作ってmainにマージする
-- 公開後、**実際にURLを取得して中身がテスト済みファイルと一致することを確認**してから報告する
+
+公開後、**URLを実際に取得して次を確認してから報告する:**
+- HTTP 200 で、中身がテスト済みのファイルと一致する
+- `sw.js` と `manifest` が同じ階層から 200 で取れる
+- **Service Workerの登録コードが本文に含まれている**(オフライン動作の前提)
 
 ### 6. 報告
 
-要点3行+共有URL+「ホーム画面に追加」手順(Safariの共有→ホーム画面に追加。プレビューからではなく一度Safariのタブで開いてから追加するよう案内)。**ユーザーはコードを書けない。専門用語を使わず、やったことと使い方だけを平易な日本語で伝える。**
+**要点3行 + 共有URL1本 + 「ホーム画面に追加」手順**だけを渡す。ファイルのパスや添付は出さない。
+
+友人へ転送する用の案内文も添える:
+> このURLを開いて、Safariの共有ボタン→「ホーム画面に追加」。アプリとして開けて、一度開けば電波が無くても見られます。
+
+(**一度Safariのタブで開いてから追加**するよう必ず書く。プレビューから追加すると正しく動かないことがある)
+
+**ユーザーはコードを書けない。専門用語を使わず、やったことと使い方だけを平易な日本語で伝える。**
 
 ---
 
@@ -212,5 +231,7 @@ python3 travel_tools/dev/verify_shiori.py travel_tools/shiori_<...>.html
 - JavaScriptが無いと閲覧・タブ切り替えができない構造
 - 外部リソースの読み込み
 - ユーザーの個人情報の埋め込み(緊急メモ欄は空欄で用意する)
+- **HTMLファイルそのものを納品物として渡すこと、Artifactで出すこと**(納品は共有URLのみ)
+- **Service Workerの無いしおりを公開すること**(URLのみの納品ではオフラインの保証がSWしかない)
 - 修正依頼で指定された範囲外を、確認なしに書き換えること
 - ユーザーに対して専門用語で説明すること(コードが書けない前提)

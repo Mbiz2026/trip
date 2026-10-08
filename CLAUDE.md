@@ -54,7 +54,10 @@
 2. **全ての情報は細部まで確実なソースを元に記載する**
 3. **1行たりとも誤りがないよう、数回にわたって裏を取ってから確定情報にする**(1ソースで確定にしない)
 4. **旅行中に質問が飛んでくる。すぐ出せるよう調査ノートにストックする**
-5. **友人にも共有する。Claudeを持っていない相手も開ける形で出力する**(単体HTML + Pages URLの2経路。Artifactだけでは不可)
+5. **友人にも共有する。納品は「共有可能なURL」のみ。**
+   - **ファイルは渡さない。Artifactも使わない。** GitHub PagesのURL1本だけを出す
+   - そのURLは**ホーム画面に追加できる形**であること(manifest + Apple系メタタグ + apple-touch-icon)
+   - **Service Workerでオフライン動作すること。** ファイル配布をやめた分、オフラインの保証はSWが負う。圏外・機内で開けないしおりは不可
 
 **修正依頼のときは、指定された箇所以外を一切変えない。** 指定外に直す必要があると判断したものは、**実行前に全て確認を取る。**
 
@@ -82,6 +85,8 @@
 
 manifest・アイコン・Apple系メタタグを全部`<head>`にdata URIで埋め込み、ファイル1つだけで完結させる方式。ユーザーにファイルを直接送る/AirDropする配布に向く。
 
+**⚠️ しおりにはこの方式を使わない**(納品がURLのみになったため。しおりはパターンBを参照)。
+
 - `<link rel="manifest" href="data:application/manifest+json;base64,...">` — name/short_name/display:standalone/icons等をJSONで書き、**base64エンコードしたdata URI**で埋め込む(生JSON+パーセントエンコードだと`"`等のエスケープが面倒なのでbase64が安全)
 - `<meta name="apple-mobile-web-app-capable" content="yes">` などApple系メタタグ一式(iOSはmanifestよりこちら優先で長年対応してきた経緯があるので必ず両方入れる)
 - `<link rel="apple-touch-icon" href="data:image/png;base64,...">` — アイコンはヘッドレスブラウザで512x512のHTML(角丸div+絵文字等)をスクリーンショットしてPNG化→base64化して作る(外部画像生成ツールは使わない)
@@ -89,6 +94,11 @@ manifest・アイコン・Apple系メタタグを全部`<head>`にdata URIで埋
 - ユーザーへの案内が無いと意味が無い機能なので、納品時は必ず「Safariの共有→ホーム画面に追加」の手順を日本語で添える(Quick Look等のプレビューから追加すると正しく動かないことがあるため、一度Safariのタブとして開いてから追加するよう案内する)
 
 ### パターンB: GitHub Pages常設ホスティング(`flight_finder.html` / `mile_compass.html` / しおり)
+
+**しおりは必ずこちら(パターンB)。** 納品がURLのみになったため、オフライン動作はService Workerが担保する。
+しおりは「自分のmanifestをdata URIで埋め込む(パターンA相当)」+「共有の `sw.js` を登録する(パターンB)」の併用にする:
+manifestはしおり固有の名前・`start_url` が必要なので埋め込みのままにし、Service Workerだけ共有のものを使う。
+登録コードは `location.protocol === 'https:'` で囲む(ローカルファイルで開かれたときに例外を出さないため)。
 
 `.github/workflows/pages.yml` が push のたびに対象HTML(→index.html等)+ `travel_tools/pwa/`(manifest・sw.js・アイコン)を自動デプロイし、真のService Workerによるオフラインキャッシュを持つ。常にURLでアクセスする使い方(ブックマーク・ホーム画面リンク)に向く。
 

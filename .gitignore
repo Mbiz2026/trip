@@ -1,0 +1,6 @@
+# Python が自動生成するキャッシュ(travel_tools/dev/ のスクリプト実行時にできる)
+__pycache__/
+*.py[cod]
+
+# OS が自動生成するもの
+.DS_Store

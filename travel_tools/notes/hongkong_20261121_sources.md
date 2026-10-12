@@ -84,3 +84,10 @@
 ## §9 この環境で開けなかったサイト(次回の作業メモ)
 
 jal.co.jp / press.jal.co.jp / discoverhongkong.com / thepeak.com.hk / taikwun.hk / partnernet.hktb.com / hilton.com / marriott.com は 403 などで取得不可。tourism.gov.hk の個別ページは接続リセット。香港政府の新聞公報(info.gov.hk)・MTR・香港天文台・M+・香港故宮・香港美術館系(hk.art.museum)・スターフェリー・トラムは取得できた。
+
+## §10 写真(2026/10/12 追加)
+
+- ユーザー要望「写真をバンバン入れて」に対し、ページが公開URLのため **Wikimedia Commons の自由ライセンス画像のみ** を使用(CC0/CC BY/CC BY-SA/パブリックドメイン/自由利用可)。34枚、幅720px(背景は1000px)のWebPに縮小してdata URIで埋め込み(外部読込なし)
+- 各写真のキャプションに撮影者・ライセンスを表記し、「出典と確認日」タブにファイルページの一覧を掲載(CC BY/BY-SA の表示義務)
+- 写真は施設名がファイル名で確認できるものを優先。店が別のもの(焼味=銅鑼湾の棋哥燒味、涼茶=旺角の一品涼茶、茶葉=イメージ)はキャプションで明記
+- 取得手順: api.wikimedia.org/core/v1/commons/search/page で検索 → page(wikitext)でライセンスと作者 → file の preferred URL。action API(commons.wikimedia.org/w/api.php)はこの環境では共有IPのため 429 で使えない。REST も 429 が頻発するので1件ずつ数秒あける

@@ -6,6 +6,7 @@
 #     manifest/アイコンは自己完結済みのため travel_tools/pwa/ は使わない)
 #   https://<owner>.github.io/trip/shiori.html  旅のしおり(最新のもの。manifest/アイコンは自己完結済み)
 #     日付つきの固定URLも同時に配信する: /shiori-20260923.html
+#   https://<owner>.github.io/trip/shiori-20270404.html ハワイ家族旅行のしおり(2027/4/4-8・旅行ごとに新しいURL)
 #   https://<owner>.github.io/trip/hongkong.html 香港2泊3日プラン(予約前の検討資料。manifest/アイコンは自己完結済み)
 # 注意: github-pages 環境の保護ルールにより、デプロイは main からのみ成功する。
 # 作業ブランチからpushしてもジョブは即failするので、公開URLを更新するには main への取り込みが必要。
@@ -50,6 +51,8 @@ jobs:
           # 旅のしおり: 短いURL(共有用)と日付つきURL(保存用)の両方で配信
           cp travel_tools/shiori_bangkok_siemreap_20260923.html dist/shiori.html
           cp travel_tools/shiori_bangkok_siemreap_20260923.html dist/shiori-20260923.html
+          # ハワイ家族旅行(2027/4/4-8)。/shiori.html は切り替えず、旅行ごとの専用URLで配信
+          cp travel_tools/shiori_hawaii_20270404.html dist/shiori-20270404.html
           # 香港2泊3日プラン(2026/11/21-23・予約前の検討資料)
           cp travel_tools/hongkong_plan_20261121.html dist/hongkong.html
           cp travel_tools/pwa/* dist/

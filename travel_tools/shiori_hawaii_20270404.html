@@ -72,10 +72,10 @@ header.app h1{margin:2px 0 6px;font-size:25px;line-height:1.32;letter-spacing:.0
 nav.tabs{position:sticky;top:0;z-index:30;background:var(--bg);padding:8px 0 10px;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 nav.tabs::-webkit-scrollbar{display:none}
 .tab{flex:none;display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600;cursor:pointer;user-select:none;min-height:38px}
-#t-plan:checked~nav .tab[for="t-plan"],#t-todo:checked~nav .tab[for="t-todo"],#t-oahu:checked~nav .tab[for="t-oahu"],#t-kids:checked~nav .tab[for="t-kids"],#t-pack:checked~nav .tab[for="t-pack"],#t-med:checked~nav .tab[for="t-med"],#t-power:checked~nav .tab[for="t-power"],#t-money:checked~nav .tab[for="t-money"],#t-lounge:checked~nav .tab[for="t-lounge"],#t-care:checked~nav .tab[for="t-care"],#t-src:checked~nav .tab[for="t-src"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-#t-plan:focus-visible~nav .tab[for="t-plan"],#t-todo:focus-visible~nav .tab[for="t-todo"],#t-oahu:focus-visible~nav .tab[for="t-oahu"],#t-kids:focus-visible~nav .tab[for="t-kids"],#t-pack:focus-visible~nav .tab[for="t-pack"],#t-med:focus-visible~nav .tab[for="t-med"],#t-power:focus-visible~nav .tab[for="t-power"],#t-money:focus-visible~nav .tab[for="t-money"],#t-lounge:focus-visible~nav .tab[for="t-lounge"],#t-care:focus-visible~nav .tab[for="t-care"],#t-src:focus-visible~nav .tab[for="t-src"]{outline:2px solid var(--accent);outline-offset:2px}
+#t-plan:checked~nav .tab[for="t-plan"],#t-days:checked~nav .tab[for="t-days"],#t-todo:checked~nav .tab[for="t-todo"],#t-oahu:checked~nav .tab[for="t-oahu"],#t-kids:checked~nav .tab[for="t-kids"],#t-pack:checked~nav .tab[for="t-pack"],#t-med:checked~nav .tab[for="t-med"],#t-power:checked~nav .tab[for="t-power"],#t-money:checked~nav .tab[for="t-money"],#t-lounge:checked~nav .tab[for="t-lounge"],#t-care:checked~nav .tab[for="t-care"],#t-src:checked~nav .tab[for="t-src"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+#t-plan:focus-visible~nav .tab[for="t-plan"],#t-days:focus-visible~nav .tab[for="t-days"],#t-todo:focus-visible~nav .tab[for="t-todo"],#t-oahu:focus-visible~nav .tab[for="t-oahu"],#t-kids:focus-visible~nav .tab[for="t-kids"],#t-pack:focus-visible~nav .tab[for="t-pack"],#t-med:focus-visible~nav .tab[for="t-med"],#t-power:focus-visible~nav .tab[for="t-power"],#t-money:focus-visible~nav .tab[for="t-money"],#t-lounge:focus-visible~nav .tab[for="t-lounge"],#t-care:focus-visible~nav .tab[for="t-care"],#t-src:focus-visible~nav .tab[for="t-src"]{outline:2px solid var(--accent);outline-offset:2px}
 section.pane{display:none}
-#t-plan:checked~#pane-plan,#t-todo:checked~#pane-todo,#t-oahu:checked~#pane-oahu,#t-kids:checked~#pane-kids,#t-pack:checked~#pane-pack,#t-med:checked~#pane-med,#t-power:checked~#pane-power,#t-money:checked~#pane-money,#t-lounge:checked~#pane-lounge,#t-care:checked~#pane-care,#t-src:checked~#pane-src{display:block}
+#t-plan:checked~#pane-plan,#t-days:checked~#pane-days,#t-todo:checked~#pane-todo,#t-oahu:checked~#pane-oahu,#t-kids:checked~#pane-kids,#t-pack:checked~#pane-pack,#t-med:checked~#pane-med,#t-power:checked~#pane-power,#t-money:checked~#pane-money,#t-lounge:checked~#pane-lounge,#t-care:checked~#pane-care,#t-src:checked~#pane-src{display:block}
 
 .sec-head{margin:14px 2px 12px}
 .sec-head h2{margin:2px 0 4px;font-size:20px;color:var(--navy);letter-spacing:.01em}
@@ -170,6 +170,7 @@ footer.app p{margin:5px 0}
 <div class="wrap">
 
 <input class="tabradio" type="radio" name="tab" id="t-plan" checked>
+<input class="tabradio" type="radio" name="tab" id="t-days">
 <input class="tabradio" type="radio" name="tab" id="t-todo">
 <input class="tabradio" type="radio" name="tab" id="t-oahu">
 <input class="tabradio" type="radio" name="tab" id="t-kids">
@@ -184,16 +185,17 @@ footer.app p{margin:5px 0}
 <header class="app">
   <div class="eyebrow">Travel Notes &middot; Apr 2027</div>
   <h1>ハワイ(オアフ島) 家族旅行のしおり</h1>
-  <p class="route-line">関空 → <b>ホノルル</b>(ホテル3泊+機内1泊) → 関空 ／ 大人2人・6歳・3歳の4人旅</p>
+  <p class="route-line">関空 → <b>ホノルル</b>(HGVに3泊+機内1泊) → 関空 ／ 大人2人・6歳・3歳の4人旅</p>
   <p class="stamp">
     <span><i class="dot"></i>2027年4月4日(日)夜 関空発 〜 4月8日(木)午後 関空着</span>
-    <span><i class="dot"></i>情報確認日: 2026年10月27日</span>
+    <span><i class="dot"></i>情報確認日: 2026年10月27日(同日、先輩のしおりの旅程を反映)</span>
     <span><i class="dot"></i>オフラインで開けます</span>
   </p>
 </header>
 
 <nav class="tabs" aria-label="タブ">
   <label class="tab" for="t-plan">⏱ 行程と関門</label>
+  <label class="tab" for="t-days">📅 毎日の予定</label>
   <label class="tab" for="t-todo">📝 事前手続き</label>
   <label class="tab" for="t-oahu">🌺 オアフの目玉</label>
   <label class="tab" for="t-kids">👨‍👩‍👧‍👦 子連れ</label>
@@ -278,6 +280,234 @@ footer.app p{margin:5px 0}
   </div>
 </section>
 
+<!-- ===================== 毎日の予定 ===================== -->
+<section class="pane" id="pane-days">
+  <div class="sec-head">
+    <h2>毎日の予定</h2>
+    <p class="lede">先輩が作った旅程をもとにしています。「1日1つのメインイベント＋休憩」が基本です。子どもの体調と天気に合わせて入れ替えてOK。時刻は<b>目安</b>です。</p>
+  </div>
+
+  <div class="card">
+    <h3>旅程の早見表</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>日付</th><th>午前</th><th>午後</th><th>夕方・夜</th><th>泊まり</th></tr></thead>
+      <tbody>
+        <tr><td><b>4/4(日)</b><br><span class="small">日本出発</span></td><td>子どもは昼寝をして体力温存</td><td>荷物の最終チェック</td><td>関西空港へ<br><b>22:00発</b> JL790</td><td>機内</td></tr>
+        <tr><td><b>4/4(日)</b><br><span class="small">ハワイ到着</span></td><td><b>10:45</b> ホノルル着<br>入国 → ホテルへ</td><td>荷物を預けて昼食・休憩<br>15〜16時ごろチェックイン</td><td>昼寝のあと短時間のビーチ散歩<br>早めの夕食</td><td>HGV</td></tr>
+        <tr><td><b>4/5(月)</b><br><span class="small">アウラニ</span></td><td>送迎車でコオリナへ<br>Makahikiでキャラクター朝食</td><td>限定グッズ → ラグーンで水遊び・昼食<br>13:45ごろワイキキへ</td><td>ホテルで休憩<br>ホテル近くで夕食</td><td>HGV</td></tr>
+        <tr><td><b>4/6(火)</b><br><span class="small">水族館＋買い物</span></td><td>ワイキキ水族館<br>またはビーチ遊び</td><td>アラモアナセンター<br>フードコート・ラウンジで休憩</td><td>最後のビーチ散歩・夕食<br><b>夜のうちに荷造り</b></td><td>HGV</td></tr>
+        <tr><td><b>4/7(水)</b><br><span class="small">帰国</span></td><td>8:00ごろホテル出発<br><b>11:35発</b> JL799</td><td colspan="2">機内(日付変更線を越えるので、日本に着くのは4/8)</td><td>—</td></tr>
+        <tr><td><b>4/8(木)</b><br><span class="small">日本着</span></td><td colspan="3"><b>15:40</b> 関西空港着 → 帰宅。おかえりなさい!</td><td>自宅</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">ホテルは「HGV(ヒルトン・グランド・バケーションズ)」。どの建物か・チェックイン時刻(15〜16時ごろ)は、このしおりでは未確認です <span class="badge warn">予約確認書で確認</span></p>
+  </div>
+
+  <div class="card">
+    <h3>時差と生活リズム</h3>
+    <ul>
+      <li>日本はハワイより<b>19時間進んでいます</b>(ハワイの朝9時＝日本の翌日の午前4時)</li>
+      <li>到着日は日光を浴びて、夜は現地時間で寝る</li>
+      <li>昼寝は1〜2時間までにすると、夜に眠りやすい</li>
+    </ul>
+    <p class="small">寝方のコツは先輩のしおりの記載で、医学的な根拠は確認していません。</p>
+  </div>
+
+  <!-- Day 1 -->
+  <div class="card">
+    <h3>4/4(日) 到着日 ── 無理をしない</h3>
+    <p class="small">チェックイン(15〜16時ごろ)までの4〜5時間をどう過ごすかを、先に決めておきます。</p>
+    <ul class="tl">
+      <li><b class="t">10:45</b><div class="d">ホノルル空港に到着。入国審査は混んでいると1時間以上かかることも</div></li>
+      <li><b class="t">12:00ごろ</b><div class="d">空港を出発。<b>車は子ども2人分のチャイルドシートが必要</b>(「子連れ」タブ)。タクシーは公式の乗り場から。配車アプリなら車種とナンバーを照合</div></li>
+      <li><b class="t">12:30ごろ</b><div class="d">ホテルに荷物を預ける</div></li>
+      <li><b class="t">13:00</b><div class="d">近くで軽めの昼食。水を買っておく</div></li>
+      <li><b class="t">14:00</b><div class="d">日陰やロビーで休憩。眠そうなら無理に出歩かない</div></li>
+      <li><b class="t">15〜16時</b><div class="d">チェックイン → 昼寝・シャワー</div></li>
+      <li><b class="t">17:00</b><div class="d">ワイキキビーチを短時間散歩(日の入りは18:47)</div></li>
+      <li><b class="t">18:00</b><div class="d">早めの夕食 → 早めに寝る</div></li>
+    </ul>
+    <h4>空港・移動のチェック</h4>
+    <ul>
+      <li>スマホが現地で通信できるか</li>
+      <li>ホテルの住所を英語で表示できるか(入国審査で滞在先を聞かれることがある)</li>
+      <li>荷物と子どもから目を離さない</li>
+    </ul>
+  </div>
+
+  <!-- Day 2 -->
+  <div class="card">
+    <h3>4/5(月) アウラニでキャラクターに会う日</h3>
+    <p class="small">宿泊していなくても楽しめるプラン。キャラクターに一番確実に会えるのは、予約制の朝食「Makahiki(マカヒキ)」です。</p>
+    <ul class="tl">
+      <li><b class="t">7:30</b><div class="d">予約した送迎車でワイキキを出発。水着は服の下に着ておく</div></li>
+      <li><b class="t">8:45</b><div class="d">アウラニ到着。予約名を伝えて入場 <span class="badge warn">入り方は予約時に確認</span></div></li>
+      <li class="hot"><b class="t">9:00</b><div class="d"><b>Makahikiでキャラクター朝食</b>。今日のメイン。全員に会えるまでゆっくり</div></li>
+      <li><b class="t">10:15</b><div class="d">ロビー周辺で写真撮影・小人「メネフネ」の像探し(入れる範囲は当日の案内に従う)</div></li>
+      <li><b class="t">10:45</b><div class="d">Kālepa's Store(カレパズ・ストア)で限定グッズ</div></li>
+      <li><b class="t">11:15</b><div class="d">隣のラグーン(入り江の海)へ歩いて移動</div></li>
+      <li><b class="t">11:30</b><div class="d">ラグーンで水遊び</div></li>
+      <li><b class="t">12:45</b><div class="d">コオリナ周辺で昼食</div></li>
+      <li><b class="t">13:45</b><div class="d">迎えの車でワイキキへ。車内で昼寝できれば理想的</div></li>
+      <li><b class="t">15:00</b><div class="d">ホテルで休憩 → 夕食はホテル近くで早めに</div></li>
+    </ul>
+
+    <div class="callout warn" style="margin-top:10px">
+      <b>Makahikiの料金・予約開始日は、公式で確認できていません</b>
+      <ul>
+        <li>非公式のファンサイト・旅行ブログでは「大人$55〜58、3〜9歳$34前後」「45日前から予約」とされていますが、<b>サイトごとに数字が違います</b>。3歳と6歳の2人とも子ども料金がかかる可能性が高いです</li>
+        <li>宿泊者でなくても予約できる、とする情報が複数あります</li>
+        <li>電話予約先として 808-674-6200 が紹介されています(ファンサイト経由)</li>
+        <li>予約は<b>ディズニー公式(Aulani)のサイト</b>で、料金・キャンセル規定と一緒に確認してください</li>
+      </ul>
+    </div>
+
+    <h4>予約のときに聞くこと</h4>
+    <ul>
+      <li>宿泊者ではないことを伝え、入場方法を確認</li>
+      <li>当日登場するキャラクター(予定)</li>
+      <li>館内のキャラクターグリーティングに、宿泊者以外も参加できるか</li>
+      <li>子ども料金がかかる年齢・キャンセル規定</li>
+    </ul>
+
+    <h4>キャラクターに会うためのコツ(先輩のしおりより)</h4>
+    <ul>
+      <li>予約はできるだけ早く。朝の早い時間帯なら子どもも元気</li>
+      <li>キャラクターはテーブルを回ってくれることが多いので、食べ終わっても全員に会えるまで席で待つ</li>
+      <li>サイン帳と太めのペン(キャラクターが持ちやすい)</li>
+      <li>撮影係を決める(例: パパが撮影、ママは子どもの横)。スマホは充電満タンで</li>
+      <li>会えるキャラクターは日替わり。「誰に会えるかな?」と楽しみにしておく</li>
+    </ul>
+
+    <h4>運転しなくても安心な往復のしかた</h4>
+    <div class="tablewrap"><table>
+      <thead><tr><th>方法</th><th>良い点</th><th>注意</th></tr></thead>
+      <tbody>
+        <tr><td><b>おすすめ: 送迎会社や貸切タクシーを、チャイルドシート2台付きで往復予約</b></td><td>一番安心。行きと帰りをまとめて頼める</td><td>料金は高め。「3歳と6歳で2台」と年齢を伝える</td></tr>
+        <tr><td>チャイルドシートを日本から持っていく</td><td>どの車でも使える</td><td>荷物が増える。3歳用は重い</td></tr>
+        <tr><td>現地のベビー用品レンタル(ホテルへ届けてもらう)</td><td>日本から運ばなくてよい</td><td>車に乗るたびに取り付けが必要</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li>UberやLyftなどの配車アプリでは、ホノルルでチャイルドシート付きの車を選べないことが多い <span class="badge warn">要確認</span></li>
+      <li><b>コオリナはワイキキから遠い</b>ので、その場でアプリから呼んでも車がなかなか来ないことがあります。<b>帰りも時刻を決めて予約</b>しておく</li>
+      <li>乗る場所は、到着したときに写真を撮っておくと迷わない</li>
+      <li>早く・遅くなりそうなときに連絡できるよう、運転手か送迎会社の連絡先を控えておく</li>
+    </ul>
+
+    <h4>宿泊者でなくてもできること</h4>
+    <ul>
+      <li>Makahikiのキャラクター朝食、Kālepa's Storeでの買い物、ロビーなど共用部分の見学・写真撮影</li>
+      <li>隣のラグーンで水遊び。コオリナのラグーンは一般にも開放されているとされます <span class="badge warn">二次情報</span></li>
+      <li>プール・流れるプール・キッズクラブは、一般的に宿泊者専用 <span class="badge warn">二次情報</span></li>
+    </ul>
+    <p class="small"><b>ラグーンは監視員(ライフガード)がいない時間もあります</b>(いる・いないで情報が割れています)。子どもから目を離さず、日陰が少ないのでこまめに休憩を。</p>
+
+    <h4>この日の持ち物</h4>
+    <ul>
+      <li>サイン帳・太めのペン</li>
+      <li>水着(服の下に)・ラッシュガード・帽子・日焼け止め</li>
+      <li>タオル・着替え・濡れた物を入れる袋</li>
+      <li>水・おやつ・大きめのエコバッグ、モバイルバッテリー</li>
+    </ul>
+  </div>
+
+  <!-- Day 3 -->
+  <div class="card">
+    <h3>4/6(火) 午前は海辺、午後は屋内でゆっくり</h3>
+    <p class="small">最終日の夜は荷造りがあるので、夕方には余裕をもってホテルに戻ります。</p>
+    <ul class="tl">
+      <li><b class="t">9:00</b><div class="d"><b>ワイキキ水族館</b>(9:00〜16:30・公式)、またはビーチ遊び。子どもの体調と天気で選ぶ</div></li>
+      <li><b class="t">11:30</b><div class="d">ホテルに戻って昼食・休憩</div></li>
+      <li><b class="t">13:30</b><div class="d"><b>アラモアナセンターへ</b>。JCBカードがあればワイキキトロリーの<b>ピンクライン</b>が無料(下の囲み)</div></li>
+      <li><b class="t">14:00</b><div class="d">買い物。疲れたら<b>楽天カード ハワイラウンジ</b>(3階)で休憩</div></li>
+      <li><b class="t">16:30</b><div class="d">ホテルに戻る</div></li>
+      <li><b class="t">17:00</b><div class="d">最後のビーチ散歩・記念撮影</div></li>
+      <li><b class="t">18:00</b><div class="d">夕食(ホテル近くで早めに)</div></li>
+      <li class="hot"><b class="t">20:00</b><div class="d"><b>荷造り</b>・明日の服を出しておく</div></li>
+    </ul>
+
+    <div class="callout ok" style="margin-top:10px">
+      <b>JCBカードで、ワイキキトロリーのピンクラインが家族4人無料(JCB公式)</b>
+      <ul>
+        <li>実施期間: 2025年4月1日〜<b>2028年3月31日</b>(旅行時は期間内)</li>
+        <li>対象: JCBロゴのあるカード(JCBプリペイドは対象外)。<b>本人＋同乗の家族大人1名＋子ども2名(11歳以下)まで</b>。乗るときにカードを見せて「ファミリー」と伝える</li>
+        <li>対象外の人は1日乗車券 1人$6(2歳以下無料)</li>
+        <li>ピンクライン以外の路線は対象外</li>
+        <li>運行: およそ15分おき。ワイキキ・ショッピング・プラザ発の始発10:00(トロリー公式)。アラモアナセンターの乗り場は<b>ノードストローム側の1階</b>(トロリー公式)</li>
+        <li>持ち込める荷物は60×45×30cmまで・膝に抱えられる範囲。<b>大きなベビーカーは乗れない場合あり</b>(JCB公式)。トロリー公式は「折りたためるベビーカーは可」</li>
+      </ul>
+    </div>
+
+    <div class="callout ok">
+      <b>楽天カード ハワイラウンジ(楽天カード公式)</b>
+      <ul>
+        <li>楽天カードの提示で、<b>会員本人＋同伴者5名まで無料</b></li>
+        <li>アラモアナ: アラモアナセンター <b>エヴァウィング3階</b>(ノードストローム側)。ワイキキ: インターナショナル・マーケットプレイス1階</li>
+        <li>営業時間・利用回数の上限は<b>確認できていません</b> <span class="badge warn">要確認</span>。先輩のしおりでは「日本で発行されたカードの現物を見せる(スマホ画面では不可)」</li>
+      </ul>
+    </div>
+
+    <h4>アラモアナセンターで迷わないコツ(先輩のしおりより)</h4>
+    <ul>
+      <li>とても広いので、はぐれたときの集合場所(例: 楽天ラウンジの前)を最初に決めておく</li>
+      <li>フードコートは12時台が混みやすいので、少し時間をずらす</li>
+      <li>子どもが疲れたら無理せず切り上げる。買い物は「行きたい店を3つまで」にしておく</li>
+    </ul>
+    <p class="small">アラモアナセンターの営業時間は、公式サイトの過去の表示で月〜土10:00〜21:00(店ごとに違う) <span class="badge warn">要確認</span></p>
+
+    <h4>今夜やっておくこと</h4>
+    <ul>
+      <li>明日の空港行きの車を予約(チャイルドシート2台)</li>
+      <li>荷造りを済ませる(液体は預け荷物へ)</li>
+      <li>パスポート4人分を一か所にまとめる</li>
+      <li>帰国便の時刻をもう一度確認</li>
+      <li>明朝の簡単な朝食を買っておく</li>
+    </ul>
+  </div>
+
+  <!-- Day 4 -->
+  <div class="card">
+    <h3>4/7(水) 帰国日は出発時刻から逆算</h3>
+    <p class="small">11:35発の便に乗るまでの朝の流れ。空港には出発の約3時間前に着く想定です。</p>
+    <ul class="tl">
+      <li><b class="t">6:30</b><div class="d">起床・着替え</div></li>
+      <li><b class="t">7:00</b><div class="d">前日に買っておいた朝食</div></li>
+      <li><b class="t">7:40</b><div class="d">忘れ物チェック → チェックアウト</div></li>
+      <li class="hot"><b class="t">8:00</b><div class="d">ホテルを出発(車は前日に予約済み)</div></li>
+      <li><b class="t">8:30ごろ</b><div class="d">空港に到着 → チェックイン・荷物を預ける</div></li>
+      <li><b class="t">搭乗前</b><div class="d">保安検査 → 搭乗口で水・軽食を買う</div></li>
+      <li><b class="t">11:35</b><div class="d">ホノルル出発 → 4/8(木)15:40 関西に到着</div></li>
+    </ul>
+    <h4>部屋を出る前に</h4>
+    <ul>
+      <li>パスポート4人分・搭乗券、充電器・ケーブル(コンセント周り)</li>
+      <li>子どものおもちゃ・ぬいぐるみ、金庫・冷蔵庫・バスルーム、ホテルの精算</li>
+    </ul>
+    <h4>保安検査の注意</h4>
+    <ul>
+      <li>液体は100ml以下の容器に入れ、透明な袋にまとめる。飲み物は保安検査を通ったあとに買う</li>
+      <li>モバイルバッテリーは手荷物に(100Wh以下・2個まで。「電源と機内」タブ)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>雨・体調がいまいちな日の代わり案</h3>
+    <ul>
+      <li>アラモアナセンターなど屋内のショッピングセンターで過ごす</li>
+      <li>ホテルのプールや部屋でゆっくり過ごし、外出は夕食だけにする</li>
+      <li>水族館は小さめなので、短時間で回りやすい</li>
+      <li>ほかの候補は「オアフの目玉」タブ(曜日ごとの営業・料金つき)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>家族のやりたいこと・おみやげメモ</h3>
+    <p class="small">この端末にだけ保存されます(JavaScriptが動く環境のみ)。</p>
+    <textarea class="memo" id="memo2" placeholder="パパ:&#10;ママ:&#10;おにいちゃん・おねえちゃん(6歳):&#10;下の子(3歳):&#10;おみやげ:"></textarea>
+  </div>
+</section>
+
 <!-- ===================== 事前手続き ===================== -->
 <section class="pane" id="pane-todo">
   <div class="sec-head">
@@ -321,6 +551,8 @@ footer.app p{margin:5px 0}
       <li><label><input type="checkbox" id="d003"><span><b>海外旅行保険</b>に4人とも加入<span class="must">必須</span><span class="why">ハワイの医療費は極めて高額。クレカ付帯は限度額が足りないことがある(外務省)</span></span></label></li>
       <li><label><input type="checkbox" id="d004"><span>外務省「たびレジ」に登録<span class="why">現地の安全情報が日本語メールで届く。家族のメールも追加できる</span></span></label></li>
       <li><label><input type="checkbox" id="d005"><span>現地の移動手段と<b>チャイルドシート2台</b>の手配方法を決める<span class="why">「子連れ」タブ参照。送迎・レンタカーの予約時に指定する</span></span></label></li>
+      <li><label><input type="checkbox" id="d007"><span><b>Makahiki(アウラニの朝食)を予約</b><span class="why">料金・予約開始日は公式で確認(「毎日の予定」タブ)</span></span></label></li>
+      <li><label><input type="checkbox" id="d008"><span><b>アウラニ往復の送迎車</b>を、チャイルドシート2台付きで予約<span class="why">帰りの時刻(13:45ごろ)も決めて予約</span></span></label></li>
       <li><label><input type="checkbox" id="d006"><span>子どもの予防接種(麻しん=はしか)の記録を母子手帳で確認<span class="why">米国の一部地域ではしかの発生が報告されている(外務省)</span></span></label></li>
     </ul>
   </div>
@@ -336,11 +568,28 @@ footer.app p{margin:5px 0}
   </div>
 
   <div class="chk">
+    <h3>2週間前〜1週間前</h3>
+    <ul>
+      <li><label><input type="checkbox" id="d015"><span>楽天カード ハワイラウンジ・JCBトロリー特典の最新条件を確認</span></label></li>
+      <li><label><input type="checkbox" id="d016"><span>eSIMの購入、または海外ローミングの設定</span></label></li>
+      <li><label><input type="checkbox" id="d017"><span>日焼け止めの買い足し(成分は「持ち物」タブ)</span></label></li>
+      <li><label><input type="checkbox" id="d018"><span>子どもの常備薬・酔い止め</span></label></li>
+      <li><label><input type="checkbox" id="d019"><span>少額のドル現金を用意(チップ・バス用)</span></label></li>
+      <li><label><input type="checkbox" id="d020"><span>座席指定(家族で並びになっているか)・手荷物の規定(個数・重さ)</span></label></li>
+      <li><label><input type="checkbox" id="d027"><span>オンラインチェックインが始まる時刻を確認</span></label></li>
+      <li><label><input type="checkbox" id="d028"><span>予約書類をスマホに保存し、紙にも印刷</span></label></li>
+    </ul>
+  </div>
+
+  <div class="chk">
     <h3>前日〜出発日</h3>
     <ul>
       <li><label><input type="checkbox" id="d021"><span>JALのオンラインチェックイン・時刻の最終確認</span></label></li>
       <li><label><input type="checkbox" id="d022"><span>ESTA承認画面のスクショ(4人分)</span></label></li>
       <li><label><input type="checkbox" id="d023"><span>ホテル予約確認書(英語)と帰りのeチケット控えをスマホに保存</span></label></li>
+      <li><label><input type="checkbox" id="d025"><span>関西空港までの移動手段と時間を確認</span></label></li>
+      <li><label><input type="checkbox" id="d026"><span>夜の便なので、子どもは昼寝をさせておく</span></label></li>
+      <li><label><input type="checkbox" id="d029"><span>スマホ・モバイルバッテリーを充電、子どもの着替え1組を機内持ち込みに</span></label></li>
       <li><label><input type="checkbox" id="d024"><span>モバイルバッテリーの容量を確認(<b>100Wh以下・2個まで</b>)<span class="why">2027年1月から国際ルールで100Wh超は持ち込み不可。「電源と機内」タブ</span></span></label></li>
     </ul>
   </div>
@@ -395,23 +644,21 @@ footer.app p{margin:5px 0}
   </div>
 
   <div class="card">
-    <h3>提案する回り方(案)</h3>
-    <p class="small">移動時間は確認できていないため書いていません。現地での車の手配(チャイルドシート付き)が前提の場所には🚗を付けました。</p>
-    <h4>4/4(日) 到着日 ── 無理をしない日</h4>
-    <p>機内で1泊したあとの到着で、子どもは寝不足になりがちです。ホテルに荷物を預けて昼食 → 昼寝 → 夕方にビーチを散歩、くらいで十分です。<b>日の入りは18:47</b>。</p>
-    <h4>4/5(月) ── ワイキキの東側でまとめて</h4>
+    <h3>予定を入れ替えたくなったときの候補</h3>
+    <p class="small">決まっている予定は「毎日の予定」タブ。ここは雨・体調・時間の余りで入れ替えたいときの候補です。移動時間は確認できていないため書いていません。車(チャイルドシート付き)が前提の場所には🚗を付けました。</p>
+    <h4>ワイキキの東側でまとめて</h4>
     <ul>
       <li>朝: <b>ダイヤモンドヘッド</b>(要予約)。山頂まで1.5〜2時間、最後は急な階段で、バリアフリー非対応(州公式)。<b>ベビーカーは使えない</b>と考えて、3歳の子は抱っこの覚悟で</li>
       <li>昼〜午後: <b>ホノルル動物園</b>(10:00〜、カパフル通り151番地)と<b>ワイキキ水族館</b>(〜16:30、カラカウア通り2777番地)。水族館はカピオラニ公園の隣(公式)。2か所の歩く距離は地図アプリで確認を</li>
     </ul>
-    <h4>4/6(火) ── 島の北側へ 🚗</h4>
+    <h4>島の北側へ 🚗(月・火なら)</h4>
     <ul>
       <li><b>ドール・プランテーション</b>(9:30〜17:30)。「パイナップル・エクスプレス」という列車ツアーや迷路がある(公式)</li>
       <li>ノースショアのハレイワで<b>マツモト・シェイブアイス</b>(毎日10:00〜18:00)</li>
-      <li>または<b>ポリネシア・カルチャー・センター</b>(12:00〜21:00・この日は営業)。ツアーなら送迎付きが楽</li>
+      <li>または<b>ポリネシア・カルチャー・センター</b>(12:00〜21:00・4/5と4/6は営業)。ツアーなら送迎付きが楽</li>
     </ul>
-    <h4>4/7(水) 帰国日 ── 朝だけ</h4>
-    <p><b>レナーズ・ベーカリー</b>(マラサダ=ハワイ風揚げパン)は<b>毎日5:30から</b>営業(公式)。早起きして寄ってから空港へ、が狙えます。</p>
+    <h4>朝早く開いている店</h4>
+    <p><b>レナーズ・ベーカリー</b>(マラサダ=ハワイ風揚げパン)は<b>毎日5:30から</b>営業(公式)。帰国日の朝食を前日に買っておく案もあります(マラサダは揚げたてが基本なので、日持ちは店で確認)。</p>
   </div>
 
   <div class="card">
@@ -503,6 +750,20 @@ footer.app p{margin:5px 0}
   </div>
 
   <div class="card">
+    <h3>迷子対策(先輩のしおりより)</h3>
+    <ul>
+      <li>毎朝、子どもの全身写真を撮っておく(その日の服装がすぐ伝えられる)</li>
+      <li>はぐれたら「その場で動かない」と、出発前に約束しておく</li>
+      <li>迷子カードを書いて、子どものポケットに入れる。<b>防犯のため部屋番号は書かない</b></li>
+    </ul>
+    <div class="srcbox" style="margin-top:8px">
+      <h3>迷子カードの書き方(紙に写して使う)</h3>
+      <p style="margin:4px 0"><b>If I'm lost, please call my parents.</b><br>Name: (子どもの名前)<br>Parent: (親の名前)<br>Phone: (親の携帯 +81-90-…)<br>Hotel: (ホテル名)</p>
+      <p class="small">このページには個人情報を書き込まないでください(共有URLのため)。紙に書いて持ち歩きます。</p>
+    </div>
+  </div>
+
+  <div class="card">
     <h3>海で遊ぶとき</h3>
     <ul>
       <li>ハワイでは、シュノーケリング中を含む<b>溺水や、サメ・クラゲの事故が1年中起きています</b>(外務省)。<b>ライフガードのいるビーチ</b>で遊ぶ</li>
@@ -527,6 +788,7 @@ footer.app p{margin:5px 0}
       <li><label><input type="checkbox" id="p003"><span>eチケット控え(帰りの便)とホテル予約確認書<span class="why">入国審査で見せることがある(外務省)</span></span></label></li>
       <li><label><input type="checkbox" id="p004"><span>海外旅行保険の証券番号と日本語の緊急デスク番号(紙とスクショ)</span></label></li>
       <li><label><input type="checkbox" id="p005"><span>クレジットカード2枚以上(別ブランド)＋<b>少額のドル現金</b><span class="why">ハナウマ湾の駐車場とバスは現金(バスはおつり無し)</span></span></label></li>
+      <li><label><input type="checkbox" id="p009"><span><b>楽天カードの現物</b>(ラウンジ用・スマホ画面では不可とされる)と<b>JCBカード</b>(トロリー用)<span class="why">カードは大人2人で分けて持つ。予備1枚はホテルの金庫へ</span></span></label></li>
       <li><label><input type="checkbox" id="p006"><span>運転するなら: 日本の運転免許証＋<b>国際運転免許証</b>＋パスポート<span class="why">日本の免許だけだと無免許扱いされる例がある(外務省)</span></span></label></li>
       <li><label><input type="checkbox" id="p007"><span>パスポートのコピー＋顔写真データ(4人分)<span class="why">紛失したときの手続きが早くなる</span></span></label></li>
       <li><label><input type="checkbox" id="p008"><span>機内で書く申告書用の<b>ボールペン</b></span></label></li>
@@ -540,6 +802,12 @@ footer.app p{margin:5px 0}
       <li><label><input type="checkbox" id="p012"><span>機内用: 着替え1組ずつ、おやつ、静かに遊べるもの、イヤホン</span></label></li>
       <li><label><input type="checkbox" id="p013"><span>母子手帳(予防接種の記録)・子どもの保険証のコピー</span></label></li>
       <li><label><input type="checkbox" id="p014"><span>子ども用の水着・ラッシュガード・帽子</span></label></li>
+      <li><label><input type="checkbox" id="p015"><span>おむつ・おしりふき(必要なら)</span></label></li>
+      <li><label><input type="checkbox" id="p016"><span>ストロー付きの水筒(空で持ち込み)・おやつ</span></label></li>
+      <li><label><input type="checkbox" id="p017"><span>軽いベビーカー・抱っこひも<span class="why">トロリーは大きなベビーカー不可の場合あり。ダイヤモンドヘッドはベビーカー不可</span></span></label></li>
+      <li><label><input type="checkbox" id="p018"><span>常備薬・体温計・ばんそうこう</span></label></li>
+      <li><label><input type="checkbox" id="p019"><span><b>迷子カード</b>(「子連れ」タブ)</span></label></li>
+      <li><label><input type="checkbox" id="p020"><span>サイン帳と太めのペン(アウラニのキャラクター用)</span></label></li>
     </ul>
   </div>
 
@@ -550,6 +818,7 @@ footer.app p{margin:5px 0}
       <li><label><input type="checkbox" id="p022"><span>帽子・サングラス・ラッシュガード</span></label></li>
       <li><label><input type="checkbox" id="p023"><span>歩きやすい靴<span class="why">ダイヤモンドヘッドは「歩きやすい靴・水・帽子・日焼け止め」を持って、と州公式が案内</span></span></label></li>
       <li><label><input type="checkbox" id="p024"><span>ビーチサンダル、折りたたみ傘(4月も月に数日は雨)</span></label></li>
+      <li><label><input type="checkbox" id="p026"><span>スマホ用の防水ポーチ</span></label></li>
       <li><label><input type="checkbox" id="p025"><span>薄手の長袖(機内・室内の冷房、朝晩の21℃前後)</span></label></li>
     </ul>
   </div>
@@ -560,6 +829,15 @@ footer.app p{margin:5px 0}
       <li><label><input type="checkbox" id="p031"><span>モバイルバッテリー <b>100Wh以下を1人2個まで</b>・手荷物へ<span class="why">預け荷物に入れない。機内で充電しない(「電源と機内」タブ)</span></span></label></li>
       <li><label><input type="checkbox" id="p032"><span>充電器とケーブル(電圧100〜240V対応か確認)</span></label></li>
       <li><label><input type="checkbox" id="p033"><span>預け荷物の鍵は<b>TSAロック</b>か、鍵をかけない<span class="why">米国では検査で鍵を切られることがある(外務省)</span></span></label></li>
+    </ul>
+  </div>
+
+  <div class="chk">
+    <h3>あると便利なもの</h3>
+    <ul>
+      <li><label><input type="checkbox" id="p041"><span>エコバッグ<span class="why">ホノルル市はレジ袋に1枚15セント以上の料金を義務づけ(市環境局)。袋が無い店もある</span></span></label></li>
+      <li><label><input type="checkbox" id="p042"><span>ジッパー付きの袋(濡れた水着入れ)</span></label></li>
+      <li><label><input type="checkbox" id="p043"><span>ウェットティッシュ</span></label></li>
     </ul>
   </div>
 
@@ -683,6 +961,33 @@ footer.app p{margin:5px 0}
   </div>
 
   <div class="card">
+    <h3>カードとお金の使い分け(先輩のしおりより)</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>カード</th><th>使う場面</th><th>ポイント</th></tr></thead>
+      <tbody>
+        <tr><td><b>楽天カード</b></td><td>楽天カード ハワイラウンジで休憩</td><td>会員1名につき同伴者5名まで無料(楽天公式)。カードの現物を見せる。営業時間・利用回数は<span class="badge warn">要確認</span></td></tr>
+        <tr><td><b>JCB</b></td><td>ワイキキトロリー ピンクライン</td><td>本人＋大人1名＋11歳以下の子ども2名まで無料、2028年3月31日まで(JCB公式)。乗車時に「ファミリー」と伝える</td></tr>
+        <tr><td><b>アメックス</b></td><td>旅行保険(航空券を買ったカード)</td><td>家族も補償されるか、利用付帯の条件、治療・救援費用の金額を確認。<b>カード付帯は限度額が足りないことがある</b>(外務省)</td></tr>
+        <tr><td><b>Revolut</b></td><td>現地での普段の支払い</td><td>支払い通貨を聞かれたら <b>USD</b> を選ぶ</td></tr>
+      </tbody>
+    </table></div>
+    <h4>チップの目安 <span class="badge warn">先輩のしおり記載・公式の基準はありません</span></h4>
+    <dl class="kv">
+      <dt>レストラン</dt><dd>18〜20%(「Service charge」が入っていれば追加は不要)</dd>
+      <dt>タクシー・配車</dt><dd>15〜20%</dd>
+      <dt>ハウスキーピング</dt><dd>1日 $2〜5</dd>
+      <dt>荷物を運んでもらったとき</dt><dd>1個 $2前後</dd>
+    </dl>
+    <h4>知っておくと戸惑わないこと</h4>
+    <ul>
+      <li>表示価格に税金が上乗せされて会計されます(下の「値段に上乗せされるもの」)</li>
+      <li>カード払いでは、チップ額を書く欄や、チップを選ぶ画面が出ることがあります</li>
+      <li>レジ袋は1枚15セント以上(ホノルル市)。エコバッグを持ち歩く</li>
+      <li>カードは大人2人で別々に持つ(同じ財布に全部入れない)。予備の1枚はホテルの金庫へ。なくしたときの連絡先を「注意と緊急」タブのメモに書いておく</li>
+    </ul>
+  </div>
+
+  <div class="card">
     <h3>空港 ⇄ ワイキキ</h3>
     <ul>
       <li><b>タクシー</b>: 手荷物受取所前の道路の中央分離帯に乗り場。黄色いシャツの「TAXI DISPATCHER」に声をかける(空港公式)。料金は二次情報で<b>30〜45ドル前後</b>と幅があります <span class="badge warn">要確認</span>。チャイルドシートの扱いは「子連れ」タブ</li>
@@ -741,6 +1046,7 @@ footer.app p{margin:5px 0}
       <li><b>JAL サクララウンジ ハレ</b>: 3階、C1ゲートの上</li>
       <li><b>IASS ハワイ・ラウンジ</b>: ガーデンコートエリア ── <b>PP対象</b> <span class="badge warn">二次情報</span>。営業は7:30〜18:00(昼に休憩をはさむという情報もあり)<span class="badge warn">二次情報</span></li>
     </ul>
+    <p class="small"><b>楽天カード ハワイラウンジ</b>は空港ではなく街なか(アラモアナセンター エヴァウィング3階/インターナショナル・マーケットプレイス1階)。会員本人＋同伴者5名まで無料(楽天公式)。営業時間は要確認。4/6の買い物の休憩に(「毎日の予定」タブ)。</p>
     <p class="small">JALサクララウンジの利用条件(搭乗クラス・会員資格)は、このしおりでは確認できていません。JAL公式で確認してください <span class="badge warn">要確認</span>。子どもの同伴条件もラウンジごとに確認を。</p>
   </div>
 </section>
@@ -839,7 +1145,7 @@ footer.app p{margin:5px 0}
   <div class="card">
     <h3>緊急メモ(自分で書き込んでください)</h3>
     <p class="small">この端末にだけ保存されます(JavaScriptが動く環境のみ)。共有URLを開いた他の人には見えません。</p>
-    <textarea class="memo" id="memo" placeholder="保険会社の日本語緊急デスク:&#10;証券番号:&#10;カード会社の紛失窓口:&#10;ホテル名と電話:&#10;送迎・レンタカー会社:&#10;日本の家族:"></textarea>
+    <textarea class="memo" id="memo" placeholder="ホテル名と電話:&#10;旅行保険の24時間窓口:&#10;証券番号:&#10;JAL:&#10;カード紛失 楽天:&#10;カード紛失 JCB:&#10;カード紛失 アメックス:&#10;カード紛失 Revolut: アプリからカードを凍結&#10;送迎会社(アウラニ往復・空港):&#10;日本の家族:"></textarea>
   </div>
 </section>
 
@@ -889,6 +1195,23 @@ footer.app p{margin:5px 0}
   </div>
 
   <div class="srcbox">
+    <h3>旅程(4/5・4/6の予定)</h3>
+    <ul>
+      <li>先輩が作成した「はじめてのハワイ 家族旅行のしおり」(PDF・11ページ)── 旅程・タイムライン・チップの目安・迷子対策。時刻は目安</li>
+    </ul>
+  </div>
+
+  <div class="srcbox">
+    <h3>カード特典・街の交通</h3>
+    <ul>
+      <li>JCB「ハワイ『ワイキキトロリー』乗車賃無料!」(期間 2025/4/1〜2028/3/31)<span class="u">https://www.jcb.jp/campaign/content/c07_060trolley_g_b.html</span></li>
+      <li>ワイキキトロリー公式 アラモアナライン(ピンクライン)<span class="u">https://waikikitrolley.com/ala-moana-line/</span></li>
+      <li>楽天カード ハワイラウンジ(公式。自動取得は遮断されたため検索結果で記載を確認)<span class="u">https://www.rakuten-card.co.jp/overseas/hawaii/lounge/</span></li>
+      <li>ホノルル市環境局 レジ袋の料金(1枚15セント以上・2018年7月1日〜)<span class="u">https://www.honolulu.gov/env/carry-out-bag-fees-start-july-1</span></li>
+    </ul>
+  </div>
+
+  <div class="srcbox">
     <h3>施設の公式サイト</h3>
     <ul>
       <li>ホノルル動物園<span class="u">https://www.honoluluzoo.org/visit</span></li>
@@ -911,6 +1234,9 @@ footer.app p{margin:5px 0}
       <li>チャイルドミールの締切・JAL国際線のベビーカー/チャイルドシート預け ── 旅行メディア・2015年の記事</li>
       <li>コナコーヒーの表示ルール ── ハワイの地元報道</li>
       <li>ハコクラゲの「満月の8〜10日後」── ワイキキ水族館のカレンダーを引用した報道</li>
+      <li>Makahikiの料金・予約開始日・宿泊者以外の予約 ── ファンサイト・旅行ブログ(数字がサイトごとに異なる)</li>
+      <li>コオリナのラグーンの一般開放・ライフガード ── 旅行ガイド・報道(情報が割れている)</li>
+      <li>アラモアナセンターの営業時間 ── 公式サイトの過去の表示(検索結果)</li>
     </ul>
   </div>
 </section>
@@ -964,6 +1290,14 @@ footer.app p{margin:5px 0}
   if(memo){
     memo.addEventListener('input', function(){
       state.__memo = memo.value;
+      save(state);
+    });
+  }
+  var memo2 = document.getElementById('memo2');
+  if(memo2){
+    if(typeof state.__memo2 === "string") memo2.value = state.__memo2;
+    memo2.addEventListener('input', function(){
+      state.__memo2 = memo2.value;
       save(state);
     });
   }

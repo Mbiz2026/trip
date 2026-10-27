@@ -1,7 +1,7 @@
 /* trip系ツール Service Worker(航空券サーチ司令塔 + マイルコンパス + 旅のしおり + 香港プラン)
    方針: 本体(ナビゲーション)はネット優先(常に最新)、圏外ならキャッシュで起動。
    アイコン等の静的ファイルはキャッシュ優先。外部サイトへのリンクは一切触らない。 */
-const VERSION = 'trip-tools-v6';
+const VERSION = 'trip-tools-v7';
 const ASSETS = [
   './',
   'mile.html',
